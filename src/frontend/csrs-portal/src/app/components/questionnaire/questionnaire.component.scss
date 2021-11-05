@@ -1,0 +1,106 @@
+@import "palette";
+@import "bootstrap/bootstrap-imports";
+
+
+div.container {
+    opacity: unset;
+  
+    button a {
+      color: theme-palette(blue);
+    }
+  
+    a {
+      color: theme-palette(blue, link);
+      white-space: nowrap;
+    }
+  
+    .main-body-navigation:hover {
+      text-decoration: none;
+    }
+  }
+
+.button-row button,
+.button-row a {
+  margin-right: 20px;
+  margin-left: 20px;
+  max-width: 50px ;
+  max-height: 40px;
+}
+
+.mat-stroked-button {
+    min-width: 200px;
+    background-color: white;
+    color: theme-palette(blue, light);
+  
+    &.large {
+      height: 46px;
+      font-size: 1.125rem;
+      margin-bottom: 1.2rem;
+    }
+  }
+
+.mat-expansion-panel{
+    box-shadow: none !important;
+}
+
+section.summary-section {
+    min-height: 300px;
+    margin-bottom: 3em;
+  }
+  
+  section {
+    margin-bottom: 1em;
+  }
+
+::ng-deep .mat-expansion-panel-header{
+    /* styles that were added to panel before */
+    background: #fff;
+    color: rgba(0,0,0,.87); 
+}
+
+.prevent-click{
+    pointer-events: none;
+}
+.authorize-click{
+pointer-events: auto;
+}
+
+
+.mat-divider {
+  border-top-width: 2px;
+  border-top-color: orange;
+}
+
+.myRed{
+  background : red;
+  color: black
+}
+
+.myGreen{
+  background : green;
+  color: black;
+}
+
+.myBlue{
+  max-width : 200px;
+  width: 195px;
+  background : blueviolet;
+  color: black;
+}
+
+.colorRed{
+  color: red;
+}
+
+.colorGreen{
+  color: green;
+}
+
+.colorBlue{
+  color: blueviolet;
+}
+
+.colorTransparent{
+  color: transparent;
+}
+

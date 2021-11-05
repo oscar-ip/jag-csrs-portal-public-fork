@@ -1,0 +1,39 @@
+
+src/frontend/csrs-portal/debug.log
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+app/*[Bb]in/
+bin/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio 2019 cache/options directory
+.vs/
+.vscode/
+
+# Visual Studio 2019 auto generated files
+Generated\ Files/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Docker Environment Files
+.env
+
+# dependencies
+/node_modules
+
