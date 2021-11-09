@@ -11,7 +11,7 @@ COPY package.json yarn.lock ./
 
 RUN yarn install
 
-COPY . .
+COPY ./src .
 
 RUN yarn run build-prod
 

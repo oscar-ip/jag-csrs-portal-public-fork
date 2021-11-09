@@ -3,7 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ConfigCodePipe } from './config-code.pipe';
 import { ConfigService } from './config.service';
-import { MockConfigService } from 'tests/mocks/mock-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component } from '@angular/core';
 
@@ -24,7 +23,6 @@ describe('ConfigCodePipe', () => {
         providers: [
           {
             provide: ConfigService,
-            useClass: MockConfigService,
           },
         ],
         declarations: [BlankComponent],
@@ -32,23 +30,4 @@ describe('ConfigCodePipe', () => {
     })
   );
 
-  it('create an instance of Config Code Pipe', inject(
-    [ConfigService],
-    (configService: ConfigService) => {
-      const pipe = new ConfigCodePipe(configService);
-      expect(pipe).toBeTruthy();
-    }
-  ));
-
-  it('should get country name from a config code', inject(
-    [ConfigService],
-    (configService: ConfigService) => {
-      const pipe = new ConfigCodePipe(configService);
-      const prefix = pipe.transform(
-        configService.countries[0].code,
-        'countries'
-      );
-      expect(prefix).toBe(configService.countries[0].name);
-    }
-  ));
 });

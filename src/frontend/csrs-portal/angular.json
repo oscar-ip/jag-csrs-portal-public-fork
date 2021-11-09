@@ -41,9 +41,6 @@
                 "src/scss"
               ]
             },
-            "allowedCommonJsDependencies": [
-              "faker"
-            ],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,

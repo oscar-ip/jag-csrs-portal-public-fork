@@ -2,7 +2,7 @@
 
 ## Installation and Configuration
 
-The installation and configuration of the Traffic Court Online development environment is sequentially ordered to ensure software dependencies are available when needed during setup.
+The installation and configuration of the CSRS development environment is sequentially ordered to ensure software dependencies are available when needed during setup.
 
 ### Installation
 
@@ -12,7 +12,7 @@ The following list includes the required software needed to run the application,
 
 [Download](https://git-scm.com/downloads) and install the Git version control system, and optionally [download](https://www.gitkraken.com) and install the free GitKraken Git GUI client.
 
-Clone the Traffic Court Online repository into a project directory GitKraken or the terminal by typing:
+Clone the CSRS repository into a project directory GitKraken or the terminal by typing:
 
 ```bash
 git clone https://github.com/bcgov/jag-csrs-portal-public
