@@ -11,7 +11,7 @@ COPY package.json yarn.lock ./
 
 RUN yarn install
 
-COPY ./src .
+COPY . .
 
 RUN yarn run build-prod
 
@@ -19,7 +19,7 @@ RUN yarn run build-prod
 FROM registry.access.redhat.com/ubi8/nginx-118
 
 COPY --from=build-deps /usr/src/app/src/favicon.ico /usr/share/nginx/html
-COPY --from=build-deps /usr/src/app/dist/csrs-portal /usr/share/nginx/html
+COPY --from=build-deps /usr/src/app/dist/citizen-portal /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/nginx.conf /opt/app-root/etc/nginx.default.d/default.conf
 
 EXPOSE 8080

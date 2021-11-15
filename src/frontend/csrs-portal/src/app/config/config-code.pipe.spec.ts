@@ -16,7 +16,6 @@ describe('ConfigCodePipe', () => {
       TestBed.configureTestingModule({
         imports: [
           RouterTestingModule.withRoutes([
-            { path: 'ticket/find', component: BlankComponent },
           ]),
           HttpClientTestingModule,
         ],

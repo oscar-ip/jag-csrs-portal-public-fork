@@ -13,7 +13,7 @@ export function initConfig(config: ConfigService) {
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule], // , KeycloakModule],
+  imports: [CommonModule], 
   providers: [
     {
       provide: ErrorHandler,

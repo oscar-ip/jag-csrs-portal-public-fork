@@ -24,17 +24,11 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { AppConfigService } from './services/app-config.service';
 
-import localeEn from '@angular/common/locales/en';
-import localeFr from '@angular/common/locales/fr';
-import { registerLocaleData } from '@angular/common';
 import { WindowRefService } from '@core/services/window-ref.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { CdkAccordionModule} from '@angular/cdk/accordion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { QuestionnaireComponent } from './components/questionnaire/questionnaire.component';
-
-registerLocaleData(localeEn, 'en');
-registerLocaleData(localeFr, 'fr');
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -81,17 +75,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  private availableLanguages = ['en', 'fr'];
-
-  constructor(private translateService: TranslateService) {
-    this.translateService.addLangs(['en', 'fr']);
-
-    const currentLanguage = window.navigator.language.substring(0, 2);
-
-    let defaultLanguage = 'en';
-    if (this.availableLanguages.includes(currentLanguage)) {
-      defaultLanguage = currentLanguage;
-    }
-    this.translateService.setDefaultLang(defaultLanguage);
-  }
+   constructor()
+   {
+   }
 }
