@@ -7,9 +7,11 @@ import { AfterViewInit, Component } from '@angular/core';
 })
 export class LandingComponent implements AfterViewInit {
   public bceIdLink: string;
+  public cscLink: string;
   
   constructor() {
     this.bceIdLink = "https://www.bceid.ca/";
+    this.cscLink = "https://www.childsupportcalculator.ca/british-columbia.html";
   }
 
   public ngAfterViewInit(): void {

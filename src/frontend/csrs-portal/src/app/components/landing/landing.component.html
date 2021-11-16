@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div> <!--class="landing-summary"-->
+<div> 
   <div class="summary-header">
     <div class="container">
       <ul class="summary-header-links">
@@ -39,184 +39,194 @@
       </ul>
     </div>
   </div>
-  <div class="container landing-summary">
-    <section class="summary-section">
-      <!--<div class="summary-content">-->
-        <div>
-          <h1>Child Support Recalculation Service</h1>
-          <p class="lead">
-            The Child Support Recalculation Service helps families with child support orders and agreements ensure a
-            fair level of support for their children. The Recalculation Service updates child support amounts to reflect
-            changes in income without burdening families with the time and expense of pursuing those adjustments
-            through court processes.
-          </p>
-        </div>
-      <!--</div>-->
-    </section>
-  </div>
-
-<div class="container">
-  <section>
-    <div class="flex-6-col round3">
-      <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-        <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0" class="mi-tile-contents-center">
-          <img class="icon-size5" src="/assets/Questionnaire-icon.svg" />
-        </mat-grid-tile>
-        <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0" class="mi-tile-contents-left border-bottom">
-          <h4>Are you eligible for this service?</h4>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="3" rowspan="1" aria-rowindex="1" class="mi-tile-contents-left">
-          To use this service you will need to determine your eligibility.
-              Complete the questionnaire to confirm if you are eligible.
-        </mat-grid-tile>    
-        <mat-grid-tile colspan="2" rowspan="1" aria-rowindex="1" class="mi-tile-contents-center">
-          <button mat-flat-button type="button" class="large" color="accent"  routerLink="/questionnaire">
-            Start questionnaire
-          </button>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </div>
-  </section>
-
-
-
-  <section>
-    <mat-grid-list cols="2" rowHeight="65px" gutterSize="5px" class="round3">
-      <!-- first row -->
-      <mat-grid-tile class="mi-tile-contents-left border-bottom">
-        <h4>New users</h4><mat-divider></mat-divider></mat-grid-tile>
-      <mat-grid-tile class="mi-tile-contents-left border-bottom">
-        <h4>Returning users</h4><mat-divider></mat-divider></mat-grid-tile>
-      <!-- second row -->
-      <mat-grid-tile class="mi-tile-contents-left">
-        <div>
-        <strong>For users who have been deemed eligible, or have been sent a file number and password, you may
-          access CSRS.</strong>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile class="mi-tile-contents-left">
-        <div>
-        For users who have previously logged in, please continue to login with your BCeID account.   
-        </div>
-      </mat-grid-tile>  
-      <mat-grid-tile class="mi-tile-contents-left">
-        <div>
-        To login you must have a valid BCeID
-          account, if you do not have one use the button below.
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile class="mi-tile-contents-left">
-       <div>
-        <a
-              [attr.href]="bceIdLink"
+  <div style="background-image: url('/assets/landing-page-background.png');
+      background-repeat: no-repeat; 
+      background-position: top;
+      background-size: 100%;">
+    <div class="container">
+      <section class="summary-section">
+        <!--<div class="summary-content">-->
+          <div>
+            <h1 class="pt-2">Child Support Recalculation Service</h1>
+            <p class="pt-2" style="color: black;">
+              <strong>Child Support Recalculation Service helps families with child support orders and written agreements
+              maintain a fair standard of support for their children by reviewing the amount of child support each year.
+              The recalculation service adjusts the amount of child support if income has gone up or down so that
+              parents do not have to return to court to have their child support amounts reviewed.</strong> 
+              <a
+              [attr.href]="cscLink"
+              class="primary-navigation"
               target="_blank"
               rel="noopener"
-              class="useful-links bceIdLink"
-        >
-          <button mat-flat-button 
-                  type="button" 
-                  class="large" 
-                  color="primary">
-                  BCeID login
-          </button>
-        </a>
-      </div>
-      </mat-grid-tile>  
-      <!-- third row -->
-      <mat-grid-tile class="mi-tile-contents-left">
-        <div >
-        If you already have a BCeID account login&nbsp;  
-            <a
-              [attr.href]="bceIdLink"
-              target="_blank"
-              rel="noopener"
-              class="useful-links bceIdLink"
             >
-             here.
+            Learn more >
             </a>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile></mat-grid-tile> 
-      <!-- fifth row -->
-      <mat-grid-tile class="mi-tile-contents-left">
+          </p>
+          </div>
+      </section>
+    </div>
+    <div class="container">
+    <section>
+      <div class="flex-6-col round3">
+        <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
+          <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0" class="mi-tile-contents-center">
+            <img class="icon-size5" src="/assets/Questionnaire-icon.svg" />
+          </mat-grid-tile>
+          <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0" class="mi-tile-contents-left border-bottom">
+            <h4>Are you eligible for this service?</h4>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="3" rowspan="1" aria-rowindex="1" class="mi-tile-contents-left">
+            To use this service you will need to determine your eligibility.
+                Complete the questionnaire to confirm if you are eligible.
+          </mat-grid-tile>    
+          <mat-grid-tile colspan="2" rowspan="1" aria-rowindex="1" class="mi-tile-contents-center">
+            <button mat-flat-button type="button" class="large" color="accent"  routerLink="/questionnaire">
+              Start questionnaire
+            </button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </section>
+
+
+
+    <section>
+      <mat-grid-list cols="2" rowHeight="65px" gutterSize="5px" class="round3">
+        <!-- first row -->
+        <mat-grid-tile class="mi-tile-contents-left border-bottom">
+          <h4>New users</h4><mat-divider></mat-divider></mat-grid-tile>
+        <mat-grid-tile class="mi-tile-contents-left border-bottom">
+          <h4>Returning users</h4><mat-divider></mat-divider></mat-grid-tile>
+        <!-- second row -->
+        <mat-grid-tile class="mi-tile-contents-left">
+          <div>
+          <strong>For users who have been deemed eligible, or have been sent a file number and password, you may
+            access CSRS.</strong>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mi-tile-contents-left">
+          <div>
+          For users who have previously logged in, please continue to login with your BCeID account.   
+          </div>
+        </mat-grid-tile>  
+        <mat-grid-tile class="mi-tile-contents-left">
+          <div>
+          To login you must have a valid BCeID
+            account, if you do not have one use the button below.
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mi-tile-contents-left">
         <div>
+          <a
+                [attr.href]="bceIdLink"
+                target="_blank"
+                rel="noopener"
+                class="useful-links bceIdLink"
+          >
+            <button mat-flat-button 
+                    type="button" 
+                    class="large" 
+                    color="primary">
+                    BCeID login
+            </button>
+          </a>
+        </div>
+        </mat-grid-tile>  
+        <!-- third row -->
+        <mat-grid-tile class="mi-tile-contents-left">
+          <div >
+          If you already have a BCeID account login&nbsp;  
+              <a
+                [attr.href]="bceIdLink"
+                target="_blank"
+                rel="noopener"
+                class="useful-links bceIdLink"
+              >
+              here.
+              </a>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile></mat-grid-tile> 
+        <!-- fifth row -->
+        <mat-grid-tile class="mi-tile-contents-left">
+          <div>
+            <a
+                [attr.href]="bceIdLink"
+                target="_blank"
+                rel="noopener"
+                class="useful-links bceIdLink"
+            >
+              <button mat-stroked-button 
+                      type="button" 
+                      class="large"
+                      routerLink="bceIdLink">
+                  Create BCeID account
+              </button>
+            </a>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile></mat-grid-tile> 
+      </mat-grid-list>
+    </section>
+
+
+  <section>
+    <div class="flex-6-col box-border">
+    <div class="flex flex-last">
+      <div class="flex-2-col info">
+        <h4>Frequently asked questions?</h4>
+        <div class="flex-last-info-content">
+          <div class="bullet-list">
+            <ul>
+              <li class="pt-0">
+                How can the Child Support Recalculation Service help me?
+              </li>
+              <li>
+                Who can enrol?
+              </li>
+              <li>
+                Is there a fee to enrol?
+              </li>
+              <li>
+                Can I still enrol if I don’t know where the other parent lives?
+              </li>
+              <li>
+                If I enrol now, when will my child support amount get recalculated?
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="flex-2-col info">
+        <h4>&nbsp;</h4>
+        <div class="bullet-list">
+          <ul>
+            <li class="pt-0">
+              Will you need my income information? If so, when?
+            </li>
+            <li>
+              Is a recalculated child support amount enforceable?
+            </li>
+            <li>
+              What if I disagree with the recalculated child support amount? 
+            </li>
+            <li>
+              Who can I speak with to get more help?
+            </li>
+          </ul>
           <a
               [attr.href]="bceIdLink"
               target="_blank"
               rel="noopener"
               class="useful-links bceIdLink"
-          >
-            <button mat-stroked-button 
-                    type="button" 
-                    class="large"
-                    routerLink="bceIdLink">
-                Create BCeID account
-            </button>
-          </a>
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile></mat-grid-tile> 
-    </mat-grid-list>
-  </section>
-
-
-<section>
-  <div class="flex-6-col box-border">
-  <div class="flex flex-last">
-    <div class="flex-2-col info">
-      <h4>Frequently asked questions?</h4>
-      <div class="flex-last-info-content">
-        <div class="bullet-list">
-          <ul>
-            <li class="pt-0">
-              How can the Child Support Recalculation Service help me?
-            </li>
-            <li>
-              Who can enrol?
-            </li>
-            <li>
-              Is there a fee to enrol?
-            </li>
-            <li>
-              Can I still enrol if I don’t know where the other parent lives?
-            </li>
-            <li>
-              If I enrol now, when will my child support amount get recalculated?
-            </li>
-          </ul>
+            >
+            + See all frequently asked questions and answers</a>
         </div>
       </div>
     </div>
-    <div class="flex-2-col info">
-      <h4>&nbsp;</h4>
-      <div class="bullet-list">
-        <ul>
-          <li class="pt-0">
-            Will you need my income information? If so, when?
-          </li>
-          <li>
-            Is a recalculated child support amount enforceable?
-          </li>
-          <li>
-            What if I disagree with the recalculated child support amount? 
-          </li>
-          <li>
-            Who can I speak with to get more help?
-          </li>
-        </ul>
-        <a
-            [attr.href]="bceIdLink"
-            target="_blank"
-            rel="noopener"
-            class="useful-links bceIdLink"
-          >
-          + See all frequently asked questions and answers</a>
-      </div>
+    </div>
+  </section>  
     </div>
   </div>
-  </div>
-</section>  
-</div>
-
 </div>
 <app-footer></app-footer>
