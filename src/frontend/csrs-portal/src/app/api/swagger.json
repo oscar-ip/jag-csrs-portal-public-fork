@@ -1,0 +1,1020 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Csrs.Api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/PortalAccount/Profile": {
+      "get": {
+        "tags": [
+          "PortalAccount"
+        ],
+        "parameters": [
+          {
+            "name": "bceIDGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalAccount"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalAccount"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalAccount"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalAccount/Signup": {
+      "post": {
+        "tags": [
+          "PortalAccount"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalAccount"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalAccount"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalAccount"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalAccount/UpdateProfile": {
+      "patch": {
+        "tags": [
+          "PortalAccount"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalAccount"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalAccount"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalAccount"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalDocument/ListDocuments": {
+      "get": {
+        "tags": [
+          "PortalDocument"
+        ],
+        "parameters": [
+          {
+            "name": "regardingGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalDocument/DownloadDocument": {
+      "get": {
+        "tags": [
+          "PortalDocument"
+        ],
+        "parameters": [
+          {
+            "name": "fileGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalDocument/UploadDocuments": {
+      "post": {
+        "tags": [
+          "PortalDocument"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalDocument"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalDocument"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalDocument"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalDocument"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalFeedback/Create": {
+      "post": {
+        "tags": [
+          "PortalFeedback"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalFeedback"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalFeedback"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalFeedback"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalFile/ListApplications": {
+      "post": {
+        "tags": [
+          "PortalFile"
+        ],
+        "parameters": [
+          {
+            "name": "partyGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToList"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToList"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToList"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalFile/ApplicationDetail": {
+      "get": {
+        "tags": [
+          "PortalFile"
+        ],
+        "parameters": [
+          {
+            "name": "fileGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalFile/CreateApplication": {
+      "post": {
+        "tags": [
+          "PortalFile"
+        ],
+        "parameters": [
+          {
+            "name": "partyGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalFile/UpdateApplication": {
+      "patch": {
+        "tags": [
+          "PortalFile"
+        ],
+        "parameters": [
+          {
+            "name": "fileGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalFileToCreate"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalMessage/List": {
+      "get": {
+        "tags": [
+          "PortalMessage"
+        ],
+        "parameters": [
+          {
+            "name": "partyGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalMessage"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalMessage"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalMessage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalMessage/Read": {
+      "get": {
+        "tags": [
+          "PortalMessage"
+        ],
+        "parameters": [
+          {
+            "name": "messageGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalMessage"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalMessage"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PortalMessage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalMessage/Create": {
+      "post": {
+        "tags": [
+          "PortalMessage"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalMessage"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalMessage"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalMessage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalMessage/Delete": {
+      "delete": {
+        "tags": [
+          "PortalMessage"
+        ],
+        "parameters": [
+          {
+            "name": "messageGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PortalUserRequest/Create": {
+      "post": {
+        "tags": [
+          "PortalUserRequest"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalUserRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalUserRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PortalAccount": {
+        "required": [
+          "bCeIDGuid",
+          "dateOfBirth",
+          "email",
+          "firstName",
+          "gender",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "partyGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bCeIDGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "preferredName": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "addressStreet1": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressStreet2": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "province": {
+            "type": "string",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "homePhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "workPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "cellPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string"
+          },
+          "optOutElectronicDocuments": {
+            "type": "boolean"
+          },
+          "identity": {
+            "type": "string",
+            "nullable": true
+          },
+          "referral": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PortalDocument": {
+        "required": [
+          "documentBody",
+          "fileCategory",
+          "fileName",
+          "regardingGuid"
+        ],
+        "type": "object",
+        "properties": {
+          "fileGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "regardingGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileCategory": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "documentBody": {
+            "type": "string"
+          },
+          "fileTag": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PortalFeedback": {
+        "required": [
+          "bCeIDGuid",
+          "messageBody",
+          "subject"
+        ],
+        "type": "object",
+        "properties": {
+          "bCeIDGuid": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "messageBody": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PortalFileToCreate": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "PortalFileToList": {
+        "type": "object",
+        "properties": {
+          "fileGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userRole": {
+            "type": "string",
+            "nullable": true
+          },
+          "csrsFileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "registrationDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "courtFileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "styleofCause": {
+            "type": "string",
+            "nullable": true
+          },
+          "statusReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PortalMessage": {
+        "required": [
+          "fileGuid",
+          "fileNo",
+          "subject"
+        ],
+        "type": "object",
+        "properties": {
+          "messageGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileNo": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "nullable": true
+          },
+          "attachment": {
+            "type": "boolean"
+          },
+          "isRead": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PortalUserRequest": {
+        "required": [
+          "fileNo",
+          "requestMessage",
+          "requestType"
+        ],
+        "type": "object",
+        "properties": {
+          "fileNo": {
+            "type": "string"
+          },
+          "requestType": {
+            "type": "string"
+          },
+          "requestMessage": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

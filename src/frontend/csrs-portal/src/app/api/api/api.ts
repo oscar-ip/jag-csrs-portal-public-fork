@@ -1,0 +1,13 @@
+export * from './portalAccount.service';
+import { PortalAccountService } from './portalAccount.service';
+export * from './portalDocument.service';
+import { PortalDocumentService } from './portalDocument.service';
+export * from './portalFeedback.service';
+import { PortalFeedbackService } from './portalFeedback.service';
+export * from './portalFile.service';
+import { PortalFileService } from './portalFile.service';
+export * from './portalMessage.service';
+import { PortalMessageService } from './portalMessage.service';
+export * from './portalUserRequest.service';
+import { PortalUserRequestService } from './portalUserRequest.service';
+export const APIS = [PortalAccountService, PortalDocumentService, PortalFeedbackService, PortalFileService, PortalMessageService, PortalUserRequestService];
