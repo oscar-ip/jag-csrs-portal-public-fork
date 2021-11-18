@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104">
+  <g id="Group_14" data-name="Group 14" transform="translate(-93 -412)">
+    <g id="Rectangle_801" data-name="Rectangle 801" transform="translate(93 412)" fill="none" stroke="#036" stroke-width="5">
+      <rect width="104" height="104" rx="10" stroke="none"/>
+      <rect x="2.5" y="2.5" width="99" height="99" rx="7.5" fill="none"/>
+    </g>
+    <g id="checklist_black_24dp" transform="translate(103 421)">
+      <rect id="Rectangle_800" data-name="Rectangle 800" width="84" height="84" fill="none"/>
+      <path id="Path_74" data-name="Path 74" d="M72,14.675H40.5v7H72Zm0,28H40.5v7H72Zm-57.61-14L2,16.285,6.935,11.35l7.42,7.42L29.195,3.93,34.13,8.865Zm0,28L2,44.285,6.935,39.35l7.42,7.42,14.84-14.84,4.935,4.935Z" transform="translate(5 9.825)" fill="#036"/>
+    </g>
+  </g>
+</svg>
