@@ -10,7 +10,7 @@ namespace Csrs.Api.Authentication
         {
             var configuration = builder.Configuration.Get<CsrsConfiguration>()?.Jwt;
 
-            if (configuration == null || configuration.Authority is null || string.IsNullOrWhiteSpace(configuration.Audience))
+            if (configuration is null || configuration.Authority is null || string.IsNullOrWhiteSpace(configuration.Audience))
             {
                 if (!builder.Environment.IsDevelopment())
                 {

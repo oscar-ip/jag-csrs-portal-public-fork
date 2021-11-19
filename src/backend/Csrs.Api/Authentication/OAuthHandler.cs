@@ -10,7 +10,7 @@ namespace Csrs.Api.Authentication
         public OAuthHandler(ITokenService tokenService, ILogger<OAuthHandler> logger)
         {
             _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(

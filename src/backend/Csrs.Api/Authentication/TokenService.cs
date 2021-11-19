@@ -150,7 +150,7 @@ namespace Csrs.Api.Authentication
         private async Task<Token?> RefreshTokenAsync(CancellationToken cancellationToken)
         {
             Token? token = await _oAuthApiClient.GetRefreshToken(cancellationToken);
-            if (token != null)
+            if (token is not null)
             {
                 var options = new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(token.ExpiresIn - Buffer) };
                 _cache.Set(token_key, token, options);
