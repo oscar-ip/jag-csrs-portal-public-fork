@@ -1,4 +1,6 @@
-﻿using Csrs.Api.Models;
+﻿using Csrs.Api.Features.PortalFiles;
+using Csrs.Api.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -7,38 +9,51 @@ namespace Csrs.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PortalFileController : ControllerBase
+    public class PortalFileController : CsrsControllerBase<PortalFileController>
     {
+        public PortalFileController(IMediator mediator, ILogger<PortalFileController> logger)
+            : base(mediator, logger)
+        {
+        }
+
         [HttpPost("ListApplications")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public Task<IList<PortalFileToList>> ListApplicationsAsync([Required] string partyGuid)
+        public async Task<IList<PortalFileToList>> ListApplicationsAsync([Required] string partyGuid)
         {
-            IList<PortalFileToList> files = Array.Empty<PortalFileToList>();
-            return Task.FromResult(files);
+            ListApplications.Request request = new();
+            ListApplications.Response response = await _mediator.Send(request);
+
+            return Array.Empty<PortalFileToList>();
         }
 
         [HttpGet("ApplicationDetail")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public Task<IList<PortalFileToCreate>> GetApplicationDetailsAsync([Required] string fileGuid)
+        public async Task<IList<PortalFileToCreate>> GetApplicationDetailsAsync([Required] string fileGuid)
         {
-            IList<PortalFileToCreate> files = Array.Empty<PortalFileToCreate>();
-            return Task.FromResult(files);
+            //ApplicationDetail.Request request = new();
+            //ApplicationDetail.Response response = await _mediator.Send(request);
+
+            return Array.Empty<PortalFileToCreate>();
         }
 
         [HttpPost("CreateApplication")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public Task<IList<PortalFileToCreate>> CreateAsync([Required] string partyGuid)
+        public async Task<IList<PortalFileToCreate>> CreateAsync([Required] string partyGuid)
         {
-            IList<PortalFileToCreate> files = Array.Empty<PortalFileToCreate>();
-            return Task.FromResult(files);
+            CreateApplication.Request request = new();
+            CreateApplication.Response response = await _mediator.Send(request);
+
+            return Array.Empty<PortalFileToCreate>();
         }
 
         [HttpPatch("UpdateApplication")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public Task<IList<PortalFileToCreate>> UpdateAsync([Required] string fileGuid)
+        public async Task<IList<PortalFileToCreate>> UpdateAsync([Required] string fileGuid)
         {
-            IList<PortalFileToCreate> files = Array.Empty<PortalFileToCreate>();
-            return Task.FromResult(files);
+            UpdateApplication.Request request = new();
+            UpdateApplication.Response response = await _mediator.Send(request);
+
+            return Array.Empty<PortalFileToCreate>();
         }
     }
 }

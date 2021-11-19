@@ -1,4 +1,7 @@
-﻿using Csrs.Api.Models;
+﻿using AutoMapper;
+using Csrs.Api.Models;
+using Csrs.Api.Models.Dynamics;
+using Csrs.Api.Repositories;
 using MediatR;
 
 namespace Csrs.Api.Features.PortalAccounts
@@ -17,26 +20,39 @@ namespace Csrs.Api.Features.PortalAccounts
 
         public class Response
         {
-            public Response(string id)
+            public Response(Guid id)
             {
-                Id = id ?? throw new ArgumentNullException(nameof(id));
+                if (id == Guid.Empty)
+                {
+                    throw new ArgumentException("id cannot be empty", nameof(id));
+                }
+
+                Id = id;
             }
 
-            public string Id { get; init; }
+            public Guid Id { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
         {
+            private readonly ICsrsPartyRepository _repository;
+            private readonly IMapper _mapper;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(ILogger<Handler> logger)
+            public Handler(ICsrsPartyRepository repository, IMapper mapper, ILogger<Handler> logger)
             {
+                _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+                _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
-            public Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(new Response(string.Empty));
+                SSG_CsrsParty entity = _mapper.Map<SSG_CsrsParty>(request.Account);
+
+                entity = await _repository.InsertAsync(entity, cancellationToken);
+
+                return new Response(entity.Id);
             }
         }
     }
