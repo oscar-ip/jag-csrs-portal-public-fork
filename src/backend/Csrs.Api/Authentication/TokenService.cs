@@ -84,7 +84,7 @@ namespace Csrs.Api.Authentication
 
             if (!response.IsSuccessStatusCode)
             {
-                var responseData = response.Content == null
+                var responseData = response.Content is null
                     ? null
                     : await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
@@ -93,7 +93,7 @@ namespace Csrs.Api.Authentication
                     (int)response.StatusCode, responseData,
                     response.Headers.ToDictionary(x => x.Key, x => x.Value), null);
             }
-            if (response.Content != null)
+            if (response.Content is not null)
             {
                 Token? token = await response.Content.ReadFromJsonAsync<Token>(cancellationToken: cancellationToken);
                 return token;

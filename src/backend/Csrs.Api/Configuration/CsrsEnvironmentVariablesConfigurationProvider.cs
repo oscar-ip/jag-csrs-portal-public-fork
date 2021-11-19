@@ -25,7 +25,7 @@
             if (!Data.ContainsKey(appKey))
             {
                 var value = Environment.GetEnvironmentVariable(variable);
-                if (value != null)
+                if (value is not null)
                 {
                     Data.Add(appKey, value);
                 }
