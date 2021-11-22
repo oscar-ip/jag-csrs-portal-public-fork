@@ -16,8 +16,8 @@
         /// <param name="appKey"></param>
         private void Add(string variable, string appKey)
         {
-            if (variable == null) throw new ArgumentNullException(nameof(variable));
-            if (appKey == null) throw new ArgumentNullException(nameof(appKey));
+            if (variable is null) throw new ArgumentNullException(nameof(variable));
+            if (appKey is null) throw new ArgumentNullException(nameof(appKey));
 
             // note the Load method may be called multiple times if before the
             // application builder Build method is called, the configuration is requested
@@ -25,7 +25,7 @@
             if (!Data.ContainsKey(appKey))
             {
                 var value = Environment.GetEnvironmentVariable(variable);
-                if (value != null)
+                if (value is not null)
                 {
                     Data.Add(appKey, value);
                 }

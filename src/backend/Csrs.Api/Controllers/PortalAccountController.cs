@@ -7,24 +7,21 @@ using System.Net;
 
 namespace Csrs.Api.Controllers
 {
+
     [Route("[controller]")]
     [ApiController]
-    public class PortalAccountController : ControllerBase
+    public class PortalAccountController : CsrsControllerBase<PortalAccountController>
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger<PortalAccountController> _logger;
-
         public PortalAccountController(IMediator mediator, ILogger<PortalAccountController> logger)
+            : base(mediator, logger)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet("Profile")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IList<PortalAccount>> GetProfileAsync([Required][FromQuery(Name = "bceIDGuid")] Guid bceIDGuid)
         {
-            Profile.Request request = new() {  BCeIDGuid = bceIDGuid };
+            Profile.Request request = new() { BCeIDGuid = bceIDGuid };
             Profile.Response? response = await _mediator.Send(request);
             return response.Accounts;
         }
@@ -35,7 +32,7 @@ namespace Csrs.Api.Controllers
         {
             Signup.Request request = new(account);
             Signup.Response? response = await _mediator.Send(request);
-            return response.Id;
+            return response.Id.ToString();
         }
 
         [HttpPatch("UpdateProfile")]
@@ -44,7 +41,7 @@ namespace Csrs.Api.Controllers
         {
             UpdateProfile.Request request = new UpdateProfile.Request(account);
             UpdateProfile.Response? response = await _mediator.Send(request);
-            return response.Id;
+            return response.Account.PartyGuid.ToString();
         }
     }
 }

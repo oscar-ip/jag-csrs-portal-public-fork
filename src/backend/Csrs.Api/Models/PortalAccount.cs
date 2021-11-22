@@ -14,7 +14,7 @@ namespace Csrs.Api.Models
         public string? LastName { get; set; }
         public string? PreferredName { get; set; }
         [Required]
-        public string? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         [Required]
         public string? Gender { get; set; }
         public string? AddressStreet1 { get; set; }

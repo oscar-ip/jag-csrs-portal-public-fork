@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Csrs.Api.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+using Csrs.Api.Repositories;
 
 namespace Csrs.Api.Features.PortalAccounts
 {
@@ -31,16 +30,19 @@ namespace Csrs.Api.Features.PortalAccounts
 
         public class Handler : IRequestHandler<Request, Response>
         {
+            private readonly ICsrsFileRepository _repository;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(ILogger<Handler> logger)
+            public Handler(ICsrsFileRepository repository, ILogger<Handler> logger)
             {
+                _repository = repository ?? throw new ArgumentNullException(nameof(repository));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
-            public Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(new Response(Array.Empty<PortalAccount>()));
+                var items = await _repository.GetAsync(request.BCeIDGuid, cancellationToken);
+                return new Response(Array.Empty<PortalAccount>());
             }
         }
     }

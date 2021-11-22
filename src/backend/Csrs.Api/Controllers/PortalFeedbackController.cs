@@ -1,4 +1,6 @@
-﻿using Csrs.Api.Models;
+﻿using Csrs.Api.Features.PortalFeedbacks;
+using Csrs.Api.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -6,13 +8,21 @@ namespace Csrs.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PortalFeedbackController : ControllerBase
+    public class PortalFeedbackController : CsrsControllerBase<PortalFeedbackController>
     {
+        public PortalFeedbackController(IMediator mediator, ILogger<PortalFeedbackController> logger)
+            : base(mediator, logger)
+        {
+        }
+
         [HttpPost("Create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public Task<string> CreateAsync(PortalFeedback feedback)
+        public async Task<string> CreateAsync(PortalFeedback feedback)
         {
-            return Task.FromResult(string.Empty);
+            Create.Request request = new();
+            Create.Response? response = await _mediator.Send(request);
+
+            return string.Empty;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Csrs.Api.Configuration
     {
         public static void UseSerilog(this WebApplicationBuilder builder)
         {
-            if (builder == null) throw new ArgumentNullException(nameof(builder));
+            if (builder is null) throw new ArgumentNullException(nameof(builder));
 
             builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
             {
@@ -16,7 +16,7 @@ namespace Csrs.Api.Configuration
                 CsrsConfiguration configuration = builder.Configuration.Get<CsrsConfiguration>();
 
                 var splunk = configuration.Splunk;
-                if (splunk == null || string.IsNullOrEmpty(splunk.Url) || string.IsNullOrEmpty(splunk.Token))
+                if (splunk is null || string.IsNullOrEmpty(splunk.Url) || string.IsNullOrEmpty(splunk.Token))
                 {
                     return;
                 }
