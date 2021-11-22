@@ -11,19 +11,20 @@ h1 {
 }
 
 h3 {
-  font-size: 1.875em;
+  font-size: 1.575em;
   line-height: 1.4em;
   font-weight: bold;
   margin-bottom: 10px;
   color: theme-palette(blue);
+  text-align: left;
 }
 
 h4 {
   font-size: 1.2em;
   line-height: 1.1em;
-  font-weight: normal;
+  font-weight: bold;
   margin-bottom: 10px;
-  color: black;
+  color: theme-palette(blue);
 }
 
 .lead {
@@ -59,9 +60,12 @@ div.landing-summary {
 }
 
 .divider {
-  color: #fff;
+  color: #FCBA19;
   display: none;
 }
+
+
+
 
 @media (min-width: 768px) {
   .divider {
@@ -96,18 +100,20 @@ div.landing-summary {
 div.summary-header {
   background-color: theme-palette(blue, bg);
   width: 100%;
-  min-height: 40px;
+  min-height: 20px;
   padding: 10px 0;
   opacity: 0.8;
 }
 
 section.summary-section {
-  min-height: 60px;
-  margin-bottom: 3em;
+  min-height: 10px;
+  margin-bottom: 1em;
+  margin-right: 5em;
 }
 
 section {
   margin-bottom: 1em;
+  margin-right: 5em;
 }
 
 div.container {
@@ -129,10 +135,10 @@ div.container {
 
 .mat-flat-button {
   min-width: 250px;
-  margin-top: 1em;
+  margin: 1em;
 
   @include media-breakpoint-down(md) {
-    // width: 100%;
+    width: 100%;
     max-width: 300px;
   }
 
@@ -188,10 +194,19 @@ img {
 }
 
 .round3 {
-  border: 2px solid grey;
+  border: 2px solid darkgray;
   border-radius: 12px;
   padding: 5px;
+  background-color: white;
 }
+
+.round4 {
+  border: 2px solid orange;
+  border-radius: 0px;
+  padding: 5px;
+  background-color: white;
+}
+
 
 .box-border {
   border-bottom: 2px solid grey;
@@ -200,6 +215,18 @@ img {
   border-left: 5px solid blue;
   padding: 5px;
   background-color: lightgray;
+}
+
+.box-border1 {
+  border: 2px solid orange;
+  padding: 25px;
+}
+
+
+
+.phone {
+  margin-left: 1.2em;
+  margin-right: 1.2em;
 }
 
 .site-header {
@@ -356,11 +383,11 @@ img {
 }
 
 .icon-size4 {
-  max-width: 50px;
+  max-width: 40px;
 }
 
 .icon-size5 {
-  max-width: 110px;
+  max-width: 90px;
 }
 
 .bullet-list ul {
@@ -380,7 +407,7 @@ img {
 mat-expansion-panel {
   box-shadow: none !important;
   padding-bottom: 1em;
-  border-bottom: 1px solid theme-palette(grey, light);
+  //border-bottom: 1px solid theme-palette(grey, light);
 }
 
 mat-expansion-panel-header {
@@ -524,6 +551,77 @@ mat-expansion-panel-header {
   color: #fff;
 }
 
-.mat-grid-tile .border-bottom{
-  border-bottom: solid 2px grey;
+.border-bottom{
+  border-bottom-width: 2px;
+  border-bottom-color: orange;
 }
+
+.text-left-inside-grid {
+  position: absolute;
+  text-align: left;
+  left: 5px;
+}
+
+.text-left-top {
+  position: absolute;
+  text-align: left;
+}
+
+
+.text-right-inside-grid {
+  position: absolute;
+  text-align: right;
+  left: 5px;
+}
+
+.text-top-inside-grid {
+  position: absolute;
+  align-items: center;
+  left: 5px;
+}
+
+
+.mat-divider {
+  display: block;
+  margin: 0;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: orange;
+}
+
+mat-grid-tile.bottom_line {
+  padding-right: 2.5rem;
+  border-bottom: solid 2px orange;
+}
+
+mat-grid-tile.bottom_line2 {
+  padding-right: 5rem;
+  border-bottom: solid 2px orange;
+}
+
+mat-grid-tile.mat-figure {
+  justify-content:center ;
+  align-items:center;
+  vertical-align:sub;
+}
+
+.mat-icon {
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 0.4em;
+  user-select: none;
+}
+
+.information {
+  margin-left: 0.4em;
+  margin-right: 0.4em;
+}
+
+.custom-tooltip {
+  font-size:18px;
+  font-weight: normal;
+  background: #003366;
+  border: solid 2px orange;
+}
+
+
