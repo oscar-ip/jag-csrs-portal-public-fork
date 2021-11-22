@@ -370,11 +370,11 @@ img {
 
   .landing-card + .landing-card {
     border-left: none;
-    border-top: solid 1px theme-palette(grey, light);
+    border-top: solid 1px white;
   }
 
   .landing-card:last-child {
-    border-bottom: solid 1px theme-palette(grey, light);
+    border-bottom: solid 1px white;
   }
 
   .landing-card.info {

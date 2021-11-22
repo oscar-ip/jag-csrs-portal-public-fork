@@ -1,7 +1,15 @@
 @import "palette";
 @import "bootstrap/bootstrap-imports";
 
-
+.yesNocontent{
+  padding-top: 15px;
+}
+.clickedContent{
+  padding-top: 10px;
+}
+.nextStep{
+  margin-top: 10px;
+}
 div.container {
     opacity: unset;
   
