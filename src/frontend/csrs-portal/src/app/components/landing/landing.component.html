@@ -28,15 +28,13 @@
       </ul>
     </div>
   </div>
-  <div style="background-image: url('/assets/landing-page-background.png');
-              background-repeat: no-repeat; 
-              background-size: 100%;">
+  <div class="background_image">
     <div class="container">
       <section class="summary-section">
         <div class="summary-content">
           <div>
             <h1>Child Support Recalculation Service</h1>
-            <p  style="color: black; font-size: 18px; padding-right: 100px;">
+            <p class="description_text">
               The Child Support Recalculation Service helps families with child support orders and written agreements
                 maintain a fair standard of support for their children by reviewing the amount of child support each year.
                 The recalculation service adjusts the amount of child support if income has gone up or down so that
@@ -55,7 +53,7 @@
       </section>
     </div>
     <div class="container">
-    <section class="padding-right: 200px;">
+    <section>
       <div class="p-2 round3">
         <mat-grid-list cols="6" rowHeight="70px" gutterSize="5px">
           <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0">
@@ -70,7 +68,7 @@
             <p style="color:black">Complete the questionnaire to obtain important information
             about eligibility for the service to help you decide whether to apply.</p>
           </mat-grid-tile>  
-          <mat-grid-tile colspan="2" rowspan="1" aria-rowindex="1" style="vertical-align: top;">
+          <mat-grid-tile colspan="2" rowspan="1" aria-rowindex="1">
               <button mat-flat-button type="button" class="large" color="accent"  routerLink="/questionnaire">
                 Start questionnaire
               </button>
@@ -79,18 +77,18 @@
       </div>
     </section>
 
-    <section class="padding-right: 200px;">
+    <section>
       <div class="p-3 round3">
         <div class="container">
           <div class="row">
-            <div class="col pr-2" style="border-bottom: solid 2px orange;">
-              <p class="bottom_line2" style="font-size: 24px; font-weight:bolder;">
+            <div class="col pr-2 border_bottom">
+              <p class="font_size_24_bolder">
                 New users
               </p>
             </div>
             <div class="col-sm-1"></div>
-            <div class="col pl-2" style="border-bottom: solid 2px orange;">
-              <p class="bottom_line2" style="font-size: 24px; font-weight:normal;">
+            <div class="col pl-2 border_bottom">
+              <p class="font_size_24_normal">
                 Returning users
               </p>
             </div>
@@ -98,7 +96,7 @@
           <!--second-->
           <div class="row">
             <div class="col pr-2 pt-2">
-              <p style="color: black;">You will need a <strong>Basic BCeID account </strong>
+              <p class="color_black">You will need a <strong>Basic BCeID account </strong>
                 <span>
                 <mat-icon style="color:#1A5A96" class="p-1"
                 matTooltip="BCeID is a user ID and password. You can use it to
@@ -112,7 +110,7 @@
             </div>
             <div class="col-sm-1"></div>
             <div class="col pl-2 pt-2">
-              <p style="color: black;">If you have previously logged in, continue to log into
+              <p class="color_black">If you have previously logged in, continue to log into
                 your account with your Basic BCeID (user ID and 
                 password.)
               </p>
@@ -121,7 +119,7 @@
           <!--third-->
           <div class="row">
             <div class="col pr-2">
-              <p style="color: black;">If you already have a Basic BCeID account log
+              <p class="color_black">If you already have a Basic BCeID account log
                 <a
                   [attr.href]="bceIdLink"
                   target="_blank"
@@ -138,7 +136,7 @@
           <!--fourth-->
           <div class="row">
             <div class="col pr-2">
-              <p style="color: black;"><strong>Were you provided a file number and password and
+              <p class="color_black"><strong>Were you provided a file number and password and
                 requested to enrol?</strong>
               <mat-expansion-panel  #expPanel hideToggle="true">
                   <mat-expansion-panel-header>
@@ -175,8 +173,7 @@ recalculation service once you have obtained your BCeID.
               >
                 <button mat-flat-button 
                         type="button" 
-                        class="large"
-                        style="border: 1px solid #003366; color: #003366;">
+                        class="large_border">
                         Register for a Basic BCeID
                 </button>
               </a>
@@ -203,19 +200,19 @@ recalculation service once you have obtained your BCeID.
       </div>
     </section>
 
-    <section class="padding-right: 200px;">
+    <section>
       <div class="p-2 round4">
         <mat-grid-list cols="6" rowHeight="55px" gutterSize="5px">
           <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0">
             <img class="icon-size5" src="/assets/Support_icon.svg" />
           </mat-grid-tile>
           <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0">
-            <p class="text-left-inside-grid" style="font-size: 24px; font-weight:bolder;">
+            <p class="text-left-inside-grid font_size_24_bolder">
               Have questions or looking for more support?
             </p>
           </mat-grid-tile>
           <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="1" class="text-left-inside-grid">
-            <p style="color:black; font-size: 18px; font-weight:lighter;">
+            <p class="font_size_18_lighter">
               Contact the recalculation service toll free at 
               <a
                   [attr.href]="bceIdLink"

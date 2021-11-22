@@ -152,6 +152,15 @@ div.container {
     background-color: theme-palette(blue, bg);
     color: #fff;
   }
+
+  &.large_border {
+    height: 46px;
+    font-size: 1.125em;
+    font-weight: bold;
+    border: 1px solid #003366; 
+    color: #003366;
+  }
+
 }
 
 .mat-stroked-button {
@@ -624,4 +633,42 @@ mat-grid-tile.mat-figure {
   border: solid 2px orange;
 }
 
+.description_text {
+  color: black; 
+  font-size: 18px; 
+  padding-right: 100px;
+}
 
+.background_image {
+  background-image: url('/assets/landing-page-background.png');
+  background-repeat: no-repeat; 
+  background-size: 100%;
+}
+
+.padding_right_200{
+  padding-right: 200px;
+}
+
+.border_bottom {
+  border-bottom: solid 2px orange;
+}
+
+.font_size_24_bolder {
+  font-size: 24px; 
+  font-weight:bolder;
+}
+
+.font_size_24_normal {
+  font-size: 24px; 
+  font-weight:normal;
+}
+
+.color_black {
+  color: black;
+}
+
+.font_size_18_lighter {
+  color:black; 
+  font-size: 18px; 
+  font-weight:lighter;
+}
