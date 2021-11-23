@@ -1,4 +1,30 @@
-<app-header></app-header>
+<app-header></app-header> 
+<div class="summary-header">
+  <div class="container">
+    <ul class="summary-header-links">
+      <li>
+        <a
+          [attr.href]=""
+          class="primary-navigation"
+          rel="noopener"
+        >
+          Home
+        </a>
+      </li>
+      <span class="divider">|</span>
+      <li>
+        <a
+          [routerLink]="['/questionnaire']"
+          class="primary-navigation"
+          rel="noopener"
+        >
+          Questionnaire
+        </a>
+      </li>
+      <span class="divider">|</span>
+    </ul>
+  </div>
+</div>
 <div class="container">
    <section>
       <div>
@@ -6,8 +32,8 @@
          <mat-divider></mat-divider>
          <h2><strong>Questionnaire</strong></h2>
          <p>Answer the following questions to learn about CSRS and your child support.</p>
-         <mat-divider></mat-divider>
-      </div>
+         <hr style="opacity: 1">
+        </div>
    </section>
    <section>
       <div class="flex-6-col">
@@ -24,17 +50,24 @@
                <ng-template matStepContent="">
                   <div *ngFor="let contentItem of question.content; index as coi;">
                      {{contentItem.label}}
-                     <ol *ngIf="contentItem.data">
-                        <li id="{{'ol-'+i+'-'+coi+'-'+oli}}" *ngFor="let oiItem of contentItem.data.ol;index as oli ">
-                           {{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}
-                        </li>
+                     <ol type="a" *ngIf="contentItem.data">
+                       <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
+                        <div style="display: flex;flex-direction: row;"><span id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
+                       </li>
                      </ol>
                   </div>
-                  <div class="button-row">
+                  <div class="button-row mt-2 ">
+                    <mat-divider></mat-divider>
+                    <br>
                      <button *ngFor="let buttonItem of question.buttons; index as bi" mat-stroked-button color="basic" (click)="setLabel(question,buttonItem,i)" [ngClass]="{ 'myGreen' :question.clicked == buttonItem.label && question.clicked == 'Yes', 'myRed' :question.clicked == buttonItem.label && question.clicked == 'No'  }">
                      {{buttonItem.label}}
+                     <br>
+                     <div *ngIf="question.clicked == buttonItem.label">
+                      <img class="icon-size5  mt-2 mb-1" src="/assets/Down-chevron-icon.svg">
+                     </div>
                      </button>
                   </div>
+                  <br>
                   <div class="yesNocontent" *ngFor="let buttonItem of question.buttons; index as yi">
                      <div *ngIf="buttonItem.label == question.clicked">
                         <div class="clickedContent" *ngFor="let cItem of buttonItem.clickedContent; index as ci">
@@ -47,11 +80,10 @@
                         </div>
                      </div>
                   </div>
-                  <mat-divider></mat-divider>
                   <div class="button-row">
                      <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
-                     <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">{{nextBackButton.label}}</button>
-                     <button class="nextStep" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next</button>
+                     <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
+                     <button class="nextStep" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
                      </span>
                   </div>
                </ng-template>
@@ -119,8 +151,9 @@
                      <strong>Child Support Recalculation Service: </strong>
                   </p>
                   <ul>
-                     <li>1-866-660-2684</li>
-                     <li>604-660-2528</li>
+                   
+                     <li> <a href="tel:1-866-660-2684">1-866-660-2684</a></li>
+                     <li> <a href="tel:604-660-2528">604-660-2528</a></li>
                   </ul>
                </ng-template>
             </mat-step>

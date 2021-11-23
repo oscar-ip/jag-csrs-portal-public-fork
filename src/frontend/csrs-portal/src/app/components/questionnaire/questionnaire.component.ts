@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { AppConfigService } from 'app/services/app-config.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -7,16 +8,12 @@ import { AfterViewInit, Component } from '@angular/core';
 })
 export class QuestionnaireComponent implements AfterViewInit {
   public bceIdLink: string;
+  private appConfigService: AppConfigService;
   data: any = [
     {
       label:
-        'Do you have an order made in the Provincial Court of British Columbia ...',
-      content: [
-        {
-          label:
-            'Do you have an order made in the Provincial Court of British Columbia or a written agreement that is filed in the Provincial Court of British Columbia that deals with child support payments?',
-        },
-      ],
+      'Do you have an order made in the Provincial Court of British Columbia or a written agreement that is filed in the Provincial Court of British Columbia that deals with child support payments?',
+      content: [],
       buttons: [
         {
           label: 'Yes',
@@ -84,20 +81,6 @@ export class QuestionnaireComponent implements AfterViewInit {
             {
               data: 'The Child Support Recalculation Service does <strong>not</strong> recalculate:',
             },
-            {
-              data: {
-                ul: [
-                  {
-                    liData:
-                      'orders and written agreements for spousal support; and',
-                  },
-                  {
-                    liData:
-                      'orders and written agreements for child support from the Supreme Court of British Columbia.',
-                  },
-                ],
-              },
-            },
           ],
         },
       ],
@@ -109,13 +92,9 @@ export class QuestionnaireComponent implements AfterViewInit {
       ],
     },
     {
-      label: 'Do you, the child or children, and the other parent ...',
-      content: [
-        {
-          label:
-            'Do you, the child or children, and the other parent all live in British Columbia?',
-        },
-      ],
+      label: 'Do you, the child or children, and the other parent all live in British Columbia?',
+
+      content: [],
       buttons: [
         {
           label: 'Yes',
@@ -166,13 +145,8 @@ export class QuestionnaireComponent implements AfterViewInit {
       ],
     },
     {
-      label: 'Has the financial situation of you or the other parent...',
-      content: [
-        {
-          label:
-            'Has the financial situation of you or the other parent or guardian changed since your support order or written agreement was made? (In other words, has the annual income amount in your most recent support order or written agreement gone up or down?)',
-        },
-      ],
+      label: 'Has the financial situation of you or the other parent or guardian changed since your support order or written agreement was made?',
+      content: [],
       buttons: [
         {
           label: 'Yes',
@@ -247,7 +221,8 @@ export class QuestionnaireComponent implements AfterViewInit {
       ],
     },
     {
-      label: 'Was the amount of child support in your order ...',
+      label: 'Was the amount of child support in your order or written agreement based on any of the following situations?',
+
       content: [
         {
           label:
@@ -258,12 +233,15 @@ export class QuestionnaireComponent implements AfterViewInit {
             ol: [
               {
                 liData: 'Undue hardship;',
+                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
               {
                 liData: 'Self-employment or partnership income; or',
+                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
               {
                 liData: 'Payor stands in place of a parent.',
+                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
             ],
           },
@@ -309,13 +287,8 @@ export class QuestionnaireComponent implements AfterViewInit {
       ],
     },
     {
-      label: 'Was the amount of child support in your order ...',
-      content: [
-        {
-          label:
-            'Was the amount of child support in your order based on imputed income ?',
-        },
-      ],
+      label: 'Was the amount of child support in your order based on imputed income ?',
+      content: [],
       buttons: [
         {
           label: 'Yes',
@@ -349,13 +322,8 @@ export class QuestionnaireComponent implements AfterViewInit {
       ],
     },
     {
-      label: 'Does your order or written agreement require the payment ...',
-      content: [
-        {
-          label:
-            ' Does your order or written agreement require the payment of special or extraordinary expenses ?',
-        },
-      ],
+      label: ' Does your order or written agreement require the payment of special or extraordinary expenses ?',
+      content: [],
       buttons: [
         {
           label: 'Yes',
@@ -410,7 +378,7 @@ export class QuestionnaireComponent implements AfterViewInit {
     },
     {
       label:
-        'Does your order/written agreement include child support involving ...',
+        'Does your order/written agreement include child support involving',
       content: [
         {
           label:
@@ -514,7 +482,7 @@ export class QuestionnaireComponent implements AfterViewInit {
   ];
 
   constructor() {
-    this.bceIdLink = 'https://www.bceid.ca/';
+    this.bceIdLink = this.appConfigService.bceIdtLink;
   }
 
   public ngAfterViewInit(): void {}
@@ -543,7 +511,7 @@ export class QuestionnaireComponent implements AfterViewInit {
       if (question.clicked === 'Yes' && node) {
         node[style].cssText += 'background-color:green !important';
       } else if (node && question.clicked === 'No') {
-        node['style'].cssText += 'background-color:red !important';
+        node[style].cssText += 'background-color:red !important';
       }
     });
   }
