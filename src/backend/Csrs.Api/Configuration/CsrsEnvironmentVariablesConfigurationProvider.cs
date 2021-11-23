@@ -7,6 +7,11 @@
             Add("SPLUNK_URL", $"{nameof(CsrsConfiguration.Splunk)}:{nameof(SplunkConfiguration.Url)}");
             Add("SPLUNK_TOKEN", $"{nameof(CsrsConfiguration.Splunk)}:{nameof(SplunkConfiguration.Token)}");
             Add("SPLUNK_VALIDATE_SERVER_CERTIFICATE", $"{nameof(CsrsConfiguration.Splunk)}:{nameof(SplunkConfiguration.ValidatServerCertificate)}");
+
+            Add("ZIPKIN_URL", $"{nameof(CsrsConfiguration.Tracing)}:{nameof(TracingConfiguration.Zipkin)}:{nameof(ZipkinConfiguration.Url)}");
+
+            Add("JAEGER_HOST", $"{nameof(CsrsConfiguration.Tracing)}:{nameof(TracingConfiguration.Jaeger)}:{nameof(JaegerConfiguration.Host)}");
+            Add("JAEGER_PORT", $"{nameof(CsrsConfiguration.Tracing)}:{nameof(TracingConfiguration.Jaeger)}:{nameof(JaegerConfiguration.Port)}");
         }
 
         /// <summary>

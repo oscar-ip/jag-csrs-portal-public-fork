@@ -25,8 +25,8 @@ namespace Csrs.Test.Controllers
             var logger = GetMockLogger();
             var mediator = GetMockMediator();
 
-            Assert.Throws<ArgumentNullException>(() => new PortalAccountController(null, logger.Object));
-            Assert.Throws<ArgumentNullException>(() => new PortalAccountController(mediator.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new PortalAccountController(null!, logger.Object));
+            Assert.Throws<ArgumentNullException>(() => new PortalAccountController(mediator.Object, null!));
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Csrs.Test.Controllers
 
             mediator
                 .Setup(_ => _.Send(It.IsAny<Profile.Request>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Profile.Response(Array.Empty<PortalAccount>()))
+                .ReturnsAsync(new Profile.Response())
                 .Verifiable("Correct request was not sent.");
 
             var sut = new PortalAccountController(mediator.Object, logger.Object);

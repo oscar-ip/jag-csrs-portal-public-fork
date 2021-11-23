@@ -1,44 +1,44 @@
-﻿using Serilog;
+﻿using Csrs.Api.Configuration;
+using Serilog;
 
-namespace Csrs.Api.Configuration
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class SerilogExtensions
 {
-    public static class SerilogExtensions
+    public static void UseSerilog(this WebApplicationBuilder builder)
     {
-        public static void UseSerilog(this WebApplicationBuilder builder)
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
+
+        builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
         {
-            if (builder is null) throw new ArgumentNullException(nameof(builder));
+            loggerConfiguration.ReadFrom.Configuration(builder.Configuration);
 
-            builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+            // get the configuration type
+            CsrsConfiguration configuration = builder.Configuration.Get<CsrsConfiguration>();
+
+            var splunk = configuration.Splunk;
+            if (splunk is null || string.IsNullOrEmpty(splunk.Url) || string.IsNullOrEmpty(splunk.Token))
             {
-                loggerConfiguration.ReadFrom.Configuration(builder.Configuration);
+                return;
+            }
 
-                // get the configuration type
-                CsrsConfiguration configuration = builder.Configuration.Get<CsrsConfiguration>();
+            HttpClientHandler? handler = null;
 
-                var splunk = configuration.Splunk;
-                if (splunk is null || string.IsNullOrEmpty(splunk.Url) || string.IsNullOrEmpty(splunk.Token))
+            if (!splunk.ValidatServerCertificate)
+            {
+                handler = new HttpClientHandler
                 {
-                    return;
-                }
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                };
+            }
 
-                HttpClientHandler? handler = null;
-
-                if (!splunk.ValidatServerCertificate)
-                {
-                    handler = new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    };
-                }
-
-                // When writing to splunk, limit data to information level
-                loggerConfiguration.WriteTo.EventCollector(
-                    splunkHost: splunk.Url,
-                    eventCollectorToken: splunk.Token,
-                    sourceType: typeof(SerilogExtensions).Assembly?.GetName()?.Name,
-                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
-                    messageHandler: handler);
-            });
-        }
+            // When writing to splunk, limit data to information level
+            loggerConfiguration.WriteTo.EventCollector(
+                splunkHost: splunk.Url,
+                eventCollectorToken: splunk.Token,
+                sourceType: typeof(SerilogExtensions).Assembly?.GetName()?.Name,
+                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+                messageHandler: handler);
+        });
     }
 }

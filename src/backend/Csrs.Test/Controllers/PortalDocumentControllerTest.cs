@@ -25,8 +25,8 @@ namespace Csrs.Test.Controllers
             var logger = GetMockLogger();
             var mediator = GetMockMediator();
 
-            Assert.Throws<ArgumentNullException>(() => new PortalDocumentController(null, logger.Object));
-            Assert.Throws<ArgumentNullException>(() => new PortalDocumentController(mediator.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new PortalDocumentController(null!, logger.Object));
+            Assert.Throws<ArgumentNullException>(() => new PortalDocumentController(mediator.Object, null!));
         }
 
 
