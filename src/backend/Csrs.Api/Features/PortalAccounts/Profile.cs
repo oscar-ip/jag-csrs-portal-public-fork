@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Csrs.Api.Models;
 using Csrs.Api.Repositories;
+using Csrs.Api.Models.Dynamics;
 
 namespace Csrs.Api.Features.PortalAccounts
 {
@@ -41,7 +42,7 @@ namespace Csrs.Api.Features.PortalAccounts
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var items = await _repository.GetAsync(request.BCeIDGuid, cancellationToken);
+                var items = await _repository.GetAsync(request.BCeIDGuid, SSG_CsrsFile.AllProperties, cancellationToken);
                 return new Response(Array.Empty<PortalAccount>());
             }
         }

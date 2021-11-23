@@ -1,6 +1,8 @@
-﻿namespace Csrs.Api.Repositories
+﻿using Csrs.Api.Models.Dynamics;
+
+namespace Csrs.Api.Repositories
 {
-    public interface ICsrsFeedbackRepository
+    public interface ICsrsFeedbackRepository : IRepository<SSG_CsrsFeedback>
     {
     }
 }
