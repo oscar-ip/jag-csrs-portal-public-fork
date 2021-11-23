@@ -1,533 +1,164 @@
-<app-header></app-header>
-
+<app-header></app-header> 
+<div class="summary-header">
   <div class="container">
-    <section>
-        <div>
-          <h1>Child Support Recalculation Service</h1>
-          <br/>
-          <mat-divider></mat-divider>
-          <h2><strong>Questionnaire</strong></h2>
-          <br/>
-          <p>Answer the following questions to learn about CSRS and your child support.</p>
-          <mat-divider></mat-divider>
-        </div>
-    </section>
-    <section>
-    <div class="flex-6-col">
-        <mat-vertical-stepper  #stepper linear>
-            <!--Question 1-->
-            <mat-step>
-              <ng-template matStepLabel>
-                <div *ngIf="a1Yes"><mat-icon [ngClass]="{ 'colorGreen' :a1Yes }">done</mat-icon></div>
-                <div *ngIf="a1No"><mat-icon [ngClass]="{ 'colorRed' :a1No }">cancel</mat-icon></div>  
-                Do you have an order made in the Provincial Court of British Columbia ...
-              </ng-template>
-              <ng-template matStepContent>
-                <br/>
-                <p></p>
-                Do you have an order made in the Provincial Court of 
-                                        British Columbia or a written agreement that is 
-                                        filed in the Provincial Court of British Columbia that 
-                                        deals with child support payments?
-                <br/>
-                <div class="button-row">
-                    <button mat-stroked-button color="basic" (click)="q1Yes()" [ngClass]="{ 'myGreen' :a1Yes }">Yes</button>
-                    <button mat-stroked-button color="basic" (click)="q1No()" [ngClass]="{ 'myRed' :a1No }">No</button>
-                </div> 
-                    <div *ngIf="a1Yes">
-                      <br/>
-                      <mat-divider></mat-divider>  
-                      <br/>
-                        <p>
-                            <strong>Great!</strong> You’ll need to provide information from your order or written agreement if 
-                            you enrol in the Child Support Recalculation Service.
-                        </p>
-                        <p>
-                            To apply for the recalculation service, you must have an order or written agreement for 
-                            child support from the Provincial Court of British Columbia. You'll need a copy of it 
-                            before you start your application. If you have an order or written agreement but do not 
-                            have a copy, ask the <a href="https://www.provincialcourt.bc.ca/locations-contacts">court</a> for one. 
-                        </p>
-                        <p>
-                            You’ll need to have a copy of it before you start your application. 
-                        </p>
-                        <p>
-                            The Child Support Recalculation Service does <strong>not</strong> recalculate:
-                        </p>
-                        <ul>
-                            <li>orders and written agreements for spousal support; and</li>
-                            <li>orders and written agreements for child support from the Supreme Court of British Columbia.</li>
-                        </ul>
-                    </div>
-                    <div *ngIf="a1No">
-                      <br/>
-                      <mat-divider></mat-divider>  
-                      <br/>
-                        <p>
-                            To apply for the Child Support Recalculation Service, you must have an order or written agreement 
-                            for child support from the Provincial Court of British Columbia. You'll need a copy of it before 
-                            you start your application. 
-                        <br/>
-                            If you need help with getting a new order or written agreement for child support, see these resources:
-                        </p>
-                        <ul>
-                            <li><a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice">British Columbia Family Justice</a></li>
-                            <li><a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/family-justice-centres">Family Justice Centres</a></li>
-                            <li><a href="https://family.legalaid.bc.ca/">Legal Aid BC - Family Law</a></li>
-                        </ul>
-                        <p>
-                          If you already have an order or written agreement but do not have a copy, ask the court for one. 
-                        </p>
-                        <p>
-                            The Child Support Recalculation Service does <strong>not</strong> recalculate:
-                        </p>
-                        <ul>
-                            <li>orders and written agreements for spousal support; and</li>
-                            <li>orders and written agreements for child support from the Supreme Court of British Columbia.</li>
-                        </ul>    
-                      </div>
-                    <br/>
-                    <mat-divider></mat-divider>
-                    <br/>
-                <button mat-stroked-button color="basic" matStepperNext>Next</button>
-              </ng-template>
-            </mat-step>
-            <!--Question 2-->
-            <mat-step>
-              <ng-template matStepLabel>
-                <div *ngIf="a2Yes"><mat-icon [ngClass]="{ 'colorGreen' :a2Yes }">done</mat-icon></div>
-                <div *ngIf="a2No"><mat-icon [ngClass]="{ 'colorRed' :a2No }">cancel</mat-icon></div>  
-                Do you, the child or children, and the other parent ...
-              </ng-template>
-              <ng-template matStepContent>
-                <br/>
-                <p>Do you, the child or children, and the other parent all live in British Columbia?</p>
-                <br/>
-                <div class="button-row">
-                    <button mat-stroked-button color="basic" (click)="q2Yes()" [ngClass]="{ 'myGreen' :a2Yes }">Yes</button>
-                    <button mat-stroked-button color="basic" (click)="q2No()" [ngClass]="{ 'myRed' :a2No }">No</button>
-                </div> 
-                  <div *ngIf="a2Yes">
-                    <br/>
-                  </div>
-                  <div *ngIf="a2No">
-                    <br/>
-                    <mat-divider></mat-divider>  
-                    <br/>
-                      <p>To use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C 
-                        residents. You’re considered a B.C. resident if you have an address in the province and spend the 
-                        majority of your time in the province.</p>
-                      <br/>
-                      <p>If you or the other parent or guardian live in another province or territory, this service is not 
-                        available to you.</p>
-                      <br/>
-                      <p>To learn about other options that might be available to you, see these resources:</p>
-                      <br/>
-                      <ul>
-                          <li><a href="https://www.isoforms.bc.ca/">British Columbia’s Interjurisdictional Support Orders Forms</a></li>
-                          <li><a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/inter-jurisdictional-support-orders">British Columbia’s Inter-Jurisdictional Support Orders</a></li>
-                          <li><a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice">British Columbia Family Justice</a></li>
-                      </ul>
-                    </div>
-                  <br/>
-                  <mat-divider></mat-divider>
-                  <br/>
-                  <div class="button-row">
-                    <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-                    <button mat-stroked-button color="basic" matStepperNext>Next</button>
-                  </div>
-              </ng-template>
-            </mat-step>
-            <!--Question 3-->
-            <mat-step>
-              <ng-template matStepLabel>
-                <div *ngIf="a3Yes"><mat-icon [ngClass]="{ 'colorGreen' :a3Yes }">done</mat-icon></div>
-                <div *ngIf="a3No"><mat-icon [ngClass]="{ 'colorGree' :a3No }">done</mat-icon></div>  
-                <div *ngIf="a3DontKnow">
-                    <mat-icon class="large" [ngClass]="{ 'colorGreen' :a3DontKnow }">done</mat-icon>
-                </div>  
-                Has the financial situation of you or the other parent...
-              </ng-template>
-              <ng-template matStepContent>
-                <br/>
-                <p>Has the financial situation of you or the other parent or guardian changed since your support 
-                    order or written agreement was made? (In other words, has the annual income amount in your most 
-                    recent support order or written agreement gone up or down?)</p>
-                <br/>
-                <div class="button-row">
-                    <button mat-stroked-button color="basic" (click)="q3Yes()" [ngClass]="{ 'myGreen' :a3Yes }">Yes</button>
-                    <button mat-stroked-button color="basic" (click)="q3No()" [ngClass]="{ 'myGreen' :a3No }">No</button>
-                    <button mat-stroked-button color="basic" class="large"
-                        (click)="q3DontKnow()" [ngClass]="{ 'myGreen' :a3DontKnow }">I don’t know
-                    </button>
-                </div> 
-                    <div *ngIf="a3Yes || a3No || a3DontKnow">
-                      <br/>
-                      <mat-divider></mat-divider>  
-                      <br/>
-                        <p>In B.C., the amount of child support to be paid is determined using 
-                          <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>.  
-                          As a general rule, the law requires courts, parents and the Child Support Recalculation Service to 
-                          use the guidelines.</p>
-                        <br/>
-                        <p>Even if you're not sure if the income of the other parent has changed, the recalculation service 
-                          can review your order or written agreement each year to ensure it is fair based on the most recent 
-                          ncome tax information and the Child Support Guidelines.</p>
-                        <br/>
-                        <p>Each year, the recalculation service will ask the paying parent to provide their income tax 
-                          information for the most recent tax year.</p>
-                        <br/>
-                        <p>In some situations, the recalculation service will ask both parents to provide this information 
-                          if their child support order or written agreement used both incomes to determine support.</p>
-                        <br/>
-                        <p>
-                          If income tax information is not provided by the time it is required, the recalculation service 
-                          can add at least 10% or more to the income amount set out in the most recent order or 
-                          recalculation statement and then recalculate the amount of child support based on the increased 
-                          income amount.  The rate of increase will depend on the date the most recent order was made or 
-                          last recalculated when income was reviewed.
-                        </p>
-                    </div>
-                    <br/>
-                    <mat-divider></mat-divider>
-                    <br/>
-                    <div class="button-row">
-                      <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-                      <button mat-stroked-button color="basic" matStepperNext>Next</button>
-                    </div>
-              </ng-template>
-            </mat-step>
-            <!--Question 4-->
-            <mat-step>
-              <ng-template matStepLabel>
-                <div *ngIf="a4Yes"><mat-icon [ngClass]="{ 'colorRed' :a4Yes }">cancel</mat-icon></div>
-                <div *ngIf="a4No"><mat-icon [ngClass]="{ 'colorGreen' :a4No }">done</mat-icon></div>  
-                <div *ngIf="a4DontKnow">
-                    <mat-icon class="large" [ngClass]="{ 'colorBlue' :a4DontKnow }">help</mat-icon>
-                </div>  
-                Was the amount of child support in your order ...
-              </ng-template>
-              <ng-template matStepContent>
-                <br/>
-                <p>
-                    Was the amount of child support in your order or written agreement based on any of the following situations?
-                </p>
-                <ol>
-                  <li>Undue hardship;</li>
-                  <li>Self-employment or partnership income; or</li>
-                  <li>Payor stands in place of a parent.</li>
-                </ol>
-                <div class="button-row">
-                    <button mat-stroked-button color="basic" (click)="q4Yes()" [ngClass]="{ 'myRed' :a4Yes }">Yes</button>
-                    <button mat-stroked-button color="basic" (click)="q4No()" [ngClass]="{ 'myGreen' :a4No }">No</button>
-                    <button mat-stroked-button color="basic" class="large"
-                        (click)="q4DontKnow()" [ngClass]="{ 'myBlue' :a4DontKnow }">I don’t know
-                    </button>
-                </div> 
-                    <div *ngIf="a4Yes || a4DontKnow">
-                      <br/>
-                      <mat-divider></mat-divider>  
-                      <br/>
-                        <p>The Child Support Recalculation Service can only recalculate support based on the Child Support Guidelines. 
-                          Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.</p>
-                        <br/>
-                        <p>If your child support was based on any of the above, the recalculation service <strong>cannot</strong> recalculate it 
-                          and you are not eligible for the service.</p>
-                    </div>
-                    <br/>
-                    <mat-divider></mat-divider>
-                    <br/>
-                    <div class="button-row">
-                      <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-                      <button mat-stroked-button color="basic" matStepperNext>Next</button>
-                    </div>
-              </ng-template>
-            </mat-step>
-            <!--Question 5-->
-            <mat-step>
-                <ng-template matStepLabel>
-                    <div *ngIf="a5Yes"><mat-icon [ngClass]="{ 'colorRed' :a5Yes }">cancel</mat-icon></div>
-                    <div *ngIf="a5No"><mat-icon [ngClass]="{ 'colorGreen' :a5No }">done</mat-icon></div>  
-                    <div *ngIf="a5DontKnow">
-                        <mat-icon class="large" [ngClass]="{ 'colorGreen' :a5DontKnow }">done</mat-icon>
-                    </div>  
-                    Was the amount of child support in your order ...
-                </ng-template>
-                <ng-template matStepContent>
-                    <br/>
-                    <p>
-                        Was the amount of child support in your order based on imputed income ?
-                    </p>
-                    
-                    <div class="button-row">
-                        <button mat-stroked-button color="basic" (click)="q5Yes()" [ngClass]="{ 'myRed' :a5Yes }">Yes</button>
-                        <button mat-stroked-button color="basic" (click)="q5No()" [ngClass]="{ 'myGreen' :a5No }">No</button>
-                        <button mat-stroked-button color="basic" class="large" 
-                                (click)="q5DontKnow()" 
-                                [ngClass]="{ 'myGreen' :a5DontKnow }">
-                                I don’t know
-                        </button>
-                    </div> 
-                        <div *ngIf="a5Yes">
-                        <br/>
-                        <mat-divider></mat-divider>  
-                        <br/>
-                            <p>The Child Support Recalculation Service <strong>cannot</strong> recalculate support when a paying parent’s income
-                                has been imputed. This is because the recalculation service cannot make decisions that a judge 
-                                can make about why income was imputed when child support was determined.  
-                                If income has been imputed, your court order will usually say so.</p>
-                            <br/>
-                            <p><strong>There is one exception:</strong> If the order states that the paying parent’s income was imputed because they 
-                                are exempt from paying federal or provincial income tax, then the recalculation service may be 
-                                able to recalculate.</p>
-                        </div>
-                        <br/>
-                        <mat-divider></mat-divider>
-                        <br/>
-                        <div class="button-row">
-                        <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-                        <button mat-stroked-button color="basic" matStepperNext>Next</button>
-                        </div>
-                </ng-template>
-                </mat-step>
-                <!--Question 6-->
-                <mat-step>
-                    <ng-template matStepLabel>
-                        <div *ngIf="a6Yes"><mat-icon [ngClass]="{ 'colorGreen' :a6Yes}">done</mat-icon></div>
-                        <div *ngIf="a6No"><mat-icon [ngClass]="{ 'colorGreen' :a6No}">done</mat-icon></div>
-                        Does your order or written agreement require the payment ...
-                    </ng-template>
-                    <ng-template matStepContent>
-                        <br/>
-                        <p>
-                            Does your order or written agreement require the payment of special or 
-                            extraordinary expenses ?
-                        </p>
-                        <div class="button-row">
-                            <button mat-stroked-button color="basic" (click)="q6Yes()" [ngClass]="{ 'myGreen' :a6Yes }">Yes</button>
-                            <button mat-stroked-button color="basic" (click)="q6No()" [ngClass]="{ 'myGreen' :a6No }">No</button>
-                       </div> 
-                            <div *ngIf="a6Yes">
-                            <br/>
-                            <mat-divider></mat-divider>  
-                            <br/>
-                                <p>The Child Support Recalculation Service may only recalculate special or extraordinary 
-                                    expenses if:
-                                </p>
-                                <ul>
-                                    <li>Both parent’s incomes are stated in the order or written agreement; and </li>
-                                    <li>Each parent’s proportion owing in relation to their incomes is clearly set out </li>
-                                </ul>   
-                                <br/>
-                                <p>The recalculation service must review your order or written agreement first to 
-                                    determine whether it can recalculate your special or extraordinary Section 7 expenses.
-                                </p>
-                                <br/>
-                                <p>
-                                    The recalculation service doesn’t have the authority to determine whether an expense 
-                                    continues to be eligible and payable. It may only adjust each parent’s proportionate 
-                                    share owing based on updated incomes.
-                                </p>
-                                <br/>
-                                <p>
-                                    If parents cannot agree on the eligibility of expenses, they may ask a court to decide.
-                                </p>
-                            </div>
-                            <br/>
-                            <mat-divider></mat-divider>
-                            <br/>
-                            <div class="button-row">
-                            <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-                            <button mat-stroked-button color="basic" matStepperNext>Next</button>
-                            </div>
-                    </ng-template>
-                </mat-step>
-                <!--Question 7-->
-                <mat-step>
-                    <ng-template matStepLabel>
-                        <div *ngIf="a7Yes"><mat-icon [ngClass]="{ 'colorRed' :a7Yes}">cancel</mat-icon></div>
-                        <div *ngIf="a7No"><mat-icon [ngClass]="{ 'colorGreen' :a7No}">done</mat-icon></div>
-                        Does your order/written agreement include child support involving ...
-                    </ng-template>
-                    <ng-template matStepContent>
-                        <br/>
-                        <p>
-                            Does your order/written agreement include child support involving
-                        </p>
-                        <ol>
-                            <li>Children at or over the age of 19 ;</li>
-                            <li>Shared parenting ;</li> 
-                            <li>Pattern of income ; or</li>
-                            <li>Income over $150,000 ?</li>
-                        </ol>
-                        <div class="button-row">
-                            <button mat-stroked-button color="basic" (click)="q7Yes()" [ngClass]="{ 'myRed' :a7Yes }">Yes</button>
-                            <button mat-stroked-button color="basic" (click)="q7No()" [ngClass]="{ 'myGreen' :a7No }">No</button>
-                       </div> 
-                            <div *ngIf="a7Yes">
-                            <br/>
-                            <mat-divider></mat-divider>  
-                            <br/>
-                                <p>These areas of child support can be complex. Sometimes a judge may apply factors 
-                                    other than the Child Support Guideline Tables to determine the amount of child 
-                                    support. The Child Support Recalculation Service must review your order or written 
-                                    agreement first to decide whether it can recalculate your child support amount.
-                                </p>
-                            </div>
-                            <br/>
-                            <mat-divider></mat-divider>
-                            <br/>
-                            <div class="button-row">
-                            <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-                            <button mat-stroked-button color="basic" matStepperNext>Next</button>
-                            </div>
-                    </ng-template>
-                </mat-step>
-                <!--Question 8-->
-                <mat-step>
-                    <ng-template matStepLabel>
-                        <div *ngIf="a8Yes"><mat-icon [ngClass]="{ 'colorRed' :a8Yes}">cancel</mat-icon></div>
-                        <div *ngIf="a8No"><mat-icon [ngClass]="{ 'colorGreen' :a8No}">done</mat-icon></div>
-                        Are there any court applications underway between you and the other ...
-                    </ng-template>
-                    <ng-template matStepContent>
-                        <br/>
-                        <p>
-                            Are there any court applications underway between you and the other parent 
-                            that could have an impact on the amount of child support in your order or 
-                            written agreement?  
-                        </p>
-                        <p>
-                            For example, a party is applying to reduce or cancel child support, or someone 
-                            is applying to change the parenting arrangements where a child will spend a 
-                            different amount of time with each parent.  
-                        </p>
-                        <div class="button-row">
-                            <button mat-stroked-button color="basic" (click)="q8Yes()" [ngClass]="{ 'myRed' :a8Yes }">Yes</button>
-                            <button mat-stroked-button color="basic" (click)="q8No()" [ngClass]="{ 'myGreen' :a8No }">No</button>
-                       </div> 
-                            <div *ngIf="a8Yes || a8No">
-                            <br/>
-                            <mat-divider></mat-divider>  
-                            <br/>
-                            <p>If you or the other parent have legal proceedings underway that may impact child 
-                                support payments, the recalculation service <strong>cannot</strong> recalculate your order. Once 
-                                you obtain a new order, you can apply to the Child Support Recalculation Service.
-                            </p>
-                            <br/>
-                            <p>The Child Support Recalculation Service recalculates child support in a less informal 
-                                way than court. Parents enrolled in the service won't have to go to court and ask a 
-                                judge to decide on child support when their income changes. 
-                            </p>
-                            <br/>
-                            <p><strong>Important note:</strong> The Child Support Recalculation Service cannot backdate the recalculation 
-                                of your child support. It can only recalculate child support amounts going forward based 
-                                on income tax information for the most recent tax year.
-                            </p>
-                            <br/>
-                            <p>
-                                The recalculation service provides a copy of the recalculation statement to both parents and 
-                                files a copy in court. Once it's in effect, the recalculated amount is the child support to be paid.
-                            </p>
-                            </div>
-                            <br/>
-                            <mat-divider></mat-divider>
-                            <br/>
-                            <div class="button-row">
-                            <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-                            <button mat-stroked-button color="basic" matStepperNext>Next</button>
-                            </div>
-                    </ng-template>
-                </mat-step>    
-                <!--Questionnaire completed -->
-                <mat-step>
-                    <ng-template matStepLabel>
-                        Questionnaire complete 
-                    </ng-template>
-                    <ng-template matStepContent>
-                        <br/>
-                        <p>Review your responses to the questions, if:</p>
-                        <mat-divider></mat-divider>    
-                        <p>
-                            <strong>After reviewing your answers and you believe you are eligible 
-                                for this service you may continue on to the
-                                application to create your CSRS account.</strong> 
-                        </p>
-                        <mat-divider></mat-divider>    
-                        <div class="flex-6-col round3">
-                            <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-                              <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0" class="mi-tile-contents-center">
-                                <img class="icon-size5" src="/assets/Questionnaire-icon.svg" />
-                              </mat-grid-tile>
-                              <mat-grid-tile colspan="5" rowspan="2" aria-rowindex="0" class="mi-tile-contents-left border-bottom">
-                                <p>
-                                    <strong>Be prepared with the following information needed to complete your application:</strong>
-                                </p>
-                                <ul>
-                                    <li>Personal information on you, the other party and the children</li>
-                                    <li>Court orders or written agreements</li>
-                                    <li>Financial information for both parties</li>
-                                </ul>
-                              </mat-grid-tile>    
-                            </mat-grid-list>
-                          </div>
-                          <br/>
-                          <p>
-                            Sign in with your BCeID to proceed, if you do not have a BCeID please create an account first.
-                          </p> 
-                          <div class="flex-6-col round3">
-                            <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-                              <mat-grid-tile colspan="3" rowspan="1" aria-rowindex="0" class="mi-tile-contents-center">
-                                <a
-                                    [attr.href]="bceIdLink"
-                                    target="_blank"
-                                    rel="noopener"
-                                    class="useful-links bceIdLink"
-                                >
-                                    <button mat-flat-button type="button" class="large" color="primary">
-                                        Sign in with BCeID to enrol
-                                    </button>
-                                </a>
-                              </mat-grid-tile>    
-                              <mat-grid-tile colspan="3" rowspan="1" aria-rowindex="0" class="mi-tile-contents-center">
-                                <a
-                                    [attr.href]="bceIdLink"
-                                    target="_blank"
-                                    rel="noopener"
-                                    class="useful-links bceIdLink"
-                                >
-                                    I don't have a BCeID account
-                                </a>
-                            </mat-grid-tile>    
-                            </mat-grid-list>
-                          </div>
-                          <br/>  
-
-                        <p>
-                            <strong>I’m not sure if I am eligible and have questions</strong>
-                        </p>
-                        <mat-divider></mat-divider>    
-                        <br/>
-                        <p>
-                            If you have more questions about your eligibly, please contact: 
-                            <strong>Child Support Recalculation Service: </strong>
-                        </p>
-                        <ul>
-                            <li>1-866-660-2684</li>
-                            <li>604-660-2528</li>
-                        </ul>
-                    </ng-template>
-                </mat-step>
-        
-          </mat-vertical-stepper>
-
-    </div>
-  </section>
-
-  
+    <ul class="summary-header-links">
+      <li>
+        <a
+          [attr.href]=""
+          class="primary-navigation"
+          rel="noopener"
+        >
+          Home
+        </a>
+      </li>
+      <span class="divider">|</span>
+      <li>
+        <a
+          [routerLink]="['/questionnaire']"
+          class="primary-navigation"
+          rel="noopener"
+        >
+          Questionnaire
+        </a>
+      </li>
+      <span class="divider">|</span>
+    </ul>
+  </div>
 </div>
-
-
+<div class="container">
+   <section>
+      <div>
+         <h1>Child Support Recalculation Service</h1>
+         <mat-divider></mat-divider>
+         <h2><strong>Questionnaire</strong></h2>
+         <p>Answer the following questions to learn about CSRS and your child support.</p>
+         <hr style="opacity: 1">
+        </div>
+   </section>
+   <section>
+      <div class="flex-6-col">
+         <mat-vertical-stepper #stepper linear>
+            <ng-template matStepperIcon="edit" let-index="index">
+               <mat-icon>{{data[index].clicked == 'Yes' ? 'done' : data[index].clicked == 'No' ? 'clear':'edit'}}</mat-icon>
+            </ng-template>
+            <mat-step class="notSelected" *ngFor="let question of data; index as i;" state="home">
+               <ng-template matStepLabel="">
+                  <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
+                     <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
+                  {{question.label}}
+               </ng-template>
+               <ng-template matStepContent="">
+                  <div *ngFor="let contentItem of question.content; index as coi;">
+                     {{contentItem.label}}
+                     <ol type="a" *ngIf="contentItem.data">
+                       <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
+                        <div style="display: flex;flex-direction: row;"><span id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
+                       </li>
+                     </ol>
+                  </div>
+                  <div class="button-row mt-2 ">
+                    <mat-divider></mat-divider>
+                    <br>
+                     <button *ngFor="let buttonItem of question.buttons; index as bi" mat-stroked-button color="basic" (click)="setLabel(question,buttonItem,i)" [ngClass]="{ 'myGreen' :question.clicked == buttonItem.label && question.clicked == 'Yes', 'myRed' :question.clicked == buttonItem.label && question.clicked == 'No'  }">
+                     {{buttonItem.label}}
+                     <br>
+                     <div *ngIf="question.clicked == buttonItem.label">
+                      <img class="icon-size5  mt-2 mb-1" src="/assets/Down-chevron-icon.svg">
+                     </div>
+                     </button>
+                  </div>
+                  <br>
+                  <div class="yesNocontent" *ngFor="let buttonItem of question.buttons; index as yi">
+                     <div *ngIf="buttonItem.label == question.clicked">
+                        <div class="clickedContent" *ngFor="let cItem of buttonItem.clickedContent; index as ci">
+                           <p id="{{'id-'+i+'-'+yi+'-'+ci}}" *ngIf="!cItem.data.ul">{{stringToHTML(i,yi,ci,cItem.data,'id')}}</p>
+                           <ul *ngIf="cItem.data.ul">
+                              <li id="{{'li-'+i+'-'+yi+'-'+uli}}" *ngFor="let liItem of cItem.data.ul;index as uli ">
+                                 {{stringToHTML(i,yi,uli,liItem.liData,'li')}}
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="button-row">
+                     <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
+                     <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
+                     <button class="nextStep" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
+                     </span>
+                  </div>
+               </ng-template>
+            </mat-step>
+            <!--Questionnaire completed -->
+            <mat-step>
+               <ng-template matStepLabel="">
+                  Questionnaire complete 
+               </ng-template>
+               <ng-template matStepContent="">
+                  <br>
+                  <p>Review your responses to the questions, if:</p>
+                  <mat-divider></mat-divider>
+                  <p>
+                     <strong>After reviewing your answers and you believe you are eligible 
+                     for this service you may continue on to the
+                     application to create your CSRS account.</strong> 
+                  </p>
+                  <mat-divider></mat-divider>
+                  <div class="flex-6-col round3">
+                     <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
+                        <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="1" rowspan="2">
+                           <img class="icon-size5" src="/assets/Questionnaire-icon.svg">
+                        </mat-grid-tile>
+                        <mat-grid-tile class="mi-tile-contents-left border-bottom" aria-rowindex="0" colspan="5" rowspan="2">
+                           <p>
+                              <strong>Be prepared with the following information needed to complete your application:</strong>
+                           </p>
+                           <ul>
+                              <li>Personal information on you, the other party and the children</li>
+                              <li>Court orders or written agreements</li>
+                              <li>Financial information for both parties</li>
+                           </ul>
+                        </mat-grid-tile>
+                     </mat-grid-list>
+                  </div>
+                  <br>
+                  <p>
+                     Sign in with your BCeID to proceed, if you do not have a BCeID please create an account first.
+                  </p>
+                  <div class="flex-6-col round3">
+                     <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
+                        <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
+                           <a class="useful-links bceIdLink" [attr.href]="bceIdLink" target="_blank" rel="noopener">
+                           <button class="large" type="button" mat-flat-button color="primary">
+                           Sign in with BCeID to enrol
+                           </button>
+                           </a>
+                        </mat-grid-tile>
+                        <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
+                           <a class="useful-links bceIdLink" [attr.href]="bceIdLink" target="_blank" rel="noopener">
+                           I don't have a BCeID account
+                           </a>
+                        </mat-grid-tile>
+                     </mat-grid-list>
+                  </div>
+                  <br>  
+                  <p>
+                     <strong>I’m not sure if I am eligible and have questions</strong>
+                  </p>
+                  <mat-divider></mat-divider>
+                  <br>
+                  <p>
+                     If you have more questions about your eligibly, please contact: 
+                     <strong>Child Support Recalculation Service: </strong>
+                  </p>
+                  <ul>
+                   
+                     <li> <a href="tel:1-866-660-2684">1-866-660-2684</a></li>
+                     <li> <a href="tel:604-660-2528">604-660-2528</a></li>
+                  </ul>
+               </ng-template>
+            </mat-step>
+         </mat-vertical-stepper>
+      </div>
+   </section>
+</div>
 <app-footer></app-footer>
-
-
