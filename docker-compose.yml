@@ -15,7 +15,7 @@ services:
     ## time we change the nginx.conf
     #volumes:
     #  - ./src/frontend/csrs-portal/nginx.conf:/opt/app-root/etc/nginx.default.d/default.conf
-    depends_on: [csrs-portal-api, csrs-keycloak]
+    depends_on: [csrs-portal-api, keycloak]
 
   # #############################################################################################
   # ###                                 Csrs BACKEND                                          ###
@@ -29,13 +29,12 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:8080
       - SERILOG__WRITETO__1__NAME=Seq
       - SERILOG__WRITETO__1__ARGS__SERVERURL=http://seq:5341
-      - ZIPKIN_URL=http://csrs-zipkin:9411/api/v2/spans
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
     ports:
       - "8081:8080"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-    depends_on: [csrs-seq, csrs-zipkin]
+    depends_on: [seq, zipkin]
 
   #############################################################################################
   ###                                  KEYCLOAK                                             ###
@@ -62,9 +61,9 @@ services:
     build:
       context: ./infrastructure/keycloak
       args:
-        - KEYCLOAK_URL=http://csrs-keycloak:8080
+        - KEYCLOAK_URL=http://keycloak:8080
     command: sh -c "dockerize -wait http://keycloak:8080 -timeout 300s /tmp/createuser.sh"
-    depends_on: [csrs-keycloak]
+    depends_on: [keycloak]
 
   # #############################################################################################
   # ###                                  SEQ CONFIG                                           ###
@@ -75,8 +74,8 @@ services:
     environment:
       - ACCEPT_EULA=Y
     ports:
-      #- 5341:5341   # logs are written here, do not need to expose
-      - 8083:80      # user interface is available here
+      - 5341:5341   # logs are written here, do not need to expose, but will so we can log from outside
+      - 8083:80     # user interface is available here
 
   # #############################################################################################
   # ###                                  ZIPKIN CONFIG                                        ###
