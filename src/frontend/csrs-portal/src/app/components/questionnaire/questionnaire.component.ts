@@ -1,5 +1,4 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { AppConfigService } from 'app/services/app-config.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -8,7 +7,6 @@ import { AppConfigService } from 'app/services/app-config.service';
 })
 export class QuestionnaireComponent implements AfterViewInit {
   public bceIdLink: string;
-  private appConfigService: AppConfigService;
   data: any = [
     {
       label:
@@ -482,7 +480,7 @@ export class QuestionnaireComponent implements AfterViewInit {
   ];
 
   constructor() {
-    this.bceIdLink = this.appConfigService.bceIdtLink;
+    this.bceIdLink = 'https://www.bceid.ca/';
   }
 
   public ngAfterViewInit(): void {}
