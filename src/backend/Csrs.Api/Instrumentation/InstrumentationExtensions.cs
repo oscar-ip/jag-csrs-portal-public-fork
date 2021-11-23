@@ -1,4 +1,5 @@
-﻿using OpenTelemetry.Metrics;
+﻿using Csrs.Api.Configuration;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -12,10 +13,13 @@ public static class InstrumentationExtensions
     /// <param name="builder"></param>
     public static void AddInstrumentation(this WebApplicationBuilder builder)
     {
+        // get the configuration type
+        CsrsConfiguration configuration = builder.Configuration.Get<CsrsConfiguration>();
+
         builder.Services.AddOpenTelemetryMetrics(options =>
         {
             //options.AddPrometheusExporter(_ => { });
-        });       
+        });
 
         builder.Services.AddOpenTelemetryTracing(builder =>
         {
@@ -23,18 +27,26 @@ public static class InstrumentationExtensions
                 .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("csrs-api"))
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation();
-           
-            // for now, just use Zipkin
-            builder.AddZipkinExporter(options => {
-                // not needed, it's the default
-                //options.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
-            });
 
-            ////builder.AddJaegerExporter(options => {
-            ////    // not needed, it's the default
-            ////    //options.AgentHost = "localhost";
-            ////    //options.AgentPort = 6831;
-            ////});
+            if (configuration?.Tracing?.Zipkin?.Url is not null)
+            {
+                builder.AddZipkinExporter(options =>
+                {
+                    options.Endpoint = configuration.Tracing.Zipkin.Url;
+                });
+            }
+
+            if (configuration?.Tracing?.Jaeger?.Host is not null)
+            {
+                builder.AddJaegerExporter(options =>
+                {
+                    options.AgentHost = configuration.Tracing.Jaeger.Host;
+                    if (configuration.Tracing.Jaeger.Port is not null)
+                    {
+                        options.AgentPort = configuration.Tracing.Jaeger.Port.Value;
+                    }
+                });
+            }
 
             ////builder.AddOtlpExporter(options => { });
         });

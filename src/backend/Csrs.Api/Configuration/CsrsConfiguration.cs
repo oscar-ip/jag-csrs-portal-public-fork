@@ -16,5 +16,7 @@
         public OAuthConfiguration? OAuth { get; set; }
 
         public JwtConfiguration? Jwt { get; set; }
+
+        public TracingConfiguration Tracing { get; set; }
     }
 }

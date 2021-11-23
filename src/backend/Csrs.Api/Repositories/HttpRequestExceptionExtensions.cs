@@ -17,10 +17,21 @@ namespace Csrs.Api.Repositories
             return exception?.InnerException is SocketException && IsTimedOut(exception?.InnerException as SocketException);
         }
 
+        public static bool IsNotFound(this HttpRequestException exception)
+        {
+            return exception?.InnerException is SocketException && IsTimedOut(exception?.InnerException as SocketException);
+        }
+
         private static bool IsTimedOut(SocketException? exception)
         {
             // A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
             return exception?.ErrorCode == (int)SocketError.TimedOut;
+        }
+
+        private static bool IsConnectionRefused(SocketException? exception)
+        {
+            // A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+            return exception?.ErrorCode == (int)SocketError.ConnectionRefused;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Csrs.Api.Models.Dynamics;
 using Simple.OData.Client;
+using System.Net;
 
 namespace Csrs.Api.Repositories
 {
@@ -52,6 +53,10 @@ namespace Csrs.Api.Repositories
             catch (HttpRequestException exception) when (exception.IsTimedOut())
             {
                 throw;
+            }
+            catch (WebRequestException exception) when (exception.Code == HttpStatusCode.NotFound)
+            {
+                return null;
             }
         }
 
