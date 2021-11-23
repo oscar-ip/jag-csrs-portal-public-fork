@@ -29,9 +29,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseRouting();
+// Prometheus Scraping Endpoint is not currently working, comment out for now
+//app.UseOpenTelemetryPrometheusScrapingEndpoint();
 app.UseAuthorization();
 app.AddHealthChecks();
 
