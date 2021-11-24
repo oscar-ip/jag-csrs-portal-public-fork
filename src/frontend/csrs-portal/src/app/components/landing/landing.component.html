@@ -95,19 +95,22 @@
           </div>
           <!--second-->
           <div class="row">
-              <div class="col pr-2 pt-2">
-                <p class="color_black">You will need a <strong>Basic BCeID account </strong>
-                  <span>
-                  <mat-icon style="color: #1A5A96; size: 30px;" class="p-1"
-                  matTooltip="BCeID is a user ID and password. You can use it to
-                  log in to securely access multiple other online
-                  government services."
-                  matTooltipPosition="after"
-                  matTooltipClass="custom-tooltip">
-                  information</mat-icon></span> to access this service. You must 
-                  register for a Basic BCeID before you can log in – it only takes a few minutes. 
-                </p>
-              </div>
+            <div class="col pr-2 pt-2">
+              <p class="color_black">You will need a <strong>Basic BCeID account </strong>
+                <span>
+                <mat-icon  
+                matTooltip="BCeID is a user ID and 
+                            password. You can use it
+                            to log in to securely 
+                            access multiple other 
+                            online government 
+                            services." 
+                 #tooltip3="matTooltip" 
+                 matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>  
+                </span> to access this service. You must 
+                register for a Basic BCeID before you can log in – it only takes a few minutes. 
+              </p>
+            </div>
             <div class="col-sm-1"></div>
             <div class="col pl-2 pt-2">
               <p class="color_black">If you have previously logged in, continue to log into
