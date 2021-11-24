@@ -17,6 +17,6 @@
 
         public JwtConfiguration? Jwt { get; set; }
 
-        public TracingConfiguration Tracing { get; set; }
+        public TracingConfiguration? Tracing { get; set; }
     }
 }
