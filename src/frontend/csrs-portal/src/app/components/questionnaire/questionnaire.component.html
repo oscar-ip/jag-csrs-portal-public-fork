@@ -4,7 +4,7 @@
     <ul class="summary-header-links">
       <li>
         <a
-          [attr.href]=""
+          [routerLink]="['/']"
           class="primary-navigation"
           rel="noopener"
         >
@@ -21,7 +21,6 @@
           Questionnaire
         </a>
       </li>
-      <span class="divider">|</span>
     </ul>
   </div>
 </div>
@@ -41,8 +40,8 @@
             <ng-template matStepperIcon="edit" let-index="index">
                <mat-icon>{{data[index].clicked == 'Yes' ? 'done' : data[index].clicked == 'No' ? 'clear':'edit'}}</mat-icon>
             </ng-template>
-            <mat-step class="notSelected" *ngFor="let question of data; index as i;" state="home">
-               <ng-template matStepLabel="">
+            <mat-step class="notSelected"  *ngFor="let question of data; index as i;" [aria-labelledby]="data[i] && data[i].clicked ? null  : 'disabled_step'" state="home">
+              <ng-template matStepLabel="">
                   <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
                      <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
                   {{question.label}}
@@ -50,11 +49,11 @@
                <ng-template matStepContent="">
                   <div *ngFor="let contentItem of question.content; index as coi;">
                      {{contentItem.label}}
-                     <ol type="a" *ngIf="contentItem.data">
-                       <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
-                        <div style="display: flex;flex-direction: row;"><span id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
-                       </li>
-                     </ol>
+                     <ol *ngIf="contentItem.data">
+                      <li  *ngFor="let oiItem of contentItem.data.ol;index as oli ">
+                         <div style="display: flex;flex-direction: row;"><span id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
+                      </li>
+                   </ol>
                   </div>
                   <div class="button-row mt-2 ">
                     <mat-divider></mat-divider>
@@ -63,7 +62,7 @@
                      {{buttonItem.label}}
                      <br>
                      <div *ngIf="question.clicked == buttonItem.label">
-                      <img class="icon-size5  mt-2 mb-1" src="/assets/Down-chevron-icon.svg">
+                      <img class="icon-size4  mt-2 mb-1" src="/assets/Down-chevron-icon.svg">
                      </div>
                      </button>
                   </div>
@@ -73,9 +72,9 @@
                         <div class="clickedContent" *ngFor="let cItem of buttonItem.clickedContent; index as ci">
                            <p id="{{'id-'+i+'-'+yi+'-'+ci}}" *ngIf="!cItem.data.ul">{{stringToHTML(i,yi,ci,cItem.data,'id')}}</p>
                            <ul *ngIf="cItem.data.ul">
-                              <li id="{{'li-'+i+'-'+yi+'-'+uli}}" *ngFor="let liItem of cItem.data.ul;index as uli ">
-                                 {{stringToHTML(i,yi,uli,liItem.liData,'li')}}
-                              </li>
+                            <li id="{{liItem.id? liItem.id:'li-'+i+'-'+yi+'-'+uli}}" *ngFor="let liItem of cItem.data.ul;index as uli ">
+                              {{stringToHTML(i,yi,uli,liItem.liData,'li',liItem.id)}}
+                           </li>
                            </ul>
                         </div>
                      </div>
@@ -83,7 +82,7 @@
                   <div class="button-row">
                      <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
                      <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
-                     <button class="nextStep" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
+                     <button class="nextStep" [disabled]="!question.clicked" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
                      </span>
                   </div>
                </ng-template>
