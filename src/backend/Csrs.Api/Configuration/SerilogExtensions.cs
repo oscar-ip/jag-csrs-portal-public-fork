@@ -16,7 +16,9 @@ public static class SerilogExtensions
         {
             loggerConfiguration.ReadFrom.Configuration(builder.Configuration);
 
+#if false
             loggerConfiguration.Enrich.With<GitVersionEnricher>();
+#endif
 
             // get the configuration type
             CsrsConfiguration configuration = builder.Configuration.Get<CsrsConfiguration>();
@@ -52,6 +54,9 @@ public static class SerilogExtensions
                 messageHandler: handler);
         });
     }
+
+
+#if false // GitVersion not working in docker build, remove for now
 
     public class GitVersionEnricher : ILogEventEnricher
     {
@@ -129,4 +134,5 @@ public static class SerilogExtensions
             });
         }
     }
+#endif
 }
