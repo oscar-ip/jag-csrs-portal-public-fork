@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Csrs.Api.Models;
 using Csrs.Api.Repositories;
+using Csrs.Api.Models.Dynamics;
+using AutoMapper;
 
 namespace Csrs.Api.Features.PortalAccounts
 {
@@ -15,14 +17,19 @@ namespace Csrs.Api.Features.PortalAccounts
 
         public class Response
         {
-            public Response(IEnumerable<PortalAccount> accounts)
+            public Response()
             {
-                if (accounts is null)
+                Accounts = Array.Empty<PortalAccount>();
+            }
+
+            public Response(PortalAccount account)
+            {
+                if (account is null)
                 {
-                    throw new ArgumentNullException(nameof(accounts));
+                    throw new ArgumentNullException(nameof(account));
                 }
 
-                Accounts = new List<PortalAccount>(accounts);
+                Accounts = new List<PortalAccount>() { account };
             }
 
             public IList<PortalAccount> Accounts { get; init; }
@@ -30,19 +37,27 @@ namespace Csrs.Api.Features.PortalAccounts
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly ICsrsFileRepository _repository;
+            private readonly ICsrsPartyRepository _repository;
+            private readonly IMapper _mapper;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(ICsrsFileRepository repository, ILogger<Handler> logger)
+            public Handler(ICsrsPartyRepository repository, IMapper mapper, ILogger<Handler> logger)
             {
                 _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+                _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var items = await _repository.GetAsync(request.BCeIDGuid, cancellationToken);
-                return new Response(Array.Empty<PortalAccount>());
+                var item = await _repository.GetAsync(request.BCeIDGuid, SSG_CsrsParty.AllProperties, cancellationToken);
+                if (item is null)
+                {
+                    return new Response();
+                }
+
+                PortalAccount account = _mapper.Map<PortalAccount>(item);
+                return new Response(account);
             }
         }
     }

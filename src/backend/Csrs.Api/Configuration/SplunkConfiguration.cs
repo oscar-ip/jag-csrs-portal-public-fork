@@ -1,4 +1,6 @@
-﻿namespace Csrs.Api.Configuration
+﻿using Serilog.Events;
+
+namespace Csrs.Api.Configuration
 {
     public class SplunkConfiguration
     {
@@ -16,5 +18,7 @@
         /// Should the TLS certificate be validated
         /// </summary>
         public bool ValidatServerCertificate { get; set; } = true;
+
+        public LogEventLevel? MinimumLevel { get; set; }
     }
 }

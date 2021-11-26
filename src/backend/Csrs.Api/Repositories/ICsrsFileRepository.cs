@@ -2,8 +2,8 @@
 
 namespace Csrs.Api.Repositories
 {
-    public interface ICsrsFileRepository : IInsertRepository<SSG_CsrsFile>, IUpdateRepository<SSG_CsrsFile>
+    public interface ICsrsFileRepository : IRepository<SSG_CsrsFile>
     {
-        Task<SSG_CsrsFile?> GetAsync(Guid id, CancellationToken cancellationToken);
+        // additional members
     }
 }
