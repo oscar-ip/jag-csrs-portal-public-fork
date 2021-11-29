@@ -41,3 +41,7 @@ obj/
 
 # End of https://www.toptal.com/developers/gitignore/api/angular,dotnetcore
 
+
+src/utility/CrmSvcUtilExtensions/.vs/CrmSvcUtilExtensions/v17/.suo
+
+src/utility/CrmSvcUtilExtensions/.vs/CrmSvcUtilExtensions/v17/

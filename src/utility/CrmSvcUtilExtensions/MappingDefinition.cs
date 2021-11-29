@@ -81,6 +81,25 @@ namespace CrmSvcUtilExtensions
             mappings.Attributes.Skip("ownerid", "owneridname", "owneridtype", "owneridyominame", "owningbusinessunit", "owningteam", "owninguser");
             mappings.Attributes.Skip("importsequencenumber", "versionnumber", "utcconversiontimezonecode", "timezoneruleversionnumber");
 
+            mappings.Entities.Add(new EntityMappingDefinition
+            {
+                LogicalName = "ssg_csrschild",
+                Name = "SSG_CsrsChild",
+                Attributes = new AttributeMappingDefinitionCollection
+                {
+                    new AttributeMappingDefinition() { LogicalName = "ssg_csrschildid", Name =  "ChildId" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_childisadependent", Name =  "ChildIsADependent" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_firstname", Name =  "FirstName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_middlename", Name =  "MiddleName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_lastname", Name =  "LastName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_dateofbirth", Name =  "DateOfBirth" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_childsfather", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_childsmother", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_fullname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_triggerrecalcrelationship", Skip = true },
+                }
+            });
+
             // add the entity mappings
             mappings.Entities.Add(new EntityMappingDefinition
             {
@@ -88,17 +107,50 @@ namespace CrmSvcUtilExtensions
                 Name = "SSG_CsrsParty",
                 Attributes = new AttributeMappingDefinitionCollection
                 {
-                    new AttributeMappingDefinition() { LogicalName = "ssg_areapostalcode", Name =  "PostalCode" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_bceid_displayname", Name =  "BCeIDDisplayName" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_bceid_guid", Name =  "BCeIDGuid" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_bceid_userid", Name =  "BCeID_UserId" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_csrspartyid", Name =  "PartyId" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_fullname", Name =  "FullName" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_street1", Name =  "AddressStreet1" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_street2", Name =  "AddressStreet2" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_provinceterritory", Name =  "Province" },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_csrsoptoutedocuments", Name =  "OptOutElectronicDocuments" },
-
+                    new AttributeMappingDefinition() { LogicalName = "ssg_areapostalcode", Name = "PostalCode" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_bceid_displayname", Name = "BCeIDDisplayName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_bceid_guid", Name = "BCeIDGuid" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_bceid_last_update", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_bceid_userid", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_cellphone", Name = "CellPhone" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_city", Name = "City" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_csrsoptoutedocuments", Name = "OptOutElectronicDocuments" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_csrsoptoutedocumentsname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_csrspartyid", Name = "PartyId" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_dateofbirth", Name = "DateOfBirth" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_email", Name = "Email" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_firstname", Name = "FirstName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_fullname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_gender", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_gendername", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_homephone", Name = "HomePhone" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_identity", Name = "Identity" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_identityname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_identityotherdetails", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_incomeassistance", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_incomeassistancename", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_lastname", Name = "LastName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_middlename", Name = "MiddleName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_partygender", Name = "Gender" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_partygendername", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_portalaccess", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_portalaccessname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_preferredcontactmethod", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_preferredcontactmethodname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_preferredname", Name = "PreferredName" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_provinceterritory", Name = "Province" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_provinceterritoryname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_referral", Name = "Referral" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_referralname", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_stagingfilenumber", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_stagingid", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_street1", Name = "AddressStreet1" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_street2", Name = "AddressStreet2" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_workphone", Name = "WorkPhone" },
+                    new AttributeMappingDefinition() { LogicalName = "statecode", Name = "StateCode" },
+                    new AttributeMappingDefinition() { LogicalName = "statecodename", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "statuscode", Name = "StatusCode" },
+                    new AttributeMappingDefinition() { LogicalName = "statuscodename", Skip = true },
                 }
             });
 
@@ -156,6 +208,44 @@ namespace CrmSvcUtilExtensions
                     new AttributeMappingDefinition() { LogicalName = "ssg_csrsportalmessageid", Name =  "MessageId" },
                     new AttributeMappingDefinition() { LogicalName = "ssg_csrsmessageread", Name =  "Read" },                    
                     new AttributeMappingDefinition() { LogicalName = "ssg_name", Name =  "Name" },
+                }
+            });
+
+            mappings.Entities.Add(new EntityMappingDefinition
+            {
+                LogicalName = "ssg_csrsbccourtlevel",
+                Name = "SSG_CsrsBCCourtLevel",
+                Attributes = new AttributeMappingDefinitionCollection
+                {
+                    new AttributeMappingDefinition() { LogicalName = "csrsbccourtlevelId", Name =  "BCCourtLevelId" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_courtlevellabel", Name =  "CourtLevel" },
+                }
+            });
+
+
+            mappings.Entities.Add(new EntityMappingDefinition
+            {
+                LogicalName = "ssg_ijssbccourtlocation",
+                Name = "SSG_IJSSBCCourtlocation",
+                Attributes = new AttributeMappingDefinitionCollection
+                {
+                    // ijssbccourtlocationId
+                    new AttributeMappingDefinition() { LogicalName = "ssg_ijssbccourtlocationid", Name =  "CourtLocationId" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_bccourtlocationname", Name =  "Name" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_street1", Name =  "AddressStreet1" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_street2", Name =  "AddressStreet2" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_city", Name =  "City" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_provinceterritory", Name =  "Province" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_courtofficeemail", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_courtofficefax", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_courtofficephone", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_courtofficephoneextension", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_csrscourtlevelfilter", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_datamigrationcount", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_filenumber", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_postalcode", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_stagingid", Skip = true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_accessdbid", Skip = true },
                 }
             });
 

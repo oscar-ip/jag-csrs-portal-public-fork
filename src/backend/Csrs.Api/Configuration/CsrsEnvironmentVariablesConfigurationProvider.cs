@@ -23,8 +23,8 @@
         /// <param name="appKey"></param>
         private void Add(string variable, string appKey)
         {
-            if (variable is null) throw new ArgumentNullException(nameof(variable));
-            if (appKey is null) throw new ArgumentNullException(nameof(appKey));
+            ArgumentNullException.ThrowIfNull(variable);
+            ArgumentNullException.ThrowIfNull(appKey);
 
             // note the Load method may be called multiple times if before the
             // application builder Build method is called, the configuration is requested

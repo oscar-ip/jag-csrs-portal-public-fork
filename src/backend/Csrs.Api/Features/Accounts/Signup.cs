@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Models;
+using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Repositories;
 using MediatR;
 
-namespace Csrs.Api.Features.PortalAccounts
+namespace Csrs.Api.Features.Accounts
 {
-    public static class UpdateProfile
+    public static class Signup
     {
         public class Request : IRequest<Response>
         {
@@ -20,12 +20,17 @@ namespace Csrs.Api.Features.PortalAccounts
 
         public class Response
         {
-            public Response(PortalAccount account)
+            public Response(Guid id)
             {
-                Account = account ?? throw new ArgumentNullException(nameof(account));
+                if (id == Guid.Empty)
+                {
+                    throw new ArgumentException("id cannot be empty", nameof(id));
+                }
+
+                Id = id;
             }
 
-            public PortalAccount Account { get; init; }
+            public Guid Id { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -43,11 +48,11 @@ namespace Csrs.Api.Features.PortalAccounts
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                SSG_CsrsParty party = _mapper.Map<SSG_CsrsParty>(request.Account);
-                party = await _repository.UpdateAsync(party, cancellationToken);
+                SSG_CsrsParty entity = _mapper.Map<SSG_CsrsParty>(request.Account);
 
-                PortalAccount account = _mapper.Map<PortalAccount>(party);
-                return new Response(account);
+                entity = await _repository.InsertAsync(entity, cancellationToken);
+
+                return new Response(entity.Id);
             }
         }
     }

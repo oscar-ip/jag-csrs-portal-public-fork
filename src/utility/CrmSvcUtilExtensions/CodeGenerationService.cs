@@ -185,6 +185,8 @@ namespace CrmSvcUtilExtensions
             buffer.AppendLine($"public partial class {entityName} : Entity");
             buffer.AppendLine("{");
             buffer.Indent();
+            buffer.AppendLine($"public const string EntityLogicalName = \"{entity.LogicalName}\";");
+            buffer.AppendLine();
 
             List<string> attributesNames = new List<string>();
 
@@ -370,6 +372,7 @@ namespace CrmSvcUtilExtensions
                 buffer.AppendLine($"/// <summary>");
                 buffer.AppendLine($"/// Primary Id alias. Logical name {attribute.LogicalName}.");
                 buffer.AppendLine($"/// </summary>");
+                buffer.AppendLine($"[JsonIgnore(Condition = JsonIgnoreCondition.Always)]");
                 buffer.AppendLine($"public override Guid Id {{ get {{ return _id; }} set {{ _id = value; }} }}");
             }
             else

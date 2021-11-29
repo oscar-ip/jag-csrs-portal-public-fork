@@ -1,4 +1,5 @@
 using MediatR;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddCsrsEnvironmentVariables();
@@ -17,7 +18,22 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "v1",
+        Title = "CSRS Api",
+
+    });
+
+    c.EnableAnnotations();
+
+    // Set the comments path for the Swagger JSON and UI.
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
@@ -32,6 +48,7 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 // Prometheus Scraping Endpoint is not currently working, comment out for now
 //app.UseOpenTelemetryPrometheusScrapingEndpoint();
+app.UseAuthentication();
 app.UseAuthorization();
 app.AddHealthChecks();
 

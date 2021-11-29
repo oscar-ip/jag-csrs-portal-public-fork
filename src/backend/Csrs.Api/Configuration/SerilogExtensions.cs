@@ -10,7 +10,7 @@ public static class SerilogExtensions
 {
     public static void UseSerilog(this WebApplicationBuilder builder)
     {
-        if (builder is null) throw new ArgumentNullException(nameof(builder));
+        ArgumentNullException.ThrowIfNull(builder);
 
         builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
         {

@@ -20,17 +20,6 @@ namespace Csrs.Test.Controllers
         }
 
         [Fact]
-        public void ControllerConstructorChecksParameters()
-        {
-            var logger = GetMockLogger();
-            var mediator = GetMockMediator();
-
-            Assert.Throws<ArgumentNullException>(() => new PortalDocumentController(null!, logger.Object));
-            Assert.Throws<ArgumentNullException>(() => new PortalDocumentController(mediator.Object, null!));
-        }
-
-
-        [Fact]
         public async Task ListDocumentsShouldCreateCorrectRequest()
         {
             var logger = GetMockLogger();

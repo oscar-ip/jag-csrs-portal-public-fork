@@ -38,10 +38,286 @@ namespace Csrs.Api.Models.Dynamics
     }
 
     /// <summary>
+    /// Background entity to capture levels of BC Courts - used to filter BC Court lookup on CSRS File. Logical name ssg_csrsbccourtlevel.
+    /// </summary>
+    public partial class SSG_CsrsBCCourtLevel : Entity
+    {
+        public const string EntityLogicalName = "ssg_csrsbccourtlevel";
+
+        /// <summary>
+        /// The label for the court level. Logical name ssg_courtlevellabel.
+        /// </summary>
+        [JsonPropertyName("ssg_courtlevellabel")]
+        public string? CourtLevel { get; set; }
+
+        /// <summary>
+        /// Unique identifier for entity instances. Logical name ssg_csrsbccourtlevelid.
+        /// </summary>
+        /// <returns>
+        /// The primary id value or <see cref="System.Guid.Empty"/> if not set.
+        /// </returns>
+        [JsonPropertyName("ssg_csrsbccourtlevelid")]
+        public System.Guid? csrsbccourtlevelId 
+        {
+            get { return _id; }
+            set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
+        }
+
+        /// <summary>
+        /// Primary Id alias. Logical name ssg_csrsbccourtlevelid.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public override Guid Id { get { return _id; } set { _id = value; } }
+
+        /// <summary>
+        /// Contains all the attributes/columns on this class.
+        /// </summary>
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsBCCourtLevel, object>> AllProperties = _ => new { _.CourtLevel, _.csrsbccourtlevelId, _.StateCode, _.StatusCode };
+
+        /// <summary>
+        /// Contains all the normal attributes on this entity.
+        /// </summary>
+        public static class Attributes
+        {
+            public const string createdby = "createdby";
+            public const string createdbyname = "createdbyname";
+            public const string createdbyyominame = "createdbyyominame";
+            public const string createdon = "createdon";
+            public const string createdonbehalfby = "createdonbehalfby";
+            public const string createdonbehalfbyname = "createdonbehalfbyname";
+            public const string createdonbehalfbyyominame = "createdonbehalfbyyominame";
+            public const string importsequencenumber = "importsequencenumber";
+            public const string modifiedby = "modifiedby";
+            public const string modifiedbyname = "modifiedbyname";
+            public const string modifiedbyyominame = "modifiedbyyominame";
+            public const string modifiedon = "modifiedon";
+            public const string modifiedonbehalfby = "modifiedonbehalfby";
+            public const string modifiedonbehalfbyname = "modifiedonbehalfbyname";
+            public const string modifiedonbehalfbyyominame = "modifiedonbehalfbyyominame";
+            public const string overriddencreatedon = "overriddencreatedon";
+            public const string ownerid = "ownerid";
+            public const string owneridname = "owneridname";
+            public const string owneridtype = "owneridtype";
+            public const string owneridyominame = "owneridyominame";
+            public const string owningbusinessunit = "owningbusinessunit";
+            public const string owningteam = "owningteam";
+            public const string owninguser = "owninguser";
+            public const string ssg_courtlevellabel = "ssg_courtlevellabel";
+            public const string ssg_csrsbccourtlevelid = "ssg_csrsbccourtlevelid";
+            public const string statecode = "statecode";
+            public const string statecodename = "statecodename";
+            public const string statuscode = "statuscode";
+            public const string statuscodename = "statuscodename";
+            public const string timezoneruleversionnumber = "timezoneruleversionnumber";
+            public const string utcconversiontimezonecode = "utcconversiontimezonecode";
+            public const string versionnumber = "versionnumber";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a one to many relationship.
+        /// These attributes will be a collection on this entity.
+        /// </summary>
+        public static class OneToManyRelationships
+        {
+            public const string ssg_csrsbccourtlevel_AsyncOperations = "ssg_csrsbccourtlevel_AsyncOperations";
+            public const string ssg_csrsbccourtlevel_BulkDeleteFailures = "ssg_csrsbccourtlevel_BulkDeleteFailures";
+            public const string ssg_csrsbccourtlevel_DuplicateBaseRecord = "ssg_csrsbccourtlevel_DuplicateBaseRecord";
+            public const string ssg_csrsbccourtlevel_DuplicateMatchingRecord = "ssg_csrsbccourtlevel_DuplicateMatchingRecord";
+            public const string ssg_csrsbccourtlevel_MailboxTrackingFolders = "ssg_csrsbccourtlevel_MailboxTrackingFolders";
+            public const string ssg_csrsbccourtlevel_PrincipalObjectAttributeAccesses = "ssg_csrsbccourtlevel_PrincipalObjectAttributeAccesses";
+            public const string ssg_csrsbccourtlevel_ProcessSession = "ssg_csrsbccourtlevel_ProcessSession";
+            public const string ssg_csrsbccourtlevel_ssg_csrsfile_BCCourtLevel = "ssg_csrsbccourtlevel_ssg_csrsfile_BCCourtLevel";
+            public const string ssg_csrsbccourtlevel_ssg_ijssbccourtlocation_CSRSCourtLevelFilter = "ssg_csrsbccourtlevel_ssg_ijssbccourtlocation_CSRSCourtLevelFilter";
+            public const string ssg_csrsbccourtlevel_SyncErrors = "ssg_csrsbccourtlevel_SyncErrors";
+            public const string ssg_csrsbccourtlevel_UserEntityInstanceDatas = "ssg_csrsbccourtlevel_UserEntityInstanceDatas";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a many to one relationship.
+        /// These attributes will be a single instance on this entity.
+        /// </summary>
+        public static class ManyToOneRelationships
+        {
+            public const string business_unit_ssg_csrsbccourtlevel = "business_unit_ssg_csrsbccourtlevel";
+            public const string lk_ssg_csrsbccourtlevel_createdby = "lk_ssg_csrsbccourtlevel_createdby";
+            public const string lk_ssg_csrsbccourtlevel_createdonbehalfby = "lk_ssg_csrsbccourtlevel_createdonbehalfby";
+            public const string lk_ssg_csrsbccourtlevel_modifiedby = "lk_ssg_csrsbccourtlevel_modifiedby";
+            public const string lk_ssg_csrsbccourtlevel_modifiedonbehalfby = "lk_ssg_csrsbccourtlevel_modifiedonbehalfby";
+            public const string owner_ssg_csrsbccourtlevel = "owner_ssg_csrsbccourtlevel";
+            public const string team_ssg_csrsbccourtlevel = "team_ssg_csrsbccourtlevel";
+            public const string user_ssg_csrsbccourtlevel = "user_ssg_csrsbccourtlevel";
+        }
+    }
+
+    /// <summary>
+    /// Child Support Recalculation System children records. Logical name ssg_csrschild.
+    /// </summary>
+    public partial class SSG_CsrsChild : Entity
+    {
+        public const string EntityLogicalName = "ssg_csrschild";
+
+        /// <summary>
+        /// Logical name ssg_childatageofmajority.
+        /// </summary>
+        [JsonPropertyName("ssg_childatageofmajority")]
+        public bool? ChildatAgeofMajority { get; set; }
+
+        /// <summary>
+        /// Indicate whether the child is still a dependent. Logical name ssg_childisadependent.
+        /// </summary>
+        [JsonPropertyName("ssg_childisadependent")]
+        public string? ChildIsADependent { get; set; }
+
+        /// <summary>
+        /// Unique identifier for entity instances. Logical name ssg_csrschildid.
+        /// </summary>
+        /// <returns>
+        /// The primary id value or <see cref="System.Guid.Empty"/> if not set.
+        /// </returns>
+        [JsonPropertyName("ssg_csrschildid")]
+        public System.Guid? ChildId 
+        {
+            get { return _id; }
+            set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
+        }
+
+        /// <summary>
+        /// Primary Id alias. Logical name ssg_csrschildid.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public override Guid Id { get { return _id; } set { _id = value; } }
+
+        /// <summary>
+        /// Logical name ssg_dateofbirth.
+        /// </summary>
+        [JsonPropertyName("ssg_dateofbirth")]
+        public DateTime? DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_filenumber.
+        /// </summary>
+        [JsonPropertyName("ssg_filenumber")]
+        public SSG_CsrsFile? FileNumber { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_firstname.
+        /// </summary>
+        [JsonPropertyName("ssg_firstname")]
+        public string? FirstName { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_lastname.
+        /// </summary>
+        [JsonPropertyName("ssg_lastname")]
+        public string? LastName { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_middlename.
+        /// </summary>
+        [JsonPropertyName("ssg_middlename")]
+        public string? MiddleName { get; set; }
+
+        /// <summary>
+        /// Contains all the attributes/columns on this class.
+        /// </summary>
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsChild, object>> AllProperties = _ => new { _.ChildatAgeofMajority, _.ChildIsADependent, _.ChildId, _.DateOfBirth, _.FileNumber, _.FirstName, _.LastName, _.MiddleName, _.StateCode, _.StatusCode };
+
+        /// <summary>
+        /// Contains all the normal attributes on this entity.
+        /// </summary>
+        public static class Attributes
+        {
+            public const string createdby = "createdby";
+            public const string createdbyname = "createdbyname";
+            public const string createdbyyominame = "createdbyyominame";
+            public const string createdon = "createdon";
+            public const string createdonbehalfby = "createdonbehalfby";
+            public const string createdonbehalfbyname = "createdonbehalfbyname";
+            public const string createdonbehalfbyyominame = "createdonbehalfbyyominame";
+            public const string importsequencenumber = "importsequencenumber";
+            public const string modifiedby = "modifiedby";
+            public const string modifiedbyname = "modifiedbyname";
+            public const string modifiedbyyominame = "modifiedbyyominame";
+            public const string modifiedon = "modifiedon";
+            public const string modifiedonbehalfby = "modifiedonbehalfby";
+            public const string modifiedonbehalfbyname = "modifiedonbehalfbyname";
+            public const string modifiedonbehalfbyyominame = "modifiedonbehalfbyyominame";
+            public const string overriddencreatedon = "overriddencreatedon";
+            public const string ownerid = "ownerid";
+            public const string owneridname = "owneridname";
+            public const string owneridtype = "owneridtype";
+            public const string owneridyominame = "owneridyominame";
+            public const string owningbusinessunit = "owningbusinessunit";
+            public const string owningteam = "owningteam";
+            public const string owninguser = "owninguser";
+            public const string ssg_childatageofmajority = "ssg_childatageofmajority";
+            public const string ssg_childatageofmajorityname = "ssg_childatageofmajorityname";
+            public const string ssg_childisadependent = "ssg_childisadependent";
+            public const string ssg_childisadependentname = "ssg_childisadependentname";
+            public const string ssg_childsfather = "ssg_childsfather";
+            public const string ssg_childsfathername = "ssg_childsfathername";
+            public const string ssg_childsmother = "ssg_childsmother";
+            public const string ssg_childsmothername = "ssg_childsmothername";
+            public const string ssg_csrschildid = "ssg_csrschildid";
+            public const string ssg_dateofbirth = "ssg_dateofbirth";
+            public const string ssg_filenumber = "ssg_filenumber";
+            public const string ssg_filenumbername = "ssg_filenumbername";
+            public const string ssg_firstname = "ssg_firstname";
+            public const string ssg_fullname = "ssg_fullname";
+            public const string ssg_lastname = "ssg_lastname";
+            public const string ssg_middlename = "ssg_middlename";
+            public const string ssg_triggerrecalcrelationship = "ssg_triggerrecalcrelationship";
+            public const string statecode = "statecode";
+            public const string statecodename = "statecodename";
+            public const string statuscode = "statuscode";
+            public const string statuscodename = "statuscodename";
+            public const string timezoneruleversionnumber = "timezoneruleversionnumber";
+            public const string utcconversiontimezonecode = "utcconversiontimezonecode";
+            public const string versionnumber = "versionnumber";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a one to many relationship.
+        /// These attributes will be a collection on this entity.
+        /// </summary>
+        public static class OneToManyRelationships
+        {
+            public const string ssg_csrschild_AsyncOperations = "ssg_csrschild_AsyncOperations";
+            public const string ssg_csrschild_BulkDeleteFailures = "ssg_csrschild_BulkDeleteFailures";
+            public const string ssg_csrschild_DuplicateBaseRecord = "ssg_csrschild_DuplicateBaseRecord";
+            public const string ssg_csrschild_DuplicateMatchingRecord = "ssg_csrschild_DuplicateMatchingRecord";
+            public const string ssg_csrschild_MailboxTrackingFolders = "ssg_csrschild_MailboxTrackingFolders";
+            public const string ssg_csrschild_PrincipalObjectAttributeAccesses = "ssg_csrschild_PrincipalObjectAttributeAccesses";
+            public const string ssg_csrschild_ProcessSession = "ssg_csrschild_ProcessSession";
+            public const string ssg_csrschild_SharePointDocumentLocations = "ssg_csrschild_SharePointDocumentLocations";
+            public const string ssg_csrschild_SharePointDocuments = "ssg_csrschild_SharePointDocuments";
+            public const string ssg_csrschild_SyncErrors = "ssg_csrschild_SyncErrors";
+            public const string ssg_csrschild_UserEntityInstanceDatas = "ssg_csrschild_UserEntityInstanceDatas";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a many to one relationship.
+        /// These attributes will be a single instance on this entity.
+        /// </summary>
+        public static class ManyToOneRelationships
+        {
+            public const string business_unit_ssg_csrschild = "business_unit_ssg_csrschild";
+            public const string lk_ssg_csrschild_createdby = "lk_ssg_csrschild_createdby";
+            public const string lk_ssg_csrschild_createdonbehalfby = "lk_ssg_csrschild_createdonbehalfby";
+            public const string lk_ssg_csrschild_modifiedby = "lk_ssg_csrschild_modifiedby";
+            public const string lk_ssg_csrschild_modifiedonbehalfby = "lk_ssg_csrschild_modifiedonbehalfby";
+            public const string owner_ssg_csrschild = "owner_ssg_csrschild";
+            public const string ssg_csrsfile_ssg_csrschild_ChildsFileNumber = "ssg_csrsfile_ssg_csrschild_ChildsFileNumber";
+            public const string ssg_csrsparty_ssg_csrschild_ChildsFather = "ssg_csrsparty_ssg_csrschild_ChildsFather";
+            public const string ssg_csrsparty_ssg_csrschild_Mother = "ssg_csrsparty_ssg_csrschild_Mother";
+            public const string team_ssg_csrschild = "team_ssg_csrschild";
+            public const string user_ssg_csrschild = "user_ssg_csrschild";
+        }
+    }
+
+    /// <summary>
     /// Logical name ssg_csrsfeedback.
     /// </summary>
     public partial class SSG_CsrsFeedback : Entity
     {
+        public const string EntityLogicalName = "ssg_csrsfeedback";
+
         /// <summary>
         /// Unique identifier for entity instances. Logical name ssg_csrsfeedbackid.
         /// </summary>
@@ -58,6 +334,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Primary Id alias. Logical name ssg_csrsfeedbackid.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
@@ -170,6 +447,8 @@ namespace Csrs.Api.Models.Dynamics
     /// </summary>
     public partial class SSG_CsrsFile : Entity
     {
+        public const string EntityLogicalName = "ssg_csrsfile";
+
         /// <summary>
         /// Exchange rate for the currency associated with the entity with respect to the base currency. Logical name exchangerate.
         /// </summary>
@@ -187,6 +466,18 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         [JsonPropertyName("ssg_autonumber")]
         public string? AutoNumber { get; set; }
+
+        /// <summary>
+        /// Select the level of court to filter the list of courts in the "Court Location" field. Logical name ssg_bccourtlevel.
+        /// </summary>
+        [JsonPropertyName("ssg_bccourtlevel")]
+        public SSG_CsrsBCCourtLevel? BCCourtLevel { get; set; }
+
+        /// <summary>
+        /// Select the BC Court registry for this File. Logical name ssg_bccourtlocation.
+        /// </summary>
+        [JsonPropertyName("ssg_bccourtlocation")]
+        public SSG_IJSSBCCourtlocation? BCCourtLocation { get; set; }
 
         /// <summary>
         /// Logical name ssg_courtfilenumber.
@@ -222,6 +513,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Primary Id alias. Logical name ssg_csrsfileid.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
@@ -241,6 +533,18 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         [JsonPropertyName("ssg_daysofmonthpayable")]
         public string? DaysofMonthPayable { get; set; }
+
+        /// <summary>
+        /// File record that is duplicated by this File. Logical name ssg_duplicatedfilenumber.
+        /// </summary>
+        [JsonPropertyName("ssg_duplicatedfilenumber")]
+        public SSG_CsrsFile? DuplicatedFileNumber { get; set; }
+
+        /// <summary>
+        /// Identify whether this file is a duplicate of another file. Visible only during Submitted Status. Logical name ssg_filealreadyexists.
+        /// </summary>
+        [JsonPropertyName("ssg_filealreadyexists")]
+        public string? FileAlreadyExists { get; set; }
 
         /// <summary>
         /// Indicator whether the File was closed before any recalculations were done. Logical name ssg_fileclosedatenrollment.
@@ -265,6 +569,12 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         [JsonPropertyName("ssg_fmepfilenumber")]
         public string? FMEPFileNumber { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_latestduplicatefile.
+        /// </summary>
+        [JsonPropertyName("ssg_latestduplicatefile")]
+        public SSG_CsrsFile? LatestDuplicateFile { get; set; }
 
         /// <summary>
         /// Number of Recalculations for the File - Used for numbering File's Recalculations. Logical name ssg_numberofrecalculations.
@@ -395,7 +705,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFile, object>> AllProperties = _ => new { _.ExchangeRate, _.Act, _.AutoNumber, _.CourtFileNumber, _.CourtFileType, _.CourtLocation, _.CsrsFileId, _.DateofOrderorWA, _.DateOrderCommences, _.DaysofMonthPayable, _.FileClosedatEnrollment, _.FileNumber, _.FMEPFileActive, _.FMEPFileNumber, _.NumberofRecalculations, _.PartyEnrolled, _.PatternofIncomePayor, _.Payor, _.RecalculationOrderedbytheCourt, _.Recipient, _.RecipientsIncomeNeeded, _.RegistrationDate, _.SafetyAlert, _.SafetyConcernDescription, _.Section7Expenses, _.Section7ExpensesRecalculated, _.Section7PayorsProportion, _.Section7RecipientsProportion, _.SharedParenting, _.SpecialExpensesWithdrawnDate, _.SplitParentingArrangement, _.StyleofCauseApplicant, _.StyleofCauseRespondent, _.SubmissionDate, _.TerminationDate, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFile, object>> AllProperties = _ => new { _.ExchangeRate, _.Act, _.AutoNumber, _.BCCourtLevel, _.BCCourtLocation, _.CourtFileNumber, _.CourtFileType, _.CourtLocation, _.CsrsFileId, _.DateofOrderorWA, _.DateOrderCommences, _.DaysofMonthPayable, _.DuplicatedFileNumber, _.FileAlreadyExists, _.FileClosedatEnrollment, _.FileNumber, _.FMEPFileActive, _.FMEPFileNumber, _.LatestDuplicateFile, _.NumberofRecalculations, _.PartyEnrolled, _.PatternofIncomePayor, _.Payor, _.RecalculationOrderedbytheCourt, _.Recipient, _.RecipientsIncomeNeeded, _.RegistrationDate, _.SafetyAlert, _.SafetyConcernDescription, _.Section7Expenses, _.Section7ExpensesRecalculated, _.Section7PayorsProportion, _.Section7RecipientsProportion, _.SharedParenting, _.SpecialExpensesWithdrawnDate, _.SplitParentingArrangement, _.StyleofCauseApplicant, _.StyleofCauseRespondent, _.SubmissionDate, _.TerminationDate, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -444,6 +754,10 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_dateordercommences = "ssg_dateordercommences";
             public const string ssg_daysofmonthpayable = "ssg_daysofmonthpayable";
             public const string ssg_daysofmonthpayablename = "ssg_daysofmonthpayablename";
+            public const string ssg_duplicatedfilenumber = "ssg_duplicatedfilenumber";
+            public const string ssg_duplicatedfilenumbername = "ssg_duplicatedfilenumbername";
+            public const string ssg_filealreadyexists = "ssg_filealreadyexists";
+            public const string ssg_filealreadyexistsname = "ssg_filealreadyexistsname";
             public const string ssg_fileclosedatenrollment = "ssg_fileclosedatenrollment";
             public const string ssg_fileclosedatenrollmentname = "ssg_fileclosedatenrollmentname";
             public const string ssg_filenumber = "ssg_filenumber";
@@ -458,6 +772,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_incomeyear2_base = "ssg_incomeyear2_base";
             public const string ssg_incomeyear3 = "ssg_incomeyear3";
             public const string ssg_incomeyear3_base = "ssg_incomeyear3_base";
+            public const string ssg_latestduplicatefile = "ssg_latestduplicatefile";
+            public const string ssg_latestduplicatefilename = "ssg_latestduplicatefilename";
             public const string ssg_numberofrecalculations = "ssg_numberofrecalculations";
             public const string ssg_offsetchildsupportamountonorder = "ssg_offsetchildsupportamountonorder";
             public const string ssg_offsetchildsupportamountonorder_base = "ssg_offsetchildsupportamountonorder_base";
@@ -540,6 +856,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsfile_SocialActivities = "ssg_csrsfile_SocialActivities";
             public const string ssg_csrsfile_ssg_csrsarchivedcourtfile_FileNumber = "ssg_csrsfile_ssg_csrsarchivedcourtfile_FileNumber";
             public const string ssg_csrsfile_ssg_csrschild_ChildsFileNumber = "ssg_csrsfile_ssg_csrschild_ChildsFileNumber";
+            public const string ssg_csrsfile_ssg_csrsfile_LatestDuplicateFile = "ssg_csrsfile_ssg_csrsfile_LatestDuplicateFile";
+            public const string ssg_csrsfile_ssg_csrsfile_MasterFileRecord = "ssg_csrsfile_ssg_csrsfile_MasterFileRecord";
             public const string ssg_csrsfile_ssg_csrsrecalculation_FileNumber = "ssg_csrsfile_ssg_csrsrecalculation_FileNumber";
             public const string ssg_csrsfile_SyncErrors = "ssg_csrsfile_SyncErrors";
             public const string ssg_csrsfile_Tasks = "ssg_csrsfile_Tasks";
@@ -559,6 +877,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string lk_ssg_csrsfile_modifiedonbehalfby = "lk_ssg_csrsfile_modifiedonbehalfby";
             public const string owner_ssg_csrsfile = "owner_ssg_csrsfile";
             public const string ssg_csrsbccourtlevel_ssg_csrsfile_BCCourtLevel = "ssg_csrsbccourtlevel_ssg_csrsfile_BCCourtLevel";
+            public const string ssg_csrsfile_ssg_csrsfile_LatestDuplicateFile = "ssg_csrsfile_ssg_csrsfile_LatestDuplicateFile";
+            public const string ssg_csrsfile_ssg_csrsfile_MasterFileRecord = "ssg_csrsfile_ssg_csrsfile_MasterFileRecord";
             public const string ssg_csrsparty_ssg_csrsfile_Payor = "ssg_csrsparty_ssg_csrsfile_Payor";
             public const string ssg_csrsparty_ssg_csrsfile_Recipient = "ssg_csrsparty_ssg_csrsfile_Recipient";
             public const string ssg_ijssbccourtlocation_ssg_csrsfile_BCCourtLocation = "ssg_ijssbccourtlocation_ssg_csrsfile_BCCourtLocation";
@@ -573,6 +893,8 @@ namespace Csrs.Api.Models.Dynamics
     /// </summary>
     public partial class SSG_CsrsParty : Entity
     {
+        public const string EntityLogicalName = "ssg_csrsparty";
+
         /// <summary>
         /// Logical name ssg_areapostalcode.
         /// </summary>
@@ -590,18 +912,6 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         [JsonPropertyName("ssg_bceid_guid")]
         public string? BCeIDGuid { get; set; }
-
-        /// <summary>
-        /// Timestamp for the last update of BCeID GUID. Logical name ssg_bceid_last_update.
-        /// </summary>
-        [JsonPropertyName("ssg_bceid_last_update")]
-        public DateTime? BCeID_Last_Update { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_bceid_userid.
-        /// </summary>
-        [JsonPropertyName("ssg_bceid_userid")]
-        public string? BCeID_UserId { get; set; }
 
         /// <summary>
         /// Logical name ssg_cellphone.
@@ -637,13 +947,20 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Primary Id alias. Logical name ssg_csrspartyid.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
         /// Logical name ssg_dateofbirth.
         /// </summary>
         [JsonPropertyName("ssg_dateofbirth")]
-        public DateTime? DateofBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Select the master Party record that is duplicated by this Party. Logical name ssg_duplicatedparty.
+        /// </summary>
+        [JsonPropertyName("ssg_duplicatedparty")]
+        public SSG_CsrsParty? DuplicatedParty { get; set; }
 
         /// <summary>
         /// Logical name ssg_email.
@@ -658,18 +975,6 @@ namespace Csrs.Api.Models.Dynamics
         public string? FirstName { get; set; }
 
         /// <summary>
-        /// The full name of the party. Logical name ssg_fullname.
-        /// </summary>
-        [JsonPropertyName("ssg_fullname")]
-        public string? FullName { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_gender.
-        /// </summary>
-        [JsonPropertyName("ssg_gender")]
-        public string? Gender { get; set; }
-
-        /// <summary>
         /// Logical name ssg_homephone.
         /// </summary>
         [JsonPropertyName("ssg_homephone")]
@@ -682,22 +987,16 @@ namespace Csrs.Api.Models.Dynamics
         public string? Identity { get; set; }
 
         /// <summary>
-        /// Capture "Other" details regarding the Party's Identity. Logical name ssg_identityotherdetails.
-        /// </summary>
-        [JsonPropertyName("ssg_identityotherdetails")]
-        public string? IdentityOtherDetails { get; set; }
-
-        /// <summary>
-        /// Indicate whether the Party requires or is on income assistance. Logical name ssg_incomeassistance.
-        /// </summary>
-        [JsonPropertyName("ssg_incomeassistance")]
-        public string? IncomeAssistance { get; set; }
-
-        /// <summary>
         /// Logical name ssg_lastname.
         /// </summary>
         [JsonPropertyName("ssg_lastname")]
         public string? LastName { get; set; }
+
+        /// <summary>
+        /// Latest duplicate record for this Party, used for data comparison purposes. Logical name ssg_latestduplicateparty.
+        /// </summary>
+        [JsonPropertyName("ssg_latestduplicateparty")]
+        public SSG_CsrsParty? LatestDuplicateParty { get; set; }
 
         /// <summary>
         /// Logical name ssg_middlename.
@@ -706,22 +1005,16 @@ namespace Csrs.Api.Models.Dynamics
         public string? MiddleName { get; set; }
 
         /// <summary>
+        /// Indicate whether this Party is a duplicate of another Party record. Logical name ssg_partyalreadyexists.
+        /// </summary>
+        [JsonPropertyName("ssg_partyalreadyexists")]
+        public string? PartyAlreadyExists { get; set; }
+
+        /// <summary>
         /// Select the gender the person identifies as. Logical name ssg_partygender.
         /// </summary>
         [JsonPropertyName("ssg_partygender")]
-        public string? PartyGender { get; set; }
-
-        /// <summary>
-        /// Determines If the user access is enabled or disabled to the portal. Logical name ssg_portalaccess.
-        /// </summary>
-        [JsonPropertyName("ssg_portalaccess")]
-        public bool? PortalAccess { get; set; }
-
-        /// <summary>
-        /// Indicator regarding the Party's preferred method of communication with the Program. Logical name ssg_preferredcontactmethod.
-        /// </summary>
-        [JsonPropertyName("ssg_preferredcontactmethod")]
-        public string? PreferredContactMethod { get; set; }
+        public string? Gender { get; set; }
 
         /// <summary>
         /// Enter the preferred name for the Party. Logical name ssg_preferredname.
@@ -740,18 +1033,6 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         [JsonPropertyName("ssg_referral")]
         public string? Referral { get; set; }
-
-        /// <summary>
-        /// to be deleted. Logical name ssg_stagingfilenumber.
-        /// </summary>
-        [JsonPropertyName("ssg_stagingfilenumber")]
-        public int? StagingFileNumber { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_stagingid.
-        /// </summary>
-        [JsonPropertyName("ssg_stagingid")]
-        public int? StagingId { get; set; }
 
         /// <summary>
         /// First line of the Party's street address. Logical name ssg_street1.
@@ -774,7 +1055,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsParty, object>> AllProperties = _ => new { _.PostalCode, _.BCeIDDisplayName, _.BCeIDGuid, _.BCeID_Last_Update, _.BCeID_UserId, _.CellPhone, _.City, _.OptOutElectronicDocuments, _.PartyId, _.DateofBirth, _.Email, _.FirstName, _.FullName, _.Gender, _.HomePhone, _.Identity, _.IdentityOtherDetails, _.IncomeAssistance, _.LastName, _.MiddleName, _.PartyGender, _.PortalAccess, _.PreferredContactMethod, _.PreferredName, _.Province, _.Referral, _.StagingFileNumber, _.StagingId, _.AddressStreet1, _.AddressStreet2, _.WorkPhone, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsParty, object>> AllProperties = _ => new { _.PostalCode, _.BCeIDDisplayName, _.BCeIDGuid, _.CellPhone, _.City, _.OptOutElectronicDocuments, _.PartyId, _.DateOfBirth, _.DuplicatedParty, _.Email, _.FirstName, _.HomePhone, _.Identity, _.LastName, _.LatestDuplicateParty, _.MiddleName, _.PartyAlreadyExists, _.Gender, _.PreferredName, _.Province, _.Referral, _.AddressStreet1, _.AddressStreet2, _.WorkPhone, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -815,6 +1096,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsoptoutedocumentsname = "ssg_csrsoptoutedocumentsname";
             public const string ssg_csrspartyid = "ssg_csrspartyid";
             public const string ssg_dateofbirth = "ssg_dateofbirth";
+            public const string ssg_duplicatedparty = "ssg_duplicatedparty";
+            public const string ssg_duplicatedpartyname = "ssg_duplicatedpartyname";
             public const string ssg_email = "ssg_email";
             public const string ssg_firstname = "ssg_firstname";
             public const string ssg_fullname = "ssg_fullname";
@@ -827,7 +1110,11 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_incomeassistance = "ssg_incomeassistance";
             public const string ssg_incomeassistancename = "ssg_incomeassistancename";
             public const string ssg_lastname = "ssg_lastname";
+            public const string ssg_latestduplicateparty = "ssg_latestduplicateparty";
+            public const string ssg_latestduplicatepartyname = "ssg_latestduplicatepartyname";
             public const string ssg_middlename = "ssg_middlename";
+            public const string ssg_partyalreadyexists = "ssg_partyalreadyexists";
+            public const string ssg_partyalreadyexistsname = "ssg_partyalreadyexistsname";
             public const string ssg_partygender = "ssg_partygender";
             public const string ssg_partygendername = "ssg_partygendername";
             public const string ssg_portalaccess = "ssg_portalaccess";
@@ -872,6 +1159,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsparty_ssg_csrschild_Mother = "ssg_csrsparty_ssg_csrschild_Mother";
             public const string ssg_csrsparty_ssg_csrsfile_Payor = "ssg_csrsparty_ssg_csrsfile_Payor";
             public const string ssg_csrsparty_ssg_csrsfile_Recipient = "ssg_csrsparty_ssg_csrsfile_Recipient";
+            public const string ssg_csrsparty_ssg_csrsparty_LatestDuplicateParty = "ssg_csrsparty_ssg_csrsparty_LatestDuplicateParty";
+            public const string ssg_csrsparty_ssg_csrsparty_MasterPartyRecord = "ssg_csrsparty_ssg_csrsparty_MasterPartyRecord";
             public const string ssg_csrsparty_ssg_csrsrecalculation_Payor = "ssg_csrsparty_ssg_csrsrecalculation_Payor";
             public const string ssg_csrsparty_ssg_csrsrecalculation_Recipient = "ssg_csrsparty_ssg_csrsrecalculation_Recipient";
             public const string ssg_csrsparty_SyncErrors = "ssg_csrsparty_SyncErrors";
@@ -891,6 +1180,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string lk_ssg_csrsparty_modifiedby = "lk_ssg_csrsparty_modifiedby";
             public const string lk_ssg_csrsparty_modifiedonbehalfby = "lk_ssg_csrsparty_modifiedonbehalfby";
             public const string owner_ssg_csrsparty = "owner_ssg_csrsparty";
+            public const string ssg_csrsparty_ssg_csrsparty_LatestDuplicateParty = "ssg_csrsparty_ssg_csrsparty_LatestDuplicateParty";
+            public const string ssg_csrsparty_ssg_csrsparty_MasterPartyRecord = "ssg_csrsparty_ssg_csrsparty_MasterPartyRecord";
             public const string team_ssg_csrsparty = "team_ssg_csrsparty";
             public const string user_ssg_csrsparty = "user_ssg_csrsparty";
         }
@@ -901,6 +1192,8 @@ namespace Csrs.Api.Models.Dynamics
     /// </summary>
     public partial class SSG_CsrsPortalMessage : Entity
     {
+        public const string EntityLogicalName = "ssg_csrsportalmessage";
+
         /// <summary>
         /// Logical name ssg_csrsfile.
         /// </summary>
@@ -947,6 +1240,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Primary Id alias. Logical name ssg_csrsportalmessageid.
         /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
@@ -1037,6 +1331,175 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_ssg_csrsfile_ssg_csrsportalmessage_csrsFile = "ssg_ssg_csrsfile_ssg_csrsportalmessage_csrsFile";
             public const string team_ssg_csrsportalmessage = "team_ssg_csrsportalmessage";
             public const string user_ssg_csrsportalmessage = "user_ssg_csrsportalmessage";
+        }
+    }
+
+    /// <summary>
+    /// Information about the BC Court where the Court Order/Service Request was executed. Logical name ssg_ijssbccourtlocation.
+    /// </summary>
+    public partial class SSG_IJSSBCCourtlocation : Entity
+    {
+        public const string EntityLogicalName = "ssg_ijssbccourtlocation";
+
+        /// <summary>
+        /// The name of the BC court. Logical name ssg_bccourtlocationname.
+        /// </summary>
+        [JsonPropertyName("ssg_bccourtlocationname")]
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// Enter the city in BC where the court is located. Logical name ssg_city.
+        /// </summary>
+        [JsonPropertyName("ssg_city")]
+        public string? City { get; set; }
+
+        /// <summary>
+        /// Select the level for this court. Logical name ssg_courtlevel.
+        /// </summary>
+        [JsonPropertyName("ssg_courtlevel")]
+        public string? CourtLevel { get; set; }
+
+        /// <summary>
+        /// Unique identifier for entity instances. Logical name ssg_ijssbccourtlocationid.
+        /// </summary>
+        /// <returns>
+        /// The primary id value or <see cref="System.Guid.Empty"/> if not set.
+        /// </returns>
+        [JsonPropertyName("ssg_ijssbccourtlocationid")]
+        public System.Guid? CourtLocationId 
+        {
+            get { return _id; }
+            set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
+        }
+
+        /// <summary>
+        /// Primary Id alias. Logical name ssg_ijssbccourtlocationid.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public override Guid Id { get { return _id; } set { _id = value; } }
+
+        /// <summary>
+        /// This field always defaults to BC. Logical name ssg_provinceterritory.
+        /// </summary>
+        [JsonPropertyName("ssg_provinceterritory")]
+        public string? Province { get; set; }
+
+        /// <summary>
+        /// Enter the street address for the court. Logical name ssg_street1.
+        /// </summary>
+        [JsonPropertyName("ssg_street1")]
+        public string? AddressStreet1 { get; set; }
+
+        /// <summary>
+        /// Enter additional address details (unit #, entrance, etc.) for the court. Logical name ssg_street2.
+        /// </summary>
+        [JsonPropertyName("ssg_street2")]
+        public string? AddressStreet2 { get; set; }
+
+        /// <summary>
+        /// Contains all the attributes/columns on this class.
+        /// </summary>
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_IJSSBCCourtlocation, object>> AllProperties = _ => new { _.Name, _.City, _.CourtLevel, _.CourtLocationId, _.Province, _.AddressStreet1, _.AddressStreet2, _.StateCode, _.StatusCode };
+
+        /// <summary>
+        /// Contains all the normal attributes on this entity.
+        /// </summary>
+        public static class Attributes
+        {
+            public const string createdby = "createdby";
+            public const string createdbyname = "createdbyname";
+            public const string createdbyyominame = "createdbyyominame";
+            public const string createdon = "createdon";
+            public const string createdonbehalfby = "createdonbehalfby";
+            public const string createdonbehalfbyname = "createdonbehalfbyname";
+            public const string createdonbehalfbyyominame = "createdonbehalfbyyominame";
+            public const string importsequencenumber = "importsequencenumber";
+            public const string modifiedby = "modifiedby";
+            public const string modifiedbyname = "modifiedbyname";
+            public const string modifiedbyyominame = "modifiedbyyominame";
+            public const string modifiedon = "modifiedon";
+            public const string modifiedonbehalfby = "modifiedonbehalfby";
+            public const string modifiedonbehalfbyname = "modifiedonbehalfbyname";
+            public const string modifiedonbehalfbyyominame = "modifiedonbehalfbyyominame";
+            public const string overriddencreatedon = "overriddencreatedon";
+            public const string ownerid = "ownerid";
+            public const string owneridname = "owneridname";
+            public const string owneridtype = "owneridtype";
+            public const string owneridyominame = "owneridyominame";
+            public const string owningbusinessunit = "owningbusinessunit";
+            public const string owningteam = "owningteam";
+            public const string owninguser = "owninguser";
+            public const string ssg_accessdbid = "ssg_accessdbid";
+            public const string ssg_bccourtlocationname = "ssg_bccourtlocationname";
+            public const string ssg_city = "ssg_city";
+            public const string ssg_country = "ssg_country";
+            public const string ssg_countryname = "ssg_countryname";
+            public const string ssg_courtlevel = "ssg_courtlevel";
+            public const string ssg_courtlevelname = "ssg_courtlevelname";
+            public const string ssg_courtofficeemail = "ssg_courtofficeemail";
+            public const string ssg_courtofficefax = "ssg_courtofficefax";
+            public const string ssg_courtofficephone = "ssg_courtofficephone";
+            public const string ssg_courtofficephoneextension = "ssg_courtofficephoneextension";
+            public const string ssg_csrscourtlevelfilter = "ssg_csrscourtlevelfilter";
+            public const string ssg_csrscourtlevelfiltername = "ssg_csrscourtlevelfiltername";
+            public const string ssg_datamigrationcount = "ssg_datamigrationcount";
+            public const string ssg_filenumber = "ssg_filenumber";
+            public const string ssg_ijssbccourtlocationid = "ssg_ijssbccourtlocationid";
+            public const string ssg_postalcode = "ssg_postalcode";
+            public const string ssg_provinceterritory = "ssg_provinceterritory";
+            public const string ssg_provinceterritoryname = "ssg_provinceterritoryname";
+            public const string ssg_stagingid = "ssg_stagingid";
+            public const string ssg_street1 = "ssg_street1";
+            public const string ssg_street2 = "ssg_street2";
+            public const string statecode = "statecode";
+            public const string statecodename = "statecodename";
+            public const string statuscode = "statuscode";
+            public const string statuscodename = "statuscodename";
+            public const string timezoneruleversionnumber = "timezoneruleversionnumber";
+            public const string utcconversiontimezonecode = "utcconversiontimezonecode";
+            public const string versionnumber = "versionnumber";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a one to many relationship.
+        /// These attributes will be a collection on this entity.
+        /// </summary>
+        public static class OneToManyRelationships
+        {
+            public const string ssg_ijssbccourtlocation_Annotations = "ssg_ijssbccourtlocation_Annotations";
+            public const string ssg_ijssbccourtlocation_AsyncOperations = "ssg_ijssbccourtlocation_AsyncOperations";
+            public const string ssg_ijssbccourtlocation_BulkDeleteFailures = "ssg_ijssbccourtlocation_BulkDeleteFailures";
+            public const string ssg_ijssbccourtlocation_DuplicateBaseRecord = "ssg_ijssbccourtlocation_DuplicateBaseRecord";
+            public const string ssg_ijssbccourtlocation_DuplicateMatchingRecord = "ssg_ijssbccourtlocation_DuplicateMatchingRecord";
+            public const string ssg_ijssbccourtlocation_MailboxTrackingFolders = "ssg_ijssbccourtlocation_MailboxTrackingFolders";
+            public const string ssg_ijssbccourtlocation_PrincipalObjectAttributeAccesses = "ssg_ijssbccourtlocation_PrincipalObjectAttributeAccesses";
+            public const string ssg_ijssbccourtlocation_ProcessSession = "ssg_ijssbccourtlocation_ProcessSession";
+            public const string ssg_ijssbccourtlocation_SharePointDocumentLocations = "ssg_ijssbccourtlocation_SharePointDocumentLocations";
+            public const string ssg_ijssbccourtlocation_SharePointDocuments = "ssg_ijssbccourtlocation_SharePointDocuments";
+            public const string ssg_ijssbccourtlocation_ssg_csrsarchivedcourtfile_BCCourtLocation = "ssg_ijssbccourtlocation_ssg_csrsarchivedcourtfile_BCCourtLocation";
+            public const string ssg_ijssbccourtlocation_ssg_csrsbccourtlocationcontact_BCCourtLocation = "ssg_ijssbccourtlocation_ssg_csrsbccourtlocationcontact_BCCourtLocation";
+            public const string ssg_ijssbccourtlocation_ssg_csrsfile_BCCourtLocation = "ssg_ijssbccourtlocation_ssg_csrsfile_BCCourtLocation";
+            public const string ssg_ijssbccourtlocation_ssg_ijssbccourtlocationcontact_BCCourtLocation = "ssg_ijssbccourtlocation_ssg_ijssbccourtlocationcontact_BCCourtLocation";
+            public const string ssg_ijssbccourtlocation_ssg_ijsscourtorder_BCCourt = "ssg_ijssbccourtlocation_ssg_ijsscourtorder_BCCourt";
+            public const string ssg_ijssbccourtlocation_ssg_ijssservicerequest_BCCourtLocation = "ssg_ijssbccourtlocation_ssg_ijssservicerequest_BCCourtLocation";
+            public const string ssg_ijssbccourtlocation_SyncErrors = "ssg_ijssbccourtlocation_SyncErrors";
+            public const string ssg_ijssbccourtlocation_UserEntityInstanceDatas = "ssg_ijssbccourtlocation_UserEntityInstanceDatas";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a many to one relationship.
+        /// These attributes will be a single instance on this entity.
+        /// </summary>
+        public static class ManyToOneRelationships
+        {
+            public const string business_unit_ssg_ijssbccourtlocation = "business_unit_ssg_ijssbccourtlocation";
+            public const string lk_ssg_ijssbccourtlocation_createdby = "lk_ssg_ijssbccourtlocation_createdby";
+            public const string lk_ssg_ijssbccourtlocation_createdonbehalfby = "lk_ssg_ijssbccourtlocation_createdonbehalfby";
+            public const string lk_ssg_ijssbccourtlocation_modifiedby = "lk_ssg_ijssbccourtlocation_modifiedby";
+            public const string lk_ssg_ijssbccourtlocation_modifiedonbehalfby = "lk_ssg_ijssbccourtlocation_modifiedonbehalfby";
+            public const string owner_ssg_ijssbccourtlocation = "owner_ssg_ijssbccourtlocation";
+            public const string ssg_csrsbccourtlevel_ssg_ijssbccourtlocation_CSRSCourtLevelFilter = "ssg_csrsbccourtlevel_ssg_ijssbccourtlocation_CSRSCourtLevelFilter";
+            public const string ssg_ijsscountry_ssg_ijssbccourtlocation_Country = "ssg_ijsscountry_ssg_ijssbccourtlocation_Country";
+            public const string team_ssg_ijssbccourtlocation = "team_ssg_ijssbccourtlocation";
+            public const string user_ssg_ijssbccourtlocation = "user_ssg_ijssbccourtlocation";
         }
     }
 }

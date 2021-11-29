@@ -1,6 +1,7 @@
 ﻿using Csrs.Api.Authentication;
 using Csrs.Api.Configuration;
 using Csrs.Api.Repositories;
+using Csrs.Api.Services;
 using Simple.OData.Client;
 using System.Configuration;
 
@@ -38,6 +39,9 @@ public static class RepositoryExtensions
         services.AddHttpClient<ODataClientSettings>(cfg => { cfg.BaseAddress = new Uri(oAuthOptions.ResourceUrl); })
             .AddHttpMessageHandler<OAuthHandler>();
 
+        services.AddHttpClient<IOptionSetRepository, OptionSetRepository>(cfg => { cfg.BaseAddress = new Uri(oAuthOptions.ResourceUrl); })
+            .AddHttpMessageHandler<OAuthHandler>();
+
         services.AddTransient<IODataClient>(provider =>
         {
             var settings = provider.GetRequiredService<ODataClientSettings>();
@@ -48,7 +52,11 @@ public static class RepositoryExtensions
         // Add other Services
         services.AddTransient<ITokenService, TokenService>();
 
+        services.AddTransient<ICourtLevelRepository, CourtLevelRepository>();
+        services.AddTransient<ICourtLocationRepository, CourtLocationRepository>();
+        services.AddTransient<ICsrsFeedbackRepository, CsrsFeedbackRepository>();
         services.AddTransient<ICsrsFileRepository, CsrsFileRepository>();
         services.AddTransient<ICsrsPartyRepository, CsrsPartyRepository>();
+        services.AddTransient<ICsrsPortalMessageRepository, CsrsPortalMessageRepository>();
     }
 }

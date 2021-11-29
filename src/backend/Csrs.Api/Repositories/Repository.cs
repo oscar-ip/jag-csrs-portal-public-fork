@@ -1,14 +1,15 @@
 ﻿using Csrs.Api.Models.Dynamics;
 using Simple.OData.Client;
+using System.Linq.Expressions;
 using System.Net;
 
 namespace Csrs.Api.Repositories
 {
     /// <summary>
-    /// Implements the generic repository interface
+    /// Implements the generic repository interface.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity.</typeparam>
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
+    public abstract class Repository<TEntity> : IRepository<TEntity>, ILookupRepository<TEntity> where TEntity : Entity
     {
         /// <summary>
         /// The <see cref="IODataClient"/>.
@@ -22,10 +23,7 @@ namespace Csrs.Api.Repositories
 
         public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
         {
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             await Client
                 .For<TEntity>()
@@ -33,12 +31,26 @@ namespace Csrs.Api.Repositories
                 .DeleteEntryAsync(cancellationToken);
         }
 
-        public async Task<TEntity?> GetAsync(Guid id, System.Linq.Expressions.Expression<Func<TEntity, object>> properties, CancellationToken cancellationToken)
+        public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, object>> properties, CancellationToken cancellationToken)
         {
-            if (properties is null)
+            ArgumentNullException.ThrowIfNull(properties);
+
+            IEnumerable<TEntity>? entities = await Client
+                .For<TEntity>()
+                .Select(properties)
+                .FindEntriesAsync(cancellationToken);
+
+            return new List<TEntity>(entities);
+        }
+
+        public async Task<TEntity?> GetAsync(Guid id, Expression<Func<TEntity, object>> properties, CancellationToken cancellationToken)
+        {
+            if (id == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(properties));
+                return null;
             }
+
+            ArgumentNullException.ThrowIfNull(properties);
 
             try
             {
@@ -62,10 +74,7 @@ namespace Csrs.Api.Repositories
 
         public async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken)
         {
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             entity = await Client
                 .For<TEntity>()
@@ -77,10 +86,7 @@ namespace Csrs.Api.Repositories
 
         public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
         {
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             entity = await Client
                 .For<TEntity>()

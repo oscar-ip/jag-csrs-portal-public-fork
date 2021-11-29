@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Csrs.Api.Models
 {
     public class PortalAccount
     {
-        public Guid PartyGuid { get; set; }
+        public Guid PartyId { get; set; }
         [Required]
         public Guid BCeIDGuid { get; set; }
         [Required]
@@ -14,6 +15,7 @@ namespace Csrs.Api.Models
         public string? LastName { get; set; }
         public string? PreferredName { get; set; }
         [Required]
+        [SwaggerSchema(Format = "date")]
         public DateTime DateOfBirth { get; set; }
         [Required]
         public string? Gender { get; set; }

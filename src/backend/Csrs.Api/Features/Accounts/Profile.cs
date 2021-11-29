@@ -3,36 +3,38 @@ using Csrs.Api.Models;
 using Csrs.Api.Repositories;
 using Csrs.Api.Models.Dynamics;
 using AutoMapper;
+using System.Security.Claims;
 
-namespace Csrs.Api.Features.PortalAccounts
+namespace Csrs.Api.Features.Accounts
 {
     public static class Profile
     {
         public class Request : IRequest<Response>
         {
-            //[FromQuery(Name = "bceIDGuid")]
-            //[Required]
-            public Guid BCeIDGuid { get; set; }
+            public Request(ClaimsPrincipal user)
+            {
+                User = user ?? throw new ArgumentNullException(nameof(user));
+            }
+
+            public ClaimsPrincipal User { get; init; }
         }
 
         public class Response
         {
-            public Response()
+            public static Response Empty = new Response();
+
+            private Response()
             {
-                Accounts = Array.Empty<PortalAccount>();
+                Account = null;
             }
 
             public Response(PortalAccount account)
             {
-                if (account is null)
-                {
-                    throw new ArgumentNullException(nameof(account));
-                }
-
-                Accounts = new List<PortalAccount>() { account };
+                ArgumentNullException.ThrowIfNull(account);
+                Account = account;
             }
 
-            public IList<PortalAccount> Accounts { get; init; }
+            public PortalAccount? Account { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -50,10 +52,16 @@ namespace Csrs.Api.Features.PortalAccounts
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var item = await _repository.GetAsync(request.BCeIDGuid, SSG_CsrsParty.AllProperties, cancellationToken);
+                Guid? userId = request.User.GetBCeIDUserId();
+                if (userId == null)
+                {
+                    return Response.Empty;
+                }
+
+                var item = await _repository.GetAsync(userId.Value, SSG_CsrsParty.AllProperties, cancellationToken);
                 if (item is null)
                 {
-                    return new Response();
+                    return Response.Empty;
                 }
 
                 PortalAccount account = _mapper.Map<PortalAccount>(item);
