@@ -23,8 +23,11 @@ namespace Csrs.Api.Models
         /// Child's date of birth name.
         /// </summary>
         [SwaggerSchema(Format = "date")]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
-        public bool ChildIsDependent { get; set; }
+        /// <summary>
+        /// Child is a dependent.
+        /// </summary>
+        public bool? ChildIsDependent { get; set; }
     }
 }
