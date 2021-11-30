@@ -7,7 +7,7 @@ namespace Csrs.Api.Models.Mapping
     {
         public PortalFeedbackProfile()
         {
-            CreateMap<PortalFeedback, SSG_CsrsFeedback>();
+            CreateMap<Feedback, SSG_CsrsFeedback>();
         }
     }
 }

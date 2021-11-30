@@ -7,8 +7,8 @@ namespace Csrs.Api.Models.Mapping
     {
         public PortalFileProfile()
         {
-            CreateMap<PortalFile, SSG_CsrsFile>();
-            CreateMap<SSG_CsrsFile, PortalFile>();
+            CreateMap<File, SSG_CsrsFile>();
+            CreateMap<SSG_CsrsFile, File>();
         }
     }
 }

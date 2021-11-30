@@ -2,7 +2,7 @@
 
 namespace Csrs.Api.Models
 {
-    public class PortalMessage
+    public class Message
     {
         public Guid MessageGuid { get; set; }
         [Required]

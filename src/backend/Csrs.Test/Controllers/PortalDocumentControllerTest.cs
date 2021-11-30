@@ -2,21 +2,20 @@
 using Csrs.Api.Features.PortalDocuments;
 using Csrs.Api.Models;
 using Moq;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Csrs.Test.Controllers
 {
-    public class PortalDocumentControllerTest : ControllerTest<PortalDocumentController>
+    public class PortalDocumentControllerTest : ControllerTest<DocumentController>
     {
         [Fact]
         public void CanCreateController()
         {
             var logger = GetMockLogger();
             var mediator = GetMockMediator();
-            new PortalDocumentController(mediator.Object, logger.Object);
+            new DocumentController(mediator.Object, logger.Object);
         }
 
         [Fact]
@@ -30,7 +29,7 @@ namespace Csrs.Test.Controllers
                 .ReturnsAsync(new ListDocuments.Response())
                 .Verifiable("Correct request was not sent.");
 
-            var sut = new PortalDocumentController(mediator.Object, logger.Object);
+            var sut = new DocumentController(mediator.Object, logger.Object);
 
             var actual = await sut.ListDocumentsAsync(string.Empty);
 
@@ -49,9 +48,9 @@ namespace Csrs.Test.Controllers
                 .ReturnsAsync(new UploadDocuments.Response())
                 .Verifiable("Correct request was not sent.");
 
-            var sut = new PortalDocumentController(mediator.Object, logger.Object);
+            var sut = new DocumentController(mediator.Object, logger.Object);
 
-            var actual = await sut.UploadDocumentsAsync(new PortalDocument()); ;
+            var actual = await sut.UploadDocumentsAsync(new Document()); ;
 
             mediator.Verify();
         }
@@ -67,7 +66,7 @@ namespace Csrs.Test.Controllers
                 .ReturnsAsync(new DownloadDocument.Response())
                 .Verifiable("Correct request was not sent.");
 
-            var sut = new PortalDocumentController(mediator.Object, logger.Object);
+            var sut = new DocumentController(mediator.Object, logger.Object);
 
             var actual = await sut.DownloadDocumentAsync(string.Empty);
 

@@ -14,25 +14,25 @@ namespace Csrs.Api.Repositories
             _optionSetService = optionSetService ?? throw new ArgumentNullException(nameof(optionSetService));
         }
 
-        public async Task<IList<OptionValue>> GetGenderPicklistAsync(CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetGenderPicklistAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_gender, cancellationToken);
             return values;
         }
 
-        public async Task<IList<OptionValue>> GetIdentityPicklistAsync(CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetIdentityPicklistAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_identity, cancellationToken);
             return values;
         }
 
-        public async Task<IList<OptionValue>> GetProvincePicklistAsync(CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetProvincePicklistAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_provinceterritory, cancellationToken);
             return values;
         }
 
-        public async Task<IList<OptionValue>> GetReferralPicklistAsync(CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetReferralPicklistAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_referral, cancellationToken);
             return values;

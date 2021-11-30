@@ -7,14 +7,14 @@ using Xunit;
 
 namespace Csrs.Test.Models.Mapping
 {
-    public class PortalAccountProfileTest : MappingProfileTest<PortalAccountProfile, PortalAccount, SSG_CsrsParty>
+    public class PortalAccountProfileTest : MappingProfileTest<PortalAccountProfile, Account, SSG_CsrsParty>
     {
         [Fact]
         public void PortalAccountProfile()
         {
             IMapper mapper = CreateMapper();
 
-            var expected = _fixture.Create<PortalAccount>();
+            var expected = _fixture.Create<Account>();
 
             var actual = mapper.Map<SSG_CsrsParty>(expected);
 

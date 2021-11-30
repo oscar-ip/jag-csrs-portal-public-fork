@@ -13,20 +13,20 @@
 
     public static class OptionSetMetadataExtensions
     {
-        public static IEnumerable<OptionValue> GetOptionValues(this OptionSetMetadata? optionSetMetadata)
+        public static IEnumerable<LookupValue> GetOptionValues(this OptionSetMetadata? optionSetMetadata)
         {
             if (optionSetMetadata?.OptionSet?.Options == null)
             {
-                return Array.Empty<OptionValue>();
+                return Array.Empty<LookupValue>();
             }
 
             var values = optionSetMetadata.OptionSet.Options
-                .Select(_ => new OptionValue(_.Value, _.Label?.UserLocalizedLabel?.Label ?? string.Empty));
+                .Select(_ => new LookupValue(_.Value, _.Label?.UserLocalizedLabel?.Label ?? string.Empty));
 
             return values;
         }
 
-        public static IEnumerable<OptionValue> GetOptionValues(this PicklistOptionSetMetadata? picklistOptionSetMetadata)
+        public static IEnumerable<LookupValue> GetOptionValues(this PicklistOptionSetMetadata? picklistOptionSetMetadata)
         {
             if (picklistOptionSetMetadata == null || picklistOptionSetMetadata.Value == null)
             {

@@ -64,13 +64,13 @@ namespace Csrs.Test.Features.Accounts
             await Picklist_calls_correct_repository_function(Lookups.Request.Province, _ => _.GetProvincePicklistAsync(It.IsAny<CancellationToken>()));
         }
 
-        private async Task Picklist_calls_correct_repository_function(Lookups.Request request, Expression<Func<ICsrsPartyRepository, Task<IList<OptionValue>>>> action)
+        private async Task Picklist_calls_correct_repository_function(Lookups.Request request, Expression<Func<ICsrsPartyRepository, Task<IList<LookupValue>>>> action)
         {
             var repositoryMock = new Mock<ICsrsPartyRepository>(MockBehavior.Strict);
             var loggerMock = new Mock<ILogger<Lookups.Handler>>();
             Fixture fixture = new Fixture();
 
-            var expected = fixture.CreateMany<OptionValue>().ToList();
+            var expected = fixture.CreateMany<LookupValue>().ToList();
 
             repositoryMock.Setup(action).ReturnsAsync(expected);
 

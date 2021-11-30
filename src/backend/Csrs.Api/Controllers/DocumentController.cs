@@ -9,41 +9,41 @@ namespace Csrs.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PortalDocumentController : CsrsControllerBase<PortalDocumentController>
+    public class DocumentController : CsrsControllerBase<DocumentController>
     {
-        public PortalDocumentController(IMediator mediator, ILogger<PortalDocumentController> logger)
+        public DocumentController(IMediator mediator, ILogger<DocumentController> logger)
             : base(mediator, logger)
         {
         }
 
         [HttpGet("ListDocuments")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<PortalDocument>> ListDocumentsAsync([Required] string regardingGuid)
+        public async Task<IList<Document>> ListDocumentsAsync([Required] string regardingGuid)
         {
             ListDocuments.Request request = new();
             ListDocuments.Response response = await _mediator.Send(request);
 
-            return Array.Empty<PortalDocument>();
+            return Array.Empty<Document>();
         }
 
         [HttpGet("DownloadDocument")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<PortalDocument>> DownloadDocumentAsync([Required]string fileGuid)
+        public async Task<IList<Document>> DownloadDocumentAsync([Required]string fileGuid)
         {
             DownloadDocument.Request request = new();
             DownloadDocument.Response response = await _mediator.Send(request);
 
-            return Array.Empty<PortalDocument>();
+            return Array.Empty<Document>();
         }
 
         [HttpPost("UploadDocuments")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<PortalDocument>> UploadDocumentsAsync(PortalDocument document)
+        public async Task<IList<Document>> UploadDocumentsAsync(Document document)
         {
             UploadDocuments.Request request = new();
             UploadDocuments.Response response = await _mediator.Send(request);
 
-            return Array.Empty<PortalDocument>();
+            return Array.Empty<Document>();
         }
     }
 }

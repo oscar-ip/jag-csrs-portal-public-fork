@@ -2,7 +2,7 @@
 
 namespace Csrs.Api.Models
 {
-    public class PortalUserRequest
+    public class UserRequest
     {
         [Required]
         public string? FileNo { get; set; }

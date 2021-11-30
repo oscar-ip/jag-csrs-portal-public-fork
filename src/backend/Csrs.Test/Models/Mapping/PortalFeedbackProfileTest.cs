@@ -4,7 +4,7 @@ using Csrs.Api.Models.Mapping;
 
 namespace Csrs.Test.Models.Mapping
 {
-    public class PortalFeedbackProfileTest : MappingProfileTest<PortalFeedbackProfile, PortalFeedback, SSG_CsrsFeedback>
+    public class PortalFeedbackProfileTest : MappingProfileTest<PortalFeedbackProfile, Feedback, SSG_CsrsFeedback>
     {
     }
 }

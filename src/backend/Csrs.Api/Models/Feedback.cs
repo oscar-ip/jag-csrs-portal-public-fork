@@ -2,7 +2,7 @@
 
 namespace Csrs.Api.Models
 {
-    public class PortalFeedback
+    public class Feedback
     {
         [Required]
         public string? BCeIDGuid { get; set; }

@@ -1,6 +1,5 @@
 ﻿using Csrs.Api.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using System.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection;

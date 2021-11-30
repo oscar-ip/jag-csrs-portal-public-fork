@@ -10,12 +10,12 @@ namespace Csrs.Api.Repositories
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IList<OptionValue>> GetGenderPicklistAsync(CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetGenderPicklistAsync(CancellationToken cancellationToken);
 
-        Task<IList<OptionValue>> GetIdentityPicklistAsync(CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetIdentityPicklistAsync(CancellationToken cancellationToken);
 
-        Task<IList<OptionValue>> GetProvincePicklistAsync(CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetProvincePicklistAsync(CancellationToken cancellationToken);
 
-        Task<IList<OptionValue>> GetReferralPicklistAsync(CancellationToken cancellationToken);        
+        Task<IList<LookupValue>> GetReferralPicklistAsync(CancellationToken cancellationToken);        
     }
 }

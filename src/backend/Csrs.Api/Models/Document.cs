@@ -2,7 +2,7 @@
 
 namespace Csrs.Api.Models
 {
-    public class PortalDocument
+    public class Document
     {
         public Guid FileGuid { get; set; }
         

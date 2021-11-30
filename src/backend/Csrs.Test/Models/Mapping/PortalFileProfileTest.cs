@@ -4,7 +4,7 @@ using Csrs.Api.Models.Mapping;
 
 namespace Csrs.Test.Models.Mapping
 {
-    public class PortalFileProfileTest : MappingProfileTest<PortalFileProfile, PortalFile, SSG_CsrsFile>
+    public class PortalFileProfileTest : MappingProfileTest<PortalFileProfile, File, SSG_CsrsFile>
     {
     }
 }

@@ -32,9 +32,9 @@ namespace Csrs.Api.Features.Accounts
 
         public class Response
         {
-            public IList<OptionValue> Items { get; init; }
+            public IList<LookupValue> Items { get; init; }
 
-            public Response(IList<OptionValue> items)
+            public Response(IList<LookupValue> items)
             {
                 ArgumentNullException.ThrowIfNull(items);
                 Items = items;
@@ -53,7 +53,7 @@ namespace Csrs.Api.Features.Accounts
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                IList<OptionValue> items = Array.Empty<OptionValue>();
+                IList<LookupValue> items = Array.Empty<LookupValue>();
 
                 switch (request.Type)
                 {

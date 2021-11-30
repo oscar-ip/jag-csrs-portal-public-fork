@@ -1,6 +1,6 @@
 ﻿namespace Csrs.Api.Models
 {
-    public class PortalFileToList
+    public class FileToList
     {
         public Guid FileGuid { get; set; }
         public string? UserRole { get; set; }

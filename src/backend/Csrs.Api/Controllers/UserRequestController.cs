@@ -9,16 +9,16 @@ namespace Csrs.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PortalUserRequestController : CsrsControllerBase<PortalUserRequestController>
+    public class UserRequestController : CsrsControllerBase<UserRequestController>
     {
-        public PortalUserRequestController(IMediator mediator, ILogger<PortalUserRequestController> logger)
+        public UserRequestController(IMediator mediator, ILogger<UserRequestController> logger)
             : base(mediator, logger)
         {
         }
 
         [HttpPost("Create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<string> CreateAsync([Required] PortalUserRequest request2)
+        public async Task<string> CreateAsync([Required] UserRequest request2)
         {
             Create.Request request = new();
             Create.Response response = await _mediator.Send(request);

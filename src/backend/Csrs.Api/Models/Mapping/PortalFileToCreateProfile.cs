@@ -7,7 +7,7 @@ namespace Csrs.Api.Models.Mapping
     {
         public PortalFileToCreateProfile()
         {
-            CreateMap<PortalFile, SSG_CsrsFile>()
+            CreateMap<File, SSG_CsrsFile>()
                 .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => State.Active))
                 .ForMember(dest => dest.StatusCode, opt => opt.MapFrom(src => Status.Active))
                 ;

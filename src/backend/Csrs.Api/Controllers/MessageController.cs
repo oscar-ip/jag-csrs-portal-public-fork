@@ -9,36 +9,36 @@ namespace Csrs.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PortalMessageController : CsrsControllerBase<PortalMessageController>
+    public class MessageController : CsrsControllerBase<MessageController>
     {
-        public PortalMessageController(IMediator mediator, ILogger<PortalMessageController> logger)
+        public MessageController(IMediator mediator, ILogger<MessageController> logger)
             : base(mediator, logger)
         {
         }
 
         [HttpGet("List")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<PortalMessage>> GetAsync([Required]string partyGuid)
+        public async Task<IList<Message>> GetAsync([Required]string partyGuid)
         {
             List.Request request = new();
             List.Response response = await _mediator.Send(request);
 
-            return Array.Empty<PortalMessage>();
+            return Array.Empty<Message>();
         }
 
         [HttpGet("Read")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<PortalMessage>> ReadAsync([Required] string messageGuid)
+        public async Task<IList<Message>> ReadAsync([Required] string messageGuid)
         {
             Read.Request request = new();
             Read.Response response = await _mediator.Send(request);
 
-            return Array.Empty<PortalMessage>();
+            return Array.Empty<Message>();
         }
 
         [HttpPost("Create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<string> CreateAsync([Required] PortalMessage message)
+        public async Task<string> CreateAsync([Required] Message message)
         {
             Create.Request request = new();
             Create.Response response = await _mediator.Send(request);

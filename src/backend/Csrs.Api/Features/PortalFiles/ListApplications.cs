@@ -1,6 +1,4 @@
 using MediatR;
-using Csrs.Api.Models;
-using Csrs.Api.Repositories;
 
 namespace Csrs.Api.Features.PortalFiles
 {
@@ -21,9 +19,9 @@ namespace Csrs.Api.Features.PortalFiles
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                return new Response();
+                return Task.FromResult(new Response());
             }
         }
 

@@ -1,13 +1,16 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Csrs.Api.Models
 {
-    public class PortalAccount
+    public class Account
     {
         public Guid PartyId { get; set; }
-        [Required]
+        
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public Guid BCeIDGuid { get; set; }
+
         [Required]
         public string? FirstName { get; set; }
         public string? MiddleName { get; set; }
@@ -18,11 +21,11 @@ namespace Csrs.Api.Models
         [SwaggerSchema(Format = "date")]
         public DateTime DateOfBirth { get; set; }
         [Required]
-        public string? Gender { get; set; }
+        public LookupValue? Gender { get; set; }
         public string? AddressStreet1 { get; set; }
         public string? AddressStreet2 { get; set; }
         public string? City { get; set; }
-        public string? Province { get; set; }
+        public LookupValue? Province { get; set; }
         public string? PostalCode { get; set; }
         public string? HomePhone { get; set; }
         public string? WorkPhone { get; set; }
@@ -30,7 +33,7 @@ namespace Csrs.Api.Models
         [Required]
         public string? Email { get; set; }
         public bool OptOutElectronicDocuments { get; set; }
-        public string? Identity { get; set; }
-        public string? Referral { get; set; }
+        public LookupValue? Identity { get; set; }
+        public LookupValue? Referral { get; set; }
     }
 }
