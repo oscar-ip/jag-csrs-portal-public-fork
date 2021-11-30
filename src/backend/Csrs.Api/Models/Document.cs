@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Csrs.Api.Models
 {
@@ -16,7 +17,8 @@ namespace Csrs.Api.Models
         public string? FileName { get; set; }
         
         [Required]
-        public string? DocumentBody { get; set; }
+        [SwaggerSchema(Format = "binary")]
+        public string? Body { get; set; }
         
         public string? FileTag { get; set; }
     }

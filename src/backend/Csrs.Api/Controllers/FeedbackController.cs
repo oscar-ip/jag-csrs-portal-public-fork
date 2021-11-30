@@ -1,4 +1,4 @@
-﻿using Csrs.Api.Features.PortalFeedbacks;
+﻿using Csrs.Api.Features.Feedbacks;
 using Csrs.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

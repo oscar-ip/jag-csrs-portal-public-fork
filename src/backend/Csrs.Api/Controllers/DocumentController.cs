@@ -1,4 +1,4 @@
-﻿using Csrs.Api.Features.PortalDocuments;
+﻿using Csrs.Api.Features.Documents;
 using Csrs.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,14 @@ namespace Csrs.Api.Controllers
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="regardingId">The id of ...</param>
+        /// <returns></returns>
         [HttpGet("ListDocuments")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Document>> ListDocumentsAsync([Required] string regardingGuid)
+        public async Task<IList<Document>> ListDocumentsAsync([Required]Guid? regardingId)
         {
             ListDocuments.Request request = new();
             ListDocuments.Response response = await _mediator.Send(request);
@@ -28,7 +33,7 @@ namespace Csrs.Api.Controllers
 
         [HttpGet("DownloadDocument")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Document>> DownloadDocumentAsync([Required]string fileGuid)
+        public async Task<IList<Document>> DownloadDocumentAsync([Required]Guid? fileId)
         {
             DownloadDocument.Request request = new();
             DownloadDocument.Response response = await _mediator.Send(request);

@@ -1,4 +1,4 @@
-﻿using Csrs.Api.Features.PortalUserRequests;
+﻿using Csrs.Api.Features.UserRequests;
 using Csrs.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
