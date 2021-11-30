@@ -14,7 +14,7 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IList<OptionValue>> GetStatusCodesAsync(string entityName, CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetStatusCodesAsync(string entityName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(entityName))
             {
@@ -33,14 +33,14 @@ namespace Csrs.Api.Services
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogInformation("Failed to get option values");
-                return Array.Empty<OptionValue>();
+                return Array.Empty<LookupValue>();
             }
 
             var optionSetMetadata = await response.Content.ReadFromJsonAsync<OptionSetMetadata>(cancellationToken: cancellationToken);
             return optionSetMetadata.GetOptionValues().ToList();
         }
 
-        public async Task<IList<OptionValue>> GetPickListValuesAsync(string entityName, string attributeName, CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetPickListValuesAsync(string entityName, string attributeName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(entityName))
             {
@@ -64,7 +64,7 @@ namespace Csrs.Api.Services
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogInformation("Failed to get option values");
-                return Array.Empty<OptionValue>();
+                return Array.Empty<LookupValue>();
             }
 
             var content = response.Content.ReadAsStringAsync(cancellationToken: cancellationToken);

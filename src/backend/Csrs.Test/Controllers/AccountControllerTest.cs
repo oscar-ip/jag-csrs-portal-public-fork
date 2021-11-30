@@ -2,7 +2,6 @@
 using Csrs.Api.Controllers;
 using Csrs.Api.Features.Accounts;
 using Csrs.Api.Models;
-using Csrs.Api.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -51,7 +49,7 @@ namespace Csrs.Test.Controllers
 
             Fixture fixture = new Fixture();
 
-            var expected = fixture.CreateMany<OptionValue>().ToList();
+            var expected = fixture.CreateMany<LookupValue>().ToList();
 
             mediator
                 .Setup(_ => _.Send(It.Is<Lookups.Request>(request => request == expectedRequest), It.IsAny<CancellationToken>()))
@@ -121,7 +119,7 @@ namespace Csrs.Test.Controllers
 
             var sut = new AccountController(mediator.Object, logger.Object);
 
-            var actual = await sut.SignupAsync(new PortalAccount());
+            var actual = await sut.SignupAsync(new Account());
 
             mediator.Verify();
         }
@@ -134,12 +132,12 @@ namespace Csrs.Test.Controllers
 
             mediator
                 .Setup(_ => _.Send(It.IsAny<UpdateProfile.Request>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new UpdateProfile.Response(new PortalAccount()))
+                .ReturnsAsync(new UpdateProfile.Response(new Account()))
                 .Verifiable("Correct request was not sent.");
 
             var sut = new AccountController(mediator.Object, logger.Object);
 
-            var actual = await sut.UpdateProfileAsync(new PortalAccount());
+            var actual = await sut.UpdateProfileAsync(new Account());
 
             mediator.Verify();
         }

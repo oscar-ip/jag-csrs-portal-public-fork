@@ -4,7 +4,6 @@ using Xunit;
 
 namespace Csrs.Test.Models.Mapping
 {
-
     public abstract class MappingProfileTest<TProfile, TSource, TDest> where TProfile : Profile, new()
     {
         protected readonly Fixture _fixture = new Fixture();

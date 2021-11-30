@@ -24,7 +24,7 @@ namespace Csrs.Api.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("Genders")]
-        [ProducesResponseType(typeof(IList<OptionValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetGendersAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Gender, cancellationToken);
@@ -38,7 +38,7 @@ namespace Csrs.Api.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("Provinces")]
-        [ProducesResponseType(typeof(IList<OptionValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetProvincesAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Province, cancellationToken);
@@ -52,7 +52,7 @@ namespace Csrs.Api.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("Identities")]
-        [ProducesResponseType(typeof(IList<OptionValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetIdentitesAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Identity, cancellationToken);
@@ -66,7 +66,7 @@ namespace Csrs.Api.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("Referrals")]
-        [ProducesResponseType(typeof(IList<OptionValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetReferralsAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Referral, cancellationToken);
@@ -80,7 +80,7 @@ namespace Csrs.Api.Controllers
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="404">The account was not found</response>
         [HttpGet]
-        [ProducesResponseType(typeof(PortalAccount), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Account), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetProfileAsync(CancellationToken cancellationToken)
@@ -93,7 +93,7 @@ namespace Csrs.Api.Controllers
 
         [HttpPost("Signup")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<string> SignupAsync([Required] PortalAccount account)
+        public async Task<string> SignupAsync([Required] Account account)
         {
             Signup.Request request = new(account);
             Signup.Response? response = await _mediator.Send(request);
@@ -102,7 +102,7 @@ namespace Csrs.Api.Controllers
 
         [HttpPatch("UpdateProfile")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<string> UpdateProfileAsync([Required]PortalAccount account)
+        public async Task<string> UpdateProfileAsync([Required]Account account)
         {
             UpdateProfile.Request request = new UpdateProfile.Request(account);
             UpdateProfile.Response? response = await _mediator.Send(request);

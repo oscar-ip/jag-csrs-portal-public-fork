@@ -10,22 +10,22 @@ namespace Csrs.Api.Features.Accounts
     {
         public class Request : IRequest<Response>
         {
-            public Request(PortalAccount account)
+            public Request(Account account)
             {
                 Account = account ?? throw new ArgumentNullException(nameof(account));
             }
 
-            public PortalAccount Account { get; init; }
+            public Account Account { get; init; }
         }
 
         public class Response
         {
-            public Response(PortalAccount account)
+            public Response(Account account)
             {
                 Account = account ?? throw new ArgumentNullException(nameof(account));
             }
 
-            public PortalAccount Account { get; init; }
+            public Account Account { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -46,7 +46,7 @@ namespace Csrs.Api.Features.Accounts
                 SSG_CsrsParty party = _mapper.Map<SSG_CsrsParty>(request.Account);
                 party = await _repository.UpdateAsync(party, cancellationToken);
 
-                PortalAccount account = _mapper.Map<PortalAccount>(party);
+                Account account = _mapper.Map<Account>(party);
                 return new Response(account);
             }
         }

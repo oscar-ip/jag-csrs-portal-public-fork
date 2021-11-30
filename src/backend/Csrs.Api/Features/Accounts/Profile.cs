@@ -28,13 +28,13 @@ namespace Csrs.Api.Features.Accounts
                 Account = null;
             }
 
-            public Response(PortalAccount account)
+            public Response(Account account)
             {
                 ArgumentNullException.ThrowIfNull(account);
                 Account = account;
             }
 
-            public PortalAccount? Account { get; init; }
+            public Account? Account { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -64,7 +64,7 @@ namespace Csrs.Api.Features.Accounts
                     return Response.Empty;
                 }
 
-                PortalAccount account = _mapper.Map<PortalAccount>(item);
+                Account account = _mapper.Map<Account>(item);
                 return new Response(account);
             }
         }

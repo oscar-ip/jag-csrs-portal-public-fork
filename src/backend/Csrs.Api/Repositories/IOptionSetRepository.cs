@@ -14,7 +14,7 @@ namespace Csrs.Api.Services
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentException"><paramref name="entityName"/> is null or empty.</exception>
         /// <returns></returns>
-        Task<IList<OptionValue>> GetStatusCodesAsync(string entityName, CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetStatusCodesAsync(string entityName, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get the pick list values for an entity attribute.
@@ -24,6 +24,6 @@ namespace Csrs.Api.Services
         /// <param name="cancellationToken"></param>
         /// <exception cref="ArgumentException"><paramref name="entityName"/> or <paramref name="attributeName"/> is null or empty.</exception>
         /// <returns></returns>
-        Task<IList<OptionValue>> GetPickListValuesAsync(string entityName, string attributeName, CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetPickListValuesAsync(string entityName, string attributeName, CancellationToken cancellationToken);
     }
 }

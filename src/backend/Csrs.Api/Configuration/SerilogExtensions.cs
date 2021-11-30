@@ -1,8 +1,6 @@
 ﻿using Csrs.Api.Configuration;
 using Serilog;
-using Serilog.Core;
 using Serilog.Events;
-using System.Runtime.CompilerServices;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

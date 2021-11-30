@@ -10,12 +10,12 @@ namespace Csrs.Api.Features.Accounts
     {
         public class Request : IRequest<Response>
         {
-            public Request(PortalAccount account)
+            public Request(Account account)
             {
                 Account = account ?? throw new ArgumentNullException(nameof(account));
             }
 
-            public PortalAccount Account { get; init; }
+            public Account Account { get; init; }
         }
 
         public class Response
