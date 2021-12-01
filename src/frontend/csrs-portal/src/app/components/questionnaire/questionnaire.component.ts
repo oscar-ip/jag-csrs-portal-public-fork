@@ -485,10 +485,15 @@ export class QuestionnaireComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {}
 
-  stringToHTML(i, yi, ci, str, idLabel) {
+  stringToHTML(i, yi, ci, str, idLabel, domId?) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(str, 'text/html');
-    const id = '#' + idLabel + '-' + i + '-' + yi + '-' + ci;
+    let id = '';
+    if (domId){
+      id = '#' + domId;
+    }else{
+      id = '#' + idLabel + '-' + i + '-' + yi + '-' + ci;
+    }
     if (
       document.querySelector(id) &&
       document.querySelector(id).childElementCount === 0
