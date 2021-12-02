@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "file-manager-service", "file-manager-service.csproj", "{5E8085A4-2D5B-4698-BB5C-0B991C129C87}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharePoint", "..\cllc-interfaces\SharePoint\SharePoint.csproj", "{5D9AD34A-D3AB-4FC9-A4F1-4CDEA11EBF4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharePoint", "..\Csrs.Interfaces.SharePoint\SharePoint.csproj", "{5D9AD34A-D3AB-4FC9-A4F1-4CDEA11EBF4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
