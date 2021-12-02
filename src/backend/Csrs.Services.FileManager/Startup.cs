@@ -19,7 +19,7 @@ using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
 
-namespace Gov.Lclb.Cllb.Services.FileManager
+namespace Csrs.Services.FileManager
 {
     public class Startup
     {

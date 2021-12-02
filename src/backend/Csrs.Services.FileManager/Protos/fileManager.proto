@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option csharp_namespace = "Gov.Lclb.Cllb.Services.FileManager";
+option csharp_namespace = "Csrs.Services.FileManager";
 
 package filemanager;
 

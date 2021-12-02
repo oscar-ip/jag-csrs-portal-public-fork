@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Gov.Lclb.Cllb.Interfaces
+namespace Csrs.Interfaces
 {
     public class SharepointHealthCheck : IHealthCheck
     // reference https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2

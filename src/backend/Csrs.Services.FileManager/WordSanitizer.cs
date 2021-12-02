@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Gov.Lclb.Cllb.Services.FileManager
+namespace Csrs.Services.FileManager
 {
     /// <summary>
     ///     Helper methods for working with <see cref="Guid" />.

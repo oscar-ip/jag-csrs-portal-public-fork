@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
-using Gov.Lclb.Cllb.Interfaces;
+using Csrs.Interfaces;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
-namespace Gov.Lclb.Cllb.Services.FileManager
+namespace Csrs.Services.FileManager
 {
     // Default to require authorization
     [Authorize]

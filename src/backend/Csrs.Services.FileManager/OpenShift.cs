@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
-using Gov.Lclb.Cllb.Services.FileManager;
+using Csrs.Services.FileManager;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +19,7 @@ using RedHat.OpenShift.Utils;
 
 // from https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore-ex/dotnetcore-2.1-https/app/OpenShift.cs
 
-namespace Gov.Lclb.Cllb.Services.FileManager
+namespace Csrs.Services.FileManager
 {
     public static class PlatformEnvironment
     {

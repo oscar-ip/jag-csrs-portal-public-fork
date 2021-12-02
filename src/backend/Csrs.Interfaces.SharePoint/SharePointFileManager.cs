@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Gov.Lclb.Cllb.Interfaces
+namespace Csrs.Interfaces
 {
     public class SharePointFileManager
     {

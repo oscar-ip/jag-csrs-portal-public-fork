@@ -1,4 +1,4 @@
-﻿namespace Gov.Lclb.Cllb.Interfaces
+﻿namespace Csrs.Interfaces
 {
     using Microsoft.Rest;
 
