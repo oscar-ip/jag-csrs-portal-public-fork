@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -111,6 +111,7 @@ namespace Csrs.Services.FileManager
         protected override async Task ExecuteAsync(CancellationToken token)
         {
             if (_options.Value.UseHttps)
+            {
                 try
                 {
                     var certificate = _certificateLoader.ServiceCertificate;
@@ -139,14 +140,19 @@ namespace Csrs.Services.FileManager
                             }
                     }
                     while (loop) ;
-                    // Our certificate expired, Stop the application.
-                    _logger.LogInformation(
-                        $"Certificate expires at {certificate.NotAfter.ToUniversalTime()}. Stopping application.");
+                    // Our certificate expired, Stop the application.  OpenShift should regenerate the certificates automatically.
+                    _logger.LogInformation("Certificate expires at {CertificateExpiration}. Stopping application.", certificate.NotAfter.ToUniversalTime());
                     _applicationLifetime.StopApplication();
                 }
                 catch (TaskCanceledException)
                 {
                 }
+            }
+            else
+            {
+                // shouldn't get here because this background should not be registered if not using HTTPS/OpenShift
+                _logger.LogInformation("Not configured to use HTTPS");
+            }
         }
     }
 
