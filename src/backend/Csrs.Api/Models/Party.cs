@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Csrs.Api.Models
 {
-    public class Account
+    public class Party
     {
         public Guid PartyId { get; set; }
         
@@ -19,7 +19,7 @@ namespace Csrs.Api.Models
         public string? PreferredName { get; set; }
         [Required]
         [SwaggerSchema(Format = "date")]
-        public DateTime DateOfBirth { get; set; }
+        public string? DateOfBirth { get; set; }
         [Required]
         public LookupValue? Gender { get; set; }
         public string? AddressStreet1 { get; set; }

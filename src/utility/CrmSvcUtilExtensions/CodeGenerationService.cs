@@ -394,7 +394,7 @@ namespace CrmSvcUtilExtensions
                 case AttributeTypeCode.ManagedProperty: return string.Empty; // typeof(BooleanManagedProperty) },
                 case AttributeTypeCode.CalendarRules: return string.Empty; // typeof(object) },
                 case AttributeTypeCode.Customer: return string.Empty; // , typeof(EntityReference) },
-                case AttributeTypeCode.DateTime: return "DateTime"; // typeof(DateTime) },
+                case AttributeTypeCode.DateTime: return "DateTimeOffset"; // typeof(DateTime) },
                 case AttributeTypeCode.Decimal: return "decimal"; // typeof(decimal) },
                 case AttributeTypeCode.Double: return "double"; // typeof(double) },
                 case AttributeTypeCode.Integer: return "int"; // typeof(int) },

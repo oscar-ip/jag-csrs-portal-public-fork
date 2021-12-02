@@ -2,6 +2,7 @@
 using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Services;
 using Simple.OData.Client;
+using System.Linq.Expressions;
 
 namespace Csrs.Api.Repositories
 {
@@ -14,25 +15,37 @@ namespace Csrs.Api.Repositories
             _optionSetService = optionSetService ?? throw new ArgumentNullException(nameof(optionSetService));
         }
 
-        public async Task<IList<LookupValue>> GetGenderPicklistAsync(CancellationToken cancellationToken)
+        public async Task<List<SSG_CsrsParty>> GetByBCeIdAsync(string bceidGuid, Expression<Func<SSG_CsrsParty, object>> properties, CancellationToken cancellationToken)
+        {
+            var client = Client.For<SSG_CsrsParty>();
+
+            IEnumerable<SSG_CsrsParty> entries = await client
+                .Filter(_ => _.BCeIDGuid == bceidGuid && _.StatusCode == Active)
+                .Select(properties)
+                .FindEntriesAsync(cancellationToken);
+
+            return entries.ToList();
+        }
+
+        public async Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_gender, cancellationToken);
             return values;
         }
 
-        public async Task<IList<LookupValue>> GetIdentityPicklistAsync(CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_identity, cancellationToken);
             return values;
         }
 
-        public async Task<IList<LookupValue>> GetProvincePicklistAsync(CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_provinceterritory, cancellationToken);
             return values;
         }
 
-        public async Task<IList<LookupValue>> GetReferralPicklistAsync(CancellationToken cancellationToken)
+        public async Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken)
         {
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_referral, cancellationToken);
             return values;

@@ -20,9 +20,21 @@ namespace Csrs.Api.Models.Dynamics
         protected Guid _id;
 
         /// <summary>
-        /// Primary id alias
+        /// Primary id alias, should only be used in Key expressions
         /// </summary>
-        public abstract Guid Id { get; set; }
+        public Guid Key { get; }
+
+        /// <summary>
+        /// Date and time when the record was created. Logical name createdon.
+        /// </summary>
+        [JsonPropertyName("createdon")]
+        public DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// Date and time when the record was modified. Logical name modifiedon.
+        /// </summary>
+        [JsonPropertyName("modifiedon")]
+        public DateTime ModifiedOn { get; set; }
 
         /// <summary>
         /// Logical name statecode.
@@ -63,16 +75,11 @@ namespace Csrs.Api.Models.Dynamics
             set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
         }
 
-        /// <summary>
-        /// Primary Id alias. Logical name ssg_csrsbccourtlevelid.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsBCCourtLevel, object>> AllProperties = _ => new { _.CourtLevel, _.csrsbccourtlevelId, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsBCCourtLevel, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.CourtLevel, _.csrsbccourtlevelId, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -179,17 +186,12 @@ namespace Csrs.Api.Models.Dynamics
             set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
         }
 
-        /// <summary>
-        /// Primary Id alias. Logical name ssg_csrschildid.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
         /// Logical name ssg_dateofbirth.
         /// </summary>
         [JsonPropertyName("ssg_dateofbirth")]
-        public DateTime? DateOfBirth { get; set; }
+        public string? DateOfBirthString { get; set; }
 
         /// <summary>
         /// Logical name ssg_filenumber.
@@ -218,7 +220,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsChild, object>> AllProperties = _ => new { _.ChildatAgeofMajority, _.ChildIsADependent, _.ChildId, _.DateOfBirth, _.FileNumber, _.FirstName, _.LastName, _.MiddleName, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsChild, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.ChildatAgeofMajority, _.ChildIsADependent, _.ChildId, _.DateOfBirthString, _.FileNumber, _.FirstName, _.LastName, _.MiddleName, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -331,11 +333,6 @@ namespace Csrs.Api.Models.Dynamics
             set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
         }
 
-        /// <summary>
-        /// Primary Id alias. Logical name ssg_csrsfeedbackid.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
         /// Logical name ssg_csrsfeedbackmessage.
@@ -364,7 +361,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFeedback, object>> AllProperties = _ => new { _.FeedbackId, _.Message, _.Subject, _.Party, _.Name, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFeedback, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.FeedbackId, _.Message, _.Subject, _.Party, _.Name, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -450,24 +447,6 @@ namespace Csrs.Api.Models.Dynamics
         public const string EntityLogicalName = "ssg_csrsfile";
 
         /// <summary>
-        /// Exchange rate for the currency associated with the entity with respect to the base currency. Logical name exchangerate.
-        /// </summary>
-        [JsonPropertyName("exchangerate")]
-        public decimal? ExchangeRate { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_act.
-        /// </summary>
-        [JsonPropertyName("ssg_act")]
-        public string? Act { get; set; }
-
-        /// <summary>
-        /// Auto Number to be copied to File Number. Do not delete. Logical name ssg_autonumber.
-        /// </summary>
-        [JsonPropertyName("ssg_autonumber")]
-        public string? AutoNumber { get; set; }
-
-        /// <summary>
         /// Select the level of court to filter the list of courts in the "Court Location" field. Logical name ssg_bccourtlevel.
         /// </summary>
         [JsonPropertyName("ssg_bccourtlevel")]
@@ -510,47 +489,6 @@ namespace Csrs.Api.Models.Dynamics
             set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
         }
 
-        /// <summary>
-        /// Primary Id alias. Logical name ssg_csrsfileid.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public override Guid Id { get { return _id; } set { _id = value; } }
-
-        /// <summary>
-        /// Enter the date the Order or WA was issued. Logical name ssg_dateoforderorwa.
-        /// </summary>
-        [JsonPropertyName("ssg_dateoforderorwa")]
-        public DateTime? DateofOrderorWA { get; set; }
-
-        /// <summary>
-        /// Specify the order commencement date. Logical name ssg_dateordercommences.
-        /// </summary>
-        [JsonPropertyName("ssg_dateordercommences")]
-        public DateTime? DateOrderCommences { get; set; }
-
-        /// <summary>
-        /// Days of the month that Child Support is due on. Logical name ssg_daysofmonthpayable.
-        /// </summary>
-        [JsonPropertyName("ssg_daysofmonthpayable")]
-        public string? DaysofMonthPayable { get; set; }
-
-        /// <summary>
-        /// File record that is duplicated by this File. Logical name ssg_duplicatedfilenumber.
-        /// </summary>
-        [JsonPropertyName("ssg_duplicatedfilenumber")]
-        public SSG_CsrsFile? DuplicatedFileNumber { get; set; }
-
-        /// <summary>
-        /// Identify whether this file is a duplicate of another file. Visible only during Submitted Status. Logical name ssg_filealreadyexists.
-        /// </summary>
-        [JsonPropertyName("ssg_filealreadyexists")]
-        public string? FileAlreadyExists { get; set; }
-
-        /// <summary>
-        /// Indicator whether the File was closed before any recalculations were done. Logical name ssg_fileclosedatenrollment.
-        /// </summary>
-        [JsonPropertyName("ssg_fileclosedatenrollment")]
-        public string? FileClosedatEnrollment { get; set; }
 
         /// <summary>
         /// The number ID for the file record. Logical name ssg_filenumber.
@@ -559,52 +497,10 @@ namespace Csrs.Api.Models.Dynamics
         public string? FileNumber { get; set; }
 
         /// <summary>
-        /// Indicate whether the FMEP File is active or not. Logical name ssg_fmepfileactive.
-        /// </summary>
-        [JsonPropertyName("ssg_fmepfileactive")]
-        public bool? FMEPFileActive { get; set; }
-
-        /// <summary>
-        /// Enter ID of the FMEP file number corresponding to this file. Logical name ssg_fmepfilenumber.
-        /// </summary>
-        [JsonPropertyName("ssg_fmepfilenumber")]
-        public string? FMEPFileNumber { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_latestduplicatefile.
-        /// </summary>
-        [JsonPropertyName("ssg_latestduplicatefile")]
-        public SSG_CsrsFile? LatestDuplicateFile { get; set; }
-
-        /// <summary>
-        /// Number of Recalculations for the File - Used for numbering File's Recalculations. Logical name ssg_numberofrecalculations.
-        /// </summary>
-        [JsonPropertyName("ssg_numberofrecalculations")]
-        public int? NumberofRecalculations { get; set; }
-
-        /// <summary>
-        /// Specify which Party enrolled for the CSRS Program. Logical name ssg_partyenrolled.
-        /// </summary>
-        [JsonPropertyName("ssg_partyenrolled")]
-        public string? PartyEnrolled { get; set; }
-
-        /// <summary>
-        /// Indicate if the payor’s guideline income is based on a pattern of income. Logical name ssg_patternofincomepayor.
-        /// </summary>
-        [JsonPropertyName("ssg_patternofincomepayor")]
-        public string? PatternofIncomePayor { get; set; }
-
-        /// <summary>
         /// Select the party who provides (pays for) support. Logical name ssg_payor.
         /// </summary>
         [JsonPropertyName("ssg_payor")]
         public SSG_CsrsParty? Payor { get; set; }
-
-        /// <summary>
-        /// Indicate whether the Recalculation was ordered by the court. Logical name ssg_recalculationorderedbythecourt.
-        /// </summary>
-        [JsonPropertyName("ssg_recalculationorderedbythecourt")]
-        public bool? RecalculationOrderedbytheCourt { get; set; }
 
         /// <summary>
         /// Select the party who receives support. Logical name ssg_recipient.
@@ -613,99 +509,27 @@ namespace Csrs.Api.Models.Dynamics
         public SSG_CsrsParty? Recipient { get; set; }
 
         /// <summary>
-        /// System-set indicator to allow capture of Recipient's Income on Recalculations. Logical name ssg_recipientsincomeneeded.
-        /// </summary>
-        [JsonPropertyName("ssg_recipientsincomeneeded")]
-        public bool? RecipientsIncomeNeeded { get; set; }
-
-        /// <summary>
         /// The registration date of the CSRS file. Logical name ssg_registrationdate.
         /// </summary>
         [JsonPropertyName("ssg_registrationdate")]
-        public DateTime? RegistrationDate { get; set; }
-
-        /// <summary>
-        /// Indicate whether there is a Safety Alert applies to the file. Logical name ssg_safetyalert.
-        /// </summary>
-        [JsonPropertyName("ssg_safetyalert")]
-        public bool? SafetyAlert { get; set; }
-
-        /// <summary>
-        /// Description of the Safety Concerns. Logical name ssg_safetyconcerndescription.
-        /// </summary>
-        [JsonPropertyName("ssg_safetyconcerndescription")]
-        public string? SafetyConcernDescription { get; set; }
-
-        /// <summary>
-        /// Indicator whether special expenses must be accounted for in the Child Support. Logical name ssg_section7expenses.
-        /// </summary>
-        [JsonPropertyName("ssg_section7expenses")]
-        public string? Section7Expenses { get; set; }
-
-        /// <summary>
-        /// Indicate whether the Section 7 expenses will be recalculated for the File. Logical name ssg_section7expensesrecalculated.
-        /// </summary>
-        [JsonPropertyName("ssg_section7expensesrecalculated")]
-        public bool? Section7ExpensesRecalculated { get; set; }
-
-        /// <summary>
-        /// Percentage of Section 7 Expenses payable by the Payor. Logical name ssg_section7payorsproportion.
-        /// </summary>
-        [JsonPropertyName("ssg_section7payorsproportion")]
-        public int? Section7PayorsProportion { get; set; }
-
-        /// <summary>
-        /// Percentage of Section 7 Expenses payable by the Recipient. Logical name ssg_section7recipientsproportion.
-        /// </summary>
-        [JsonPropertyName("ssg_section7recipientsproportion")]
-        public int? Section7RecipientsProportion { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_sharedparenting.
-        /// </summary>
-        [JsonPropertyName("ssg_sharedparenting")]
-        public bool? SharedParenting { get; set; }
-
-        /// <summary>
-        /// Date when Section 7 Expenses were withdrawn. Logical name ssg_specialexpenseswithdrawndate.
-        /// </summary>
-        [JsonPropertyName("ssg_specialexpenseswithdrawndate")]
-        public DateTime? SpecialExpensesWithdrawnDate { get; set; }
-
-        /// <summary>
-        /// Specify whether the parents are sharing custody (parenting) of the child(ren). Logical name ssg_splitparentingarrangement.
-        /// </summary>
-        [JsonPropertyName("ssg_splitparentingarrangement")]
-        public bool? SplitParentingArrangement { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_styleofcauseapplicant.
-        /// </summary>
-        [JsonPropertyName("ssg_styleofcauseapplicant")]
-        public string? StyleofCauseApplicant { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_styleofcauserespondent.
-        /// </summary>
-        [JsonPropertyName("ssg_styleofcauserespondent")]
-        public string? StyleofCauseRespondent { get; set; }
+        public string? RegistrationDateString { get; set; }
 
         /// <summary>
         /// Date/time the application or file was first submitted to the Program. Logical name ssg_submissiondate.
         /// </summary>
         [JsonPropertyName("ssg_submissiondate")]
-        public DateTime? SubmissionDate { get; set; }
+        public string? SubmissionDateString { get; set; }
 
         /// <summary>
         /// Date when the File's state is set to "Inactive". Logical name ssg_terminationdate.
         /// </summary>
         [JsonPropertyName("ssg_terminationdate")]
-        public DateTime? TerminationDate { get; set; }
+        public string? TerminationDateString { get; set; }
 
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFile, object>> AllProperties = _ => new { _.ExchangeRate, _.Act, _.AutoNumber, _.BCCourtLevel, _.BCCourtLocation, _.CourtFileNumber, _.CourtFileType, _.CourtLocation, _.CsrsFileId, _.DateofOrderorWA, _.DateOrderCommences, _.DaysofMonthPayable, _.DuplicatedFileNumber, _.FileAlreadyExists, _.FileClosedatEnrollment, _.FileNumber, _.FMEPFileActive, _.FMEPFileNumber, _.LatestDuplicateFile, _.NumberofRecalculations, _.PartyEnrolled, _.PatternofIncomePayor, _.Payor, _.RecalculationOrderedbytheCourt, _.Recipient, _.RecipientsIncomeNeeded, _.RegistrationDate, _.SafetyAlert, _.SafetyConcernDescription, _.Section7Expenses, _.Section7ExpensesRecalculated, _.Section7PayorsProportion, _.Section7RecipientsProportion, _.SharedParenting, _.SpecialExpensesWithdrawnDate, _.SplitParentingArrangement, _.StyleofCauseApplicant, _.StyleofCauseRespondent, _.SubmissionDate, _.TerminationDate, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFile, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.BCCourtLevel, _.BCCourtLocation, _.CourtFileNumber, _.CourtFileType, _.CourtLocation, _.CsrsFileId, _.FileNumber, _.Payor, _.Recipient, _.RegistrationDateString, _.SubmissionDateString, _.TerminationDateString, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -766,12 +590,6 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_fmepfilenumber = "ssg_fmepfilenumber";
             public const string ssg_incomeonorder = "ssg_incomeonorder";
             public const string ssg_incomeonorder_base = "ssg_incomeonorder_base";
-            public const string ssg_incomeyear1 = "ssg_incomeyear1";
-            public const string ssg_incomeyear1_base = "ssg_incomeyear1_base";
-            public const string ssg_incomeyear2 = "ssg_incomeyear2";
-            public const string ssg_incomeyear2_base = "ssg_incomeyear2_base";
-            public const string ssg_incomeyear3 = "ssg_incomeyear3";
-            public const string ssg_incomeyear3_base = "ssg_incomeyear3_base";
             public const string ssg_latestduplicatefile = "ssg_latestduplicatefile";
             public const string ssg_latestduplicatefilename = "ssg_latestduplicatefilename";
             public const string ssg_numberofrecalculations = "ssg_numberofrecalculations";
@@ -779,10 +597,9 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_offsetchildsupportamountonorder_base = "ssg_offsetchildsupportamountonorder_base";
             public const string ssg_partyenrolled = "ssg_partyenrolled";
             public const string ssg_partyenrolledname = "ssg_partyenrolledname";
-            public const string ssg_patternofincomepayor = "ssg_patternofincomepayor";
-            public const string ssg_patternofincomepayorname = "ssg_patternofincomepayorname";
             public const string ssg_payor = "ssg_payor";
             public const string ssg_payorname = "ssg_payorname";
+            public const string ssg_payorssafetyconcerndescription = "ssg_payorssafetyconcerndescription";
             public const string ssg_recalculationorderedbythecourt = "ssg_recalculationorderedbythecourt";
             public const string ssg_recalculationorderedbythecourtname = "ssg_recalculationorderedbythecourtname";
             public const string ssg_recipient = "ssg_recipient";
@@ -796,6 +613,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_registrationdate = "ssg_registrationdate";
             public const string ssg_safetyalert = "ssg_safetyalert";
             public const string ssg_safetyalertname = "ssg_safetyalertname";
+            public const string ssg_safetyalertpayor = "ssg_safetyalertpayor";
+            public const string ssg_safetyalertpayorname = "ssg_safetyalertpayorname";
             public const string ssg_safetyconcerndescription = "ssg_safetyconcerndescription";
             public const string ssg_section7expenses = "ssg_section7expenses";
             public const string ssg_section7expensesname = "ssg_section7expensesname";
@@ -944,17 +763,12 @@ namespace Csrs.Api.Models.Dynamics
             set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
         }
 
-        /// <summary>
-        /// Primary Id alias. Logical name ssg_csrspartyid.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
         /// Logical name ssg_dateofbirth.
         /// </summary>
         [JsonPropertyName("ssg_dateofbirth")]
-        public DateTime? DateOfBirth { get; set; }
+        public string? DateOfBirthString { get; set; }
 
         /// <summary>
         /// Select the master Party record that is duplicated by this Party. Logical name ssg_duplicatedparty.
@@ -1055,7 +869,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsParty, object>> AllProperties = _ => new { _.PostalCode, _.BCeIDDisplayName, _.BCeIDGuid, _.CellPhone, _.City, _.OptOutElectronicDocuments, _.PartyId, _.DateOfBirth, _.DuplicatedParty, _.Email, _.FirstName, _.HomePhone, _.Identity, _.LastName, _.LatestDuplicateParty, _.MiddleName, _.PartyAlreadyExists, _.Gender, _.PreferredName, _.Province, _.Referral, _.AddressStreet1, _.AddressStreet2, _.WorkPhone, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsParty, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.PostalCode, _.BCeIDDisplayName, _.BCeIDGuid, _.CellPhone, _.City, _.OptOutElectronicDocuments, _.PartyId, _.DateOfBirthString, _.DuplicatedParty, _.Email, _.FirstName, _.HomePhone, _.Identity, _.LastName, _.LatestDuplicateParty, _.MiddleName, _.PartyAlreadyExists, _.Gender, _.PreferredName, _.Province, _.Referral, _.AddressStreet1, _.AddressStreet2, _.WorkPhone, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -1210,7 +1024,7 @@ namespace Csrs.Api.Models.Dynamics
         /// Logical name ssg_csrsmessagedate.
         /// </summary>
         [JsonPropertyName("ssg_csrsmessagedate")]
-        public DateTime? Date { get; set; }
+        public string? DateString { get; set; }
 
         /// <summary>
         /// Logical name ssg_csrsmessageread.
@@ -1237,11 +1051,6 @@ namespace Csrs.Api.Models.Dynamics
             set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
         }
 
-        /// <summary>
-        /// Primary Id alias. Logical name ssg_csrsportalmessageid.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
         /// The name of the custom entity. Logical name ssg_name.
@@ -1252,7 +1061,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsPortalMessage, object>> AllProperties = _ => new { _.File, _.HasAttachment, _.Date, _.Read, _.Subject, _.MessageId, _.Name, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsPortalMessage, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.File, _.HasAttachment, _.DateString, _.Read, _.Subject, _.MessageId, _.Name, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -1372,11 +1181,6 @@ namespace Csrs.Api.Models.Dynamics
             set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
         }
 
-        /// <summary>
-        /// Primary Id alias. Logical name ssg_ijssbccourtlocationid.
-        /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public override Guid Id { get { return _id; } set { _id = value; } }
 
         /// <summary>
         /// This field always defaults to BC. Logical name ssg_provinceterritory.
@@ -1399,7 +1203,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_IJSSBCCourtlocation, object>> AllProperties = _ => new { _.Name, _.City, _.CourtLevel, _.CourtLocationId, _.Province, _.AddressStreet1, _.AddressStreet2, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_IJSSBCCourtlocation, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.Name, _.City, _.CourtLevel, _.CourtLocationId, _.Province, _.AddressStreet1, _.AddressStreet2, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.

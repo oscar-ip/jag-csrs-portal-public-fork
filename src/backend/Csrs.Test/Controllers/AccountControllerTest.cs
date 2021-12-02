@@ -88,7 +88,8 @@ namespace Csrs.Test.Controllers
             var mediator = GetMockMediator(true);
             var httpContextMock = new Mock<HttpContext>();
 
-            var user = CreateUser(Guid.NewGuid());
+            Guid id = Guid.NewGuid();
+            var user = CreateUser(id);
 
             mediator
                 .Setup(_ => _.Send(It.Is<Profile.Request>(request => request.User == user), It.IsAny<CancellationToken>()))
@@ -100,46 +101,57 @@ namespace Csrs.Test.Controllers
             var sut = new AccountController(mediator.Object, logger.Object);
             sut.ControllerContext.HttpContext = httpContextMock.Object;
 
-            var actual = await sut.GetProfileAsync(CancellationToken.None);
+            var actual = await sut.GetAsync(id.ToString(), CancellationToken.None);
 
             mediator.Verify();
         }
 
-        [Fact]
-        public async Task SignupShouldCreateCorrectRequest()
+        [Theory]
+        [MemberData(nameof(GetChildrenTestCase))]
+        public async Task CreateShouldCreateCorrectRequest(IList<Child> children, IList<Child> expectedChildren)
         {
             var logger = GetMockLogger();
             var mediator = GetMockMediator(true);
 
+            Fixture fixture = new Fixture();
+            var user = CreateUser(Guid.NewGuid());
+            var account = fixture.Create<Party>();
+            var file = fixture.Create<File>();
+            file.Children = children;
 
             mediator
-                .Setup(_ => _.Send(It.IsAny<Signup.Request>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Signup.Response(Guid.NewGuid()))
+                .Setup(_ => _.Send(It.Is<NewAccountAndFile.Request>(_ => _.User == user && _.Applicant == account && _.File == file), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NewAccountAndFile.Response(Guid.NewGuid()))
                 .Verifiable("Correct request was not sent.");
 
-            var sut = new AccountController(mediator.Object, logger.Object);
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(_ => _.User).Returns(user);
 
-            var actual = await sut.SignupAsync(new Account());
+            var sut = new AccountController(mediator.Object, logger.Object);
+            sut.ControllerContext.HttpContext = httpContextMock.Object;
+
+            var actual = await sut.CreateAsync(new NewFileRequest { User = account, File = file }, CancellationToken.None);
 
             mediator.Verify();
         }
 
-        [Fact]
-        public async Task UpdateProfileAsyncShouldCreateCorrectRequest()
+        public static IEnumerable<object[]> GetChildrenTestCase()
         {
-            var logger = GetMockLogger();
-            var mediator = GetMockMediator(true);
+            Fixture fixture = new Fixture();
 
-            mediator
-                .Setup(_ => _.Send(It.IsAny<UpdateProfile.Request>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new UpdateProfile.Response(new Account()))
-                .Verifiable("Correct request was not sent.");
+            List<Child> children = null!;
 
-            var sut = new AccountController(mediator.Object, logger.Object);
+            yield return new object[] { children, Array.Empty<Child>() }; // null children, expected the request to have empty
 
-            var actual = await sut.UpdateProfileAsync(new Account());
+            children = new List<Child>();
+            yield return new object[] { children, children }; // no children
 
-            mediator.Verify();
+            for (int i = 1; i <= 5; i++)
+            {
+                children = fixture.CreateMany<Child>(i).ToList();
+                yield return new object[] { children, children }; // no children
+
+            }
         }
     }
 }

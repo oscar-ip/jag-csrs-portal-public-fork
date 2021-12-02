@@ -11,6 +11,8 @@ namespace Csrs.Api.Repositories
     /// <typeparam name="TEntity">The type of entity.</typeparam>
     public abstract class Repository<TEntity> : IRepository<TEntity>, ILookupRepository<TEntity> where TEntity : Entity
     {
+        protected const int Active = 1;
+
         /// <summary>
         /// The <see cref="IODataClient"/>.
         /// </summary>
@@ -27,7 +29,7 @@ namespace Csrs.Api.Repositories
 
             await Client
                 .For<TEntity>()
-                .Key(entity.Id)
+                .Key(entity.Key)
                 .DeleteEntryAsync(cancellationToken);
         }
 
@@ -57,6 +59,7 @@ namespace Csrs.Api.Repositories
                 TEntity entity = await Client
                     .For<TEntity>()
                     .Key(id)
+                    .Filter(_ => _.StatusCode == Active)
                     .Select(properties)
                     .FindEntryAsync(cancellationToken);
 
@@ -90,7 +93,7 @@ namespace Csrs.Api.Repositories
 
             entity = await Client
                 .For<TEntity>()
-                .Key(entity.Id)
+                .Key(entity.Key)
                 .Set(entity)
                 .UpdateEntryAsync(cancellationToken);
 

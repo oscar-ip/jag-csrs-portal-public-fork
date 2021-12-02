@@ -76,8 +76,8 @@ namespace CrmSvcUtilExtensions
             mappings.Attributes.Add(new AttributeMappingDefinition { LogicalName = "statuscode", Name = "StatusCode" });
 
             // skip any of these fields if we dont need them
-            mappings.Attributes.Skip("createdby", "createdbyname", "createdon", "createdonbehalfby", "createdonbehalfbyname","createdbyyominame","createdonbehalfbyyominame", "overriddencreatedon");
-            mappings.Attributes.Skip("modifiedby","modifiedbyname", "modifiedon", "modifiedonbehalfby", "modifiedbyyominame","modifiedonbehalfbyyominame");
+            mappings.Attributes.Skip("createdby", "createdbyname", "createdonbehalfby", "createdonbehalfbyname","createdbyyominame","createdonbehalfbyyominame", "overriddencreatedon");
+            mappings.Attributes.Skip("modifiedby","modifiedbyname", "modifiedonbehalfby", "modifiedbyyominame","modifiedonbehalfbyyominame");
             mappings.Attributes.Skip("ownerid", "owneridname", "owneridtype", "owneridyominame", "owningbusinessunit", "owningteam", "owninguser");
             mappings.Attributes.Skip("importsequencenumber", "versionnumber", "utcconversiontimezonecode", "timezoneruleversionnumber");
 

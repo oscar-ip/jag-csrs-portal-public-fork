@@ -1,9 +1,7 @@
 ﻿using MediatR;
 using Csrs.Api.Models;
-using Csrs.Api.Repositories;
-using Csrs.Api.Models.Dynamics;
-using AutoMapper;
 using System.Security.Claims;
+using Csrs.Api.Services;
 
 namespace Csrs.Api.Features.Accounts
 {
@@ -11,12 +9,16 @@ namespace Csrs.Api.Features.Accounts
     {
         public class Request : IRequest<Response>
         {
-            public Request(ClaimsPrincipal user)
+            public Request(ClaimsPrincipal user, string bceidGuid)
             {
                 User = user ?? throw new ArgumentNullException(nameof(user));
+                BceidGuid = bceidGuid;
             }
 
             public ClaimsPrincipal User { get; init; }
+
+            [Obsolete("This is temporary field until authentication is complete")]
+            public string BceidGuid { get; init; }
         }
 
         public class Response
@@ -25,47 +27,54 @@ namespace Csrs.Api.Features.Accounts
 
             private Response()
             {
-                Account = null;
+                AccountFileFileSummary = null;
             }
 
-            public Response(Account account)
+            public Response(AccountFileSummary accountFileFileSummary)
             {
-                ArgumentNullException.ThrowIfNull(account);
-                Account = account;
+                ArgumentNullException.ThrowIfNull(accountFileFileSummary);
+                AccountFileFileSummary = accountFileFileSummary;
             }
 
-            public Account? Account { get; init; }
+            public AccountFileSummary? AccountFileFileSummary { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly ICsrsPartyRepository _repository;
-            private readonly IMapper _mapper;
+            private readonly IAccountService _accountService;
+            private readonly IFileService _fileService;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(ICsrsPartyRepository repository, IMapper mapper, ILogger<Handler> logger)
+            public Handler(IAccountService accountService, 
+                IFileService fileService,
+                ILogger<Handler> logger)
             {
-                _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-                _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+                _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+                _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                Guid? userId = request.User.GetBCeIDUserId();
-                if (userId == null)
+                //Guid? userId = request.User.GetBCeIDUserId();
+                //if (userId == null)
+                //{
+                //    return Response.Empty;
+                //}
+
+                Party? accountParty = await _accountService.GetPartyByBCeIdAsync(request.BceidGuid, cancellationToken);
+                //Party? accountParty = await _accountService.GetPartyAsync(userId.Value, cancellationToken);
+
+                if (accountParty == null)
                 {
                     return Response.Empty;
                 }
 
-                var item = await _repository.GetAsync(userId.Value, SSG_CsrsParty.AllProperties, cancellationToken);
-                if (item is null)
-                {
-                    return Response.Empty;
-                }
+                AccountFileSummary summary = new AccountFileSummary();
+                summary.User = accountParty;
+                summary.Files = await _fileService.GetPartyFileSummariesAsync(accountParty.PartyId, cancellationToken);
 
-                Account account = _mapper.Map<Account>(item);
-                return new Response(account);
+                return new Response(summary);
             }
         }
     }

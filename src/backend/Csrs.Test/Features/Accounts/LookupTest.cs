@@ -43,25 +43,25 @@ namespace Csrs.Test.Features.Accounts
         [Fact]
         public async Task Requesting_Genders_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Gender, _ => _.GetGenderPicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Gender, _ => _.GetGendersAsync(It.IsAny<CancellationToken>()));
         }
 
         [Fact]
         public async Task Requesting_Identity_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Identity, _ => _.GetIdentityPicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Identity, _ => _.GetIdentitiesAsync(It.IsAny<CancellationToken>()));
         }
 
         [Fact]
         public async Task Requesting_Referral_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Referral, _ => _.GetReferralPicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Referral, _ => _.GetReferralsAsync(It.IsAny<CancellationToken>()));
         }
 
         [Fact]
         public async Task Requesting_Province_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Province, _ => _.GetProvincePicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Province, _ => _.GetProvincesAsync(It.IsAny<CancellationToken>()));
         }
 
         private async Task Picklist_calls_correct_repository_function(Lookups.Request request, Expression<Func<ICsrsPartyRepository, Task<IList<LookupValue>>>> action)

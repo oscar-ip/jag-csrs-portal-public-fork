@@ -2,39 +2,64 @@
 
 namespace Csrs.Api.Models
 {
-    public class File
+    public class AccountFileSummary
     {
-        public Guid FileGuid { get; set; }
+        /// <summary>
+        /// The details of the current user's account.
+        /// </summary>
         [Required]
-        public string? UserRole { get; set; }
+        public Party? User { get; set; }
+
+        public IList<FileSummary> Files { get; set; }
+    }
+
+    public class FileSummary
+    {
+        public Guid? FileId { get; set; }
+
+        /// <summary>
+        /// The file status, Draft or Active.
+        /// </summary>
+        public FileStatus? Status { get; set; }
+
+        /// <summary>
+        /// The role the user plays on this file. The other party will have the other role.
+        /// </summary>
         [Required]
-        public string? Courtlocation { get; set; }
-        [Required]
-        public string? CourtFileNumber { get; set; }
-        public bool OrderedbytheCourtField { get; set; }
-        public string? Act { get; set; }
-        public string? DateofOrder { get; set; }
-        public string? Referrals { get; set; }
-        public string? FMEP { get; set; }
-        public bool SpecialExpenses { get; set; }
-        public bool SplitParenting { get; set; }
-        public bool SharedParenting { get; set; }
-        public string? RecipientPartyFirstName { get; set; }
-        public string? RecipientPartyMiddleName { get; set; }
-        public string? RecipientPartyLastName { get; set; }
-        public string? RecipientPartyDOB { get; set; }
-        public string? RecipientPartyGender { get; set; }
-        public string? RecipientPartyAddress { get; set; }
-        public string? RecipientPartyPhonenumber { get; set; }
-        public string? RecipientPartyEmailAddress { get; set; }
-        public string? RecipientPartyIncomeAmountfromtheorder { get; set; }
-        public bool RecipientPartyPatternofincome { get; set; }
-        public bool PayorSameastheotherparty { get; set; }
-        public string? ChildFirstName { get; set; }
-        public string? ChildMiddleName { get; set; }
-        public string? ChildLastName { get; set; }
-        public string? ChildDOB { get; set; }
-        public bool ChildIsDependent { get; set; }
-        public string? StatusReason { get; set; }
+        public PartyRole UsersRole { get; set; }
+    }
+
+    public class File : FileSummary
+    {
+        //[Required]
+        //public string? Courtlocation { get; set; }
+        //[Required]
+        //public string? CourtFileNumber { get; set; }
+        //public bool OrderedbytheCourtField { get; set; }
+        //public string? Act { get; set; }
+        //public string? DateofOrder { get; set; }
+        //public string? Referrals { get; set; }
+        //public string? FMEP { get; set; }
+        //public bool SpecialExpenses { get; set; }
+        //public bool SplitParenting { get; set; }
+        //public bool SharedParenting { get; set; }
+
+        /// <summary>
+        /// The other party on the file. The other party could be recipient or payer.
+        /// The other party cannot have the same role as the applying party.
+        /// </summary>
+        public Party? OtherParty { get; set; }
+
+        /// <summary>
+        /// The children on this file.
+        /// </summary>
+        public IList<Child>? Children { get; set; }
+    }
+
+    public enum FileStatus
+    {
+        Unknown  = 0,
+        Draft,
+        Active,
     }
 }

@@ -58,16 +58,16 @@ namespace Csrs.Api.Features.Accounts
                 switch (request.Type)
                 {
                     case LookupType.Gender:
-                        items = await _repository.GetGenderPicklistAsync(cancellationToken);
+                        items = await _repository.GetGendersAsync(cancellationToken);
                         break;
                     case LookupType.Referral:
-                        items = await _repository.GetReferralPicklistAsync(cancellationToken);
+                        items = await _repository.GetReferralsAsync(cancellationToken);
                         break;
                     case LookupType.Province:
-                        items = await _repository.GetProvincePicklistAsync(cancellationToken);
+                        items = await _repository.GetProvincesAsync(cancellationToken);
                         break;
                     case LookupType.Identity:
-                        items = await _repository.GetIdentityPicklistAsync(cancellationToken);
+                        items = await _repository.GetIdentitiesAsync(cancellationToken);
                         break;
                     default:
                         break;
