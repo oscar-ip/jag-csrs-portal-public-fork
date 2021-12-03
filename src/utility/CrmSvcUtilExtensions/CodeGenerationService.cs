@@ -103,9 +103,23 @@ namespace CrmSvcUtilExtensions
             buffer.AppendLine("protected Guid _id;");
             buffer.AppendLine();
             buffer.AppendLine("/// <summary>");
-            buffer.AppendLine("/// Primary id alias");
+            buffer.AppendLine("/// Primary id alias, should only be used in Key expressions");
             buffer.AppendLine("/// </summary>");
-            buffer.AppendLine("public abstract Guid Id { get; set; }");
+            buffer.AppendLine("public Guid Key { get; }");
+            buffer.AppendLine();
+
+            buffer.AppendLine("/// <summary>");
+            buffer.AppendLine("/// Date and time when the record was created. Logical name createdon.");
+            buffer.AppendLine("/// </summary>");
+            buffer.AppendLine("[JsonPropertyName(\"createdon\")]");
+            buffer.AppendLine("public DateTime CreatedOn { get; set; }");
+            buffer.AppendLine();
+
+            buffer.AppendLine("/// <summary>");
+            buffer.AppendLine("/// Date and time when the record was modified. Logical name modifiedon.");
+            buffer.AppendLine("/// </summary>");
+            buffer.AppendLine("[JsonPropertyName(\"modifiedon\")]");
+            buffer.AppendLine("public DateTime ModifiedOn { get; set; }");
             buffer.AppendLine();
 
             buffer.AppendLine("/// <summary>");
@@ -189,6 +203,8 @@ namespace CrmSvcUtilExtensions
             buffer.AppendLine();
 
             List<string> attributesNames = new List<string>();
+            attributesNames.Add("CreatedOn");
+            attributesNames.Add("ModifiedOn");
 
             foreach (var attribute in entity.Attributes.Where(_ => _.AttributeType != null).OrderBy(_ => _.LogicalName))
             {
@@ -329,7 +345,15 @@ namespace CrmSvcUtilExtensions
                 attributeType = namingService.GetNameForEntity(otherEntity, services);
             }
 
+            // avoid type 'Microsoft.OData.Edm.Date' cannot be converted to type 'System.Nullable`1[System.DateTime]'.
+            //if (attributeType == nameof(DateTime)) nullable = string.Empty;
+
             var attributeName = namingService.GetNameForAttribute(entity, attribute, services);
+            if (attribute.AttributeType == AttributeTypeCode.DateTime)
+            {
+                attributeName += "String";
+            }
+
             var attributesDescription = attribute.Description.LocalizedLabels.FirstOrDefault()?.Label;
 
             buffer.AppendLine($"/// <summary>");
@@ -367,13 +391,6 @@ namespace CrmSvcUtilExtensions
                 buffer.AppendLine("set { _id = value.HasValue ? value.Value : System.Guid.Empty; }");
                 buffer.UnindentAndAppendLine("}");
                 buffer.AppendLine();
-
-                // implement the primary key alias
-                buffer.AppendLine($"/// <summary>");
-                buffer.AppendLine($"/// Primary Id alias. Logical name {attribute.LogicalName}.");
-                buffer.AppendLine($"/// </summary>");
-                buffer.AppendLine($"[JsonIgnore(Condition = JsonIgnoreCondition.Always)]");
-                buffer.AppendLine($"public override Guid Id {{ get {{ return _id; }} set {{ _id = value; }} }}");
             }
             else
             {
@@ -394,7 +411,7 @@ namespace CrmSvcUtilExtensions
                 case AttributeTypeCode.ManagedProperty: return string.Empty; // typeof(BooleanManagedProperty) },
                 case AttributeTypeCode.CalendarRules: return string.Empty; // typeof(object) },
                 case AttributeTypeCode.Customer: return string.Empty; // , typeof(EntityReference) },
-                case AttributeTypeCode.DateTime: return "DateTimeOffset"; // typeof(DateTime) },
+                case AttributeTypeCode.DateTime: return "string"; // typeof(DateTime) },
                 case AttributeTypeCode.Decimal: return "decimal"; // typeof(decimal) },
                 case AttributeTypeCode.Double: return "double"; // typeof(double) },
                 case AttributeTypeCode.Integer: return "int"; // typeof(int) },

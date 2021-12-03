@@ -76,8 +76,8 @@ namespace CrmSvcUtilExtensions
             mappings.Attributes.Add(new AttributeMappingDefinition { LogicalName = "statuscode", Name = "StatusCode" });
 
             // skip any of these fields if we dont need them
-            mappings.Attributes.Skip("createdby", "createdbyname", "createdonbehalfby", "createdonbehalfbyname","createdbyyominame","createdonbehalfbyyominame", "overriddencreatedon");
-            mappings.Attributes.Skip("modifiedby","modifiedbyname", "modifiedonbehalfby", "modifiedbyyominame","modifiedonbehalfbyyominame");
+            mappings.Attributes.Skip("createdby", "createdon", "createdbyname", "createdonbehalfby", "createdonbehalfbyname","createdbyyominame","createdonbehalfbyyominame", "overriddencreatedon");
+            mappings.Attributes.Skip("modifiedby", "modifiedon", "modifiedbyname", "modifiedonbehalfby", "modifiedbyyominame","modifiedonbehalfbyyominame");
             mappings.Attributes.Skip("ownerid", "owneridname", "owneridtype", "owneridyominame", "owningbusinessunit", "owningteam", "owninguser");
             mappings.Attributes.Skip("importsequencenumber", "versionnumber", "utcconversiontimezonecode", "timezoneruleversionnumber");
 
@@ -178,6 +178,40 @@ namespace CrmSvcUtilExtensions
                     new AttributeMappingDefinition() { LogicalName = "ssg_incomeyear3_base", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_offsetchildsupportamountonorder", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_offsetchildsupportamountonorder_base", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "exchangerate", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_act", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_autonumber", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_dateoforderorwa", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_dateordercommences", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_daysofmonthpayable", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_duplicatedfilenumber", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_filealreadyexists", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_fileclosedatenrollment", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_fmepfileactive", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_fmepfilenumber", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_latestduplicatefile", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_numberofrecalculations", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_partyenrolled", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_patternofincomepayor", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_payorssafetyconcerndescription", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_recalculationorderedbythecourt", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_recipientsincomeneeded", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyalert", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyalertpayor", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyconcerndescription", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_section7expenses", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_section7expensesrecalculated", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_section7payorsproportion", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_section7recipientsproportion", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_sharedparenting", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_specialexpenseswithdrawndate", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_splitparentingarrangement", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_styleofcauseapplicant", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_styleofcauserespondent", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_submissiondate", Skip =  false },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_terminationdate", Skip =  false },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_act", Skip =  true },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_act", Skip =  true },
                 }
             });
 

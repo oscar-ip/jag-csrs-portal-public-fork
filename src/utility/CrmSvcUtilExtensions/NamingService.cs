@@ -23,14 +23,14 @@ namespace CrmSvcUtilExtensions
         {
             // entity level attributes
             var attributeMapping = _mappings.GetAttributeMapping(entityMetadata, attributeMetadata);
-            if (attributeMapping != null)
+            if (attributeMapping?.Name != null)
             {
                 return attributeMapping.Name;
             }
 
             // global attribute mappings like Status ans StateCode
             attributeMapping = _mappings.Attributes.Where(_ => _.LogicalName == attributeMetadata.LogicalName && !_.Skip).SingleOrDefault();
-            if (attributeMapping != null)
+            if (attributeMapping?.Name != null)
             {
                 return attributeMapping.Name;
             }
