@@ -1,5 +1,4 @@
-﻿using Ardalis.SmartEnum;
-using Csrs.Api.Services;
+﻿using Csrs.Api.Services;
 
 namespace Csrs.Api.Models.Dynamics
 {
