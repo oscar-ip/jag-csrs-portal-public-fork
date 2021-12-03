@@ -21,6 +21,20 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        public async Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken)
+        {
+            // TODO: add caching
+            IList<LookupValue>? genders = await _partyRepository.GetGendersAsync(cancellationToken);
+            return genders;
+        }
+
+        public async Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken)
+        {
+            // TODO: add caching
+            IList<LookupValue> identities = await _partyRepository.GetIdentitiesAsync(cancellationToken);
+            return identities;
+        }
+
         public async Task<Party?> GetPartyAsync(Guid partyId, CancellationToken cancellationToken)
         {
             if (partyId == Guid.Empty)
@@ -56,6 +70,20 @@ namespace Csrs.Api.Services
 
             var party = await MapAsync(csrsParty, cancellationToken);
             return party;
+        }
+
+        public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
+        {
+            // TODO: add caching
+            IList<LookupValue>? provinces = await _partyRepository.GetProvincesAsync(cancellationToken);
+            return provinces;
+        }
+
+        public async Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken)
+        {
+            // TODO: add caching
+            IList<LookupValue>? referrals = await _partyRepository.GetReferralsAsync(cancellationToken);
+            return referrals;
         }
 
         private SSG_CsrsParty? GetNewestParty(List<SSG_CsrsParty>? parties)
@@ -96,25 +124,25 @@ namespace Csrs.Api.Services
             // todo: these lookups should be cached
             if (!string.IsNullOrEmpty(csrsParty.Identity) && int.TryParse(csrsParty.Identity, out int identityId))
             {
-                IList<LookupValue>? identities = await _partyRepository.GetIdentitiesAsync(cancellationToken);
+                IList<LookupValue>? identities = await GetIdentitiesAsync(cancellationToken);
                 party.Identity = identities.SingleOrDefault(_ => _.Id == identityId);
             }
 
             if (!string.IsNullOrEmpty(csrsParty.Gender) && int.TryParse(csrsParty.Gender, out int genderId))
             {
-                IList<LookupValue>? genders = await _partyRepository.GetGendersAsync(cancellationToken);
+                IList<LookupValue>? genders = await GetGendersAsync(cancellationToken);
                 party.Gender = genders.SingleOrDefault(_ => _.Id == genderId);
             }
 
             if (!string.IsNullOrEmpty(csrsParty.Referral) && int.TryParse(csrsParty.Referral, out int referralId))
             {
-                IList<LookupValue>? referrals = await _partyRepository.GetReferralsAsync(cancellationToken);
+                IList<LookupValue>? referrals = await GetReferralsAsync(cancellationToken);
                 party.Referral = referrals.SingleOrDefault(_ => _.Id == referralId);
             }
 
             if (!string.IsNullOrEmpty(csrsParty.Province) && int.TryParse(csrsParty.Province, out int provinceId))
             {
-                IList<LookupValue>? provinces = await _partyRepository.GetProvincesAsync(cancellationToken);
+                IList<LookupValue>? provinces = await GetProvincesAsync(cancellationToken);
                 party.Province = provinces.SingleOrDefault(_ => _.Id == provinceId);
             }
 

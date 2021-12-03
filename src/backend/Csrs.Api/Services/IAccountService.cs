@@ -7,5 +7,13 @@ namespace Csrs.Api.Services
         Task<Party?> GetPartyByBCeIdAsync(string bceidGuid, CancellationToken cancellationToken);
 
         Task<Party?> GetPartyAsync(Guid id, CancellationToken cancellationToken);
+
+        Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken);
+
+        Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken);
+
+        Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken);
+
+        Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);
     }
 }

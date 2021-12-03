@@ -1,5 +1,6 @@
 ﻿using Csrs.Api.Models;
 using Csrs.Api.Repositories;
+using Csrs.Api.Services;
 using MediatR;
 
 namespace Csrs.Api.Features.Accounts
@@ -42,12 +43,12 @@ namespace Csrs.Api.Features.Accounts
         }
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly ICsrsPartyRepository _repository;
+            private readonly IAccountService _service;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(ICsrsPartyRepository repository, ILogger<Handler> logger)
+            public Handler(IAccountService service, ILogger<Handler> logger)
             {
-                _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+                _service = service ?? throw new ArgumentNullException(nameof(service));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
@@ -58,18 +59,19 @@ namespace Csrs.Api.Features.Accounts
                 switch (request.Type)
                 {
                     case LookupType.Gender:
-                        items = await _repository.GetGendersAsync(cancellationToken);
+                        items = await _service.GetGendersAsync(cancellationToken);
                         break;
                     case LookupType.Referral:
-                        items = await _repository.GetReferralsAsync(cancellationToken);
+                        items = await _service.GetReferralsAsync(cancellationToken);
                         break;
                     case LookupType.Province:
-                        items = await _repository.GetProvincesAsync(cancellationToken);
+                        items = await _service.GetProvincesAsync(cancellationToken);
                         break;
                     case LookupType.Identity:
-                        items = await _repository.GetIdentitiesAsync(cancellationToken);
+                        items = await _service.GetIdentitiesAsync(cancellationToken);
                         break;
                     default:
+                        _logger.LogInformation("Unexpected lookup type {LookupType}", request.Type);
                         break;
                 }
 
