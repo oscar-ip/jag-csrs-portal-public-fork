@@ -2,12 +2,13 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
-import { PortalAccountService } from './api/portalAccount.service';
-import { PortalDocumentService } from './api/portalDocument.service';
-import { PortalFeedbackService } from './api/portalFeedback.service';
-import { PortalFileService } from './api/portalFile.service';
-import { PortalMessageService } from './api/portalMessage.service';
-import { PortalUserRequestService } from './api/portalUserRequest.service';
+import { AccountService } from './api/account.service';
+import { DocumentService } from './api/document.service';
+import { FeedbackService } from './api/feedback.service';
+import { FileService } from './api/file.service';
+import { LookupService } from './api/lookup.service';
+import { MessageService } from './api/message.service';
+import { UserRequestService } from './api/userRequest.service';
 
 @NgModule({
   imports:      [],

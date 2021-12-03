@@ -51,7 +51,7 @@ yarn start
 To test the production build locally before pushing features to the repository for deployment type:
 
 ```bash
-ng build --prod
+ng build --configuration production
 ```
 
 #### Angular CLI Reference
