@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { AfterViewInit, Component } from '@angular/core';
 
 @Component({
@@ -485,15 +486,10 @@ export class QuestionnaireComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {}
 
-  stringToHTML(i, yi, ci, str, idLabel, domId?) {
+  stringToHTML(i, yi, ci, str, idLabel) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(str, 'text/html');
-    let id = '';
-    if (domId){
-      id = '#' + domId;
-    }else{
-      id = '#' + idLabel + '-' + i + '-' + yi + '-' + ci;
-    }
+    const id = '#' + idLabel + '-' + i + '-' + yi + '-' + ci;
     if (
       document.querySelector(id) &&
       document.querySelector(id).childElementCount === 0
@@ -512,9 +508,9 @@ export class QuestionnaireComponent implements AfterViewInit {
         '#cdk-step-label-0-' + index + ' .mat-step-icon-state-edit'
       );
       if (question.clicked === 'Yes' && node) {
-        node[style].cssText += 'background-color:green !important';
+        node[style].cssText += 'background-color:#2E8540 !important';
       } else if (node && question.clicked === 'No') {
-        node[style].cssText += 'background-color:red !important';
+        node[style].cssText += 'background-color:#D8292F !important';
       }
     });
   }

@@ -1,0 +1,413 @@
+<div class="container">
+    <div class="heading mt-5">
+        <h1>CSRS Application</h1>
+        <p>To create your CSRS account, please complete the following application.</p>
+        <mat-divider></mat-divider>
+    </div>
+   // vertical stepper
+        <mat-stepper orientation="vertical" [linear]="false" #stepper>
+          <mat-step [stepControl]="firstFormGroup">
+
+            <ng-template matStepLabel>Getting Started</ng-template>
+            <div class="text-dark">
+            <span class="text-dark">Fields marked <span class="text-danger">*</span> are required</span><br>
+            <section class="text-dark">
+                <label class="w-100">
+                  <strong>What best describes your situation?<span class="text-danger">*</span> </strong>
+                </label>
+                
+                  <div class="row">
+                    <div class="col-6">
+                      <mat-radio-button>
+                        <span class="wrap-mat-radio-label">
+                          I am the receipent, i currently receive child support
+                        </span>
+                      </mat-radio-button>
+                    </div>
+                    <div class="col-6">
+                      <mat-radio-button>
+                        <span class="wrap-mat-radio-label">
+                          I am the payer, i current pay child support
+                        </span>
+                      </mat-radio-button>
+                    </div>
+                  </div>
+                </section>
+                <section>
+                  <label class="w-100">
+                    <strong> Do you have an order or filed written agreement ?<span class="text-danger">*</span></strong>
+                  </label>
+                  <div class="row">
+                    <div class="col-6">
+                      <mat-radio-button>
+                        <span class="wrap-mat-radio-label">
+                          Order
+                        </span>
+                      </mat-radio-button>
+                    </div>
+                    <div class="col-6">
+                      <mat-radio-button>
+                        <span class="wrap-mat-radio-label">
+                          Written agreement
+                        </span>
+                      </mat-radio-button>
+                    </div>
+                  </div>
+                </section>    
+              </div>       
+              <hr style="opacity: 1">  
+            <!-- <app-step-disputant id="stepDisputant" [stepper]="disputeStepper" (stepCancel)="onStepCancel()"
+              (stepSave)="onStepSave($event)"></app-step-disputant> -->
+          </mat-step>
+  
+          <mat-step [stepControl]="secondFormGroup">
+            <ng-template matStepLabel>Your Personal Information</ng-template>
+             <form [formGroup]="secondFormGroup">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Legal first name</mat-label>
+                    <input matInput
+                           formControlName="firstName" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Legal middle name</mat-label>
+                    <input matInput
+                           formControlName="middleName" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Legal lastname</mat-label>
+                    <input matInput
+                           formControlName="lastName" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Preferred name</mat-label>
+                    <input matInput
+                           formControlName="prefferedName" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100">
+                      <mat-label>Birthdate</mat-label>
+                      <input matInput
+                             [matDatepicker]="picker"
+                             formControlName="birthdate"
+                             readonly
+                             (click)="picker.open()" />
+                      <mat-datepicker-toggle matSuffix
+                                             [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker
+                                      startView="multi-year"></mat-datepicker>
+                      <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
+                        "error.required" | translate
+                        }}</mat-error> -->
+                    </mat-form-field>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Street address 1</mat-label>
+                    <input matInput
+                           formControlName="streetAddress1" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Street address 2</mat-label>
+                    <input matInput
+                           formControlName="streetAddress2" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>City</mat-label>
+                    <input matInput
+                           formControlName="city" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Province</mat-label>
+                    <input matInput
+                           formControlName="province" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100">
+                      <mat-label>Postal code</mat-label>
+                      <input matInput
+                             mask="S0S 0S0"
+                             oninput="this.value = this.value.toUpperCase()"
+                             formControlName="postalCode"
+                             [showMaskTyped]="true" />
+                      <mat-error>{{ "error.required" | translate }}</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field class="w-100">
+                      <mat-label>Home phone number</mat-label>
+                      <input matInput
+                             formControlName="homePhoneNumber"
+                             mask="(000) 000-0000"
+                             [showMaskTyped]="true" />
+                      <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                        "error.required" | translate
+                        }}</mat-error>
+                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                    </mat-form-field>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100">
+                      <mat-label>Cell phone number</mat-label>
+                      <input matInput
+                             formControlName="cellPhoneNumber"
+                             mask="(000) 000-0000"
+                             [showMaskTyped]="true" />
+                      <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                        "error.required" | translate
+                        }}</mat-error>
+                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field class="w-100">
+                      <mat-label>Work phone number</mat-label>
+                      <input matInput
+                             formControlName="workPhoneNumber"
+                             mask="(000) 000-0000"
+                             [showMaskTyped]="true" />
+                      <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                        "error.required" | translate
+                        }}</mat-error>
+                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                    </mat-form-field>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Email</mat-label>
+                    <input matInput
+                           formControlName="email" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Gender</mat-label>
+                    <input matInput
+                           formControlName="gender" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+             </form>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>Additional Information</ng-template>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Legal first name</mat-label>
+                  <input matInput
+                         formControlName="firstName" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Legal middle name</mat-label>
+                  <input matInput
+                         formControlName="middleName" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Legal lastname</mat-label>
+                  <input matInput
+                         formControlName="lastName" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Preferred name</mat-label>
+                  <input matInput
+                         formControlName="prefferedName" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Birthdate</mat-label>
+                    <input matInput
+                           [matDatepicker]="picker"
+                           formControlName="birthdate"
+                           readonly
+                           (click)="picker.open()" />
+                    <mat-datepicker-toggle matSuffix
+                                           [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker
+                                    startView="multi-year"></mat-datepicker>
+                    <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
+                      "error.required" | translate
+                      }}</mat-error> -->
+                  </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Street address 1</mat-label>
+                  <input matInput
+                         formControlName="streetAddress1" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Street address 2</mat-label>
+                  <input matInput
+                         formControlName="streetAddress2" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>City</mat-label>
+                  <input matInput
+                         formControlName="city" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Province</mat-label>
+                  <input matInput
+                         formControlName="province" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Postal code</mat-label>
+                    <input matInput
+                           mask="S0S 0S0"
+                           oninput="this.value = this.value.toUpperCase()"
+                           formControlName="postalCode"
+                           [showMaskTyped]="true" />
+                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Home phone number</mat-label>
+                    <input matInput
+                           formControlName="homePhoneNumber"
+                           mask="(000) 000-0000"
+                           [showMaskTyped]="true" />
+                    <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                      "error.required" | translate
+                      }}</mat-error>
+                    <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                  </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Cell phone number</mat-label>
+                    <input matInput
+                           formControlName="cellPhoneNumber"
+                           mask="(000) 000-0000"
+                           [showMaskTyped]="true" />
+                    <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                      "error.required" | translate
+                      }}</mat-error>
+                    <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100">
+                    <mat-label>Work phone number</mat-label>
+                    <input matInput
+                           formControlName="workPhoneNumber"
+                           mask="(000) 000-0000"
+                           [showMaskTyped]="true" />
+                    <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                      "error.required" | translate
+                      }}</mat-error>
+                    <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                  </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Email</mat-label>
+                  <input matInput
+                         formControlName="email" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Gender</mat-label>
+                  <input matInput
+                         formControlName="gender" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-step>
+  
+          <mat-step>
+            <ng-template matStepLabel>Conditions of Enrolment</ng-template>
+            <!-- <app-step-count
+              id="stepCount"
+              [stepControl]="offence3Form"
+              [stepper]="disputeStepper"
+              (stepSave)="onStepSave($event)"></app-step-count> -->
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Review and submit your application</ng-template>
+            <!-- <app-step-overview id="stepOverview" [stepper]="disputeStepper" [overviewTicket]="overviewTicket"
+              (busy)="(busy)" (stepSave)="onStepSave($event)"></app-step-overview> -->
+          </mat-step>
+        </mat-stepper>
+</div>

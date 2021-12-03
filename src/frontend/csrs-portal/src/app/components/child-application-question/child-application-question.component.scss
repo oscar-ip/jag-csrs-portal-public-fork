@@ -1,0 +1,75 @@
+.mat-stepper-vertical {
+    margin-top: 8px;
+  }
+  
+  .mat-form-field {
+    margin-top: 16px;
+  }
+  .heading{
+    font-size: 15px;
+    font-weight: 800;
+    color: black;
+    padding-bottom: 10px;
+    
+  }
+  .firstQuestionRadio{
+      padding-bottom: 10px;
+  }
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+  .example-container .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+  
+  }
+  .example-container{
+    font-size: 12px;
+  }
+  .stepRow{
+    display: flex;
+    flex-direction: row;
+  }
+  .width100{
+    .mat-form-field{
+      width: 100%;
+    }
+  }
+  .document-drag-container{
+    height: 200px;
+    border-style: dotted;
+    border-radius: 5px;
+  }
+  .submit-layer{
+    min-height: 100px;
+    background-color: rgb(246, 246, 246);
+    border-radius: 5px;
+    padding-bottom: 10px;
+  }
+  .spaceAround{
+    justify-content: space-between;
+    padding: 4px;
+  }
+  .bold{
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .leftRight{
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  div.row-height {
+    height: 90px;
+    display: flex;
+    flex-direction: row;
+  }
+  button.nextStep{
+    width: 100px;
+    float: right;
+    border: 1px solid white;
+    background-color: #003366;
+    color: #ffffff;
+  }
+  .submit-text-color {
+    font-size: 20px;;
+    color: #003366;
+  }

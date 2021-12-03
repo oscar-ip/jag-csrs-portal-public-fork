@@ -2,13 +2,10 @@
 @import "bootstrap/bootstrap-imports";
 
 .h1_class {
-  font-size: 2.6em;
-  line-height: 1.6em;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-weight: bolder;
-  color: theme-palette(blue);
+  font-size: 36px;
   padding-bottom: 20px;
+  font-weight: bolder;
+  color: #003366;
 }
 .summary-header-links {
   list-style: none;
@@ -28,10 +25,11 @@
 }
 
 .divider {
-  color: #FCBA19;
-  display: none;
+  color: white;
 }
-
+.toggle-button {
+  width: 200px;
+}
 @media (min-width: 768px) {
   .divider {
     display: inline-block;
@@ -64,25 +62,10 @@
 
 div.summary-header {
   background-color: #38598A;
-  width: 100%;
-  min-height: 20px;
-  padding: 7px 0;
-  opacity: 0.8;
-}
-
-section.summary-section {
-  min-height: 10px;
-  margin-bottom: 1em;
-  margin-right: 5em;
-}
-
-section {
-  margin-bottom: 1em;
-  margin-right: 5em;
+  padding: 10px 0px 10px 0px;
 }
 
 div.container {
-  opacity: unset;
 
   button a {
     color: theme-palette(blue);
@@ -185,19 +168,6 @@ img {
 }
 
 
-.box-border {
-  border-bottom: 2px solid grey;
-  border-right: 2px solid grey;
-  border-top: 2px solid grey;
-  border-left: 5px solid blue;
-  padding: 5px;
-  background-color: lightgray;
-}
-
-.box-border1 {
-  border: 2px solid orange;
-  padding: 25px;
-}
 
 
 
@@ -223,19 +193,13 @@ img {
   height: 64px;
 }
 
-.summary-content {
-  padding: 30px 0 10px 0;
-  color: #fff;
-}
 
 @media (min-width: 992px) {
-  section.summary-section {
-    margin-bottom: 3em;
-  }
+
 
   .summary-content {
-    padding-top: 54px;
-    padding-bottom: 32px;
+    padding-top: 50px;
+    padding-bottom: 200px;
     height: 220px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -385,17 +349,6 @@ img {
   }
 }
 
-mat-expansion-panel {
-  box-shadow: none !important;
-  padding-bottom: 1em;
-  //border-bottom: 1px solid theme-palette(grey, light);
-}
-
-mat-expansion-panel-header {
-  padding-left: 0;
-  padding-right: 0;//0.5em;
-}
-
 .flex {
   display: flex;
   flex-direction: row;
@@ -538,6 +491,8 @@ mat-expansion-panel-header {
 }
 
 .text-left-inside-grid {
+  padding-top: 20px;
+  margin-bottom: 0px;
   position: absolute;
   text-align: left;
   left: 5px;
@@ -571,21 +526,11 @@ mat-expansion-panel-header {
 }
 
 mat-grid-tile.bottom_line {
-  padding-right: 2.5rem;
-  border-bottom: solid 1px orange;
-  padding-top: -0.2rem;
+  margin-bottom: 20px;
+  border-bottom: solid 2px #FCBA19;
 }
 
-mat-grid-tile.bottom_line2 {
-  padding-right: 5rem;
-  border-bottom: solid 1px orange;
-}
 
-mat-grid-tile.mat-figure {
-  justify-content:center ;
-  align-items:center;
-  vertical-align:sub;
-}
 
 .mat-icon {
   cursor: pointer;
@@ -608,15 +553,13 @@ mat-grid-tile.mat-figure {
 
 .description_text {
   color: black; 
-  padding-right: 70px;
-  padding-bottom: 20px;
-  font-size: 1.2em;
+  font-size: 20px;
 }
 
 .background_image {
   background-image: url('/assets/landing-page-background.png');
   background-repeat: no-repeat; 
-  background-size: 100%;
+  background-size: 110%;
 }
 
 .padding_right_200{
@@ -624,8 +567,6 @@ mat-grid-tile.mat-figure {
 }
 
 .border_bottom {
-  padding-bottom: 10px;
-  margin-left: 15px;
   margin-right: 10px;
   border-bottom: solid 1px orange;
 }
@@ -651,7 +592,7 @@ mat-grid-tile.mat-figure {
 }
 
 .toolTipIcon{
-  color:rgba(0, 102, 143, 0.733);
+  color: #009CDE;
 }
 .mat-tooltip {
   font-size: 15px;
