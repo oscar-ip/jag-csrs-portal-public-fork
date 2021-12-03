@@ -18,12 +18,12 @@ namespace Csrs.Api.Models
         /// <summary>
         /// The unique id of the value.
         /// </summary>
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// The human readable value.
         /// </summary>
-        public string? Value { get; set; }
+        public string Value { get; set; }
 
         private string DebuggerDisplay => $"{Value} ({Id})";
     }

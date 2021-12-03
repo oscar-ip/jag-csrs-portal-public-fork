@@ -2,6 +2,7 @@
 using Csrs.Api.Features.Accounts;
 using Csrs.Api.Models;
 using Csrs.Api.Repositories;
+using Csrs.Api.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -34,53 +35,53 @@ namespace Csrs.Test.Features.Accounts
         [Fact]
         public void Handler_cannot_be_constructed_with_null_logger()
         {
-            var repositoryMock = new Mock<ICsrsPartyRepository>();
+            var serviceMock = new Mock<IAccountService>();
 
-            var actual = Assert.Throws<ArgumentNullException>(() => new Lookups.Handler(repositoryMock.Object, null!));
+            var actual = Assert.Throws<ArgumentNullException>(() => new Lookups.Handler(serviceMock.Object, null!));
             Assert.Equal("logger", actual.ParamName);
         }
 
         [Fact]
         public async Task Requesting_Genders_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Gender, _ => _.GetGenderPicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Gender, _ => _.GetGendersAsync(It.IsAny<CancellationToken>()));
         }
 
         [Fact]
         public async Task Requesting_Identity_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Identity, _ => _.GetIdentityPicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Identity, _ => _.GetIdentitiesAsync(It.IsAny<CancellationToken>()));
         }
 
         [Fact]
         public async Task Requesting_Referral_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Referral, _ => _.GetReferralPicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Referral, _ => _.GetReferralsAsync(It.IsAny<CancellationToken>()));
         }
 
         [Fact]
         public async Task Requesting_Province_calls_correct_repository_function()
         {
-            await Picklist_calls_correct_repository_function(Lookups.Request.Province, _ => _.GetProvincePicklistAsync(It.IsAny<CancellationToken>()));
+            await Picklist_calls_correct_repository_function(Lookups.Request.Province, _ => _.GetProvincesAsync(It.IsAny<CancellationToken>()));
         }
 
-        private async Task Picklist_calls_correct_repository_function(Lookups.Request request, Expression<Func<ICsrsPartyRepository, Task<IList<LookupValue>>>> action)
+        private async Task Picklist_calls_correct_repository_function(Lookups.Request request, Expression<Func<IAccountService, Task<IList<LookupValue>>>> action)
         {
-            var repositoryMock = new Mock<ICsrsPartyRepository>(MockBehavior.Strict);
+            var serviceMock = new Mock<IAccountService>(MockBehavior.Strict);
             var loggerMock = new Mock<ILogger<Lookups.Handler>>();
             Fixture fixture = new Fixture();
 
             var expected = fixture.CreateMany<LookupValue>().ToList();
 
-            repositoryMock.Setup(action).ReturnsAsync(expected);
+            serviceMock.Setup(action).ReturnsAsync(expected);
 
-            var sut = new Lookups.Handler(repositoryMock.Object, loggerMock.Object);
+            var sut = new Lookups.Handler(serviceMock.Object, loggerMock.Object);
 
             var response = await sut.Handle(request, CancellationToken.None);
 
             Assert.Equal(expected, response.Items);
 
-            repositoryMock.Verify();
+            serviceMock.Verify();
             loggerMock.Verify();
         }
     }

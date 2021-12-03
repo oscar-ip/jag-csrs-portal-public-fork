@@ -1,5 +1,6 @@
 ﻿using Csrs.Api.Models;
 using Csrs.Api.Models.Dynamics;
+using System.Linq.Expressions;
 
 namespace Csrs.Api.Repositories
 {
@@ -10,12 +11,14 @@ namespace Csrs.Api.Repositories
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IList<LookupValue>> GetGenderPicklistAsync(CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken);
 
-        Task<IList<LookupValue>> GetIdentityPicklistAsync(CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken);
 
-        Task<IList<LookupValue>> GetProvincePicklistAsync(CancellationToken cancellationToken);
+        Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken);
 
-        Task<IList<LookupValue>> GetReferralPicklistAsync(CancellationToken cancellationToken);        
+        Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);
+
+        Task<List<SSG_CsrsParty>> GetByBCeIdAsync(string id, Expression<Func<SSG_CsrsParty, object>> properties, CancellationToken cancellationToken);
     }
 }
