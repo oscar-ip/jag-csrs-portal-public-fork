@@ -29,7 +29,7 @@ namespace Csrs.Test.Features.Accounts
             var loggerMock = new Mock<ILogger<Lookups.Handler>>();
 
             var actual = Assert.Throws<ArgumentNullException>(() => new Lookups.Handler(null!, loggerMock.Object));
-            Assert.Equal("repository", actual.ParamName);
+            Assert.Equal("service", actual.ParamName);
         }
 
         [Fact]
