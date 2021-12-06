@@ -68,10 +68,10 @@ export class LandingComponent implements OnInit {
 
 
       this.authService.login({
-        redirectUri: 'https://jag-csrs-portal-public-f0b5b6-dev.apps.silver.devops.gov.bc.ca',
-        onLoad: 'login-required',
-        flow: 'hybrid',
-        enableLogging: true
+        redirectUri: 'https://jag-csrs-portal-public-f0b5b6-dev.apps.silver.devops.gov.bc.ca'//,
+        //onLoad: 'login-required',
+        //flow: 'hybrid',
+        //enableLogging: true
       });
   }
 
