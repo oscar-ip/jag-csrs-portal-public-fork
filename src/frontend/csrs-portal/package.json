@@ -31,6 +31,7 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "bootstrap": "^5.1.0",
     "colors": "^1.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "keycloak-angular": "^8.4.0",
     "keycloak-js": "^15.0.2",
