@@ -33,10 +33,11 @@ import { WelcomeUserComponent } from './components/welcome-user/welcome-user.com
 import { ApplicationFormStepperComponent } from './components/application-form-stepper/application-form-stepper.component';
 import { ChildApplicationQuestionComponent } from './components/child-application-question/child-application-question.component';
 
+import { KeycloakModule } from '@core/keycloak/keycloak.module';
+
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,6 +59,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     MatStepperModule,
     CdkAccordionModule,
     MatGridListModule,
+    KeycloakModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -80,6 +82,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   ],
   bootstrap: [AppComponent],
 })
+
+
+
 export class AppModule {
    constructor()
    {
