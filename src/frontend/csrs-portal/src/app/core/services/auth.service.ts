@@ -25,29 +25,32 @@ export class AuthService {
 
   public login(options?: any): Promise<any> {
 
-    this.logger.info('inside keycloak login');
+    console.log('inside keycloak login');
     const promiseVoid = this.keycloakService.login(options);
-    this.logger.info(`after this.keycloakService.login(options)`);
+    console.log('after this.keycloakService.login(options)');
 
+    /*
     setTimeout(() => {
       if (this.keycloakService.getKeycloakInstance().onAuthSuccess)
       {
         console.log('authenticated');
       }
-   });
-
+   });*/
 
     const loggedIn = this.keycloakService.isLoggedIn();
-    this.logger.info(`loggedIn id ${loggedIn}`);
+    console.log(`loggedIn id ${loggedIn}`);
     if (loggedIn)
     {
+      console.log(`inside loggedIn id ${loggedIn}`);
+      /*
       const token = this.keycloakService.getToken() as Promise<string> ;
-      this.logger.info(`token is ${JSON.stringify(token)}`);
+      console.log(`token is ${JSON.stringify(token)}`);
       localStorage.setItem('jwt', JSON.stringify(token));
 
       const userProfile = this.keycloakService.loadUserProfile() as Promise<Keycloak.KeycloakProfile>;
-      this.logger.info(`userProfile is ${JSON.stringify(userProfile)}`);
+      console.log(`userProfile is ${JSON.stringify(userProfile)}`);
       localStorage.setItem('user', JSON.stringify(userProfile));
+      */
     }
 
     this.logger.info(`before leaving this.keycloakService.login(options)`);
