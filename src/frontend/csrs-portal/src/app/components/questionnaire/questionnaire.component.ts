@@ -8,6 +8,7 @@ import { AfterViewInit, Component } from '@angular/core';
 })
 export class QuestionnaireComponent implements AfterViewInit {
   public bceIdLink: string;
+  public bceIdRegisterLink: string;
   data: any = [
     {
       label:
@@ -482,6 +483,7 @@ export class QuestionnaireComponent implements AfterViewInit {
 
   constructor() {
     this.bceIdLink = 'https://www.bceid.ca/';
+    this.bceIdRegisterLink = 'https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
   }
 
   public ngAfterViewInit(): void {}
