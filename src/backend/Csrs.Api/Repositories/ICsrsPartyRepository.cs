@@ -19,6 +19,6 @@ namespace Csrs.Api.Repositories
 
         Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);
 
-        Task<List<SSG_CsrsParty>> GetByBCeIdAsync(string id, Expression<Func<SSG_CsrsParty, object>> properties, CancellationToken cancellationToken);
+        Task<List<SSG_CsrsParty>> GetByBCeIdAsync(Guid id, Expression<Func<SSG_CsrsParty, object>> properties, CancellationToken cancellationToken);
     }
 }

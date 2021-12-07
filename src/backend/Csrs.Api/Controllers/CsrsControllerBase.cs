@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Csrs.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public abstract class CsrsControllerBase<TController> : ControllerBase
     {
         protected readonly IMediator _mediator;

@@ -56,7 +56,7 @@ namespace Csrs.Api.Services
             return party;
         }
 
-        public async Task<Party?> GetPartyByBCeIdAsync(string bceidGuid, CancellationToken cancellationToken)
+        public async Task<Party?> GetPartyByBCeIdAsync(Guid bceidGuid, CancellationToken cancellationToken)
         {
             using var scope = _logger.BeginScope(new Dictionary<string, object> { { "BCeID_Guid", bceidGuid } });
 
@@ -84,6 +84,28 @@ namespace Csrs.Api.Services
             // TODO: add caching
             IList<LookupValue>? referrals = await _partyRepository.GetReferralsAsync(cancellationToken);
             return referrals;
+        }
+
+        public async Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(party);
+
+            var csrsParty = _mapper.Map<SSG_CsrsParty>(party);
+
+            if (csrsParty.PartyId == Guid.Empty)
+            {
+                _logger.LogInformation("Source party does not have a PartyId, inserting");
+                csrsParty = await _partyRepository.InsertAsync(csrsParty, cancellationToken);
+            }
+            else
+            {
+                _logger.LogInformation("Source party has a PartyId, updating");
+                csrsParty = await _partyRepository.UpdateAsync(csrsParty, cancellationToken);
+            }
+
+            party = _mapper.Map<Party>(csrsParty);
+
+            return party;
         }
 
         private SSG_CsrsParty? GetNewestParty(List<SSG_CsrsParty>? parties)

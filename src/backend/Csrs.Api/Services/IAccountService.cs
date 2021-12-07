@@ -4,7 +4,7 @@ namespace Csrs.Api.Services
 {
     public interface IAccountService
     {
-        Task<Party?> GetPartyByBCeIdAsync(string bceidGuid, CancellationToken cancellationToken);
+        Task<Party?> GetPartyByBCeIdAsync(Guid bceidGuid, CancellationToken cancellationToken);
 
         Task<Party?> GetPartyAsync(Guid id, CancellationToken cancellationToken);
 
@@ -15,5 +15,7 @@ namespace Csrs.Api.Services
         Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken);
 
         Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);
+
+        Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken);
     }
 }

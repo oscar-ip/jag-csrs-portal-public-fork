@@ -5,11 +5,13 @@ using System.Net;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Csrs.Api.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Csrs.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthenticationController : ControllerBase
     {
         private readonly IOptions<JwtBearerOptions> _options;
@@ -55,7 +57,8 @@ namespace Csrs.Api.Controllers
             return BadRequest();
 
         }
-        // token
+
+        [AllowAnonymous]
         [HttpPost("token")]
         public async Task<IActionResult> GetTokenAsync([FromForm] Dictionary<string, string> data)
         {
@@ -92,6 +95,7 @@ namespace Csrs.Api.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet(".well-known/openid-configuration")]
         public async Task<IActionResult> GetOpenidConfigurationAsync()
         {

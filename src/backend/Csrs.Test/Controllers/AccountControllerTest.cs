@@ -101,7 +101,7 @@ namespace Csrs.Test.Controllers
             var sut = new AccountController(mediator.Object, logger.Object);
             sut.ControllerContext.HttpContext = httpContextMock.Object;
 
-            var actual = await sut.GetAsync(id.ToString(), CancellationToken.None);
+            var actual = await sut.GetAsync(CancellationToken.None);
 
             mediator.Verify();
         }
