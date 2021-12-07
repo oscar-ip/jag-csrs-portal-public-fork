@@ -48,7 +48,7 @@ namespace Csrs.Api.Features.Accounts
             private readonly IFileService _fileService;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(IAccountService accountService, IFileService fileService, IMapper mapper, ILogger<Handler> logger)
+            public Handler(IAccountService accountService, IFileService fileService, ILogger<Handler> logger)
             {
                 _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
                 _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
