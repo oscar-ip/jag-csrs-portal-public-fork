@@ -11,7 +11,7 @@ namespace Csrs.Api.Models.Mapping
             CreateMap<Party, SSG_CsrsParty>()
                 .ForMember(dest => dest.Key, opt => opt.Ignore())
                 .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => State.Active))
-                .ForMember(dest => dest.StatusCode, opt => opt.MapFrom(src => GetActiveStatusCode()))
+                .ForMember(dest => dest.StatusCode, opt => opt.MapFrom(src => SSG_CsrsParty.Active.Id))
                 ;
 
             // SSG_CsrsParty -> Party
@@ -21,7 +21,5 @@ namespace Csrs.Api.Models.Mapping
                 .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(_ => _.DateOfBirthString))
                 ;
         }
-
-        private int GetActiveStatusCode() => SSG_CsrsParty.StatusCodes.FromName(SSG_CsrsParty.Active).Value;
     }
 }

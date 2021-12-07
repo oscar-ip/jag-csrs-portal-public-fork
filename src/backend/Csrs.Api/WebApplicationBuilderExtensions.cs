@@ -74,8 +74,5 @@ public static class WebApplicationBuilderExtensions
         services.AddTransient<ICsrsFileRepository, CsrsFileRepository>();
         services.AddTransient<ICsrsPartyRepository, CsrsPartyRepository>();
         services.AddTransient<ICsrsPortalMessageRepository, CsrsPortalMessageRepository>();
-
-
-        services.AddHostedService<StartupHostedService>();
     }
 }
