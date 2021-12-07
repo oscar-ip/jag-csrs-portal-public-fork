@@ -56,7 +56,7 @@ namespace Csrs.Api.Features.Accounts
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                //Guid? userId = request.User.GetBCeIDUserId();
+                Guid? userId = request.User.GetBCeIDUserId();
                 //if (userId == null)
                 //{
                 //    return Response.Empty;

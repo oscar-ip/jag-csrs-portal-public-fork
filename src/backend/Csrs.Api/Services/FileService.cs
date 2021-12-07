@@ -56,11 +56,8 @@ namespace Csrs.Api.Services
 
         private FileStatus GetFileStatus(int statusCode)
         {
-            SSG_CsrsFile.StatusCodes? value = SSG_CsrsFile.StatusCodes.FromValue(statusCode);
-            if (value is not null)
-            {
-                return (FileStatus)Enum.Parse(typeof(FileStatus), value.Name);
-            }
+            if (statusCode == SSG_CsrsFile.Active.Id) return FileStatus.Active;
+            if (statusCode == SSG_CsrsFile.Draft.Id) return FileStatus.Draft;
 
             _logger.LogInformation("Could not decode {EntityLogicalName} status code value {StatusCode}, file status will be Unknown", SSG_CsrsFile.EntityLogicalName, statusCode);
             return FileStatus.Unknown;

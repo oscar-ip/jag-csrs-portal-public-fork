@@ -42,7 +42,12 @@ namespace Csrs.Test.Controllers
             {
                 Assembly assembly = typeof(CsrsControllerBase<>).Assembly;
 
-                var controllerTypes = assembly.GetTypes().Where(type => !type.IsAbstract && typeof(ControllerBase).IsAssignableFrom(type));
+                // note AuthenticationController currently is the excpetion (for now?)
+
+                var controllerTypes = assembly
+                    .GetTypes()
+                    .Where(type => !type.IsAbstract && typeof(ControllerBase).IsAssignableFrom(type) && type != typeof(AuthenticationController));
+
                 foreach (var controllerType in controllerTypes)
                 {
                     yield return new object[] { controllerType };

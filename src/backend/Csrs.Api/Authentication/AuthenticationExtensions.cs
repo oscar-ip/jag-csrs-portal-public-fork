@@ -1,25 +1,24 @@
 ﻿using Csrs.Api.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class AuthenticationExtensions
 {
+    private const string ConfigurationKey = "Jwt";
+
     public static void AddJwtBearerAuthentication(this WebApplicationBuilder builder)
     {
-        var configuration = builder.Configuration.Get<CsrsConfiguration>()?.Jwt;
+        builder.Services.Configure<JwtBearerOptions>(options => builder.Configuration.GetSection(ConfigurationKey).Bind(options));
+        builder.Services.Configure<JwtAccessTokenConfiguration>(options => builder.Configuration.GetSection("JwtAccessToken").Bind(options));
 
-        if (configuration is null || configuration.Authority is null || string.IsNullOrWhiteSpace(configuration.Audience))
+        if (builder.Environment.IsDevelopment())
         {
-            if (!builder.Environment.IsDevelopment())
+            var options = new JwtBearerOptions();
+            Bind(builder, options);
+            if (string.IsNullOrEmpty(options.Audience) || string.IsNullOrEmpty(options.Authority))
             {
-                // better error message
-                throw new ConfigurationErrorsException("Jwt is not configured correctly");
-            }
-            else
-            {
-                return; // for development, no auth if not configured?
+                return; // no configuration
             }
         }
 
@@ -30,20 +29,10 @@ public static class AuthenticationExtensions
         })
         .AddJwtBearer(options =>
         {
-            string audience = configuration.Audience;
-            string authority = configuration.Authority.ToString();
+            Bind(builder, options);
 
-            if (!authority.EndsWith("/", StringComparison.InvariantCulture))
-            {
-                authority += "/";
-            }
-
-                // KeyCloak metadata address https://www.keycloak.org/docs/latest/authorization_services/index.html
-                string metadataAddress = authority + ".well-known/uma2-configuration";
-
-            options.Authority = authority;
-            options.Audience = audience;
-            options.MetadataAddress = metadataAddress;
+            // update the MetadataAddress if needed
+            options.MetadataAddress = options.GetMetadataAddress();
 
             options.Events = new JwtBearerEvents
             {
@@ -64,4 +53,31 @@ public static class AuthenticationExtensions
             };
         });
     }
+
+    public static string? GetMetadataAddress(this JwtBearerOptions options)
+    {
+        // https://dev.oidc.gov.bc.ca/auth/realms/onestopauth-basic/.well-known/uma2-configuration
+        if (string.IsNullOrEmpty(options?.MetadataAddress))
+        {
+            if (!string.IsNullOrEmpty(options?.Authority))
+            {
+                return options.Authority.EndsWith("/")
+                    ? options.Authority + ".well-known/uma2-configuration"
+                    : options.Authority + "/" + ".well-known/uma2-configuration";
+            }
+        }
+        else
+        {
+            return options?.MetadataAddress;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Binds the Jwt configuration to the options
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="options"></param>
+    private static void Bind(WebApplicationBuilder builder, JwtBearerOptions options) => builder.Configuration.Bind(ConfigurationKey, options);
 }
