@@ -63,7 +63,7 @@ div.landing-summary {
 }
 
 div.summary-header {
-  background-color:#003366;
+  background-color: #38598A;
   width: 100%;
   min-height: 40px;
   padding: 10px 0;
@@ -74,14 +74,13 @@ div.summary-header {
 .yesNocontent{
   padding-top: 15px;
 }
-.clickedContent{
-  padding-top: 10px;
+.body-text{
+  padding-bottom: 0px;
 }
-
 button.nextStep{
   float: right;
   border: 1px solid white;
-  background-color: darkblue;
+  background-color: #003366;
   color: #ffffff;
   padding: 5px 10px;
 }
@@ -97,7 +96,7 @@ div.container {
     opacity: unset;
   
     button a {
-      color: theme-palette(blue);
+      color: #003366;
     }
   
     a {
@@ -121,7 +120,7 @@ div.container {
 .mat-stroked-button {
     min-width: 200px;
     background-color: white;
-    color: theme-palette(blue, light);
+    color: #003366;
   
     &.large {
       height: 46px;
@@ -163,15 +162,20 @@ pointer-events: auto;
 }
 
 .myRed{
-  background : red;
-  color: white
+  background : #D8292F;
+  color: white;
+  border: 1px solid #003366;
 }
 
 .myGreen{
-  background : green;
+  background : #2E8540;
   color: white;
 }
-
+.toggle-button {
+  width:10px;
+  font-size: 20px;
+  border: 2px solid #003366;
+}
 .myBlue{
   max-width : 200px;
   width: 195px;
@@ -194,9 +198,11 @@ pointer-events: auto;
 .colorTransparent{
   color: transparent;
 }
-
+.content-data body{
+ color: #000;
+}
 .toolTipIcon{
-  color:rgba(0, 102, 143, 0.733);
+  color: #009cde;
   
 }
 ::ng-deep .mat-tooltip {

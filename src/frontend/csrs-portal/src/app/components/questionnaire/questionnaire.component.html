@@ -1,164 +1,162 @@
-<app-header></app-header> 
 <div class="summary-header">
-  <div class="container">
-    <ul class="summary-header-links">
-      <li>
-        <a
-          [attr.href]=""
-          class="primary-navigation"
-          rel="noopener"
-        >
-          Home
-        </a>
-      </li>
-      <span class="divider">|</span>
-      <li>
-        <a
-          [routerLink]="['/questionnaire']"
-          class="primary-navigation"
-          rel="noopener"
-        >
-          Questionnaire
-        </a>
-      </li>
-      <span class="divider">|</span>
-    </ul>
-  </div>
-</div>
-<div class="container">
-   <section>
-      <div>
-         <h1>Child Support Recalculation Service</h1>
-         <mat-divider></mat-divider>
-         <h2><strong>Questionnaire</strong></h2>
-         <p>Answer the following questions to learn about CSRS and your child support.</p>
-         <hr style="opacity: 1">
-        </div>
-   </section>
-   <section>
-      <div class="flex-6-col">
-         <mat-vertical-stepper #stepper linear>
-            <ng-template matStepperIcon="edit" let-index="index">
-               <mat-icon>{{data[index].clicked == 'Yes' ? 'done' : data[index].clicked == 'No' ? 'clear':'edit'}}</mat-icon>
-            </ng-template>
-            <mat-step class="notSelected" *ngFor="let question of data; index as i;" state="home">
-               <ng-template matStepLabel="">
-                  <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
-                     <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
-                  {{question.label}}
-               </ng-template>
-               <ng-template matStepContent="">
-                  <div *ngFor="let contentItem of question.content; index as coi;">
+   <div class="container">
+     <ul class="summary-header-links">
+       <li>
+         <a
+         [routerLink]="['/home']"
+           class="primary-navigation"
+           rel="noopener"
+         >
+           Home
+         </a>
+       </li>
+       <span class="divider">|</span>
+       <li>
+         <a
+           [routerLink]="['/questionnaire']"
+           class="primary-navigation"
+           rel="noopener"
+         >
+           Questionnaire
+         </a>
+       </li>
+     </ul>
+   </div>
+ </div>
+ <div class="container">
+    <section>
+       <div>
+          <h1>Child Support Recalculation Service</h1>
+          <mat-divider></mat-divider>
+          <h2><strong>Questionnaire</strong></h2>
+          <p  class="text-dark">Answer the following questions to learn about CSRS and your child support.</p>
+          <hr style="opacity: 1">
+         </div>
+    </section>
+    <section>
+       <div class="flex-6-col">
+          <mat-vertical-stepper #stepper linear>
+             <ng-template matStepperIcon="edit" let-index="index">
+                <mat-icon>{{data[index].clicked == 'Yes' ? 'done' : data[index].clicked == 'No' ? 'clear':'edit'}}</mat-icon>
+             </ng-template>
+             <mat-step class="notSelected" *ngFor="let question of data; index as i;" state="home">
+                <ng-template matStepLabel="" >
+                   <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
+                      <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
+                   <span style="font-size: 20px;">{{question.label}}</span>
+                </ng-template>
+                <ng-template matStepContent="">
+                   <div *ngFor="let contentItem of question.content; index as coi;">
                      {{contentItem.label}}
-                     <ol type="a" *ngIf="contentItem.data">
-                       <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
-                        <div style="display: flex;flex-direction: row;"><span id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
-                       </li>
-                     </ol>
-                  </div>
-                  <div class="button-row mt-2 ">
-                    <mat-divider></mat-divider>
-                    <br>
-                     <button *ngFor="let buttonItem of question.buttons; index as bi" mat-stroked-button color="basic" (click)="setLabel(question,buttonItem,i)" [ngClass]="{ 'myGreen' :question.clicked == buttonItem.label && question.clicked == 'Yes', 'myRed' :question.clicked == buttonItem.label && question.clicked == 'No'  }">
-                     {{buttonItem.label}}
-                     <br>
-                     <div *ngIf="question.clicked == buttonItem.label">
-                      <img class="icon-size5  mt-2 mb-1" src="/assets/Down-chevron-icon.svg">
-                     </div>
-                     </button>
-                  </div>
-                  <br>
-                  <div class="yesNocontent" *ngFor="let buttonItem of question.buttons; index as yi">
-                     <div *ngIf="buttonItem.label == question.clicked">
-                        <div class="clickedContent" *ngFor="let cItem of buttonItem.clickedContent; index as ci">
-                           <p id="{{'id-'+i+'-'+yi+'-'+ci}}" *ngIf="!cItem.data.ul">{{stringToHTML(i,yi,ci,cItem.data,'id')}}</p>
-                           <ul *ngIf="cItem.data.ul">
-                              <li id="{{'li-'+i+'-'+yi+'-'+uli}}" *ngFor="let liItem of cItem.data.ul;index as uli ">
-                                 {{stringToHTML(i,yi,uli,liItem.liData,'li')}}
-                              </li>
-                           </ul>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="button-row">
-                     <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
-                     <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
-                     <button class="nextStep" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
-                     </span>
-                  </div>
-               </ng-template>
-            </mat-step>
-            <!--Questionnaire completed -->
-            <mat-step>
-               <ng-template matStepLabel="">
-                  Questionnaire complete 
-               </ng-template>
-               <ng-template matStepContent="">
-                  <br>
-                  <p>Review your responses to the questions, if:</p>
-                  <mat-divider></mat-divider>
-                  <p>
-                     <strong>After reviewing your answers and you believe you are eligible 
-                     for this service you may continue on to the
-                     application to create your CSRS account.</strong> 
-                  </p>
-                  <mat-divider></mat-divider>
-                  <div class="flex-6-col round3">
-                     <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-                        <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="1" rowspan="2">
-                           <img class="icon-size5" src="/assets/Questionnaire-icon.svg">
-                        </mat-grid-tile>
-                        <mat-grid-tile class="mi-tile-contents-left border-bottom" aria-rowindex="0" colspan="5" rowspan="2">
-                           <p>
-                              <strong>Be prepared with the following information needed to complete your application:</strong>
-                           </p>
-                           <ul>
-                              <li>Personal information on you, the other party and the children</li>
-                              <li>Court orders or written agreements</li>
-                              <li>Financial information for both parties</li>
-                           </ul>
-                        </mat-grid-tile>
-                     </mat-grid-list>
-                  </div>
-                  <br>
-                  <p>
-                     Sign in with your BCeID to proceed, if you do not have a BCeID please create an account first.
-                  </p>
-                  <div class="flex-6-col round3">
-                     <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-                        <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
-                           <a class="useful-links bceIdLink" [attr.href]="bceIdLink" target="_blank" rel="noopener">
-                           <button class="large" type="button" mat-flat-button color="primary">
-                           Sign in with BCeID to enrol
-                           </button>
-                           </a>
-                        </mat-grid-tile>
-                        <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
-                           <a class="useful-links bceIdLink" [attr.href]="bceIdLink" target="_blank" rel="noopener">
-                           I don't have a BCeID account
-                           </a>
-                        </mat-grid-tile>
-                     </mat-grid-list>
-                  </div>
-                  <br>  
-                  <p>
-                     <strong>I’m not sure if I am eligible and have questions</strong>
-                  </p>
-                  <mat-divider></mat-divider>
-                  <br>
-                  <p>
-                     If you have more questions about your eligibly, please contact: 
-                     <strong>Child Support Recalculation Service: </strong>
-                  </p>
-                  <ul>
-                   
-                     <li> <a href="tel:1-866-660-2684">1-866-660-2684</a></li>
-                     <li> <a href="tel:604-660-2528">604-660-2528</a></li>
-                  </ul>
-               </ng-template>
-            </mat-step>
-         </mat-vertical-stepper>
-      </div>
-   </section>
-</div>
-<app-footer></app-footer>
+                      <ol type="a" *ngIf="contentItem.data">
+                        <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
+                         <div style="display: flex;flex-direction: row;"><span class="toggle-button" id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
+                        </li>
+                      </ol>
+                   </div>
+                   <div class="button-row mt-2 ">
+                     <mat-divider class="mb-2"></mat-divider>
+                      <button class="toggle-button" *ngFor="let buttonItem of question.buttons; index as bi" mat-stroked-button color="basic" (click)="setLabel(question,buttonItem,i)" [ngClass]="{ 'myGreen' :question.clicked == buttonItem.label && question.clicked == 'Yes', 'myRed' :question.clicked == buttonItem.label && question.clicked == 'No'  }">
+                      {{buttonItem.label}}
+                      <div class="mb-5" *ngIf="question.clicked == buttonItem.label && buttonItem.clickedContent.length!=0">
+                       <img class="icon-size6  m-2" src="/assets/Down-chevron-icon.svg">
+                      </div>
+                      </button>
+                      <br>
+                      <br>
+
+                   </div>
+                   <div class="yesNocontent text-dark" *ngFor="let buttonItem of question.buttons; index as yi">
+                      <div *ngIf="buttonItem.label == question.clicked">
+                         <div *ngFor="let cItem of buttonItem.clickedContent; index as ci">
+                            <p id="{{'id-'+i+'-'+yi+'-'+ci}}" *ngIf="!cItem.data.ul">{{stringToHTML(i,yi,ci,cItem.data,'id')}}</p>
+                            <ul *ngIf="cItem.data.ul">
+                               <li id="{{'li-'+i+'-'+yi+'-'+uli}}" *ngFor="let liItem of cItem.data.ul;index as uli ">
+                                  {{stringToHTML(i,yi,uli,liItem.liData,'li')}}
+                               </li>
+                            </ul>
+                         </div>
+                      </div>
+                   </div>
+                   <hr class="mt-0 mb-4" style="opacity: 1">
+                   <div class="button-row">
+                      <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
+                      <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
+                      <button class="nextStep" [disabled]="!question.clicked" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
+                      </span>
+                   </div>
+                </ng-template>
+             </mat-step>
+             <!--Questionnaire completed -->
+             <mat-step>
+                <ng-template matStepLabel="">
+                   Questionnaire complete
+                </ng-template>
+                <ng-template matStepContent="">
+                   <br>
+                   <p>Review your responses to the questions, if:</p>
+                   <mat-divider></mat-divider>
+                   <p>
+                      <strong>After reviewing your answers and you believe you are eligible
+                      for this service you may continue on to the
+                      application to create your CSRS account.</strong>
+                   </p>
+                   <mat-divider></mat-divider>
+                   <div class="flex-6-col round3">
+                      <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
+                         <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="1" rowspan="2">
+                            <img class="icon-size5" src="/assets/Questionnaire-icon.svg">
+                         </mat-grid-tile>
+                         <mat-grid-tile class="mi-tile-contents-left border-bottom" aria-rowindex="0" colspan="5" rowspan="2">
+                            <p>
+                               <strong>Be prepared with the following information needed to complete your application:</strong>
+                            </p>
+                            <ul>
+                               <li>Personal information on you, the other party and the children</li>
+                               <li>Court orders or written agreements</li>
+                               <li>Financial information for both parties</li>
+                            </ul>
+                         </mat-grid-tile>
+                      </mat-grid-list>
+                   </div>
+                   <br>
+                   <p>
+                      Sign in with your BCeID to proceed, if you do not have a BCeID please create an account first.
+                   </p>
+                   <div class="flex-6-col round3">
+                      <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
+                         <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
+                            <a class="useful-links bceIdLink" [attr.href]="bceIdLink" target="_blank" rel="noopener">
+                            <button class="large" type="button" mat-flat-button color="primary">
+                            Sign in with BCeID to enrol
+                            </button>
+                            </a>
+                         </mat-grid-tile>
+                         <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
+                            <a class="useful-links bceIdLink" [attr.href]="bceIdRegisterLink" target="_blank" rel="noopener">
+                            I don't have a BCeID account
+                            </a>
+                         </mat-grid-tile>
+                      </mat-grid-list>
+                   </div>
+                   <br>
+                   <p>
+                      <strong>I’m not sure if I am eligible and have questions</strong>
+                   </p>
+                   <mat-divider></mat-divider>
+                   <br>
+                   <p>
+                      If you have more questions about your eligibly, please contact:
+                      <strong>Child Support Recalculation Service: </strong>
+                   </p>
+                   <ul>
+
+                      <li> <a href="tel:1-866-660-2684">1-866-660-2684</a></li>
+                      <li> <a href="tel:604-660-2528">604-660-2528</a></li>
+                   </ul>
+                </ng-template>
+             </mat-step>
+          </mat-vertical-stepper>
+       </div>
+    </section>
+ </div>

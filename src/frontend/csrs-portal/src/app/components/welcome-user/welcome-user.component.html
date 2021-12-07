@@ -1,0 +1,69 @@
+<div class="container mt-5 mb-2">
+      <div #alertContent
+                    class="alert-content p-5 m-3 row">
+                    <span class="icon-col col-md-2">
+                      <img class="icon-size4" src="/assets/Questionnaire-icon.svg" />
+                    </span>
+                    <div class="col-md-10">
+                      <h1><strong>I want to start a new child support recalculation application</strong><br /></h1> 
+                      <hr style="opacity:1;"/>
+                      <span>Before you start your application, make sure you have: </span>
+                       <ul>
+                           <li>A copy of your current order or written agreement </li>
+                           <li>Contact information for you and the other party (to the best of your knowledge)</li>
+                           <li>Child(ren) information </li>
+                       </ul>
+                       <span><strong>Note: </strong>You may start your application and return to it later; however your information will only be saved for 30 days.</span><br>
+                       <button mat-flat-button color="accent" class="start-button large" routerLink="/applicationform">
+                        Start the application
+                    </button>
+                      </div>
+      </div>
+</div>
+<div class="container">
+  <div style="float:left; width: 48%;"><hr style="opacity:1;"/></div>
+  <div style="float:right; width: 48%;"><hr style="opacity:1;"/></div>
+<h1><strong>OR</strong></h1>
+</div>
+<div class="container">
+      <div #alertContent
+                    class="alert-content p-5 m-3">
+       <h1><strong>The recalculation service sent me a file number and password. I want to create a web account. </strong><br /></h1> 
+       <span>If an order requires you to be enrolled in the Child Support Recalculation Service, or the other party has enrolled your order or written agreement, you have been provided a file number and a password so that you can create a web account. Please enter them below to proceed: </span>
+       <br> 
+       <div class="row">
+        <div class="col-md-6">
+            <mat-form-field class="w-100">
+              <mat-label>File number</mat-label>
+              <input matInput />
+            </mat-form-field>
+          </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Password</mat-label>
+            <input matInput />
+          </mat-form-field>
+        </div>
+      </div> 
+       <button mat-flat-button color="primary" color="primary" class="large" style="float: right;">
+            Create Account
+        </button>
+      </div>
+</div>
+<div class="container footer row">
+        <span class="icon-col col-md-1">
+          <img class="icon-size5" src="/assets/Support_icon.svg" />
+        </span>
+        <div class="col-md-11">
+          <h1>
+            <strong>Have questions or Looking for more support?</strong>
+          </h1>
+            <p class="text-body">
+              Contact the Recalculation Service toll free
+              <a href="tel:+18776618026">1-877-661-8026</a>,
+              or learn more about the progrom
+            </p>
+        </div>
+        
+</div>
+

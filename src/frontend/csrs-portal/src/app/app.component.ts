@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { Router, NavigationEnd, RouterEvent } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { ConfigService } from '@config/config.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
+
 
 @Component({
   selector: 'app-root',
@@ -11,6 +13,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+   env = environment;
   constructor(
     private routeStateService: RouteStateService,
     private titleService: Title,
@@ -26,6 +29,11 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    if (isDevMode()) {
+      console.log('Development!');
+    } else {
+      console.log('Production!');
+    }
   }
 
 }
