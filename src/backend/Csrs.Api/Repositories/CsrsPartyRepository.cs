@@ -15,12 +15,14 @@ namespace Csrs.Api.Repositories
             _optionSetService = optionSetService ?? throw new ArgumentNullException(nameof(optionSetService));
         }
 
-        public async Task<List<SSG_CsrsParty>> GetByBCeIdAsync(string bceidGuid, Expression<Func<SSG_CsrsParty, object>> properties, CancellationToken cancellationToken)
+        public async Task<List<SSG_CsrsParty>> GetByBCeIdAsync(Guid bceidGuid, Expression<Func<SSG_CsrsParty, object>> properties, CancellationToken cancellationToken)
         {
             var client = Client.For<SSG_CsrsParty>();
 
+            string guidValue = bceidGuid.ToString("d"); // format with dashes : xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
             IEnumerable<SSG_CsrsParty> entries = await client
-                .Filter(_ => _.BCeIDGuid == bceidGuid && _.StatusCode == Active)
+                .Filter(_ => _.BCeIDGuid == guidValue && _.StatusCode == Active)
                 .Select(properties)
                 .FindEntriesAsync(cancellationToken);
 

@@ -25,6 +25,7 @@ namespace Csrs.Api.Controllers
         [AllowAnonymous]
         [HttpGet("Genders")]
         [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetGendersAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Gender, cancellationToken);
@@ -39,6 +40,7 @@ namespace Csrs.Api.Controllers
         [AllowAnonymous]
         [HttpGet("Provinces")]
         [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetProvincesAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Province, cancellationToken);
@@ -53,6 +55,7 @@ namespace Csrs.Api.Controllers
         [AllowAnonymous]
         [HttpGet("Identities")]
         [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetIdentitesAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Identity, cancellationToken);
@@ -67,25 +70,12 @@ namespace Csrs.Api.Controllers
         [AllowAnonymous]
         [HttpGet("Referrals")]
         [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetReferralsAsync(CancellationToken cancellationToken)
         {
             Lookups.Response? response = await _mediator.Send(Lookups.Request.Referral, cancellationToken);
             return Ok(response.Items);
         }
-
-        ///// <summary>
-        ///// Gets the profile for the currently logged in user.
-        ///// </summary>
-        ///// <response code="200">The account was found</response>
-        ///// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
-        ///// <response code="404">The account was not found</response>
-        //[HttpGet]
-        //[ProducesResponseType(typeof(Party), (int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //[ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        //public async Task<IActionResult> GetProfileAsync(CancellationToken cancellationToken)
-        //{
-        //}
 
         /// <summary>
         /// Gets the current user's file summary.
@@ -98,17 +88,9 @@ namespace Csrs.Api.Controllers
         [ProducesResponseType(typeof(AccountFileSummary), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> GetAsync(
-            [Required] string bceidGuid, 
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
-            ////         /// <summary>
-            ///// This is a TEMPORARY field until login is implemented. The BCeiD Guid should come from the auth token
-            ///// </summary>
-            //[Required]
-            //public Guid BCeiD { get; set; }
-
-            Profile.Request request = new(User, bceidGuid);
+            Profile.Request request = new(User);
             Profile.Response? response = await _mediator.Send(request, cancellationToken);
 
             return response != Profile.Response.Empty ? Ok(response.AccountFileFileSummary) : NotFound();

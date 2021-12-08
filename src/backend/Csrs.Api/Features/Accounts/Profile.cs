@@ -9,16 +9,12 @@ namespace Csrs.Api.Features.Accounts
     {
         public class Request : IRequest<Response>
         {
-            public Request(ClaimsPrincipal user, string bceidGuid)
+            public Request(ClaimsPrincipal user)
             {
                 User = user ?? throw new ArgumentNullException(nameof(user));
-                BceidGuid = bceidGuid;
             }
 
             public ClaimsPrincipal User { get; init; }
-
-            [Obsolete("This is temporary field until authentication is complete")]
-            public string BceidGuid { get; init; }
         }
 
         public class Response
@@ -45,7 +41,7 @@ namespace Csrs.Api.Features.Accounts
             private readonly IFileService _fileService;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(IAccountService accountService, 
+            public Handler(IAccountService accountService,
                 IFileService fileService,
                 ILogger<Handler> logger)
             {
@@ -57,13 +53,13 @@ namespace Csrs.Api.Features.Accounts
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
                 Guid? userId = request.User.GetBCeIDUserId();
-                //if (userId == null)
-                //{
-                //    return Response.Empty;
-                //}
+                if (userId is null)
+                {
+                    // no bceid value
+                    return Response.Empty;
+                }
 
-                Party? accountParty = await _accountService.GetPartyByBCeIdAsync(request.BceidGuid, cancellationToken);
-                //Party? accountParty = await _accountService.GetPartyAsync(userId.Value, cancellationToken);
+                Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId.Value, cancellationToken);
 
                 if (accountParty == null)
                 {
