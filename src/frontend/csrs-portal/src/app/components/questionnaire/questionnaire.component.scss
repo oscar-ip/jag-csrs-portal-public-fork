@@ -72,17 +72,18 @@ div.summary-header {
 }
 
 .yesNocontent{
-  padding-top: 15px;
+  margin-top: 40px;
 }
 .body-text{
   padding-bottom: 0px;
 }
 button.nextStep{
+  min-width: 150px;
   float: right;
   border: 1px solid white;
   background-color: #003366;
   color: #ffffff;
-  padding: 5px 10px;
+  font-size: 20px;
 }
 
 button.nextStep:disabled,
@@ -156,9 +157,9 @@ pointer-events: auto;
 }
 
 
-.mat-divider {
-  border-top-width: 2px;
-  border-top-color: orange;
+mat-divider {
+  border-top-color: #FCBA19;
+  opacity: 1;
 }
 
 .myRed{
@@ -172,9 +173,12 @@ pointer-events: auto;
   color: white;
 }
 .toggle-button {
-  width:10px;
+  min-width:fit-content;
   font-size: 20px;
   border: 2px solid #003366;
+}
+.list-item {
+  font-weight: bold;;
 }
 .myBlue{
   max-width : 200px;
@@ -212,3 +216,19 @@ pointer-events: auto;
   background-color: rgba(255, 255, 255, .9);
   border: 4px solid rgb(255, 191, 0);
  }
+//  .mat-step-icon-content, .mat-step-icon .mat-icon{
+//   style="transform: translate(-55%, -90%);}
+.alert-content {
+  border: 1px solid darkblue;;
+  border-left: 4px solid darkblue;
+  height:175px;
+  padding: 30px;
+  padding-left: 10px;
+  margin-left: 10px;
+  }
+  .alert-text{
+      border: 1px solid gray;;
+      border-left: 4px solid darkblue;
+      height: 50px;
+      margin-left: 10px;
+  }

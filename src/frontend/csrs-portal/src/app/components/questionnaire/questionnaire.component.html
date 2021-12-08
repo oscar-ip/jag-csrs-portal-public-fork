@@ -26,11 +26,11 @@
  <div class="container">
     <section>
        <div>
-          <h1>Child Support Recalculation Service</h1>
-          <mat-divider></mat-divider>
-          <h2><strong>Questionnaire</strong></h2>
-          <p  class="text-dark">Answer the following questions to learn about CSRS and your child support.</p>
-          <hr style="opacity: 1">
+          <h1 class="mb-3" style="font-size: 28px;">Child Support Recalculation Service</h1>
+          <mat-divider class="mb-4"></mat-divider>
+          <h2 class="mb-1" style="font-size: 24px;"><strong>Questionnaire</strong></h2>
+          <p  class="mb-1 text-dark" style="font-size: 18px;">Answer the following questions to learn about CSRS and your child support.</p>
+          <hr class="mb-4" style="opacity: 1">
          </div>
     </section>
     <section>
@@ -39,7 +39,7 @@
              <ng-template matStepperIcon="edit" let-index="index">
                 <mat-icon>{{data[index].clicked == 'Yes' ? 'done' : data[index].clicked == 'No' ? 'clear':'edit'}}</mat-icon>
              </ng-template>
-             <mat-step class="notSelected" *ngFor="let question of data; index as i;" state="home">
+             <mat-step class="notSelected" *ngFor="let question of data; index as i;" >
                 <ng-template matStepLabel="" >
                    <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
                       <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
@@ -47,15 +47,15 @@
                 </ng-template>
                 <ng-template matStepContent="">
                    <div *ngFor="let contentItem of question.content; index as coi;">
-                     {{contentItem.label}}
+                     <strong>{{contentItem.label}}</strong>
                       <ol type="a" *ngIf="contentItem.data">
                         <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
-                         <div style="display: flex;flex-direction: row;"><span class="toggle-button" id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
+                         <div style="display: flex;flex-direction: row;"><span class="list-item" id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
                         </li>
                       </ol>
                    </div>
                    <div class="button-row mt-2 ">
-                     <mat-divider class="mb-2"></mat-divider>
+                     <mat-divider class="mb-4"></mat-divider>
                       <button class="toggle-button" *ngFor="let buttonItem of question.buttons; index as bi" mat-stroked-button color="basic" (click)="setLabel(question,buttonItem,i)" [ngClass]="{ 'myGreen' :question.clicked == buttonItem.label && question.clicked == 'Yes', 'myRed' :question.clicked == buttonItem.label && question.clicked == 'No'  }">
                       {{buttonItem.label}}
                       <div class="mb-5" *ngIf="question.clicked == buttonItem.label && buttonItem.clickedContent.length!=0">
@@ -63,8 +63,6 @@
                       </div>
                       </button>
                       <br>
-                      <br>
-
                    </div>
                    <div class="yesNocontent text-dark" *ngFor="let buttonItem of question.buttons; index as yi">
                       <div *ngIf="buttonItem.label == question.clicked">
@@ -89,73 +87,97 @@
              </mat-step>
              <!--Questionnaire completed -->
              <mat-step>
-                <ng-template matStepLabel="">
-                   Questionnaire complete
-                </ng-template>
-                <ng-template matStepContent="">
-                   <br>
-                   <p>Review your responses to the questions, if:</p>
-                   <mat-divider></mat-divider>
-                   <p>
-                      <strong>After reviewing your answers and you believe you are eligible
-                      for this service you may continue on to the
-                      application to create your CSRS account.</strong>
-                   </p>
-                   <mat-divider></mat-divider>
-                   <div class="flex-6-col round3">
-                      <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-                         <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="1" rowspan="2">
-                            <img class="icon-size5" src="/assets/Questionnaire-icon.svg">
-                         </mat-grid-tile>
-                         <mat-grid-tile class="mi-tile-contents-left border-bottom" aria-rowindex="0" colspan="5" rowspan="2">
-                            <p>
-                               <strong>Be prepared with the following information needed to complete your application:</strong>
-                            </p>
-                            <ul>
-                               <li>Personal information on you, the other party and the children</li>
-                               <li>Court orders or written agreements</li>
-                               <li>Financial information for both parties</li>
-                            </ul>
-                         </mat-grid-tile>
-                      </mat-grid-list>
+               <ng-template matStepLabel=""> Questionnaire complete </ng-template>
+               <ng-template matStepContent="">
+                 <p>Review your responses to the questions, if:</p>
+                 <mat-divider></mat-divider>
+                 <h1><strong>I think I am eligible and want to enrol</strong></h1>
+                 <hr style="opacity: 1" />
+                 <p>
+                   <strong
+                     >After reviewing your answers and you believe you are eligible for
+                     this service you may continue on to the application to create your
+                     CSRS account.</strong
+                   >
+                 </p>
+                 <div class="container mb-2">
+                   <div #alertContent class="alert-content row">
+                     <span class="col-sm-2">
+                       <img
+                         style="height: 70px; width: auto"
+                         src="/assets/Questionnaire-icon.svg"
+                       />
+                     </span>
+                     <div class="col-sm-10">
+                       <h1>Before you start your application, make sure you have:</h1>
+                       <ul class="text-dark">
+                         <li>
+                           Contact information for you and the other party (to the best
+                           of your knowledge)
+                         </li>
+                         <li>A copy of your current order or written agreement</li>
+                         <li>Child(ren) information</li>
+                       </ul>
+                     </div>
                    </div>
-                   <br>
-                   <p>
-                      Sign in with your BCeID to proceed, if you do not have a BCeID please create an account first.
-                   </p>
-                   <div class="flex-6-col round3">
-                      <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-                         <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
-                            <a class="useful-links bceIdLink" [attr.href]="bceIdLink" target="_blank" rel="noopener">
-                            <button class="large" type="button" mat-flat-button color="primary">
-                            Sign in with BCeID to enrol
-                            </button>
-                            </a>
-                         </mat-grid-tile>
-                         <mat-grid-tile class="mi-tile-contents-center" aria-rowindex="0" colspan="3" rowspan="1">
-                            <a class="useful-links bceIdLink" [attr.href]="bceIdRegisterLink" target="_blank" rel="noopener">
-                            I don't have a BCeID account
-                            </a>
-                         </mat-grid-tile>
-                      </mat-grid-list>
-                   </div>
-                   <br>
-                   <p>
-                      <strong>I’m not sure if I am eligible and have questions</strong>
-                   </p>
-                   <mat-divider></mat-divider>
-                   <br>
-                   <p>
-                      If you have more questions about your eligibly, please contact:
-                      <strong>Child Support Recalculation Service: </strong>
-                   </p>
-                   <ul>
-
-                      <li> <a href="tel:1-866-660-2684">1-866-660-2684</a></li>
-                      <li> <a href="tel:604-660-2528">604-660-2528</a></li>
-                   </ul>
-                </ng-template>
+                 </div>
+                 <p>
+                   Sign in with your BCeID to proceed, if you do not have a BCeID please
+                   create an account first.
+                 </p>
+                 <div class="flex-6-col round3">
+                   <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
+                     <mat-grid-tile
+                       class="mi-tile-contents-center"
+                       aria-rowindex="0"
+                       colspan="3"
+                       rowspan="1"
+                     >
+                       <a class="useful-links bceIdLink" target="_blank" rel="noopener">
+                         <button
+                           style="width: 400px"
+                           type="button"
+                           mat-flat-button
+                           color="primary"
+                         >
+                           BCeID Login
+                         </button>
+                       </a>
+                     </mat-grid-tile>
+                     <mat-grid-tile
+                       class="mi-tile-contents-center"
+                       aria-rowindex="0"
+                       colspan="3"
+                       rowspan="1"
+                     >
+                       <a class="useful-links bceIdLink" target="_blank" rel="noopener">
+                         <button style="width: 400px" mat-stroked-button color="primary">
+                           Register for a Basic BCeID
+                         </button>
+                       </a>
+                     </mat-grid-tile>
+                   </mat-grid-list>
+                 </div>
+                 <div class="container mt-4 mb-2">
+                   <div #alertContent class="alert-text row">
+                       <span class="text-dark"><strong style="color: #003366;">Prefer a pdf to complete your application? </strong>You can download the PDF version of the application here and mail the completed package.</span>
+                     </div>
+                 </div>
+                 <p>
+                   <strong>I’m not sure if I am eligible and have questions</strong>
+                 </p>
+                 <hr style="opacity: 1" />
+                 <p>
+                   If you have more questions about your eligibly, please contact:
+                   <strong>Child Support Recalculation Service: </strong>
+                 </p>
+                 <ul>
+                   <li><a href="tel:1-866-660-2684">1-866-660-2684</a></li>
+                   <li><a href="tel:604-660-2528">604-660-2528</a></li>
+                 </ul>
+               </ng-template>
              </mat-step>
+         
           </mat-vertical-stepper>
        </div>
     </section>

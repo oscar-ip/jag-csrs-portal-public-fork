@@ -9,6 +9,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-child-application-question',
@@ -29,15 +30,20 @@ export class ChildApplicationQuestionComponent implements OnInit {
   provinceData: any = [];
   genderData: any = [];
   identityData: any = [];
+  referalsData: any = [];
+  courtLocationsData: any = [];
   constructor(private _formBuilder: FormBuilder, private http: HttpClient) {}
 
   ngOnInit() {
-    this.provinceData = [{label: 'hai', value: 1234}];
-    this.identityData = [{label: 'hai', value: 1234}];
+    this.provinceData = [{label: 'province', value: 'british columbia'}];
+    this.identityData = [{label: 'hai', value: ''}];
     this.genderData =  [{label: 'hai', value: 1234}];
+     this.getReferalsData();
+    this.getCourtLocationData();
     this.getIdentityData();
     this.getProvinceData();
     this.getGenderyData();
+    
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
       secondControl: ['', Validators.required]
@@ -85,13 +91,13 @@ export class ChildApplicationQuestionComponent implements OnInit {
        
       ])
     });
-    this.fourthFormGroup = this._formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      birthdate: [],
-      givenNames: [],
-      middleName: []
-    });
+    // this.fourthFormGroup = this._formBuilder.group({
+    //   firstName: ['', Validators.required],
+    //   lastName: ['', Validators.required],
+    //   birthdate: [],
+    //   givenNames: [],
+    //   middleName: []
+    // });
     this.fifthFormGroup = this._formBuilder.group({
       firstName: [''],
       birthdate: [],
@@ -108,25 +114,65 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.nineFormGroup = this._formBuilder.group({
       secondCtrl: [''],
     });
+    this.setFormDataFromLocal();
   }
-
+  setFormDataFromLocal(){
+  if (localStorage.getItem('formData')){
+      let data = localStorage.getItem('formData');
+      data = JSON.parse(data);
+      if (data['firstStep']){
+        this.firstFormGroup.patchValue(data['firstStep']);
+      }
+      if (data['secondFormGroup']){
+        this.secondFormGroup.patchValue(data['secondFormGroup']);
+      }
+      if (data['thirdFormGroup']){
+        this.thirdFormGroup.patchValue(data['thirdFormGroup']);
+      }
+      if (data['fourthFormGroup']){
+        this.fourthFormGroup.patchValue(data['fourthFormGroup']);
+      }
+      if (data['fifthFormGroup']){
+        this.fifthFormGroup.patchValue(data['fifthFormGroup']);
+      }
+      if (data['sixFormGroup']){
+        this.sixFormGroup.patchValue(data['sixFormGroup']);
+      }
+      if (data['seventhFormGroup']){
+        this.seventhFormGroup.patchValue(data['seventhFormGroup']);
+      }
+      if (data['eFormGroup']){
+        this.eFormGroup.patchValue(data['eFormGroup']);
+      }
+      if (data['nineFormGroup']){
+        this.nineFormGroup.patchValue(data['nineFormGroup']);
+      }
+  }
+ 
+}
   getIdentityData() {
-    this.http.get('https://ed92ce0e-25ce-4a67-a586-e53fc4379ab9.mock.pstmn.io/identity').subscribe(data => {
-      console.log('data', data);
-      this.identityData = [{label: 'hai', value: 1234}];
+    this.http.get('https://localhost:8081/Account/Identity').subscribe(data => {
+      this.identityData = data;
     });
   }
   getProvinceData() {
-    this.http.get('https://ed92ce0e-25ce-4a67-a586-e53fc4379ab9.mock.pstmn.io/province').subscribe(data1 => {
-      console.log('data', data1);
-      // this.provinceData = data1;
-      this.provinceData = [{label: 'hai', value: 1234}];
+    this.http.get('https://localhost:8081/Account/Province').subscribe(data1 => {
+      this.provinceData = data1;
     });
   }
   getGenderyData() {
-    this.http.get('https://ed92ce0e-25ce-4a67-a586-e53fc4379ab9.mock.pstmn.io/gender').subscribe(data2 => {
-      console.log('data', data2);
-      this.genderData =  [{label: 'hai', value: 1234}];
+    this.http.get('https://localhost:8081/Account/Gender').subscribe(data2 => {
+      this.genderData =  data2;
+    });
+  }
+  getCourtLocationData() {
+    this.http.get('https://localhost:8081/CourtLocations').subscribe(data1 => {
+      this.courtLocationsData = data1;
+    });
+  }
+  getReferalsData() {
+    this.http.get('https://localhost:8081/Account/Referrals').subscribe(data1 => {
+      this.referalsData = data1;
     });
   }
 
@@ -143,6 +189,24 @@ export class ChildApplicationQuestionComponent implements OnInit {
     });
 
     usersArray.insert(arraylen, newUsergroup);
+  }
+
+  saveLater(){
+    const formData = {
+      firstStep: this.firstFormGroup.value,
+      secondFormGroup: this.secondFormGroup.value,
+      thirdFormGroup: this.thirdFormGroup.value,
+      fourthFormGroup1: this.fourthFormGroup1.value,
+      fifthFormGroup: this.fifthFormGroup.value,
+      sixFormGroup: this.sixFormGroup.value,
+      seventhFormGroup: this.seventhFormGroup.value,
+      eFormGroup: this.eFormGroup.value,
+      nineFormGroup: this.nineFormGroup.value,
+    };
+    localStorage.setItem('formData', JSON.stringify(formData));
+  }
+  save(){
+    localStorage.getsetItemItem('formData', '');
   }
 
 }

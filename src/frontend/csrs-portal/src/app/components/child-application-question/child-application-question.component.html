@@ -1,10 +1,11 @@
 <div class="container">
   <section>
     <div>
-      <h1>Child Support Recalculation Application</h1>
-      <p>To create your CSRS account, please complete the following application.</p>
-      <mat-divider></mat-divider>
-      <hr style="opacity: 1">
+      <h1 class="mb-1">Child Support Recalculation Application</h1>
+      <p>
+        To create your CSRS account, please complete the following application.
+      </p>
+      <hr style="opacity: 1; color: #fcba19" />
     </div>
   </section>
   <section>
@@ -14,20 +15,23 @@
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Getting Started</ng-template>
             <div class="text-dark">
-              <span class="text-dark">Fields marked <span class="text-danger">*</span> are required</span><br>
+              <div class="pb-1">
+                Fields marked <span class="text-danger">*</span> are required
+              </div>
               <section class="text-dark">
-                <label class="w-100">
-                  <strong>What best describes your situation?<span class="text-danger">*</span> </strong>
+                <label class="w-100 py-1">
+                  <strong>What best describes your situation?<span class="text-danger">*</span>
+                  </strong>
                 </label>
                 <div class="row">
                   <div class="col-12">
                     <mat-radio-group formControlName="firstCtrl">
-                      <mat-radio-button value="1">
+                      <mat-radio-button class="radio-question" value="1">
                         <span class="wrap-mat-radio-label">
                           I am the receipent, i currently receive child support
                         </span>
                       </mat-radio-button>
-                      <mat-radio-button class="mx-5 px-5" value="2">
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="2">
                         <span class="wrap-mat-radio-label">
                           I am the payer, i current pay child support
                         </span>
@@ -37,18 +41,17 @@
                 </div>
               </section>
               <section>
-                <label class="w-100">
-                  <strong> Do you have an order or filed written agreement ?<span class="text-danger">*</span></strong>
+                <label class="w-100 py-2">
+                  <strong>
+                    Do you have an order or filed written agreement ?<span class="text-danger">*</span></strong>
                 </label>
                 <div class="row">
                   <div class="col-12">
                     <mat-radio-group formControlName="secondControl">
-                      <mat-radio-button value="1">
-                        <span class="wrap-mat-radio-label">
-                          Order
-                        </span>
+                      <mat-radio-button class="radio-question" value="1">
+                        <span class="wrap-mat-radio-label"> Order </span>
                       </mat-radio-button>
-                      <mat-radio-button style="margin-left: 433px;" value="2">
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="2">
                         <span class="wrap-mat-radio-label">
                           Written agreement
                         </span>
@@ -58,9 +61,11 @@
                 </div>
               </section>
             </div>
-            <hr style="opacity: 1">
+            <hr style="opacity: 1" />
             <div>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
@@ -145,8 +150,8 @@
                 <mat-form-field class="w-100">
                   <mat-label>Province<span class="text-danger">*</span></mat-label>
                   <mat-select formControlName="province">
-                    <mat-option *ngFor="let provinceName of provinceData; index as pi" value='provinceName.value'>
-                      {{provinceName.label}}
+                    <mat-option *ngFor="let provinceName of provinceData; index as pi" value="provinceName.value">
+                      {{ provinceName.value }}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -209,20 +214,23 @@
                 <mat-form-field class="w-100">
                   <mat-label>Gender</mat-label>
                   <mat-select formControlName="gender">
-                    <mat-option *ngFor="let genderValue of genderData; index as pi" value='genderValue.value'>
-                      {{genderValue.label}}
+                    <mat-option *ngFor="let genderValue of genderData; index as pi" value="genderValue.value">
+                      {{ genderValue.value }}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
-            <div class="row">
+            <div class="row text-dark pt-3">
+              <strong>What best describes your identity?</strong>
+              <div><strong style="color: #003366;">Note:</strong> The question is voluntary. The Child Support Recalculation Program wants to ensure that families can access its services.</div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
+                  <mat-label>Gender</mat-label>
                   <mat-select formControlName="identity">
-                    <mat-option *ngFor="let idenityName of identityData; index as pi" value='identityName.value'>
-                      {{idenityName.label}}
+                    <mat-option *ngFor="let idenityName of identityData; index as pi" value="identityName.value">
+                      {{ idenityName.value }}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -230,8 +238,12 @@
               </div>
             </div>
             <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
@@ -240,8 +252,10 @@
           <form [formGroup]="thirdFormGroup">
             <ng-template matStepLabel>Information about the other party (parent, caregiver, guardian)
             </ng-template>
-            <div class='heading'>Enter as much information as you can about the other party involved in this
-              application.</div>
+            <div class="heading">
+              Enter as much information as you can about the other party
+              involved in this application.
+            </div>
             <div class="row row-height">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
@@ -320,10 +334,9 @@
                   <mat-label>Province</mat-label>
 
                   <mat-select formControlName="province">
-                    <mat-option *ngFor="let provinceName of provinceData; index as pi" value='provinceName.value'>
-                      {{provinceName.label}}
+                    <mat-option *ngFor="let provinceName of provinceData; index as pi" value="provinceName.value">
+                      {{ provinceName.value }}
                     </mat-option>
-
                   </mat-select>
 
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -381,28 +394,41 @@
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
-
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Gender</mat-label>
-                  <input matInput formControlName="givenNames" />
+                  <mat-select formControlName="gender">
+                    <mat-option *ngFor="let genderValue of genderData; index as pi" value='genderValue.value'>
+                      {{genderValue.value}}
+                    </mat-option>
+                  </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
-            </div>
-            <mat-divider></mat-divider>
             <div>
-               <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-               <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
+          </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="fourthFormGroup">
-          <form [formGroup]="fourthFormGroup">
+        <mat-step [stepControl]="fourthFormGroup1">
+          <form [formGroup]="fourthFormGroup1">
             <ng-template matStepLabel>Information about the Child(ren)</ng-template>
-            <div class='heading'>Enter as much information as you can about the other party involved in this
-              application.</div>
-            <ng-container *ngFor="let userFormGroup of this.fourthFormGroup1.get('users')['controls']; let i = index">
+            <div class="heading">
+              Enter as much information as you can about the other party
+              involved in this application.
+            </div>
+            <ng-container *ngFor="
+                let userFormGroup of this.fourthFormGroup1.get('users')[
+                  'controls'
+                ];
+                let i = index
+              ">
               <div class="row row-height" [formGroup]="userFormGroup">
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
@@ -440,29 +466,53 @@
                   </mat-form-field>
                 </div>
               </div>
-              <mat-divider></mat-divider>
+              <div class="row text-dark mt-4">
+                <div class="col-md-6">
+                  <p>If a child is over age of majority, are they still a dependant?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <mat-radio-group aria-label="Select an option">
+                    <mat-radio-button value="1">Yes</mat-radio-button>
+                    <mat-radio-button value="2">No</mat-radio-button>
+                    <mat-radio-button value="3">I don't know</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+              <div class="add-child">
+                <button  mat-stroked-button (click)="callAntherchild()">
+                  + Add another child
+                </button>
+              </div>
             </ng-container>
-            <div>
-              <button mat-button (click)="callAntherchild()">+ Add another child</button>
-            </div>
-
           </form>
+          <hr style="opacity: 1" />
           <div>
-            <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-            <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+            <button mat-stroked-button color="basic" matStepperPrevious>
+              Back
+            </button>
+            <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+              Next
+            </button>
           </div>
         </mat-step>
         <mat-step [stepControl]="fifthFormGroup">
           <form [formGroup]="fifthFormGroup">
             <ng-template matStepLabel>Details about the Court Order or Written Agreement</ng-template>
-            <div class='heading'>It would be helpful if you had a copy of your court order or written
-              agreement when answering the
-              following questions</div>
+            <div class="heading">
+              It would be helpful if you had a copy of your court order or
+              written agreement when answering the following questions
+            </div>
             <div class="row text-dark">
               <div class="col-md-6">
                 <span>Court location</span>
                 <mat-form-field class="w-100">
                   <input matInput formControlName="firstName" />
+                  <mat-select formControlName="gender">
+                    <mat-option *ngFor="let locationValue of courtLocationsData; index as pi" value='locationValue.value'>
+                      {{locationValue.ssg_bccourtlocationname}}
+                    </mat-option>
+                  </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -483,7 +533,7 @@
               <p>Payor's income amount from the order or written agreement</p>
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
-                  <input matInput #input>
+                  <input matInput #input />
                   <mat-icon matSuffix>attach_money</mat-icon>
                 </mat-form-field>
               </div>
@@ -512,32 +562,27 @@
                 </mat-radio-group>
               </div>
             </div>
-            <div class="row text-dark">
-
-            </div>
+            <div class="row text-dark"></div>
             <div class="col-md-6">
               <mat-form-field class="w-100" appearance="fill">
                 <mat-label>Income year 1</mat-label>
-                <input matInput #input>
+                <input matInput #input />
                 <mat-icon matSuffix>attach_money</mat-icon>
               </mat-form-field>
-
             </div>
             <div class="col-md-6">
               <mat-form-field class="w-100" appearance="fill">
                 <mat-label>Income year 2</mat-label>
-                <input matInput #input>
+                <input matInput #input />
                 <mat-icon matSuffix>attach_money</mat-icon>
               </mat-form-field>
-
             </div>
             <div class="col-md-6">
               <mat-form-field class="w-100" appearance="fill">
                 <mat-label>Income year 3</mat-label>
-                <input matInput #input>
+                <input matInput #input />
                 <mat-icon matSuffix>attach_money</mat-icon>
               </mat-form-field>
-
             </div>
             <div class="row">
               <div class="col-md-6">
@@ -553,8 +598,12 @@
             </div>
             <mat-divider></mat-divider>
             <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
@@ -562,7 +611,10 @@
           <form [formGroup]="sixFormGroup">
             <ng-template matStepLabel>Additional Information</ng-template>
             <div class="stepRow">
-              <div>Do you have any concerns for your safety or your children’s safety?</div>
+              <div>
+                Do you have any concerns for your safety or your children’s
+                safety?
+              </div>
               <mat-radio-group aria-label="Select an option">
                 <mat-radio-button value="1">Yes</mat-radio-button>
                 <mat-radio-button value="2">No</mat-radio-button>
@@ -570,14 +622,16 @@
             </div>
             <div class="example-container width100">
               <mat-form-field appearance="fill">
-                <mat-label>If yes, please provide any details including if there any protection orders
-                  in place involving you or the other party?</mat-label>
-                <input matInput #input>
+                <mat-label>If yes, please provide any details including if there any
+                  protection orders in place involving you or the other
+                  party?</mat-label>
+                <input matInput #input />
               </mat-form-field>
-
             </div>
             <div class="stepRow">
-              <div>Are you enrolled in the Family Maintenance Enforcement Program?</div>
+              <div>
+                Are you enrolled in the Family Maintenance Enforcement Program?
+              </div>
               <mat-radio-group aria-label="Select an option">
                 <mat-radio-button value="1">Yes</mat-radio-button>
                 <mat-radio-button value="2">No</mat-radio-button>
@@ -586,9 +640,8 @@
             <div class="example-container">
               <mat-form-field appearance="fill">
                 <mat-label>My FMEP file # is:</mat-label>
-                <input matInput #input>
+                <input matInput #input />
               </mat-form-field>
-
             </div>
             <div class="stepRow">
               <div>Are you currently on income assistance?</div>
@@ -599,20 +652,25 @@
             </div>
             <div class="example-container width100">
               <mat-form-field appearance="fill">
-                <mat-label>How did you hear about the Child Support Recalculation Service (CSRS)?
+                <mat-label>How did you hear about the Child Support Recalculation
+                  Service (CSRS)?
                 </mat-label>
-                <select matNativeControl required>
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
-                </select>
+               <mat-select formControlName="gender">
+                    <mat-option *ngFor="let identityValue of identityData; index as pi" value='identityValue.value'>
+                      {{identityValue.value}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
               </mat-form-field>
             </div>
             <mat-divider></mat-divider>
             <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
@@ -620,17 +678,30 @@
         <mat-step [stepControl]="seventhFormGroup">
           <form [formGroup]="seventhFormGroup">
             <ng-template matStepLabel>Upload your documents</ng-template>
-            <div>Please attach your most recent <strong>Child Support Order</strong> or filed
+            <div>
+              Please attach your most recent
+              <strong>Child Support Order</strong> or filed
               <strong>Written Agreement</strong>
             </div>
             <div class="document-drag-container">
-
+              <div class="dropzone">
+                <input class="drop-file" type="file" #fileDropRef id="fileDropRef" multiple />
+                <h3>Drag and drop file here</h3>
+                <h3>or</h3>
+                <label class="browse-file" for="fileDropRef">Choose Documents</label>
+              </div>
             </div>
             <mat-divider></mat-divider>
             <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-              <button mat-button matStepperPrevious>Save my application for later</button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button mat-button matStepperPrevious>
+                Save my application for later
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
@@ -638,65 +709,76 @@
         <mat-step [stepControl]="eFormGroup">
           <form [formGroup]="eFormGroup">
             <ng-template matStepLabel>Conditions of Enrolment</ng-template>
-            <div class="heading">Please review and accept the conditions of enrolment:</div>
+            <div class="heading">
+              Please review and accept the conditions of enrolment:
+            </div>
             <div class="text-dark">
               <ul>
-                <li>I will notify the recalculation service of any changes in my contact information or
-                  any legal action
-                  which may impact the recalculation of my child support</li>
-                <li> I understand the recalculation service may access Court Services Online to obtain
-                  copies of the
-                  child support order or written agreement.</li>
                 <li>
-                  Unless a court orders otherwise, I may withdraw from the recalculation service
-                  providing that the
-                  other party also agrees to withdraw.
+                  I will notify the recalculation service of any changes in my
+                  contact information or any legal action which may impact the
+                  recalculation of my child support
                 </li>
                 <li>
-                  I understand that if I do not provide my income tax information, as requested by the
-                  recalculation
-                  service, the service may adjust my annual income amount using rate increases set out
-                  under the
-                  Family Law Act Regulation
+                  I understand the recalculation service may access Court
+                  Services Online to obtain copies of the child support order or
+                  written agreement.
                 </li>
                 <li>
-                  I understand the use of the information I provide to the recalculation service is
-                  for the purposes
-                  of child support recalculation. If I am involved with the Family Maintenance
-                  Enforcement Program,
-                  my information may be shared with this program.
+                  Unless a court orders otherwise, I may withdraw from the
+                  recalculation service providing that the other party also
+                  agrees to withdraw.
+                </li>
+                <li>
+                  I understand that if I do not provide my income tax
+                  information, as requested by the recalculation service, the
+                  service may adjust my annual income amount using rate
+                  increases set out under the Family Law Act Regulation
+                </li>
+                <li>
+                  I understand the use of the information I provide to the
+                  recalculation service is for the purposes of child support
+                  recalculation. If I am involved with the Family Maintenance
+                  Enforcement Program, my information may be shared with this
+                  program.
                 </li>
               </ul>
               <p>
-                <strong>Collection Notices:</strong>Your personal information is collected by Ministry
-                of Attorney General’s Maintenance Enforcement
-                and Locate Services (MELS) pursuant to section 26(a) and (c) of the Freedom of
-                Information and Protection of Privacy Act
-                and the Family Law Act. MELS uses this information for the purposes of establishing,
-                recalculating or enforcing child
-                support. Should you have any questions about the collection, use or disclosure of your
-                personal information, please
-                contact a Client Relations Officer: Address: 203 - 865 Hornby Street, Vancouver, BC
-                Phone Number: (604) 660-2528.
+                <strong>Collection Notices:</strong>Your personal information is
+                collected by Ministry of Attorney General’s Maintenance
+                Enforcement and Locate Services (MELS) pursuant to section 26(a)
+                and (c) of the Freedom of Information and Protection of Privacy
+                Act and the Family Law Act. MELS uses this information for the
+                purposes of establishing, recalculating or enforcing child
+                support. Should you have any questions about the collection, use
+                or disclosure of your personal information, please contact a
+                Client Relations Officer: Address: 203 - 865 Hornby Street,
+                Vancouver, BC Phone Number: (604) 660-2528.
               </p>
-              <mat-checkbox class="example-margin">I accept and acknowledge the terms and conditions
-                listed above.</mat-checkbox>
+              <mat-checkbox class="example-margin">I accept and acknowledge the terms and conditions listed
+                above.</mat-checkbox>
             </div>
             <mat-divider></mat-divider>
             <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
         <mat-step [stepControl]="nineFormGroup">
           <form [formGroup]="nineFormGroup" class="text-dark">
-            <ng-template matStepLabel>Review and submit your application </ng-template>
-            <div>Review all application details below to ensure information is correct, you can go back and
-              edit any of the
-              information before submission.
+            <ng-template matStepLabel>Review and submit your application
+            </ng-template>
+            <div>
+              Review all application details below to ensure information is
+              correct, you can go back and edit any of the information before
+              submission.
             </div>
-            <div class='submit-layer'>
+            <div class="submit-layer">
               <div class="stepRow spaceAround">
                 <strong class="submit-text-color">Getting Started</strong>
                 <a>Edit</a>
@@ -706,12 +788,12 @@
                 <div class="bold">Payor, I pay child support</div>
               </div>
               <div class="stepRow spaceAround">
-                <div>Do you have an order or filed written agreement? </div>
+                <div>Do you have an order or filed written agreement?</div>
                 <div class="bold">Yes</div>
               </div>
             </div>
-            <br>
-            <div class='submit-layer'>
+            <br />
+            <div class="submit-layer">
               <div class="stepRow spaceAround">
                 <strong class="submit-text-color">Your Personal Information</strong>
                 <a>Edit</a>
@@ -722,7 +804,7 @@
                   <div class="bold">Susan</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Legal middle name(s): </div>
+                  <div>Legal middle name(s):</div>
                   <div class="bold">Jane</div>
                 </div>
               </div>
@@ -732,7 +814,7 @@
                   <div class="bold">Susan</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Preferred name: </div>
+                  <div>Preferred name:</div>
                   <div class="bold">-</div>
                 </div>
               </div>
@@ -742,7 +824,7 @@
                   <div class="bold">1988/05/05</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Street address 1: </div>
+                  <div>Street address 1:</div>
                   <div class="bold">123 Surrey Avenue</div>
                 </div>
               </div>
@@ -752,7 +834,7 @@
                   <div class="bold">1988/05/05</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>City: </div>
+                  <div>City:</div>
                   <div class="bold">123 Surrey Avenue</div>
                 </div>
               </div>
@@ -767,8 +849,8 @@
                 </div>
               </div>
             </div>
-            <br>
-            <div class='submit-layer'>
+            <br />
+            <div class="submit-layer">
               <div class="stepRow spaceAround">
                 <strong class="submit-text-color">Information about third party</strong>
                 <a>Edit</a>
@@ -779,7 +861,7 @@
                   <div class="bold">Susan</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Legal middle name(s): </div>
+                  <div>Legal middle name(s):</div>
                   <div class="bold">Jane</div>
                 </div>
               </div>
@@ -789,7 +871,7 @@
                   <div class="bold">Susan</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Preferred name: </div>
+                  <div>Preferred name:</div>
                   <div class="bold">-</div>
                 </div>
               </div>
@@ -799,7 +881,7 @@
                   <div class="bold">1988/05/05</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Street address 1: </div>
+                  <div>Street address 1:</div>
                   <div class="bold">123 Surrey Avenue</div>
                 </div>
               </div>
@@ -809,7 +891,7 @@
                   <div class="bold">1988/05/05</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>City: </div>
+                  <div>City:</div>
                   <div class="bold">123 Surrey Avenue</div>
                 </div>
               </div>
@@ -824,20 +906,22 @@
                 </div>
               </div>
             </div>
-            <br>
-            <div class='submit-layer'>
+            <br />
+            <div class="submit-layer">
               <div class="stepRow spaceAround">
                 <strong class="submit-text-color">Information about the Child(ren)</strong>
                 <a>Edit</a>
               </div>
-              <span><strong>Child 1</strong></span>
+              <div class="stepRow spaceAround">
+                <strong class="submit-text-color">Child 1</strong>
+              </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround leftRight">
                   <div>Legal first name:</div>
                   <div class="bold">Susan</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Legal middle name(s): </div>
+                  <div>Legal middle name(s):</div>
                   <div class="bold">Jane</div>
                 </div>
               </div>
@@ -852,8 +936,8 @@
                 </div>
               </div>
             </div>
-            <br>
-            <div class='submit-layer'>
+            <br />
+            <div class="submit-layer">
               <div class="stepRow spaceAround">
                 <strong class="submit-text-color">Details about the court order or wirtten agreement</strong>
                 <a>Edit</a>
@@ -874,17 +958,25 @@
                   <div class="bold">1988/05/05</div>
                 </div>
               </div>
-              <span>Income</span>
+              <div class="stepRow spaceAround">
+                <strong class="submit-text-color">Income</strong>
+              </div>
               <div class="row">
                 <div class="col-md-10 stepRow spaceAround leftRight">
-                  <div><strong>Receipent: </strong>Guidelines income amount from the Order</div>
+                  <div>
+                    <strong>Receipent: </strong>Guidelines income amount from
+                    the Order
+                  </div>
                 </div>
                 <div class="col-md-2 stepRow spaceAround leftRight pl-5">
                   <div class="bold">Vancouver</div>
                 </div>
                 <div class="row">
                   <div class="col-md-10 stepRow spaceAround leftRight">
-                    <div><strong>Payor: </strong>Guidelines income amount from the Order</div>
+                    <div>
+                      <strong>Payor: </strong>Guidelines income amount from the
+                      Order
+                    </div>
                   </div>
                   <div class="col-md-2 stepRow spaceAround leftRight">
                     <div class="bold">Vancouver</div>
@@ -905,7 +997,7 @@
                   <div class="col-md-2 stepRow spaceAround leftRight">
                     <div>
                       Yes
-                      <ul style="list-style: none; padding-left: 0px;">
+                      <ul style="list-style: none; padding-left: 0px">
                         <li>$ 1234.56</li>
                         <li>$ 1234.56</li>
                         <li>$ 1234.56</li>
@@ -916,62 +1008,73 @@
                 </div>
               </div>
             </div>
-            <br>
+            <br />
             <div class="submit-layer">
               <div class="stepRow spaceAround">
-                <strong class="submit-text-color">Additional Information</strong>
+                <strong class="submit-text-color">Conditions of Enrolment</strong>
                 <a>Edit</a>
               </div>
-              <div class="row">
-                <div class="col-md-10 stepRow spaceAround leftRight">
-                  <div>Do you have concern for your safety or your child safety</div>
-                </div>
-                <div class="col-md-2 stepRow spaceAround leftRight">
-                  <div class="bold">No</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-10 stepRow spaceAround leftRight">
-                  <div>Are you Enrolled in Family Maintainance Enforcement Program</div>
-                </div>
-                <div class="col-md-2 stepRow spaceAround leftRight">
-                  <div class="bold">Yes</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-10 stepRow spaceAround leftRight">
-                  <div>If yes my FMEP # is</div>
-                </div>
-                <div class="col-md-2 stepRow spaceAround leftRight">
-                  <div class="bold">3456789</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-10 stepRow spaceAround leftRight">
-                  <div>Are you currently on Income assistance?</div>
-                </div>
-                <div class="col-md-2 stepRow spaceAround leftRight">
-                  <div class="bold">Vancouver Provincial Court</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-10 stepRow spaceAround leftRight">
-                  <div>How did you hear about Child Support Recalculation Service</div>
-                </div>
-                <div class="col-md-2 stepRow spaceAround leftRight">
-                  <div class="bold">FMEP</div>
-                </div>
+              <div class="text-dark">
+                <ul>
+                  <li>
+                    I will notify the recalculation service of any changes in my
+                    contact information or any legal action which may impact the
+                    recalculation of my child support
+                  </li>
+                  <li>
+                    I understand the recalculation service may access Court
+                    Services Online to obtain copies of the child support order
+                    or written agreement.
+                  </li>
+                  <li>
+                    Unless a court orders otherwise, I may withdraw from the
+                    recalculation service providing that the other party also
+                    agrees to withdraw.
+                  </li>
+                  <li>
+                    I understand that if I do not provide my income tax
+                    information, as requested by the recalculation service, the
+                    service may adjust my annual income amount using rate
+                    increases set out under the Family Law Act Regulation
+                  </li>
+                  <li>
+                    I understand the use of the information I provide to the
+                    recalculation service is for the purposes of child support
+                    recalculation. If I am involved with the Family Maintenance
+                    Enforcement Program, my information may be shared with this
+                    program.
+                  </li>
+                </ul>
+                <mat-checkbox class="example-margin">I accept and acknowledge the terms and conditions listed
+                  above.</mat-checkbox>
               </div>
             </div>
+            <app-alert type="warning" icon="info">
+              <ng-container #alertContent class="alert-content">
+                <strong>If you choose to not appear in court, you must submit written
+                  reasons for each request to ask for more time or a fine
+                  reduction for each count.</strong>
+              </ng-container>
+            </app-alert>
             <mat-divider></mat-divider>
             <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>Back</button>
-              <button mat-button matStepperPrevious>Save my application for later</button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>Next</button>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button mat-flat-button color="primary" matStepperPrevious>
+                Save my application for later
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
             </div>
           </form>
         </mat-step>
       </mat-stepper>
+      <div>
+        <button mat-button (click)="saveLater()">Save fot later</button>
+        <button mat-button (click)="save()">Save</button>
+      </div>
     </div>
   </section>
 </div>

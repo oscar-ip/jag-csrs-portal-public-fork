@@ -232,15 +232,15 @@ export class QuestionnaireComponent implements AfterViewInit {
           data: {
             ol: [
               {
-                liData: 'Undue hardship;',
+                liData: '<strong>Undue hardship;</strong>',
                 tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
               {
-                liData: 'Self-employment or partnership income; or',
+                liData: '<strong>Self-employment or partnership income; or</strong>',
                 tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
               {
-                liData: 'Payor stands in place of a parent.',
+                liData: '<strong>Payor stands in place of a parent.</strong>',
                 tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
             ],
@@ -388,16 +388,16 @@ export class QuestionnaireComponent implements AfterViewInit {
           data: {
             ol: [
               {
-                liData: 'Children at or over the age of 19 ;',
+                liData: '<strong>Children at or over the age of 19 ;</strong>',
               },
               {
-                liData: 'Shared parenting ;',
+                liData: '<strong>Shared parenting ;</strong>',
               },
               {
-                liData: 'Pattern of income ; or',
+                liData: '<strong>Pattern of income ; or</strong>',
               },
               {
-                liData: 'Income over $150,000 ?',
+                liData: '<strong>Income over $150,000 ?</strong>',
               },
             ],
           },
@@ -434,12 +434,8 @@ export class QuestionnaireComponent implements AfterViewInit {
     },
     {
       label:
-        'Are there any court applications underway between you and the other ...',
+      ' Are there any court applications underway between you and the other parent that could have an impact on the amount of child support in your order or written agreement?',
       content: [
-        {
-          label:
-            ' Are there any court applications underway between you and the other parent that could have an impact on the amount of child support in your order or written agreement?',
-        },
         {
           label:
             'For example, a party is applying to reduce or cancel child support, or someone is applying to change the parenting arrangements where a child will spend a different amount of time with each parent. ',
