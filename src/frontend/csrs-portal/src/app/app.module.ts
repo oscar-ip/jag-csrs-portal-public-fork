@@ -34,6 +34,7 @@ import { ApplicationFormStepperComponent } from './components/application-form-s
 import { ChildApplicationQuestionComponent } from './components/child-application-question/child-application-question.component';
 
 import { KeycloakModule } from '@core/keycloak/keycloak.module';
+import { AuthConfigModule } from './auth/auth-config.module';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -60,6 +61,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CdkAccordionModule,
     MatGridListModule,
     KeycloakModule,
+    AuthConfigModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

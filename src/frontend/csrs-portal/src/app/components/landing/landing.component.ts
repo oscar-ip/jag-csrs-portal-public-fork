@@ -4,9 +4,10 @@ import { AuthService } from '@core/services/auth.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 
-import { KeycloakService } from 'keycloak-angular';
-import { KeycloakProfile, KeycloakLoginOptions } from 'keycloak-js';
+//import { KeycloakService } from 'keycloak-angular';
+//import { KeycloakProfile, KeycloakLoginOptions } from 'keycloak-js';
 import { Router, ActivatedRoute } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-landing',
@@ -17,67 +18,71 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class LandingComponent implements OnInit {
 
   public isLoggedIn = false;
-  public userProfile: KeycloakProfile | null = null;
-  public options: KeycloakLoginOptions | null = null;
+  //public userProfile: KeycloakProfile | null = null;
+  //public options: KeycloakLoginOptions | null = null;
   public bceIdLink: string;
   public bceIdRegisterLink: string;
   public cscLink: string;
   public welcomeUser: string;
   public code: string;
+  //public oidcSecurityService: OidcSecurityService;
 
-  constructor(@Inject(AuthService) private authService,
+  constructor(//@Inject(AuthService) private authService,
               @Inject(LoggerService) private logger,
-              @Inject(KeycloakService) private  keycloakService,
+             // @Inject(KeycloakService) private  keycloakService,
               @Inject(Router) private router,
-              @Inject(ActivatedRoute) private route) {
+              @Inject(ActivatedRoute) private route,
+              @Inject(OidcSecurityService) private oidcSecurityService) {
     this.bceIdLink = 'https://www.bceid.ca/';
     this.cscLink = 'https://www.childsupportcalculator.ca/british-columbia.html';
     this.bceIdRegisterLink = 'https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
     console.log(`constructor`);
+
+    const accessToken = oidcSecurityService.getAccessToken();
+
+    if (accessToken) {
+      console.log('accessToken: ' + accessToken);
+    }
+
+    if (oidcSecurityService.isAuthenticated()) {
+      console.log('authenticated');
+    } else {
+      console.log('not authenticated');
+    }
+
   }
 
   public async ngOnInit() {
-    this.isLoggedIn = await this.keycloakService.isLoggedIn();
-    console.log(`isLoggedIn is ${this.isLoggedIn}`);
 
-    if (this.isLoggedIn) {
-      this.userProfile = await this.keycloakService.loadUserProfile();
-      console.log(`userProfile is ${this.userProfile}`);
+      this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 
-      this.route.queryParams
-      .filter(params => params.code)
-      .subscribe(params => {
-        console.log(params);
-        this.code = params.code;
-        console.log(this.code);
+        console.log(`isAuthenticated = ${isAuthenticated}`);
+        console.log(`userData = ${userData}`);
+        console.log(`accessToken = ${accessToken}`);
+        console.log(`idToken = ${idToken}`);
+
+        console.dir({ isAuthenticated, userData, accessToken, idToken });
+        if (isAuthenticated === true)
+        {
+          this.router.navigate(['/welcomeuser']);
+        }
       });
 
-      if (this.code)
-      {
-        // here should be called service to transfer code thru api to backend ....
-      }
 
-
-      this.router.navigate(['/welcomeuser']);
     }
+
+
+
+  login() {
+    console.log('inside login');
+    this.oidcSecurityService.authorize();
   }
 
-  public login(): void {
-      console.log('login');
-
-
-
-      this.authService.login({
-        redirectUri: 'https://jag-csrs-portal-public-f0b5b6-dev.apps.silver.devops.gov.bc.ca'//,
-        //onLoad: 'login-required',
-        //flow: 'hybrid',
-        //enableLogging: true
-      });
+  logout() {
+    console.log('inside logout');
+    this.oidcSecurityService.logoff();
   }
 
-  public logout() {
-    console.log('logout');
-    this.authService.logout();
-  }
+
 
 }
