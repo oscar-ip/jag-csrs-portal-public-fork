@@ -6,7 +6,6 @@ import { RouteStateService } from '@core/services/route-state.service';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,20 +19,24 @@ export class AppComponent implements OnInit {
     private configService: ConfigService,
     private metaTagService: Meta,
     private router: Router,
+
   ) {
+
     this.router.events.subscribe((evt) => {
       if (evt instanceof NavigationEnd) {
-        
+
       }
     });
   }
 
-  public ngOnInit(): void {
+  ngOnInit() {
     if (isDevMode()) {
       console.log('Development!');
     } else {
       console.log('Production!');
     }
   }
+
+
 
 }
