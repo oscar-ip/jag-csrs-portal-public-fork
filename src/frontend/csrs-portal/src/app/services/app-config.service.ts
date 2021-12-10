@@ -2,31 +2,27 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-
 export interface IAppConfig {
   production: boolean;
   environment: string;
   version: string;
   bceIdLink: string;
   };
-
-
 export class AppConfig implements IAppConfig {
   production: boolean;
   environment: string;
   version: string;
   bceIdLink: string;
 }
-
 @Injectable({
   providedIn: 'root',
 })
 export class AppConfigService {
-  private appConfig: AppConfig;
+  public appConfig: AppConfig;
 
   private BCE_ID_DEFAULT =
     'https://bceid.gov.bc.ca/' as const;
-  
+
   constructor(private http: HttpClient) { }
 
   public loadAppConfig(): Observable<any> {
@@ -53,5 +49,4 @@ export class AppConfigService {
     const link = this.appConfig?.bceIdLink;
     return link ? link : this.BCE_ID_DEFAULT;
   }
-
 }

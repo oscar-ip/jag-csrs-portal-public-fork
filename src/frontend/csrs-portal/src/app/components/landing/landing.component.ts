@@ -4,8 +4,6 @@ import { AuthService } from '@core/services/auth.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 
-//import { KeycloakService } from 'keycloak-angular';
-//import { KeycloakProfile, KeycloakLoginOptions } from 'keycloak-js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
@@ -18,18 +16,13 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 export class LandingComponent implements OnInit {
 
   public isLoggedIn = false;
-  //public userProfile: KeycloakProfile | null = null;
-  //public options: KeycloakLoginOptions | null = null;
   public bceIdLink: string;
   public bceIdRegisterLink: string;
   public cscLink: string;
   public welcomeUser: string;
   public code: string;
-  //public oidcSecurityService: OidcSecurityService;
 
-  constructor(//@Inject(AuthService) private authService,
-              @Inject(LoggerService) private logger,
-             // @Inject(KeycloakService) private  keycloakService,
+  constructor(@Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService) {
@@ -67,11 +60,7 @@ export class LandingComponent implements OnInit {
           this.router.navigate(['/welcomeuser']);
         }
       });
-
-
     }
-
-
 
   login() {
     console.log('inside login');
@@ -82,7 +71,4 @@ export class LandingComponent implements OnInit {
     console.log('inside logout');
     this.oidcSecurityService.logoff();
   }
-
-
-
 }
