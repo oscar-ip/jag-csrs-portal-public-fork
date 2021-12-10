@@ -21,6 +21,7 @@ export class LandingComponent implements OnInit {
   public cscLink: string;
   public welcomeUser: string;
   public code: string;
+  public _logger: LoggerService;
 
   constructor(@Inject(LoggerService) private logger,
               @Inject(Router) private router,
@@ -29,18 +30,20 @@ export class LandingComponent implements OnInit {
     this.bceIdLink = 'https://www.bceid.ca/';
     this.cscLink = 'https://www.childsupportcalculator.ca/british-columbia.html';
     this.bceIdRegisterLink = 'https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
-    console.log(`constructor`);
+
+    this._logger = logger;
+    this._logger.log('info', 'logger:constructor');
 
     const accessToken = oidcSecurityService.getAccessToken();
 
     if (accessToken) {
-      console.log('accessToken: ' + accessToken);
+      this._logger.log('info', `accessToken: ${accessToken}`);
     }
 
     if (oidcSecurityService.isAuthenticated()) {
-      console.log('authenticated');
+      this._logger.log('info', 'authenticated');
     } else {
-      console.log('not authenticated');
+      this._logger.log('info', 'not authenticated');
     }
 
   }
@@ -49,12 +52,11 @@ export class LandingComponent implements OnInit {
 
       this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 
-        console.log(`isAuthenticated = ${isAuthenticated}`);
-        console.log(`userData = ${userData}`);
-        console.log(`accessToken = ${accessToken}`);
-        console.log(`idToken = ${idToken}`);
+        this._logger.log('info',`isAuthenticated = ${isAuthenticated}`);
+        this._logger.log('info',`userData = ${userData}`);
+        this._logger.log('info',`accessToken = ${accessToken}`);
+        this._logger.log('info',`idToken = ${idToken}`);
 
-        console.dir({ isAuthenticated, userData, accessToken, idToken });
         if (isAuthenticated === true)
         {
           this.router.navigate(['/welcomeuser']);
@@ -63,12 +65,12 @@ export class LandingComponent implements OnInit {
     }
 
   login() {
-    console.log('inside login');
+    this._logger.log('info','inside login');
     this.oidcSecurityService.authorize();
   }
 
   logout() {
-    console.log('inside logout');
+    this._logger.log('info','inside logout');
     this.oidcSecurityService.logoff();
   }
 }
