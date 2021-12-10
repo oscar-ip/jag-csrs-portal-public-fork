@@ -1,21 +1,22 @@
 /* eslint-disable arrow-body-style */
 import { HttpClient } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { AuthModule, LogLevel, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
 import { map } from 'rxjs/operators';
+import { environment } from 'environments/environment';
 
 export const httpLoaderFactory = (httpClient: HttpClient) => {
   const config$ = httpClient.get<any>(`assets/oidc.json`).pipe(
     map((customConfig: any) => {
       return {
         triggerAuthorizationResultEvent: true,
-        postLoginRoute: customConfig.postLoginRoute,
-        logLevel: LogLevel.Debug,
-        historyCleanupOff: true,
+        postLoginRoute: window.location.origin + customConfig.postLoginRoute,
+        logLevel: environment.production ? LogLevel.None : LogLevel.Debug, // or can use isDevMode() ?
+        //historyCleanupOff: true, //commented now, will come back later
         eagerLoadAuthWellKnownEndpoints: false,
         authority: customConfig.authority,
-        redirectUrl: customConfig.redirectUrl,
-        postLogoutRedirectUri: customConfig.postLogoutRedirectUri,
+        redirectUrl: window.location.origin,
+        postLogoutRedirectUri: window.location.origin,
         clientId: customConfig.clientId,
         scope: customConfig.scope,
         responseType: customConfig.responseType,
