@@ -133,7 +133,7 @@
                        colspan="3"
                        rowspan="1"
                      >
-                       <a class="useful-links bceIdLink" target="_blank" rel="noopener">
+                       <a class="useful-links bceIdLink" target="_blank" rel="noopener" (click)="login();">
                          <button
                            style="width: 400px"
                            type="button"
@@ -143,6 +143,7 @@
                            BCeID Login
                          </button>
                        </a>
+
                      </mat-grid-tile>
                      <mat-grid-tile
                        class="mi-tile-contents-center"
@@ -150,7 +151,7 @@
                        colspan="3"
                        rowspan="1"
                      >
-                       <a class="useful-links bceIdLink" target="_blank" rel="noopener">
+                       <a class="useful-links bceIdLink" [attr.href]="bceIdRegisterLink" target="_blank" rel="noopener">
                          <button style="width: 400px" mat-stroked-button color="primary">
                            Register for a Basic BCeID
                          </button>
@@ -159,8 +160,10 @@
                    </mat-grid-list>
                  </div>
                  <div class="container mt-4 mb-2">
-                   <div #alertContent class="alert-text row">
-                       <span class="text-dark"><strong style="color: #003366;">Prefer a pdf to complete your application? </strong>You can download the PDF version of the application here and mail the completed package.</span>
+                   <div #alertContent class="alert-text2 row">
+                       <span class="text-dark"><strong style="color: #003366;">Prefer a pdf to complete your application? </strong>
+                        You can download the PDF version of the application
+                        <a class ='btn' style="cursor:pointer" (click)="downloadApplication();"> here</a> and mail the completed package.</span>
                      </div>
                  </div>
                  <p>
@@ -177,7 +180,7 @@
                  </ul>
                </ng-template>
              </mat-step>
-         
+
           </mat-vertical-stepper>
        </div>
     </section>
