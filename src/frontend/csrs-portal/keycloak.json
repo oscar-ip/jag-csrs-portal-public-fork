@@ -1,8 +1,0 @@
-{
-  "realm": "onestopauth-basic",
-  "auth-server-url": "https://dev.oidc.gov.bc.ca/auth",
-  "ssl-required": "external",
-  "resource": "jsb-csrs-991",
-  "public-client": true,
-  "confidential-port": 0
-}

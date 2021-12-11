@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
 import { Config } from '@config/config.model';
-import { AuthService } from '@core/services/auth.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 

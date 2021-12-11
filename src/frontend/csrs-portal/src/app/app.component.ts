@@ -5,6 +5,7 @@ import { ConfigService } from '@config/config.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
+import { LoggerService } from '@core/services/logger.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
     private configService: ConfigService,
     private metaTagService: Meta,
     private router: Router,
+    private logger: LoggerService,
 
   ) {
 
@@ -31,9 +33,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (isDevMode()) {
-      console.log('Development!');
+      this.logger.log('info', 'Development!')
     } else {
-      console.log('Production!');
+      this.logger.log('info', 'Production!')
     }
   }
 

@@ -15,7 +15,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         //historyCleanupOff: true, //commented now, will come back later
         eagerLoadAuthWellKnownEndpoints: false,
         authority: customConfig.authority,
-        redirectUrl: window.location.origin,
+        redirectUrl: customConfig.redirectUrl,
         postLogoutRedirectUri: window.location.origin,
         clientId: customConfig.clientId,
         scope: customConfig.scope,

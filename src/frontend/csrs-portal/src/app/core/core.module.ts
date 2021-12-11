@@ -4,8 +4,6 @@ import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { ConfigService } from '@config/config.service';
 import { ErrorHandlerInterceptor } from './interceptors/error-handler.interceptor';
 import { ErrorHandlerService } from './services/error-handler.service';
-import { AuthService } from './services/auth.service';
-import { AuthGuard } from './guards/auth-guard';
 
 export function initConfig(config: ConfigService) {
   return () => {
