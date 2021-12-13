@@ -2,7 +2,7 @@
 
 namespace Csrs.Api.Repositories
 {
-    public class FileInsertOrUpdateFieldMapper : IInsertFieldMapper<Models.File, SSG_CsrsFile>
+    public class FileInsertOrUpdateFieldMapper : IInsertOrUpdateFieldMapper<Models.File, SSG_CsrsFile>
     {
         public Dictionary<string, object?> GetFieldsForInsert(Models.File model)
         {
@@ -13,6 +13,11 @@ namespace Csrs.Api.Repositories
             //entry.Add(SSG_CsrsFile.Attributes.ssg, model, _ => _.);
 
             return entry;
+        }
+
+        public Dictionary<string, object?> GetFieldsForUpdate(Models.File model, SSG_CsrsFile entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
