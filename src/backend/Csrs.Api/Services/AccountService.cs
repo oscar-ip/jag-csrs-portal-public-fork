@@ -2,26 +2,27 @@ using AutoMapper;
 using Csrs.Api.Models;
 using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 
 namespace Csrs.Api.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IUserService _userService;
+        private readonly IMemoryCache _cache;
         private readonly ICsrsPartyRepository _partyRepository;
         private readonly IMapper _mapper;
         private readonly IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty> _partyInsertOrUpdateFieldMapper;
         private readonly ILogger<AccountService> _logger;
 
         public AccountService(
-            IUserService userService,
+            IMemoryCache cache,
             ICsrsPartyRepository partyRepository,
             IMapper mapper,
             IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty> partyInsertOrUpdateFieldMapper,
             ILogger<AccountService> logger)
         {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _partyRepository = partyRepository ?? throw new ArgumentNullException(nameof(partyRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _partyInsertOrUpdateFieldMapper = partyInsertOrUpdateFieldMapper ?? throw new ArgumentNullException(nameof(partyInsertOrUpdateFieldMapper));
@@ -30,23 +31,32 @@ namespace Csrs.Api.Services
 
         public async Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken)
         {
-            // TODO: add caching
-            IList<LookupValue>? genders = await _partyRepository.GetGendersAsync(cancellationToken);
-            return genders;
+            IList<LookupValue>? values = await GetPickListAsync("GenderPickList", _partyRepository.GetGendersAsync, cancellationToken);
+            return values;
         }
 
         public async Task<IList<LookupValue>> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
         {
-            // TODO: add caching
-            IList<LookupValue>? genders = await _partyRepository.GetPreferredContactMethodsAsync(cancellationToken);
-            return genders;
+            IList<LookupValue>? values = await GetPickListAsync("PreferredContactMethodsPickList", _partyRepository.GetPreferredContactMethodsAsync, cancellationToken);
+            return values;
         }
 
         public async Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken)
         {
-            // TODO: add caching
-            IList<LookupValue> identities = await _partyRepository.GetIdentitiesAsync(cancellationToken);
-            return identities;
+            IList<LookupValue>? values = await GetPickListAsync("IdentitiesPickList", _partyRepository.GetIdentitiesAsync, cancellationToken);
+            return values;
+        }
+
+        public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = await GetPickListAsync("ProvincesPickList", _partyRepository.GetProvincesAsync, cancellationToken);
+            return values;
+        }
+
+        public async Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = await GetPickListAsync("ReferralsPickList", _partyRepository.GetReferralsAsync, cancellationToken);
+            return values;
         }
 
         public async Task<Party?> GetPartyAsync(Guid partyId, CancellationToken cancellationToken)
@@ -84,20 +94,6 @@ namespace Csrs.Api.Services
 
             var party = await MapAsync(csrsParty, cancellationToken);
             return party;
-        }
-
-        public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
-        {
-            // TODO: add caching
-            IList<LookupValue>? provinces = await _partyRepository.GetProvincesAsync(cancellationToken);
-            return provinces;
-        }
-
-        public async Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken)
-        {
-            // TODO: add caching
-            IList<LookupValue>? referrals = await _partyRepository.GetReferralsAsync(cancellationToken);
-            return referrals;
         }
 
         public async Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken)
@@ -210,6 +206,33 @@ namespace Csrs.Api.Services
             return party;
         }
 
+
+        private async Task<IList<LookupValue>> GetPickListAsync(string cacheKey, Func<CancellationToken, Task<IList<LookupValue>>> fetchPickList, CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = _cache.Get<IList<LookupValue>>(cacheKey);
+            if (values is not null)
+            {
+                return values;
+            }
+
+            values = await fetchPickList(cancellationToken);
+
+            if (values is not null)
+            {
+                var random = new Random();
+                var seconds = random.Next(-120, 120);
+                // cache for 1 hour +/- two minutes
+                var absolteExpiration = DateTime.UtcNow.AddSeconds(60 * 60 + seconds);
+
+                _cache.Set(cacheKey, values, absolteExpiration);
+            }
+            else
+            {
+                values = Array.Empty<LookupValue>();
+            }
+
+            return values;
+        }
     }
 
 }
