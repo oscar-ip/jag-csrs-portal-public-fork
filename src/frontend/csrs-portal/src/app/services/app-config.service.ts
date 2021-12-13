@@ -6,22 +6,21 @@ export interface IAppConfig {
   production: boolean;
   environment: string;
   version: string;
-  bceIdLink: string;
+  cscLink: string;
+  bceIdRegisterLink: string;
   };
 export class AppConfig implements IAppConfig {
   production: boolean;
   environment: string;
   version: string;
-  bceIdLink: string;
+  cscLink: string;
+  bceIdRegisterLink: string;
 }
 @Injectable({
   providedIn: 'root',
 })
 export class AppConfigService {
   public appConfig: AppConfig;
-
-  private BCE_ID_DEFAULT =
-    'https://bceid.gov.bc.ca/' as const;
 
   constructor(private http: HttpClient) { }
 
@@ -45,8 +44,11 @@ export class AppConfigService {
     return this.appConfig?.version;
   }
 
-  get bceIdtLink(): string {
-    const link = this.appConfig?.bceIdLink;
-    return link ? link : this.BCE_ID_DEFAULT;
+  get cscLink(): string {
+    return this.appConfig?.cscLink;
+  }
+
+  get bceIdRegisterLink(): string {
+    return this.appConfig?.bceIdRegisterLink;
   }
 }

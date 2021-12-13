@@ -32,13 +32,5 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (isDevMode()) {
-      this.logger.log('info', 'Development!')
-    } else {
-      this.logger.log('info', 'Production!')
-    }
   }
-
-
-
 }

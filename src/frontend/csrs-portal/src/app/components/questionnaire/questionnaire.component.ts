@@ -1,26 +1,27 @@
 import { style } from '@angular/animations';
-//import { AfterViewInit, Component } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
+import { AppConfigService } from 'app/services/app-config.service';
 
 @Component({
   selector: 'app-questionnaire',
   templateUrl: './questionnaire.component.html',
   styleUrls: ['./questionnaire.component.scss'],
 })
-//export class QuestionnaireComponent implements AfterViewInit {
-  export class QuestionnaireComponent implements OnInit {
+
+export class QuestionnaireComponent implements OnInit {
   public isLoggedIn = false;
-  public bceIdLink: string;
   public bceIdRegisterLink: string;
   public _logger: LoggerService;
   public _oidc: OidcSecurityService;
   public _router: Router;
 
   public welcomeUser: string;
+  public _config: AppConfigService;
+
 
   data: any = [
     {
@@ -493,11 +494,10 @@ import { Inject } from '@angular/core';
   constructor(@Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
-              @Inject(OidcSecurityService) private oidcSecurityService) {
+              @Inject(OidcSecurityService) private oidcSecurityService,
+              @Inject(AppConfigService) private appConfigService) {
 
-          this.bceIdLink = 'https://www.bceid.ca/';
-          this.bceIdRegisterLink = 'https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
-
+          this._config = appConfigService;
           this._logger = logger;
           this._logger.log('info', 'Questionnaire: constructor');
 
@@ -513,8 +513,6 @@ import { Inject } from '@angular/core';
             this._logger.log('info', 'Questionnaire: not authenticated');
           }
   }
-
-  //public ngAfterViewInit(): void {}
 
   stringToHTML(i, yi, ci, str, idLabel) {
     const parser = new DOMParser();
@@ -545,9 +543,9 @@ import { Inject } from '@angular/core';
     });
   }
 
-
   public async ngOnInit() {
 
+    this.bceIdRegisterLink = this._config.bceIdRegisterLink;
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 
       this._logger.log('info',`Questionnaire: isAuthenticated = ${isAuthenticated}`);

@@ -11,8 +11,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
       return {
         triggerAuthorizationResultEvent: true,
         postLoginRoute: window.location.origin + customConfig.postLoginRoute,
-        logLevel: environment.production ? LogLevel.None : LogLevel.Debug, // or can use isDevMode() ?
-        //historyCleanupOff: true, //commented now, will come back later
+        logLevel: environment.production ? LogLevel.None : LogLevel.Debug,
         eagerLoadAuthWellKnownEndpoints: false,
         authority: customConfig.authority,
         redirectUrl: customConfig.redirectUrl,
