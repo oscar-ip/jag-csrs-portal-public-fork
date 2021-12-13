@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -30,8 +31,19 @@ builder.Services.AddSwaggerGen(c =>
     {
         Version = "v1",
         Title = "CSRS API",
-        Description = "BC Child Support Recalculation Service API",        
+        Description = "BC Child Support Recalculation Service API",
     });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement { { 
+            new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } }, new string[] { } } });
 
     c.EnableAnnotations();
 

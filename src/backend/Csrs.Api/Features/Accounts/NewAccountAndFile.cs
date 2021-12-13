@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using Csrs.Api.Models;
+﻿using Csrs.Api.Models;
+using Csrs.Api.Repositories;
 using Csrs.Api.Services;
 using MediatR;
-using System.Security.Claims;
 using File = Csrs.Api.Models.File;
 
 namespace Csrs.Api.Features.Accounts
@@ -11,17 +10,11 @@ namespace Csrs.Api.Features.Accounts
     {
         public class Request : IRequest<Response>
         {
-            public Request(ClaimsPrincipal user, Party applicant, File file)
+            public Request(Party applicant, File file)
             {
-                User = user ?? throw new ArgumentNullException(nameof(user));
                 Applicant = applicant ?? throw new ArgumentNullException(nameof(applicant));
                 File = file ?? throw new ArgumentNullException(nameof(file));
             }
-
-            /// <summary>
-            /// The user creating the new account and file
-            /// </summary>
-            public ClaimsPrincipal User { get; init; }
 
             public Party Applicant { get; init; }
             public File File { get; init; }
@@ -31,11 +24,6 @@ namespace Csrs.Api.Features.Accounts
         {
             public Response(Guid id)
             {
-                //if (id == Guid.Empty)
-                //{
-                //    throw new ArgumentException("id cannot be empty", nameof(id));
-                //}
-
                 Id = id;
             }
 
@@ -44,12 +32,19 @@ namespace Csrs.Api.Features.Accounts
 
         public class Handler : IRequestHandler<Request, Response>
         {
+            private readonly IUserService _userService;
             private readonly IAccountService _accountService;
             private readonly IFileService _fileService;
+
             private readonly ILogger<Handler> _logger;
 
-            public Handler(IAccountService accountService, IFileService fileService, ILogger<Handler> logger)
+            public Handler(
+                IUserService userService, 
+                IAccountService accountService,
+                IFileService fileService, 
+                ILogger<Handler> logger)
             {
+                _userService = userService ?? throw new ArgumentNullException(nameof(userService));
                 _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
                 _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -59,17 +54,17 @@ namespace Csrs.Api.Features.Accounts
             {
                 _logger.LogDebug("Checking current user for BCeID Guid");
 
-                Guid? userId = request.User.GetBCeIDUserId();
-                if (userId is null)
+                Guid userId = _userService.GetBCeIDUserId();
+                if (userId == Guid.Empty)
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot create account");
                     return new Response(Guid.Empty);
                 }
 
-                var bceidScope = _logger.BeginScope(new Dictionary<string, object> { { "BCeIDGuid", userId.Value } });
+                var bceidScope = _logger.AddBCeIdGuid(userId);
 
                 // find to see if the person has an account already?
-                Party? party = await _accountService.GetPartyByBCeIdAsync(userId.Value, cancellationToken);
+                Party? party = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);
 
                 if (party is not null)
                 {
@@ -88,11 +83,29 @@ namespace Csrs.Api.Features.Accounts
                     // will case party to be created
                     _logger.LogDebug("Party does not exist, create new party");
                     party = new Party();
-                    party.BCeIDGuid = userId.Value;
+                    party.BCeIDGuid = userId;
                 }
 
+                // create the party
+                _logger.LogInformation("Creating party");
+
                 party = await _accountService.CreateOrUpdateAsync(party, cancellationToken);
-                await _fileService.CreateFile(party, request.File, cancellationToken);
+
+                // create the other party
+                Party? otherParty = null;
+                if (request.File.OtherParty != null)
+                {
+                    _logger.LogInformation("Creating other party");
+
+                    otherParty = await _accountService.CreateOrUpdateAsync(request.File.OtherParty, cancellationToken);
+                }
+                else
+                {
+                    _logger.LogInformation("No other party provided");
+                }
+
+                // create the file
+                var file = await _fileService.CreateFile(party, otherParty, request.File, cancellationToken);
 
                 _logger.LogDebug("Party and file created successfully");
                 return new Response(party.PartyId);

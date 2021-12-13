@@ -5,7 +5,7 @@ namespace Csrs.Api.Repositories
 {
     public class CourtLevelRepository : Repository<SSG_CsrsBCCourtLevel>, ICourtLevelRepository
     {
-        public CourtLevelRepository(IODataClient client) : base(client)
+        public CourtLevelRepository(IODataClient client, ILogger<CourtLevelRepository> logger) : base(client, logger)
         {
         }
     }

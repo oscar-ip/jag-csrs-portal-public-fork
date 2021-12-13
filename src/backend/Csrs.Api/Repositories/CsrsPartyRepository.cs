@@ -10,7 +10,7 @@ namespace Csrs.Api.Repositories
     {
         private readonly IOptionSetRepository _optionSetService;
 
-        public CsrsPartyRepository(IODataClient client, IOptionSetRepository optionSetService) : base(client)
+        public CsrsPartyRepository(IODataClient client, IOptionSetRepository optionSetService, ILogger<CsrsPartyRepository> logger) : base(client, logger)
         {
             _optionSetService = optionSetService ?? throw new ArgumentNullException(nameof(optionSetService));
         }
@@ -21,8 +21,14 @@ namespace Csrs.Api.Repositories
 
             string guidValue = bceidGuid.ToString("d"); // format with dashes : xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
+            using var scope = Logger.BeginScope(new Dictionary<string, object> {
+                { SSG_CsrsParty.Attributes.ssg_bceid_guid, guidValue },
+                { SSG_CsrsParty.Attributes.statuscode, Active } });
+
+            Logger.LogDebug("Looking for party by bceid Guid");
+
             IEnumerable<SSG_CsrsParty> entries = await client
-                .Filter(_ => _.BCeIDGuid == guidValue && _.StatusCode == Active)
+                .Filter(_ => _.BCeIdGuid == guidValue && _.StatusCode == Active)
                 .Select(properties)
                 .FindEntriesAsync(cancellationToken);
 
@@ -31,24 +37,40 @@ namespace Csrs.Api.Repositories
 
         public async Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken)
         {
-            var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_gender, cancellationToken);
+            Logger.LogDebug("Getting gender lookup values");
+
+            var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_partygender, cancellationToken);
             return values;
         }
 
         public async Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken)
         {
+            Logger.LogDebug("Getting identity lookup values");
+
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_identity, cancellationToken);
+            return values;
+        }
+
+        public async Task<IList<LookupValue>> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
+        {
+            Logger.LogDebug("Getting preferred contact method lookup values");
+
+            var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_preferredcontactmethod, cancellationToken);
             return values;
         }
 
         public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
         {
+            Logger.LogDebug("Getting province lookup values");
+
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_provinceterritory, cancellationToken);
             return values;
         }
 
         public async Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken)
         {
+            Logger.LogDebug("Getting referral lookup values");
+
             var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_referral, cancellationToken);
             return values;
         }

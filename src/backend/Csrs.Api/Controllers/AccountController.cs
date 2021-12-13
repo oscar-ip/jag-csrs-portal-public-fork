@@ -1,4 +1,4 @@
-﻿using Csrs.Api.Features.Accounts;
+using Csrs.Api.Features.Accounts;
 using Csrs.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -78,9 +78,23 @@ namespace Csrs.Api.Controllers
         }
 
         /// <summary>
+        /// Gets the preferred contact methods values for an account.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("PreferredContactMethods")]
+        [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
+        {
+            Lookups.Response? response = await _mediator.Send(Lookups.Request.PreferredContactMethods, cancellationToken);
+            return Ok(response.Items);
+        }
+
+        /// <summary>
         /// Gets the current user's file summary.
         /// </summary>
-        /// <param name="bceidGuid">TEMPORARY field until login is implemented</param>
         /// <response code="200">The user and their files were found.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="404">The user was not found</response>
@@ -116,7 +130,7 @@ namespace Csrs.Api.Controllers
                 return BadRequest();
             }
 
-            NewAccountAndFile.Request request = new(User, newFileRequest.User, newFileRequest.File);
+            NewAccountAndFile.Request request = new(newFileRequest.User, newFileRequest.File);
             NewAccountAndFile.Response? response = await _mediator.Send(request, cancellationToken);
             return Ok(response.Id);
         }

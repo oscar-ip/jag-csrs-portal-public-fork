@@ -13,7 +13,8 @@ namespace Csrs.Api.Features.Accounts
             Gender,
             Province,
             Identity,
-            Referral
+            Referral,
+            PreferredContactMethods
         }
 
         public class Request : IRequest<Response>
@@ -22,6 +23,7 @@ namespace Csrs.Api.Features.Accounts
             public static readonly Request Province = new(LookupType.Province);
             public static readonly Request Identity = new(LookupType.Identity);
             public static readonly Request Referral = new(LookupType.Referral);
+            public static readonly Request PreferredContactMethods = new(LookupType.PreferredContactMethods);
 
             public LookupType Type { get; init; }
 
@@ -69,6 +71,9 @@ namespace Csrs.Api.Features.Accounts
                         break;
                     case LookupType.Identity:
                         items = await _service.GetIdentitiesAsync(cancellationToken);
+                        break;
+                    case LookupType.PreferredContactMethods:
+                        items = await _service.GetPreferredContactMethodsAsync(cancellationToken);
                         break;
                     default:
                         _logger.LogInformation("Unexpected lookup type {LookupType}", request.Type);

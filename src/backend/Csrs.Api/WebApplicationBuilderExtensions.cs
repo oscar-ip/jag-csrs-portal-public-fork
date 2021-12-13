@@ -1,6 +1,8 @@
 using Csrs.Api;
 using Csrs.Api.Authentication;
 using Csrs.Api.Configuration;
+using Csrs.Api.Models;
+using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Repositories;
 using Csrs.Api.Services;
 using Simple.OData.Client;
@@ -61,18 +63,28 @@ public static class WebApplicationBuilderExtensions
             return new ODataClient(settings);
         });
 
+        services.AddHttpContextAccessor();
+
         // Add services
         services.AddTransient<ITokenService, TokenService>();
 
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
+        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IChildService, ChildService>();
 
         // Add repositories
         services.AddTransient<ICourtLevelRepository, CourtLevelRepository>();
         services.AddTransient<ICourtLocationRepository, CourtLocationRepository>();
+
+        services.AddTransient<ICsrsChildRepository, CsrsChildRepository>();
         services.AddTransient<ICsrsFeedbackRepository, CsrsFeedbackRepository>();
         services.AddTransient<ICsrsFileRepository, CsrsFileRepository>();
         services.AddTransient<ICsrsPartyRepository, CsrsPartyRepository>();
-        services.AddTransient<ICsrsPortalMessageRepository, CsrsPortalMessageRepository>();
+
+        // mappers
+        services.AddTransient<IInsertOrUpdateFieldMapper<Csrs.Api.Models.File, SSG_CsrsFile>, FileInsertOrUpdateFieldMapper>();
+        services.AddTransient<IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty>, PartyInsertOrUpdateFieldMapper>();
+
     }
 }

@@ -12,6 +12,8 @@ namespace Csrs.Api.Services
 
         Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken);
 
+        Task<IList<LookupValue>> GetPreferredContactMethodsAsync(CancellationToken cancellationToken);
+
         Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken);
 
         Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);

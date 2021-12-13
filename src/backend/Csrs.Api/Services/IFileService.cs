@@ -7,6 +7,19 @@ namespace Csrs.Api.Services
     {
         Task<IList<FileSummary>> GetPartyFileSummariesAsync(Guid partyId, CancellationToken cancellationToken);
 
-        Task<File> CreateFile(Party party, File file, CancellationToken cancellationToken);
+        Task<File> CreateFile(Party party, Party? otherOarty, File file, CancellationToken cancellationToken);
+    }
+
+    public interface IChildService
+    {
+        Task CreateChild();
+    }
+
+    public class ChildService : IChildService
+    {
+        public Task CreateChild()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

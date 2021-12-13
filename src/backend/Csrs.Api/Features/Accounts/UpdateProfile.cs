@@ -3,6 +3,7 @@ using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Models;
 using Csrs.Api.Repositories;
 using MediatR;
+using Csrs.Api.Services;
 
 namespace Csrs.Api.Features.Accounts
 {
@@ -30,23 +31,20 @@ namespace Csrs.Api.Features.Accounts
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly ICsrsPartyRepository _repository;
+            private readonly IAccountService _accountService;
             private readonly IMapper _mapper;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(ICsrsPartyRepository repository, IMapper mapper, ILogger<Handler> logger)
+            public Handler(IAccountService accountService, IMapper mapper, ILogger<Handler> logger)
             {
-                _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+                _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
                 _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             }
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                SSG_CsrsParty party = _mapper.Map<SSG_CsrsParty>(request.Account);
-                party = await _repository.UpdateAsync(party, cancellationToken);
-
-                Party account = _mapper.Map<Party>(party);
+                var account = await _accountService.CreateOrUpdateAsync(request.Account, cancellationToken);
                 return new Response(account);
             }
         }

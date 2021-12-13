@@ -162,16 +162,10 @@ namespace Csrs.Api.Models.Dynamics
         public const string EntityLogicalName = "ssg_csrschild";
 
         /// <summary>
-        /// Logical name ssg_childatageofmajority.
-        /// </summary>
-        [JsonPropertyName("ssg_childatageofmajority")]
-        public bool? ChildatAgeofMajority { get; set; }
-
-        /// <summary>
         /// Indicate whether the child is still a dependent. Logical name ssg_childisadependent.
         /// </summary>
         [JsonPropertyName("ssg_childisadependent")]
-        public string? ChildIsADependent { get; set; }
+        public string? ChildIsDependent { get; set; }
 
         /// <summary>
         /// Unique identifier for entity instances. Logical name ssg_csrschildid.
@@ -197,7 +191,7 @@ namespace Csrs.Api.Models.Dynamics
         /// Logical name ssg_filenumber.
         /// </summary>
         [JsonPropertyName("ssg_filenumber")]
-        public SSG_CsrsFile? FileNumber { get; set; }
+        public SSG_CsrsFile? FileId { get; set; }
 
         /// <summary>
         /// Logical name ssg_firstname.
@@ -220,7 +214,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsChild, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.ChildatAgeofMajority, _.ChildIsADependent, _.ChildId, _.DateOfBirthString, _.FileNumber, _.FirstName, _.LastName, _.MiddleName, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsChild, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.ChildIsDependent, _.ChildId, _.DateOfBirthString, _.FileId, _.FirstName, _.LastName, _.MiddleName, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -310,6 +304,157 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsparty_ssg_csrschild_Mother = "ssg_csrsparty_ssg_csrschild_Mother";
             public const string team_ssg_csrschild = "team_ssg_csrschild";
             public const string user_ssg_csrschild = "user_ssg_csrschild";
+        }
+    }
+
+    /// <summary>
+    /// Logical name ssg_csrscommunicationmessage.
+    /// </summary>
+    public partial class SSG_CsrsCommunicationMessage : Entity
+    {
+        public const string EntityLogicalName = "ssg_csrscommunicationmessage";
+
+        /// <summary>
+        /// Unique identifier for entity instances. Logical name ssg_csrscommunicationmessageid.
+        /// </summary>
+        /// <returns>
+        /// The primary id value or <see cref="System.Guid.Empty"/> if not set.
+        /// </returns>
+        [JsonPropertyName("ssg_csrscommunicationmessageid")]
+        public System.Guid? csrscommunicationmessageId 
+        {
+            get { return _id; }
+            set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
+        }
+
+
+        /// <summary>
+        /// Logical name ssg_csrsfile.
+        /// </summary>
+        [JsonPropertyName("ssg_csrsfile")]
+        public SSG_CsrsFile? File { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_csrsmessage.
+        /// </summary>
+        [JsonPropertyName("ssg_csrsmessage")]
+        public string? csrsMessage { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_csrsmessageattachment.
+        /// </summary>
+        [JsonPropertyName("ssg_csrsmessageattachment")]
+        public bool? HasAttachment { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_csrsmessagefolder.
+        /// </summary>
+        [JsonPropertyName("ssg_csrsmessagefolder")]
+        public string? csrsMessageFolder { get; set; }
+
+        /// <summary>
+        /// Logical name ssg_csrsmessageread.
+        /// </summary>
+        [JsonPropertyName("ssg_csrsmessageread")]
+        public bool? Read { get; set; }
+
+        /// <summary>
+        /// Subject Line. Logical name ssg_csrsmessagesubject.
+        /// </summary>
+        [JsonPropertyName("ssg_csrsmessagesubject")]
+        public string? Subject { get; set; }
+
+        /// <summary>
+        /// https://justice.gov.bc.ca/jira/browse/CSRS-56. Logical name ssg_csrssubjecttype.
+        /// </summary>
+        [JsonPropertyName("ssg_csrssubjecttype")]
+        public string? csrsSubjectType { get; set; }
+
+        /// <summary>
+        /// Contains all the attributes/columns on this class.
+        /// </summary>
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsCommunicationMessage, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.csrscommunicationmessageId, _.File, _.csrsMessage, _.HasAttachment, _.csrsMessageFolder, _.Read, _.Subject, _.csrsSubjectType, _.StateCode, _.StatusCode };
+
+        /// <summary>
+        /// Contains all the normal attributes on this entity.
+        /// </summary>
+        public static class Attributes
+        {
+            public const string createdby = "createdby";
+            public const string createdbyname = "createdbyname";
+            public const string createdbyyominame = "createdbyyominame";
+            public const string createdon = "createdon";
+            public const string createdonbehalfby = "createdonbehalfby";
+            public const string createdonbehalfbyname = "createdonbehalfbyname";
+            public const string createdonbehalfbyyominame = "createdonbehalfbyyominame";
+            public const string importsequencenumber = "importsequencenumber";
+            public const string modifiedby = "modifiedby";
+            public const string modifiedbyname = "modifiedbyname";
+            public const string modifiedbyyominame = "modifiedbyyominame";
+            public const string modifiedon = "modifiedon";
+            public const string modifiedonbehalfby = "modifiedonbehalfby";
+            public const string modifiedonbehalfbyname = "modifiedonbehalfbyname";
+            public const string modifiedonbehalfbyyominame = "modifiedonbehalfbyyominame";
+            public const string overriddencreatedon = "overriddencreatedon";
+            public const string ownerid = "ownerid";
+            public const string owneridname = "owneridname";
+            public const string owneridtype = "owneridtype";
+            public const string owneridyominame = "owneridyominame";
+            public const string owningbusinessunit = "owningbusinessunit";
+            public const string owningteam = "owningteam";
+            public const string owninguser = "owninguser";
+            public const string ssg_csrscommunicationmessageid = "ssg_csrscommunicationmessageid";
+            public const string ssg_csrsfile = "ssg_csrsfile";
+            public const string ssg_csrsfilename = "ssg_csrsfilename";
+            public const string ssg_csrsmessage = "ssg_csrsmessage";
+            public const string ssg_csrsmessageattachment = "ssg_csrsmessageattachment";
+            public const string ssg_csrsmessageattachmentname = "ssg_csrsmessageattachmentname";
+            public const string ssg_csrsmessagefolder = "ssg_csrsmessagefolder";
+            public const string ssg_csrsmessagefoldername = "ssg_csrsmessagefoldername";
+            public const string ssg_csrsmessageread = "ssg_csrsmessageread";
+            public const string ssg_csrsmessagereadname = "ssg_csrsmessagereadname";
+            public const string ssg_csrsmessagesubject = "ssg_csrsmessagesubject";
+            public const string ssg_csrssubjecttype = "ssg_csrssubjecttype";
+            public const string ssg_csrssubjecttypename = "ssg_csrssubjecttypename";
+            public const string statecode = "statecode";
+            public const string statecodename = "statecodename";
+            public const string statuscode = "statuscode";
+            public const string statuscodename = "statuscodename";
+            public const string timezoneruleversionnumber = "timezoneruleversionnumber";
+            public const string utcconversiontimezonecode = "utcconversiontimezonecode";
+            public const string versionnumber = "versionnumber";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a one to many relationship.
+        /// These attributes will be a collection on this entity.
+        /// </summary>
+        public static class OneToManyRelationships
+        {
+            public const string ssg_csrscommunicationmessage_AsyncOperations = "ssg_csrscommunicationmessage_AsyncOperations";
+            public const string ssg_csrscommunicationmessage_BulkDeleteFailures = "ssg_csrscommunicationmessage_BulkDeleteFailures";
+            public const string ssg_csrscommunicationmessage_DuplicateBaseRecord = "ssg_csrscommunicationmessage_DuplicateBaseRecord";
+            public const string ssg_csrscommunicationmessage_DuplicateMatchingRecord = "ssg_csrscommunicationmessage_DuplicateMatchingRecord";
+            public const string ssg_csrscommunicationmessage_MailboxTrackingFolders = "ssg_csrscommunicationmessage_MailboxTrackingFolders";
+            public const string ssg_csrscommunicationmessage_PrincipalObjectAttributeAccesses = "ssg_csrscommunicationmessage_PrincipalObjectAttributeAccesses";
+            public const string ssg_csrscommunicationmessage_ProcessSession = "ssg_csrscommunicationmessage_ProcessSession";
+            public const string ssg_csrscommunicationmessage_SyncErrors = "ssg_csrscommunicationmessage_SyncErrors";
+            public const string ssg_csrscommunicationmessage_UserEntityInstanceDatas = "ssg_csrscommunicationmessage_UserEntityInstanceDatas";
+        }
+        /// <summary>
+        /// Contains all the attributes that represent a many to one relationship.
+        /// These attributes will be a single instance on this entity.
+        /// </summary>
+        public static class ManyToOneRelationships
+        {
+            public const string business_unit_ssg_csrscommunicationmessage = "business_unit_ssg_csrscommunicationmessage";
+            public const string lk_ssg_csrscommunicationmessage_createdby = "lk_ssg_csrscommunicationmessage_createdby";
+            public const string lk_ssg_csrscommunicationmessage_createdonbehalfby = "lk_ssg_csrscommunicationmessage_createdonbehalfby";
+            public const string lk_ssg_csrscommunicationmessage_modifiedby = "lk_ssg_csrscommunicationmessage_modifiedby";
+            public const string lk_ssg_csrscommunicationmessage_modifiedonbehalfby = "lk_ssg_csrscommunicationmessage_modifiedonbehalfby";
+            public const string owner_ssg_csrscommunicationmessage = "owner_ssg_csrscommunicationmessage";
+            public const string ssg_ssg_csrsfile_ssg_csrscommunicationmessage_File = "ssg_ssg_csrsfile_ssg_csrscommunicationmessage_File";
+            public const string team_ssg_csrscommunicationmessage = "team_ssg_csrscommunicationmessage";
+            public const string user_ssg_csrscommunicationmessage = "user_ssg_csrscommunicationmessage";
         }
     }
 
@@ -681,7 +826,7 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsfile_SyncErrors = "ssg_csrsfile_SyncErrors";
             public const string ssg_csrsfile_Tasks = "ssg_csrsfile_Tasks";
             public const string ssg_csrsfile_UserEntityInstanceDatas = "ssg_csrsfile_UserEntityInstanceDatas";
-            public const string ssg_ssg_csrsfile_ssg_csrsportalmessage_csrsFile = "ssg_ssg_csrsfile_ssg_csrsportalmessage_csrsFile";
+            public const string ssg_ssg_csrsfile_ssg_csrscommunicationmessage_File = "ssg_ssg_csrsfile_ssg_csrscommunicationmessage_File";
         }
         /// <summary>
         /// Contains all the attributes that represent a many to one relationship.
@@ -724,13 +869,19 @@ namespace Csrs.Api.Models.Dynamics
         /// Logical name ssg_bceid_displayname.
         /// </summary>
         [JsonPropertyName("ssg_bceid_displayname")]
-        public string? BCeIDDisplayName { get; set; }
+        public string? BCeIdDisplayName { get; set; }
 
         /// <summary>
         /// Logical name ssg_bceid_guid.
         /// </summary>
         [JsonPropertyName("ssg_bceid_guid")]
-        public string? BCeIDGuid { get; set; }
+        public string? BCeIdGuid { get; set; }
+
+        /// <summary>
+        /// Timestamp for the last update of BCeID GUID. Logical name ssg_bceid_last_update.
+        /// </summary>
+        [JsonPropertyName("ssg_bceid_last_update")]
+        public string? BCeIdLastUpdateString { get; set; }
 
         /// <summary>
         /// Logical name ssg_cellphone.
@@ -743,12 +894,6 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         [JsonPropertyName("ssg_city")]
         public string? City { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_csrsoptoutedocuments.
-        /// </summary>
-        [JsonPropertyName("ssg_csrsoptoutedocuments")]
-        public bool? OptOutElectronicDocuments { get; set; }
 
         /// <summary>
         /// Unique identifier for entity instances. Logical name ssg_csrspartyid.
@@ -831,12 +976,6 @@ namespace Csrs.Api.Models.Dynamics
         public string? Gender { get; set; }
 
         /// <summary>
-        /// Enter the preferred name for the Party. Logical name ssg_preferredname.
-        /// </summary>
-        [JsonPropertyName("ssg_preferredname")]
-        public string? PreferredName { get; set; }
-
-        /// <summary>
         /// Logical name ssg_provinceterritory.
         /// </summary>
         [JsonPropertyName("ssg_provinceterritory")]
@@ -869,7 +1008,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsParty, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.PostalCode, _.BCeIDDisplayName, _.BCeIDGuid, _.CellPhone, _.City, _.OptOutElectronicDocuments, _.PartyId, _.DateOfBirthString, _.DuplicatedParty, _.Email, _.FirstName, _.HomePhone, _.Identity, _.LastName, _.LatestDuplicateParty, _.MiddleName, _.PartyAlreadyExists, _.Gender, _.PreferredName, _.Province, _.Referral, _.AddressStreet1, _.AddressStreet2, _.WorkPhone, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsParty, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.PostalCode, _.BCeIdDisplayName, _.BCeIdGuid, _.BCeIdLastUpdateString, _.CellPhone, _.City, _.PartyId, _.DateOfBirthString, _.DuplicatedParty, _.Email, _.FirstName, _.HomePhone, _.Identity, _.LastName, _.LatestDuplicateParty, _.MiddleName, _.PartyAlreadyExists, _.Gender, _.Province, _.Referral, _.AddressStreet1, _.AddressStreet2, _.WorkPhone, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -906,8 +1045,6 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_bceid_userid = "ssg_bceid_userid";
             public const string ssg_cellphone = "ssg_cellphone";
             public const string ssg_city = "ssg_city";
-            public const string ssg_csrsoptoutedocuments = "ssg_csrsoptoutedocuments";
-            public const string ssg_csrsoptoutedocumentsname = "ssg_csrsoptoutedocumentsname";
             public const string ssg_csrspartyid = "ssg_csrspartyid";
             public const string ssg_dateofbirth = "ssg_dateofbirth";
             public const string ssg_duplicatedparty = "ssg_duplicatedparty";
@@ -998,148 +1135,6 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsparty_ssg_csrsparty_MasterPartyRecord = "ssg_csrsparty_ssg_csrsparty_MasterPartyRecord";
             public const string team_ssg_csrsparty = "team_ssg_csrsparty";
             public const string user_ssg_csrsparty = "user_ssg_csrsparty";
-        }
-    }
-
-    /// <summary>
-    /// Logical name ssg_csrsportalmessage.
-    /// </summary>
-    public partial class SSG_CsrsPortalMessage : Entity
-    {
-        public const string EntityLogicalName = "ssg_csrsportalmessage";
-
-        /// <summary>
-        /// Logical name ssg_csrsfile.
-        /// </summary>
-        [JsonPropertyName("ssg_csrsfile")]
-        public SSG_CsrsFile? File { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_csrsmessageattachment.
-        /// </summary>
-        [JsonPropertyName("ssg_csrsmessageattachment")]
-        public bool? HasAttachment { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_csrsmessagedate.
-        /// </summary>
-        [JsonPropertyName("ssg_csrsmessagedate")]
-        public string? DateString { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_csrsmessageread.
-        /// </summary>
-        [JsonPropertyName("ssg_csrsmessageread")]
-        public bool? Read { get; set; }
-
-        /// <summary>
-        /// Logical name ssg_csrsmessagesubject.
-        /// </summary>
-        [JsonPropertyName("ssg_csrsmessagesubject")]
-        public string? Subject { get; set; }
-
-        /// <summary>
-        /// Unique identifier for entity instances. Logical name ssg_csrsportalmessageid.
-        /// </summary>
-        /// <returns>
-        /// The primary id value or <see cref="System.Guid.Empty"/> if not set.
-        /// </returns>
-        [JsonPropertyName("ssg_csrsportalmessageid")]
-        public System.Guid? MessageId 
-        {
-            get { return _id; }
-            set { _id = value.HasValue ? value.Value : System.Guid.Empty; }
-        }
-
-
-        /// <summary>
-        /// The name of the custom entity. Logical name ssg_name.
-        /// </summary>
-        [JsonPropertyName("ssg_name")]
-        public string? Name { get; set; }
-
-        /// <summary>
-        /// Contains all the attributes/columns on this class.
-        /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsPortalMessage, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.File, _.HasAttachment, _.DateString, _.Read, _.Subject, _.MessageId, _.Name, _.StateCode, _.StatusCode };
-
-        /// <summary>
-        /// Contains all the normal attributes on this entity.
-        /// </summary>
-        public static class Attributes
-        {
-            public const string createdby = "createdby";
-            public const string createdbyname = "createdbyname";
-            public const string createdbyyominame = "createdbyyominame";
-            public const string createdon = "createdon";
-            public const string createdonbehalfby = "createdonbehalfby";
-            public const string createdonbehalfbyname = "createdonbehalfbyname";
-            public const string createdonbehalfbyyominame = "createdonbehalfbyyominame";
-            public const string importsequencenumber = "importsequencenumber";
-            public const string modifiedby = "modifiedby";
-            public const string modifiedbyname = "modifiedbyname";
-            public const string modifiedbyyominame = "modifiedbyyominame";
-            public const string modifiedon = "modifiedon";
-            public const string modifiedonbehalfby = "modifiedonbehalfby";
-            public const string modifiedonbehalfbyname = "modifiedonbehalfbyname";
-            public const string modifiedonbehalfbyyominame = "modifiedonbehalfbyyominame";
-            public const string overriddencreatedon = "overriddencreatedon";
-            public const string ownerid = "ownerid";
-            public const string owneridname = "owneridname";
-            public const string owneridtype = "owneridtype";
-            public const string owneridyominame = "owneridyominame";
-            public const string owningbusinessunit = "owningbusinessunit";
-            public const string owningteam = "owningteam";
-            public const string owninguser = "owninguser";
-            public const string ssg_csrsfile = "ssg_csrsfile";
-            public const string ssg_csrsfilename = "ssg_csrsfilename";
-            public const string ssg_csrsmessageattachment = "ssg_csrsmessageattachment";
-            public const string ssg_csrsmessageattachmentname = "ssg_csrsmessageattachmentname";
-            public const string ssg_csrsmessagedate = "ssg_csrsmessagedate";
-            public const string ssg_csrsmessageread = "ssg_csrsmessageread";
-            public const string ssg_csrsmessagereadname = "ssg_csrsmessagereadname";
-            public const string ssg_csrsmessagesubject = "ssg_csrsmessagesubject";
-            public const string ssg_csrsportalmessageid = "ssg_csrsportalmessageid";
-            public const string ssg_name = "ssg_name";
-            public const string statecode = "statecode";
-            public const string statecodename = "statecodename";
-            public const string statuscode = "statuscode";
-            public const string statuscodename = "statuscodename";
-            public const string timezoneruleversionnumber = "timezoneruleversionnumber";
-            public const string utcconversiontimezonecode = "utcconversiontimezonecode";
-            public const string versionnumber = "versionnumber";
-        }
-        /// <summary>
-        /// Contains all the attributes that represent a one to many relationship.
-        /// These attributes will be a collection on this entity.
-        /// </summary>
-        public static class OneToManyRelationships
-        {
-            public const string ssg_csrsportalmessage_AsyncOperations = "ssg_csrsportalmessage_AsyncOperations";
-            public const string ssg_csrsportalmessage_BulkDeleteFailures = "ssg_csrsportalmessage_BulkDeleteFailures";
-            public const string ssg_csrsportalmessage_DuplicateBaseRecord = "ssg_csrsportalmessage_DuplicateBaseRecord";
-            public const string ssg_csrsportalmessage_DuplicateMatchingRecord = "ssg_csrsportalmessage_DuplicateMatchingRecord";
-            public const string ssg_csrsportalmessage_MailboxTrackingFolders = "ssg_csrsportalmessage_MailboxTrackingFolders";
-            public const string ssg_csrsportalmessage_PrincipalObjectAttributeAccesses = "ssg_csrsportalmessage_PrincipalObjectAttributeAccesses";
-            public const string ssg_csrsportalmessage_ProcessSession = "ssg_csrsportalmessage_ProcessSession";
-            public const string ssg_csrsportalmessage_SyncErrors = "ssg_csrsportalmessage_SyncErrors";
-            public const string ssg_csrsportalmessage_UserEntityInstanceDatas = "ssg_csrsportalmessage_UserEntityInstanceDatas";
-        }
-        /// <summary>
-        /// Contains all the attributes that represent a many to one relationship.
-        /// These attributes will be a single instance on this entity.
-        /// </summary>
-        public static class ManyToOneRelationships
-        {
-            public const string business_unit_ssg_csrsportalmessage = "business_unit_ssg_csrsportalmessage";
-            public const string lk_ssg_csrsportalmessage_createdby = "lk_ssg_csrsportalmessage_createdby";
-            public const string lk_ssg_csrsportalmessage_createdonbehalfby = "lk_ssg_csrsportalmessage_createdonbehalfby";
-            public const string lk_ssg_csrsportalmessage_modifiedby = "lk_ssg_csrsportalmessage_modifiedby";
-            public const string lk_ssg_csrsportalmessage_modifiedonbehalfby = "lk_ssg_csrsportalmessage_modifiedonbehalfby";
-            public const string owner_ssg_csrsportalmessage = "owner_ssg_csrsportalmessage";
-            public const string ssg_ssg_csrsfile_ssg_csrsportalmessage_csrsFile = "ssg_ssg_csrsfile_ssg_csrsportalmessage_csrsFile";
-            public const string team_ssg_csrsportalmessage = "team_ssg_csrsportalmessage";
-            public const string user_ssg_csrsportalmessage = "user_ssg_csrsportalmessage";
         }
     }
 

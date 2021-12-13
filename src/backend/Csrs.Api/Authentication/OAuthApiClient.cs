@@ -78,7 +78,7 @@ namespace Csrs.Api.Authentication
             //  - 404 : empty
 
             // ensure the http status code is logged on any of the messages below
-            using var statusCodeScope = _logger.BeginScope(new Dictionary<string, object> { { "StatusCode", response.StatusCode } });
+            using var statusCodeScope = _logger.Add(response.StatusCode);
 
             if (response.StatusCode is HttpStatusCode.BadRequest)
             {

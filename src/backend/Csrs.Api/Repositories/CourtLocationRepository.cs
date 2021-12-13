@@ -5,7 +5,7 @@ namespace Csrs.Api.Repositories
 {
     public class CourtLocationRepository : Repository<SSG_IJSSBCCourtlocation>, ICourtLocationRepository
     {
-        public CourtLocationRepository(IODataClient client) : base(client)
+        public CourtLocationRepository(IODataClient client, ILogger<CourtLocationRepository> logger) : base(client, logger)
         {
         }
     }

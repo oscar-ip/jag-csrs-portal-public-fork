@@ -2,37 +2,61 @@ using AutoMapper;
 using Csrs.Api.Models;
 using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Repositories;
+using Microsoft.Extensions.Caching.Memory;
+using System.Diagnostics;
 
 namespace Csrs.Api.Services
 {
     public class AccountService : IAccountService
     {
+        private readonly IMemoryCache _cache;
         private readonly ICsrsPartyRepository _partyRepository;
         private readonly IMapper _mapper;
+        private readonly IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty> _partyInsertOrUpdateFieldMapper;
         private readonly ILogger<AccountService> _logger;
 
         public AccountService(
+            IMemoryCache cache,
             ICsrsPartyRepository partyRepository,
-            IMapper mapper, 
+            IMapper mapper,
+            IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty> partyInsertOrUpdateFieldMapper,
             ILogger<AccountService> logger)
         {
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _partyRepository = partyRepository ?? throw new ArgumentNullException(nameof(partyRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _partyInsertOrUpdateFieldMapper = partyInsertOrUpdateFieldMapper ?? throw new ArgumentNullException(nameof(partyInsertOrUpdateFieldMapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken)
         {
-            // TODO: add caching
-            IList<LookupValue>? genders = await _partyRepository.GetGendersAsync(cancellationToken);
-            return genders;
+            IList<LookupValue>? values = await GetPickListAsync("GenderPickList", _partyRepository.GetGendersAsync, cancellationToken);
+            return values;
+        }
+
+        public async Task<IList<LookupValue>> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = await GetPickListAsync("PreferredContactMethodsPickList", _partyRepository.GetPreferredContactMethodsAsync, cancellationToken);
+            return values;
         }
 
         public async Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken)
         {
-            // TODO: add caching
-            IList<LookupValue> identities = await _partyRepository.GetIdentitiesAsync(cancellationToken);
-            return identities;
+            IList<LookupValue>? values = await GetPickListAsync("IdentitiesPickList", _partyRepository.GetIdentitiesAsync, cancellationToken);
+            return values;
+        }
+
+        public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = await GetPickListAsync("ProvincesPickList", _partyRepository.GetProvincesAsync, cancellationToken);
+            return values;
+        }
+
+        public async Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = await GetPickListAsync("ReferralsPickList", _partyRepository.GetReferralsAsync, cancellationToken);
+            return values;
         }
 
         public async Task<Party?> GetPartyAsync(Guid partyId, CancellationToken cancellationToken)
@@ -43,7 +67,7 @@ namespace Csrs.Api.Services
                 return null;
             }
 
-            using var scope = _logger.BeginScope(new Dictionary<string, object> { { "PartyId", partyId } });
+            using var scope = _logger.AddPartyId(partyId);
 
             var csrsParty = await _partyRepository.GetAsync(partyId, SSG_CsrsParty.AllProperties, cancellationToken);
             if (csrsParty == null)
@@ -58,7 +82,7 @@ namespace Csrs.Api.Services
 
         public async Task<Party?> GetPartyByBCeIdAsync(Guid bceidGuid, CancellationToken cancellationToken)
         {
-            using var scope = _logger.BeginScope(new Dictionary<string, object> { { "BCeID_Guid", bceidGuid } });
+            using var scope = _logger.AddBCeIdGuid(bceidGuid);
 
             List<SSG_CsrsParty>? parties = await _partyRepository.GetByBCeIdAsync(bceidGuid, SSG_CsrsParty.AllProperties, cancellationToken);
 
@@ -72,35 +96,41 @@ namespace Csrs.Api.Services
             return party;
         }
 
-        public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
-        {
-            // TODO: add caching
-            IList<LookupValue>? provinces = await _partyRepository.GetProvincesAsync(cancellationToken);
-            return provinces;
-        }
-
-        public async Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken)
-        {
-            // TODO: add caching
-            IList<LookupValue>? referrals = await _partyRepository.GetReferralsAsync(cancellationToken);
-            return referrals;
-        }
-
         public async Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(party);
 
-            var csrsParty = _mapper.Map<SSG_CsrsParty>(party);
+            SSG_CsrsParty? csrsParty = null;
 
-            if (csrsParty.PartyId == Guid.Empty)
+            // if the caller had a party id specificed, attempt to look up that party
+            if (party.PartyId != Guid.Empty)
+            {
+                csrsParty = await _partyRepository.GetAsync(party.PartyId, SSG_CsrsParty.AllProperties, cancellationToken);
+                if (csrsParty is null)
+                {
+                    using var scope = _logger.AddPartyId(party.PartyId);
+                    _logger.LogInformation("Could not find party. will insert a new party, party id will be reset");
+                    party.PartyId = Guid.Empty;
+                }
+            }
+
+            if (party.PartyId == Guid.Empty)
             {
                 _logger.LogInformation("Source party does not have a PartyId, inserting");
-                csrsParty = await _partyRepository.InsertAsync(csrsParty, cancellationToken);
+
+                Dictionary<string, object>? fields = _partyInsertOrUpdateFieldMapper.GetFieldsForInsert(party);
+
+
+                csrsParty = await _partyRepository.InsertAsync(fields, cancellationToken);
             }
             else
             {
-                _logger.LogInformation("Source party has a PartyId, updating");
-                csrsParty = await _partyRepository.UpdateAsync(csrsParty, cancellationToken);
+                Debug.Assert(csrsParty != null);
+
+                using var scope = _logger.AddPartyId(party.PartyId);
+                _logger.LogInformation("Source party exists, updating");
+                Dictionary<string, object>? fields = _partyInsertOrUpdateFieldMapper.GetFieldsForUpdate(party, csrsParty);
+                csrsParty = await _partyRepository.UpdateAsync(csrsParty.Key, fields, cancellationToken);
             }
 
             party = _mapper.Map<Party>(csrsParty);
@@ -124,6 +154,11 @@ namespace Csrs.Api.Services
             }
 
             _logger.LogInformation("{Count} parties found with same BCeID identifier, returning the last modified entry", parties.Count);
+
+            //
+            // TODO: most recent needs to be based on BCeIdLastUpdate not ModifiedOn
+            //
+
 
             // Take the last modified one, assumes two records will not be updated at the exact same time
             SSG_CsrsParty? csrsParty = parties.OrderByDescending(_ => _.ModifiedOn).First();
@@ -172,5 +207,32 @@ namespace Csrs.Api.Services
         }
 
 
+        private async Task<IList<LookupValue>> GetPickListAsync(string cacheKey, Func<CancellationToken, Task<IList<LookupValue>>> fetchPickList, CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = _cache.Get<IList<LookupValue>>(cacheKey);
+            if (values is not null)
+            {
+                return values;
+            }
+
+            values = await fetchPickList(cancellationToken);
+
+            if (values is not null)
+            {
+                var random = new Random();
+                var seconds = random.Next(-120, 120);
+                // cache for 1 hour +/- two minutes
+                var absolteExpiration = DateTime.UtcNow.AddSeconds(60 * 60 + seconds);
+
+                _cache.Set(cacheKey, values, absolteExpiration);
+            }
+            else
+            {
+                values = Array.Empty<LookupValue>();
+            }
+
+            return values;
+        }
     }
+
 }
