@@ -120,7 +120,7 @@ namespace Csrs.Test.Controllers
             file.Children = children;
 
             mediator
-                .Setup(_ => _.Send(It.Is<NewAccountAndFile.Request>(_ => _.User == user && _.Applicant == account && _.File == file), It.IsAny<CancellationToken>()))
+                .Setup(_ => _.Send(It.Is<NewAccountAndFile.Request>(_ => _.Applicant == account && _.File == file), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new NewAccountAndFile.Response(Guid.NewGuid()))
                 .Verifiable("Correct request was not sent.");
 

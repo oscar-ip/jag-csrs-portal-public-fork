@@ -61,11 +61,15 @@ public static class WebApplicationBuilderExtensions
             return new ODataClient(settings);
         });
 
+        services.AddHttpContextAccessor();
+
         // Add services
         services.AddTransient<ITokenService, TokenService>();
 
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
+        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IChildService, ChildService>();
 
         // Add repositories
         services.AddTransient<ICourtLevelRepository, CourtLevelRepository>();
@@ -73,6 +77,6 @@ public static class WebApplicationBuilderExtensions
         services.AddTransient<ICsrsFeedbackRepository, CsrsFeedbackRepository>();
         services.AddTransient<ICsrsFileRepository, CsrsFileRepository>();
         services.AddTransient<ICsrsPartyRepository, CsrsPartyRepository>();
-        services.AddTransient<ICsrsPortalMessageRepository, CsrsPortalMessageRepository>();
+
     }
 }

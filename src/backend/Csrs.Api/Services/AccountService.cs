@@ -2,22 +2,29 @@ using AutoMapper;
 using Csrs.Api.Models;
 using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Repositories;
+using System.Diagnostics;
 
 namespace Csrs.Api.Services
 {
     public class AccountService : IAccountService
     {
+        private readonly IUserService _userService;
         private readonly ICsrsPartyRepository _partyRepository;
         private readonly IMapper _mapper;
+        private readonly IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty> _partyInsertOrUpdateFieldMapper;
         private readonly ILogger<AccountService> _logger;
 
         public AccountService(
+            IUserService userService,
             ICsrsPartyRepository partyRepository,
-            IMapper mapper, 
+            IMapper mapper,
+            IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty> partyInsertOrUpdateFieldMapper,
             ILogger<AccountService> logger)
         {
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _partyRepository = partyRepository ?? throw new ArgumentNullException(nameof(partyRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _partyInsertOrUpdateFieldMapper = partyInsertOrUpdateFieldMapper ?? throw new ArgumentNullException(nameof(partyInsertOrUpdateFieldMapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -43,7 +50,7 @@ namespace Csrs.Api.Services
                 return null;
             }
 
-            using var scope = _logger.BeginScope(new Dictionary<string, object> { { "PartyId", partyId } });
+            using var scope = _logger.AddPartyId(partyId);
 
             var csrsParty = await _partyRepository.GetAsync(partyId, SSG_CsrsParty.AllProperties, cancellationToken);
             if (csrsParty == null)
@@ -58,7 +65,7 @@ namespace Csrs.Api.Services
 
         public async Task<Party?> GetPartyByBCeIdAsync(Guid bceidGuid, CancellationToken cancellationToken)
         {
-            using var scope = _logger.BeginScope(new Dictionary<string, object> { { "BCeID_Guid", bceidGuid } });
+            using var scope = _logger.AddBCeIdGuid(bceidGuid);
 
             List<SSG_CsrsParty>? parties = await _partyRepository.GetByBCeIdAsync(bceidGuid, SSG_CsrsParty.AllProperties, cancellationToken);
 
@@ -90,17 +97,37 @@ namespace Csrs.Api.Services
         {
             ArgumentNullException.ThrowIfNull(party);
 
-            var csrsParty = _mapper.Map<SSG_CsrsParty>(party);
+            SSG_CsrsParty? csrsParty = null;
 
-            if (csrsParty.PartyId == Guid.Empty)
+            // if the caller had a party id specificed, attempt to look up that party
+            if (party.PartyId != Guid.Empty)
+            {
+                csrsParty = await _partyRepository.GetAsync(party.PartyId, SSG_CsrsParty.AllProperties, cancellationToken);
+                if (csrsParty is null)
+                {
+                    using var scope = _logger.AddPartyId(party.PartyId);
+                    _logger.LogInformation("Could not find party. will insert a new party, party id will be reset");
+                    party.PartyId = Guid.Empty;
+                }
+            }
+
+            if (party.PartyId == Guid.Empty)
             {
                 _logger.LogInformation("Source party does not have a PartyId, inserting");
-                csrsParty = await _partyRepository.InsertAsync(csrsParty, cancellationToken);
+
+                Dictionary<string, object>? fields = _partyInsertOrUpdateFieldMapper.GetFieldsForInsert(party);
+
+
+                csrsParty = await _partyRepository.InsertAsync(fields, cancellationToken);
             }
             else
             {
-                _logger.LogInformation("Source party has a PartyId, updating");
-                csrsParty = await _partyRepository.UpdateAsync(csrsParty, cancellationToken);
+                Debug.Assert(csrsParty != null);
+
+                using var scope = _logger.AddPartyId(party.PartyId);
+                _logger.LogInformation("Source party exists, updating");
+                Dictionary<string, object>? fields = _partyInsertOrUpdateFieldMapper.GetFieldsForUpdate(party, csrsParty);
+                csrsParty = await _partyRepository.UpdateAsync(csrsParty.Key, fields, cancellationToken);
             }
 
             party = _mapper.Map<Party>(csrsParty);
@@ -124,6 +151,11 @@ namespace Csrs.Api.Services
             }
 
             _logger.LogInformation("{Count} parties found with same BCeID identifier, returning the last modified entry", parties.Count);
+
+            //
+            // TODO: most recent needs to be based on BCeIdLastUpdate not ModifiedOn
+            //
+
 
             // Take the last modified one, assumes two records will not be updated at the exact same time
             SSG_CsrsParty? csrsParty = parties.OrderByDescending(_ => _.ModifiedOn).First();
@@ -170,7 +202,6 @@ namespace Csrs.Api.Services
 
             return party;
         }
-
-
     }
+
 }

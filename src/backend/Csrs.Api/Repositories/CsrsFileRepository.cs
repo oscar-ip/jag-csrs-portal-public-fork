@@ -5,7 +5,7 @@ namespace Csrs.Api.Repositories
 {
     public class CsrsFileRepository : Repository<SSG_CsrsFile>, ICsrsFileRepository
     {
-        public CsrsFileRepository(IODataClient client) : base(client)
+        public CsrsFileRepository(IODataClient client, ILogger<CsrsFileRepository> logger) : base(client, logger)
         {
         }
 

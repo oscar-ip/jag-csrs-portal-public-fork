@@ -80,7 +80,6 @@ namespace Csrs.Api.Controllers
         /// <summary>
         /// Gets the current user's file summary.
         /// </summary>
-        /// <param name="bceidGuid">TEMPORARY field until login is implemented</param>
         /// <response code="200">The user and their files were found.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="404">The user was not found</response>
@@ -116,7 +115,7 @@ namespace Csrs.Api.Controllers
                 return BadRequest();
             }
 
-            NewAccountAndFile.Request request = new(User, newFileRequest.User, newFileRequest.File);
+            NewAccountAndFile.Request request = new(newFileRequest.User, newFileRequest.File);
             NewAccountAndFile.Response? response = await _mediator.Send(request, cancellationToken);
             return Ok(response.Id);
         }

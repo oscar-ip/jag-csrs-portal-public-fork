@@ -26,25 +26,25 @@ namespace Csrs.Api.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken);
+        Task<TEntity> InsertAsync(Dictionary<string, object?> entity, CancellationToken cancellationToken);
 
 
         /// <summary>
         /// Update an entity.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+        Task<TEntity> UpdateAsync(Guid id, Dictionary<string, object?> entity, CancellationToken cancellationToken);
 
         /// <summary>
         /// Delete an entity
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

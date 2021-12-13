@@ -17,19 +17,24 @@ namespace Csrs.Api.Repositories
         /// The <see cref="IODataClient"/>.
         /// </summary>
         protected readonly IODataClient Client;
-        
-        protected Repository(IODataClient client)
+        protected ILogger<Repository<TEntity>> Logger { get; }
+
+        protected Repository(IODataClient client, ILogger<Repository<TEntity>> logger)
         {
             Client = client ?? throw new ArgumentNullException(nameof(client));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
+        public async Task DeleteAsync(Guid key, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(entity);
+            if (key == Guid.Empty)
+            {
+                return;
+            }
 
             await Client
                 .For<TEntity>()
-                .Key(entity.Key)
+                .Key(key)
                 .DeleteEntryAsync(cancellationToken);
         }
 
@@ -75,26 +80,32 @@ namespace Csrs.Api.Repositories
             }
         }
 
-        public async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken)
+        public async Task<TEntity> InsertAsync(Dictionary<string, object?> entry, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(entity);
+            ArgumentNullException.ThrowIfNull(entry);
 
-            entity = await Client
+            using var scope = Logger.BeginScope(entry);
+            Logger.LogTrace("Inserting new entity");
+
+            TEntity entity = await Client
                 .For<TEntity>()
-                .Set(entity)
+                .Set(entry)
                 .InsertEntryAsync(cancellationToken);
 
             return entity;
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
+        public async Task<TEntity> UpdateAsync(Guid key, Dictionary<string, object?> entry, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(entity);
+            ArgumentNullException.ThrowIfNull(entry);
 
-            entity = await Client
+            using var scope = Logger.BeginScope(entry);
+            Logger.LogTrace("Updating existing entity");
+
+            TEntity entity = await Client
                 .For<TEntity>()
-                .Key(entity.Key)
-                .Set(entity)
+                .Key(key)
+                .Set(entry)
                 .UpdateEntryAsync(cancellationToken);
 
             return entity;

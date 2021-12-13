@@ -37,14 +37,18 @@ namespace Csrs.Api.Features.Accounts
 
         public class Handler : IRequestHandler<Request, Response>
         {
+            private readonly IUserService _userService;
             private readonly IAccountService _accountService;
             private readonly IFileService _fileService;
             private readonly ILogger<Handler> _logger;
 
-            public Handler(IAccountService accountService,
+            public Handler(
+                IUserService userService,
+                IAccountService accountService,
                 IFileService fileService,
                 ILogger<Handler> logger)
             {
+                _userService = userService;
                 _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
                 _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -52,14 +56,14 @@ namespace Csrs.Api.Features.Accounts
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                Guid? userId = request.User.GetBCeIDUserId();
-                if (userId is null)
+                Guid userId = _userService.GetBCeIDUserId();
+                if (userId == Guid.Empty)
                 {
                     // no bceid value
                     return Response.Empty;
                 }
 
-                Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId.Value, cancellationToken);
+                Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);
 
                 if (accountParty == null)
                 {
