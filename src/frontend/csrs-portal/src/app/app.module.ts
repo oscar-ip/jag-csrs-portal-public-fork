@@ -33,7 +33,6 @@ import { WelcomeUserComponent } from './components/welcome-user/welcome-user.com
 import { ApplicationFormStepperComponent } from './components/application-form-stepper/application-form-stepper.component';
 import { ChildApplicationQuestionComponent } from './components/child-application-question/child-application-question.component';
 
-import { KeycloakModule } from '@core/keycloak/keycloak.module';
 import { AuthConfigModule } from './auth/auth-config.module';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -60,7 +59,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     MatStepperModule,
     CdkAccordionModule,
     MatGridListModule,
-    KeycloakModule,
     AuthConfigModule,
     TranslateModule.forRoot({
       loader: {

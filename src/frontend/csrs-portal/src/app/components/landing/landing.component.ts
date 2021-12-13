@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
-import { Config } from '@config/config.model';
-import { AuthService } from '@core/services/auth.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 
-//import { KeycloakService } from 'keycloak-angular';
-//import { KeycloakProfile, KeycloakLoginOptions } from 'keycloak-js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { AppConfigService } from 'app/services/app-config.service';
 
 @Component({
   selector: 'app-landing',
@@ -18,71 +15,64 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 export class LandingComponent implements OnInit {
 
   public isLoggedIn = false;
-  //public userProfile: KeycloakProfile | null = null;
-  //public options: KeycloakLoginOptions | null = null;
   public bceIdLink: string;
   public bceIdRegisterLink: string;
   public cscLink: string;
   public welcomeUser: string;
   public code: string;
-  //public oidcSecurityService: OidcSecurityService;
+  public _logger: LoggerService;
+  public _config: AppConfigService;
 
-  constructor(//@Inject(AuthService) private authService,
-              @Inject(LoggerService) private logger,
-             // @Inject(KeycloakService) private  keycloakService,
+  constructor(@Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
-              @Inject(OidcSecurityService) private oidcSecurityService) {
-    this.bceIdLink = 'https://www.bceid.ca/';
-    this.cscLink = 'https://www.childsupportcalculator.ca/british-columbia.html';
-    this.bceIdRegisterLink = 'https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
-    console.log(`constructor`);
+              @Inject(OidcSecurityService) private oidcSecurityService,
+              @Inject(AppConfigService) private appConfigService) {
+
+    this._config = appConfigService;
+    this._logger = logger;
+    this._logger.log('info', 'logger:constructor');
 
     const accessToken = oidcSecurityService.getAccessToken();
 
     if (accessToken) {
-      console.log('accessToken: ' + accessToken);
+      this._logger.log('info', `accessToken: ${accessToken}`);
     }
 
     if (oidcSecurityService.isAuthenticated()) {
-      console.log('authenticated');
+      this._logger.log('info', 'authenticated');
     } else {
-      console.log('not authenticated');
+      this._logger.log('info', 'not authenticated');
     }
 
   }
 
   public async ngOnInit() {
 
+      this.cscLink = this._config.cscLink;
+      this.bceIdRegisterLink = this._config.bceIdRegisterLink;
+
       this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 
-        console.log(`isAuthenticated = ${isAuthenticated}`);
-        console.log(`userData = ${userData}`);
-        console.log(`accessToken = ${accessToken}`);
-        console.log(`idToken = ${idToken}`);
+        this._logger.log('info',`isAuthenticated = ${isAuthenticated}`);
+        this._logger.log('info',`userData = ${userData}`);
+        this._logger.log('info',`accessToken = ${accessToken}`);
+        this._logger.log('info',`idToken = ${idToken}`);
 
-        console.dir({ isAuthenticated, userData, accessToken, idToken });
         if (isAuthenticated === true)
         {
           this.router.navigate(['/welcomeuser']);
         }
       });
-
-
     }
 
-
-
   login() {
-    console.log('inside login');
+    this._logger.log('info','inside login');
     this.oidcSecurityService.authorize();
   }
 
   logout() {
-    console.log('inside logout');
+    this._logger.log('info','inside logout');
     this.oidcSecurityService.logoff();
   }
-
-
-
 }

@@ -95,16 +95,16 @@ button.nextStep[disabled]{
 
 div.container {
     opacity: unset;
-  
+
     button a {
       color: #003366;
     }
-  
+
     a {
       color: theme-palette(blue, link);
       white-space: nowrap;
     }
-  
+
     .main-body-navigation:hover {
       text-decoration: none;
     }
@@ -122,7 +122,7 @@ div.container {
     min-width: 200px;
     background-color: white;
     color: #003366;
-  
+
     &.large {
       height: 46px;
       font-size: 1.125rem;
@@ -138,7 +138,7 @@ section.summary-section {
     min-height: 300px;
     margin-bottom: 3em;
   }
-  
+
   section {
     margin-bottom: 1em;
   }
@@ -146,7 +146,7 @@ section.summary-section {
 ::ng-deep .mat-expansion-panel-header{
     /* styles that were added to panel before */
     background: #fff;
-    color: rgba(0,0,0,.87); 
+    color: rgba(0,0,0,.87);
 }
 
 .prevent-click{
@@ -207,7 +207,7 @@ mat-divider {
 }
 .toolTipIcon{
   color: #009cde;
-  
+
 }
 ::ng-deep .mat-tooltip {
   font-size: 15px;
@@ -232,3 +232,9 @@ mat-divider {
       height: 50px;
       margin-left: 10px;
   }
+  .alert-text2{
+    border: 1px solid gray;;
+    border-left: 4px solid darkblue;
+    height: 75px;
+    margin-left: 10px;
+}

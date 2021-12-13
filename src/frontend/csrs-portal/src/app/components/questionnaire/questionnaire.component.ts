@@ -1,14 +1,28 @@
 import { style } from '@angular/animations';
-import { AfterViewInit, Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { LoggerService } from '@core/services/logger.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Inject } from '@angular/core';
+import { AppConfigService } from 'app/services/app-config.service';
 
 @Component({
   selector: 'app-questionnaire',
   templateUrl: './questionnaire.component.html',
   styleUrls: ['./questionnaire.component.scss'],
 })
-export class QuestionnaireComponent implements AfterViewInit {
-  public bceIdLink: string;
+
+export class QuestionnaireComponent implements OnInit {
+  public isLoggedIn = false;
   public bceIdRegisterLink: string;
+  public _logger: LoggerService;
+  public _oidc: OidcSecurityService;
+  public _router: Router;
+
+  public welcomeUser: string;
+  public _config: AppConfigService;
+
+
   data: any = [
     {
       label:
@@ -477,12 +491,28 @@ export class QuestionnaireComponent implements AfterViewInit {
     },
   ];
 
-  constructor() {
-    this.bceIdLink = 'https://www.bceid.ca/';
-    this.bceIdRegisterLink = 'https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
-  }
+  constructor(@Inject(LoggerService) private logger,
+              @Inject(Router) private router,
+              @Inject(ActivatedRoute) private route,
+              @Inject(OidcSecurityService) private oidcSecurityService,
+              @Inject(AppConfigService) private appConfigService) {
 
-  public ngAfterViewInit(): void {}
+          this._config = appConfigService;
+          this._logger = logger;
+          this._logger.log('info', 'Questionnaire: constructor');
+
+          const accessToken = oidcSecurityService.getAccessToken();
+
+          if (accessToken) {
+            this._logger.log('info', `Questionnaire: accessToken: ${accessToken}`);
+          }
+
+          if (oidcSecurityService.isAuthenticated()) {
+            this._logger.log('info', 'Questionnaire: authenticated');
+          } else {
+            this._logger.log('info', 'Questionnaire: not authenticated');
+          }
+  }
 
   stringToHTML(i, yi, ci, str, idLabel) {
     const parser = new DOMParser();
@@ -512,4 +542,40 @@ export class QuestionnaireComponent implements AfterViewInit {
       }
     });
   }
+
+  public async ngOnInit() {
+
+    this.bceIdRegisterLink = this._config.bceIdRegisterLink;
+    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
+
+      this._logger.log('info',`Questionnaire: isAuthenticated = ${isAuthenticated}`);
+      this._logger.log('info',`Questionnaire: userData = ${userData}`);
+      this._logger.log('info',`Questionnaire: accessToken = ${accessToken}`);
+      this._logger.log('info',`Questionnaire: idToken = ${idToken}`);
+
+      if (isAuthenticated === true)
+      {
+        this.router.navigate(['/welcomeuser']);
+      }
+    });
+  }
+
+  login() {
+    this._logger.log('info','Questionnaire: inside login');
+    this.oidcSecurityService.authorize();
+  }
+
+  logout() {
+    this._logger.log('info','Questionnaire: inside logout');
+    this.oidcSecurityService.logoff();
+  }
+
+  downloadApplication()
+  {
+    let link = document.createElement('a');
+    link.download = "Application.pdf";
+    link.href = "assets/Application.pdf";
+    link.click();
+  }
+
 }
