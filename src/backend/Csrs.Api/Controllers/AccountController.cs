@@ -1,4 +1,4 @@
-﻿using Csrs.Api.Features.Accounts;
+using Csrs.Api.Features.Accounts;
 using Csrs.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
