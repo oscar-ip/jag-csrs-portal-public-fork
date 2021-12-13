@@ -51,6 +51,14 @@ namespace Csrs.Api.Repositories
             return values;
         }
 
+        public async Task<IList<LookupValue>> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
+        {
+            Logger.LogDebug("Getting preferred contact method lookup values");
+
+            var values = await _optionSetService.GetPickListValuesAsync(SSG_CsrsParty.EntityLogicalName, SSG_CsrsParty.Attributes.ssg_preferredcontactmethod, cancellationToken);
+            return values;
+        }
+
         public async Task<IList<LookupValue>> GetProvincesAsync(CancellationToken cancellationToken)
         {
             Logger.LogDebug("Getting province lookup values");

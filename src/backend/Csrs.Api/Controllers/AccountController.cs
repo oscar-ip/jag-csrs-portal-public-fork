@@ -78,6 +78,21 @@ namespace Csrs.Api.Controllers
         }
 
         /// <summary>
+        /// Gets the preferred contact methods values for an account.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("PreferredContactMethods")]
+        [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
+        {
+            Lookups.Response? response = await _mediator.Send(Lookups.Request.PreferredContactMethods, cancellationToken);
+            return Ok(response.Items);
+        }
+
+        /// <summary>
         /// Gets the current user's file summary.
         /// </summary>
         /// <response code="200">The user and their files were found.</response>

@@ -35,6 +35,13 @@ namespace Csrs.Api.Services
             return genders;
         }
 
+        public async Task<IList<LookupValue>> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
+        {
+            // TODO: add caching
+            IList<LookupValue>? genders = await _partyRepository.GetPreferredContactMethodsAsync(cancellationToken);
+            return genders;
+        }
+
         public async Task<IList<LookupValue>> GetIdentitiesAsync(CancellationToken cancellationToken)
         {
             // TODO: add caching
@@ -202,6 +209,7 @@ namespace Csrs.Api.Services
 
             return party;
         }
+
     }
 
 }
