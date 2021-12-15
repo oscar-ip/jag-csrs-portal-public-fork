@@ -14,6 +14,8 @@ import { AccountService } from 'app/api/api/account.service';
 import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
+import { of } from 'rxjs';
+
 
 @Component({
   selector: 'app-child-application-question',
@@ -165,84 +167,79 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
 }
-getIdentityData() {
-  this._accountService.apiAccountIdentitiesGet().subscribe(data => {
-      this.identityData = data;
-    },
-    (err: HttpErrorResponse) => {
-      if (err.error instanceof Error) {
-       //A client-side or network error occurred.
-       this._logger.log('error',err.error.message);
-      } else {
-          //Backend returns unsuccessful response codes such as 404, 500 etc.
-          this._logger.log('info',`Backend returned status code: ${err.status}`);
-          this._logger.log('info',`Response body: ${err.error}`);
-        }
-     });
-}
+  getIdentityData() {
+      this._accountService.apiAccountIdentitiesGet().subscribe({
+        next: (data) => this.identityData = data,
+        error: (e) => {
+          if (e.error instanceof Error) {
+            this._logger.error(e.error.message);
+          } else {
+              //Backend returns unsuccessful response codes such as 404, 500 etc.
+              this._logger.info('Backend returned ', e);
+            }
+        },
+        complete: () => this._logger.info('apiAccountIdentitiesGet is completed')
+    })
+  }
 
-getProvinceData() {
-  this._accountService.apiAccountProvincesGet().subscribe(data1 => {
-    this.provinceData = data1;
-  },
-  (err: HttpErrorResponse) => {
-    if (err.error instanceof Error) {
-     //A client-side or network error occurred.
-     this._logger.log('error',err.error.message);
-    } else {
-        //Backend returns unsuccessful response codes such as 404, 500 etc.
-        this._logger.log('info',`Backend returned status code: ${err.status}`);
-        this._logger.log('info',`Response body: ${err.error}`);
-      }
-   });
-}
+  getProvinceData() {
+    this._accountService.apiAccountProvincesGet().subscribe({
+      next: (data) => this.provinceData = data,
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this._logger.error(e.error.message);
+        } else {
+            //Backend returns unsuccessful response codes such as 404, 500 etc.
+            this._logger.info('Backend returned ', e);
+          }
+      },
+      complete: () => this._logger.info('apiAccountProvincesGet is completed')
+    })
+  }
 
   getGenderyData() {
-    this._accountService.apiAccountGendersGet().subscribe(data2 => {
-        this.genderData =  data2;
-    },
-    (err: HttpErrorResponse) => {
-      if (err.error instanceof Error) {
-      //A client-side or network error occurred.
-      this._logger.log('error',err.error.message);
-      } else {
-          //Backend returns unsuccessful response codes such as 404, 500 etc.
-          this._logger.log('info',`Backend returned status code: ${err.status}`);
-          this._logger.log('info',`Response body: ${err.error}`);
-        }
-    });
+    this._accountService.apiAccountGendersGet().subscribe({
+      next: (data) => this.genderData = data,
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this._logger.error(e.error.message);
+        } else {
+            //Backend returns unsuccessful response codes such as 404, 500 etc.
+            this._logger.info('Backend returned ', e);
+          }
+      },
+      complete: () => this._logger.info('apiAccountGendersGet is completed')
+    })
   }
 
   getCourtLocationData() {
-    this._lookupService.courtlocationsGet().subscribe(data1 => {
-      this.courtLocationsData = data1;
-      },
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-        //A client-side or network error occurred.
-        this._logger.log('error',err.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.log('info',`Backend returned status code: ${err.status}`);
-            this._logger.log('info',`Response body: ${err.error}`);
-          }
-      });
+      this._lookupService.courtlocationsGet().subscribe({
+        next: (data) => this.courtLocationsData = data,
+        error: (e) => {
+          if (e.error instanceof Error) {
+            this._logger.error(e.error.message);
+          } else {
+              //Backend returns unsuccessful response codes such as 404, 500 etc.
+              this._logger.info('Backend returned ', e);
+            }
+        },
+        complete: () => this._logger.info('courtlocationsGet is completed')
+      })
   }
 
   getReferalsData() {
-    this._accountService.apiAccountReferralsGet().subscribe(data1 => {
-        this.referalsData = data1;
-    },
-    (err: HttpErrorResponse) => {
-      if (err.error instanceof Error) {
-      //A client-side or network error occurred.
-      this._logger.log('error',err.error.message);
-      } else {
-          //Backend returns unsuccessful response codes such as 404, 500 etc.
-          this._logger.log('info',`Backend returned status code: ${err.status}`);
-          this._logger.log('info',`Response body: ${err.error}`);
-        }
-    });
+    this._accountService.apiAccountReferralsGet().subscribe({
+      next: (data) => this.referalsData = data,
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this._logger.error(e.error.message);
+        } else {
+            //Backend returns unsuccessful response codes such as 404, 500 etc.
+            this._logger.info('Backend returned ', e);
+          }
+      },
+      complete: () => this._logger.info('apiAccountReferralsGet is completed')
+    })
   }
 
   callAntherchild(){
