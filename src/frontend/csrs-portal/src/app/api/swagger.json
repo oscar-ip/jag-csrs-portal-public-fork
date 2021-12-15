@@ -6,7 +6,7 @@
     "version": "v1"
   },
   "paths": {
-    "/account/genders": {
+    "/api/account/genders": {
       "get": {
         "tags": [
           "Account"
@@ -45,7 +45,7 @@
         }
       }
     },
-    "/account/provinces": {
+    "/api/account/provinces": {
       "get": {
         "tags": [
           "Account"
@@ -84,7 +84,7 @@
         }
       }
     },
-    "/account/identities": {
+    "/api/account/identities": {
       "get": {
         "tags": [
           "Account"
@@ -123,7 +123,7 @@
         }
       }
     },
-    "/account/referrals": {
+    "/api/account/referrals": {
       "get": {
         "tags": [
           "Account"
@@ -162,23 +162,51 @@
         }
       }
     },
-    "/account": {
+    "/api/account/preferredcontactmethods": {
+      "get": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Gets the preferred contact methods values for an account.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LookupValue"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LookupValue"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LookupValue"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/account": {
       "get": {
         "tags": [
           "Account"
         ],
         "summary": "Gets the current user's file summary.",
-        "parameters": [
-          {
-            "name": "bceidGuid",
-            "in": "query",
-            "description": "TEMPORARY field until login is implemented",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "The user and their files were found.",
@@ -221,29 +249,12 @@
             }
           },
           "401": {
-            "description": "The request is not authorized. Ensure correct authentication header is present.",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
+            "description": "The request is not authorized. Ensure correct authentication header is present."
           }
         }
       }
     },
-    "/account/create": {
+    "/api/account/create": {
       "post": {
         "tags": [
           "Account"
@@ -336,7 +347,7 @@
         }
       }
     },
-    "/document/listdocuments": {
+    "/api/document/listdocuments": {
       "get": {
         "tags": [
           "Document"
@@ -387,7 +398,7 @@
         }
       }
     },
-    "/document/downloaddocument": {
+    "/api/document/downloaddocument": {
       "get": {
         "tags": [
           "Document"
@@ -436,7 +447,7 @@
         }
       }
     },
-    "/document/uploaddocuments": {
+    "/api/document/uploaddocuments": {
       "post": {
         "tags": [
           "Document"
@@ -493,7 +504,7 @@
         }
       }
     },
-    "/feedback/create": {
+    "/api/feedback/create": {
       "post": {
         "tags": [
           "Feedback"
@@ -541,7 +552,7 @@
         }
       }
     },
-    "/file/listapplications": {
+    "/api/file/listapplications": {
       "post": {
         "tags": [
           "File"
@@ -589,7 +600,7 @@
         }
       }
     },
-    "/file/applicationdetail": {
+    "/api/file/applicationdetail": {
       "get": {
         "tags": [
           "File"
@@ -637,7 +648,7 @@
         }
       }
     },
-    "/file/createapplication": {
+    "/api/file/createapplication": {
       "post": {
         "tags": [
           "File"
@@ -685,7 +696,7 @@
         }
       }
     },
-    "/file/updateapplication": {
+    "/api/file/updateapplication": {
       "patch": {
         "tags": [
           "File"
@@ -809,7 +820,7 @@
         }
       }
     },
-    "/message/list": {
+    "/api/message/list": {
       "get": {
         "tags": [
           "Message"
@@ -857,7 +868,7 @@
         }
       }
     },
-    "/message/read": {
+    "/api/message/read": {
       "get": {
         "tags": [
           "Message"
@@ -905,7 +916,7 @@
         }
       }
     },
-    "/message/create": {
+    "/api/message/create": {
       "post": {
         "tags": [
           "Message"
@@ -954,7 +965,7 @@
         }
       }
     },
-    "/message/delete": {
+    "/api/message/delete": {
       "delete": {
         "tags": [
           "Message"
@@ -993,7 +1004,7 @@
         }
       }
     },
-    "/userrequest/create": {
+    "/api/userrequest/create": {
       "post": {
         "tags": [
           "UserRequest"
@@ -1570,6 +1581,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        "name": "Authorization",
+        "in": "header"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }

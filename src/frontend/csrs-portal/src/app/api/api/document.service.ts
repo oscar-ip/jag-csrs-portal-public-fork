@@ -89,12 +89,12 @@ export class DocumentService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public documentDownloaddocumentGet(fileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Document>>;
-    public documentDownloaddocumentGet(fileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Document>>>;
-    public documentDownloaddocumentGet(fileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Document>>>;
-    public documentDownloaddocumentGet(fileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiDocumentDownloaddocumentGet(fileId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Document>>;
+    public apiDocumentDownloaddocumentGet(fileId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Document>>>;
+    public apiDocumentDownloaddocumentGet(fileId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Document>>>;
+    public apiDocumentDownloaddocumentGet(fileId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
         if (fileId === null || fileId === undefined) {
-            throw new Error('Required parameter fileId was null or undefined when calling documentDownloaddocumentGet.');
+            throw new Error('Required parameter fileId was null or undefined when calling apiDocumentDownloaddocumentGet.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -104,6 +104,13 @@ export class DocumentService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -125,7 +132,7 @@ export class DocumentService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<Array<Document>>(`${this.configuration.basePath}/document/downloaddocument`,
+        return this.httpClient.get<Array<Document>>(`${this.configuration.basePath}/api/document/downloaddocument`,
             {
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
@@ -142,12 +149,12 @@ export class DocumentService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public documentListdocumentsGet(regardingId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Document>>;
-    public documentListdocumentsGet(regardingId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Document>>>;
-    public documentListdocumentsGet(regardingId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Document>>>;
-    public documentListdocumentsGet(regardingId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiDocumentListdocumentsGet(regardingId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Document>>;
+    public apiDocumentListdocumentsGet(regardingId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Document>>>;
+    public apiDocumentListdocumentsGet(regardingId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Document>>>;
+    public apiDocumentListdocumentsGet(regardingId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
         if (regardingId === null || regardingId === undefined) {
-            throw new Error('Required parameter regardingId was null or undefined when calling documentListdocumentsGet.');
+            throw new Error('Required parameter regardingId was null or undefined when calling apiDocumentListdocumentsGet.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -157,6 +164,13 @@ export class DocumentService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -178,7 +192,7 @@ export class DocumentService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<Array<Document>>(`${this.configuration.basePath}/document/listdocuments`,
+        return this.httpClient.get<Array<Document>>(`${this.configuration.basePath}/api/document/listdocuments`,
             {
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
@@ -195,12 +209,19 @@ export class DocumentService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public documentUploaddocumentsPost(document?: Document, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Document>>;
-    public documentUploaddocumentsPost(document?: Document, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Document>>>;
-    public documentUploaddocumentsPost(document?: Document, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Document>>>;
-    public documentUploaddocumentsPost(document?: Document, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiDocumentUploaddocumentsPost(document?: Document, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Document>>;
+    public apiDocumentUploaddocumentsPost(document?: Document, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Document>>>;
+    public apiDocumentUploaddocumentsPost(document?: Document, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Document>>>;
+    public apiDocumentUploaddocumentsPost(document?: Document, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -233,7 +254,7 @@ export class DocumentService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.post<Array<Document>>(`${this.configuration.basePath}/document/uploaddocuments`,
+        return this.httpClient.post<Array<Document>>(`${this.configuration.basePath}/api/document/uploaddocuments`,
             document,
             {
                 responseType: <any>responseType_,

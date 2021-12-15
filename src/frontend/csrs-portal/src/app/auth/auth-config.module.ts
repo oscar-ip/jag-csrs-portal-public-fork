@@ -26,7 +26,8 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         autoUserInfo: true,
         customParamsAuthRequest: {
           prompt: customConfig.prompt,
-        }
+        },
+        historyCleanupOff: true,
       };
     })
   );
