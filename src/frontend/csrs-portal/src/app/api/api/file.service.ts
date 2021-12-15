@@ -89,12 +89,12 @@ export class FileService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public fileApplicationdetailGet(fileGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<object>>;
-    public fileApplicationdetailGet(fileGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<object>>>;
-    public fileApplicationdetailGet(fileGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<object>>>;
-    public fileApplicationdetailGet(fileGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiFileApplicationdetailGet(fileGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<object>>;
+    public apiFileApplicationdetailGet(fileGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<object>>>;
+    public apiFileApplicationdetailGet(fileGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<object>>>;
+    public apiFileApplicationdetailGet(fileGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
         if (fileGuid === null || fileGuid === undefined) {
-            throw new Error('Required parameter fileGuid was null or undefined when calling fileApplicationdetailGet.');
+            throw new Error('Required parameter fileGuid was null or undefined when calling apiFileApplicationdetailGet.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -104,6 +104,13 @@ export class FileService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -125,7 +132,7 @@ export class FileService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<Array<object>>(`${this.configuration.basePath}/file/applicationdetail`,
+        return this.httpClient.get<Array<object>>(`${this.configuration.basePath}/api/file/applicationdetail`,
             {
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
@@ -142,12 +149,12 @@ export class FileService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public fileCreateapplicationPost(partyGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<object>>;
-    public fileCreateapplicationPost(partyGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<object>>>;
-    public fileCreateapplicationPost(partyGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<object>>>;
-    public fileCreateapplicationPost(partyGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiFileCreateapplicationPost(partyGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<object>>;
+    public apiFileCreateapplicationPost(partyGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<object>>>;
+    public apiFileCreateapplicationPost(partyGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<object>>>;
+    public apiFileCreateapplicationPost(partyGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
         if (partyGuid === null || partyGuid === undefined) {
-            throw new Error('Required parameter partyGuid was null or undefined when calling fileCreateapplicationPost.');
+            throw new Error('Required parameter partyGuid was null or undefined when calling apiFileCreateapplicationPost.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -157,6 +164,13 @@ export class FileService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -178,7 +192,7 @@ export class FileService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.post<Array<object>>(`${this.configuration.basePath}/file/createapplication`,
+        return this.httpClient.post<Array<object>>(`${this.configuration.basePath}/api/file/createapplication`,
             null,
             {
                 params: localVarQueryParameters,
@@ -196,12 +210,12 @@ export class FileService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public fileListapplicationsPost(partyGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<FileToList>>;
-    public fileListapplicationsPost(partyGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<FileToList>>>;
-    public fileListapplicationsPost(partyGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<FileToList>>>;
-    public fileListapplicationsPost(partyGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiFileListapplicationsPost(partyGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<FileToList>>;
+    public apiFileListapplicationsPost(partyGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<FileToList>>>;
+    public apiFileListapplicationsPost(partyGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<FileToList>>>;
+    public apiFileListapplicationsPost(partyGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
         if (partyGuid === null || partyGuid === undefined) {
-            throw new Error('Required parameter partyGuid was null or undefined when calling fileListapplicationsPost.');
+            throw new Error('Required parameter partyGuid was null or undefined when calling apiFileListapplicationsPost.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -211,6 +225,13 @@ export class FileService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -232,7 +253,7 @@ export class FileService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.post<Array<FileToList>>(`${this.configuration.basePath}/file/listapplications`,
+        return this.httpClient.post<Array<FileToList>>(`${this.configuration.basePath}/api/file/listapplications`,
             null,
             {
                 params: localVarQueryParameters,
@@ -250,12 +271,12 @@ export class FileService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public fileUpdateapplicationPatch(fileGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<object>>;
-    public fileUpdateapplicationPatch(fileGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<object>>>;
-    public fileUpdateapplicationPatch(fileGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<object>>>;
-    public fileUpdateapplicationPatch(fileGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiFileUpdateapplicationPatch(fileGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<object>>;
+    public apiFileUpdateapplicationPatch(fileGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<object>>>;
+    public apiFileUpdateapplicationPatch(fileGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<object>>>;
+    public apiFileUpdateapplicationPatch(fileGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
         if (fileGuid === null || fileGuid === undefined) {
-            throw new Error('Required parameter fileGuid was null or undefined when calling fileUpdateapplicationPatch.');
+            throw new Error('Required parameter fileGuid was null or undefined when calling apiFileUpdateapplicationPatch.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -265,6 +286,13 @@ export class FileService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -286,7 +314,7 @@ export class FileService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.patch<Array<object>>(`${this.configuration.basePath}/file/updateapplication`,
+        return this.httpClient.patch<Array<object>>(`${this.configuration.basePath}/api/file/updateapplication`,
             null,
             {
                 params: localVarQueryParameters,

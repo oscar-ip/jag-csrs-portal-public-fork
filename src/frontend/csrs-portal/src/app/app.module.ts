@@ -22,7 +22,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LandingComponent } from './components/landing/landing.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { AppConfigService } from './services/app-config.service';
+import { AppConfigService, AppConfig } from './services/app-config.service';
 
 import { WindowRefService } from '@core/services/window-ref.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -34,10 +34,38 @@ import { ApplicationFormStepperComponent } from './components/application-form-s
 import { ChildApplicationQuestionComponent } from './components/child-application-question/child-application-question.component';
 
 import { AuthConfigModule } from './auth/auth-config.module';
+import { ApiModule } from './api/api.module';
+import { Configuration } from './api/configuration';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+////////////////////
+//import { ApiModule, Configuration } from '';
+/*@NgModule({
+    imports: [ ApiModule ],
+    declarations: [ AppComponent ],
+    providers: [
+      {
+        provide: Configuration,
+        useFactory: (authService: AuthService) => new Configuration(
+          {
+            basePath: environment.apiUrl,
+            accessToken: authService.getAccessToken.bind(authService)
+          }
+        ),
+        deps: [AuthService],
+        multi: false
+      }
+    ],
+    bootstrap: [ AppComponent ]
+})
+export class AppModule {}
+*/
+////////////////////
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +88,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CdkAccordionModule,
     MatGridListModule,
     AuthConfigModule,
+    ApiModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -76,7 +105,15 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AppConfigService,
     {
       provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { showError: true }
+      useValue: { showError: true },
+      useFactory: (authService: OidcSecurityService) => new Configuration (
+        {
+          basePath: '',//environment.apiUrl,
+          accessToken: authService.getAccessToken.bind(authService)
+        }
+      ),
+      deps: [OidcSecurityService],
+      multi: false
     },
     WindowRefService,
   ],
@@ -85,8 +122,4 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 
 
 
-export class AppModule {
-   constructor()
-   {
-   }
-}
+export class AppModule {}

@@ -10,6 +10,9 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { JsonPipe } from '@angular/common';
+import { AccountService } from 'app/api/api/account.service';
+import { LookupService } from 'app/api/api/lookup.service';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-child-application-question',
@@ -32,18 +35,25 @@ export class ChildApplicationQuestionComponent implements OnInit {
   identityData: any = [];
   referalsData: any = [];
   courtLocationsData: any = [];
-  constructor(private _formBuilder: FormBuilder, private http: HttpClient) {}
+  _accountService: AccountService;
+  _lookupService: LookupService;
+
+  constructor(private _formBuilder: FormBuilder, private http: HttpClient,
+    @Inject(AccountService) private accountService,
+    @Inject(LookupService) private lookupService) {}
 
   ngOnInit() {
+    this._accountService = this.accountService;
+    this._lookupService = this.lookupService;
     this.provinceData = [{label: 'province', value: 'british columbia'}];
     this.identityData = [{label: 'hai', value: ''}];
     this.genderData =  [{label: 'hai', value: 1234}];
-     this.getReferalsData();
+    this.getReferalsData();
     this.getCourtLocationData();
     this.getIdentityData();
     this.getProvinceData();
     this.getGenderyData();
-    
+
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
       secondControl: ['', Validators.required]
@@ -78,7 +88,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       postalCode: [],
       phoneNumber: []
     });
-    
+
     this.fourthFormGroup1 = this._formBuilder.group({
       users: this._formBuilder.array([
         this._formBuilder.group({
@@ -88,7 +98,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
           givenNames: [],
           middleName: []
         })
-       
+
       ])
     });
     // this.fourthFormGroup = this._formBuilder.group({
@@ -148,33 +158,35 @@ export class ChildApplicationQuestionComponent implements OnInit {
         this.nineFormGroup.patchValue(data['nineFormGroup']);
       }
   }
- 
+
 }
-  getIdentityData() {
-    this.http.get('https://localhost:8081/Account/Identity').subscribe(data => {
+getIdentityData() {
+  this._accountService.apiAccountIdentitiesGet().subscribe(data => {
       this.identityData = data;
     });
-  }
-  getProvinceData() {
-    this.http.get('https://localhost:8081/Account/Province').subscribe(data1 => {
-      this.provinceData = data1;
-    });
-  }
-  getGenderyData() {
-    this.http.get('https://localhost:8081/Account/Gender').subscribe(data2 => {
+  };
+
+getProvinceData() {
+  this._accountService.apiAccountProvincesGet().subscribe(data1 => {
+    this.provinceData = data1;
+  });
+
+}
+getGenderyData() {
+  this._accountService.apiAccountGendersGet().subscribe(data2 => {
       this.genderData =  data2;
+  });
+}
+getCourtLocationData() {
+  this._lookupService.courtlocationsGet().subscribe(data1 => {
+     this.courtLocationsData = data1;
     });
-  }
-  getCourtLocationData() {
-    this.http.get('https://localhost:8081/CourtLocations').subscribe(data1 => {
-      this.courtLocationsData = data1;
-    });
-  }
-  getReferalsData() {
-    this.http.get('https://localhost:8081/Account/Referrals').subscribe(data1 => {
+}
+getReferalsData() {
+  this._accountService.apiAccountReferralsGet().subscribe(data1 => {
       this.referalsData = data1;
-    });
-  }
+  });
+}
 
   callAntherchild(){
     const usersArray = this.fourthFormGroup1.controls.users as FormArray;

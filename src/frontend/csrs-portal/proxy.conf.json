@@ -1,0 +1,8 @@
+{
+    "/api/*": {
+      "target": "http://jag-csrs-portal-public-f0b5b6-dev.apps.silver.devops.gov.bc.ca/",//"http://localhost:8081/",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    }
+}

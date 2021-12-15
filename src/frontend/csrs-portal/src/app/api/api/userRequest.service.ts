@@ -89,15 +89,22 @@ export class UserRequestService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public userrequestCreatePost(userRequest: UserRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<string>;
-    public userrequestCreatePost(userRequest: UserRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<string>>;
-    public userrequestCreatePost(userRequest: UserRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<string>>;
-    public userrequestCreatePost(userRequest: UserRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiUserrequestCreatePost(userRequest: UserRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<string>;
+    public apiUserrequestCreatePost(userRequest: UserRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<string>>;
+    public apiUserrequestCreatePost(userRequest: UserRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<string>>;
+    public apiUserrequestCreatePost(userRequest: UserRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
         if (userRequest === null || userRequest === undefined) {
-            throw new Error('Required parameter userRequest was null or undefined when calling userrequestCreatePost.');
+            throw new Error('Required parameter userRequest was null or undefined when calling apiUserrequestCreatePost.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -130,7 +137,7 @@ export class UserRequestService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.post<string>(`${this.configuration.basePath}/userrequest/create`,
+        return this.httpClient.post<string>(`${this.configuration.basePath}/api/userrequest/create`,
             userRequest,
             {
                 responseType: <any>responseType_,
