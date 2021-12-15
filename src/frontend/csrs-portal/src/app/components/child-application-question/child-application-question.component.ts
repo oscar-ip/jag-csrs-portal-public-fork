@@ -6,13 +6,14 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { JsonPipe } from '@angular/common';
 import { AccountService } from 'app/api/api/account.service';
 import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
+import { LoggerService } from '@core/services/logger.service';
 
 @Component({
   selector: 'app-child-application-question',
@@ -37,14 +38,18 @@ export class ChildApplicationQuestionComponent implements OnInit {
   courtLocationsData: any = [];
   _accountService: AccountService;
   _lookupService: LookupService;
+  _logger: LoggerService;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
     @Inject(AccountService) private accountService,
-    @Inject(LookupService) private lookupService) {}
+    @Inject(LookupService) private lookupService,
+    @Inject(LoggerService) private logger) {}
 
   ngOnInit() {
     this._accountService = this.accountService;
     this._lookupService = this.lookupService;
+    this._logger = this.logger;
+
     this.provinceData = [{label: 'province', value: 'british columbia'}];
     this.identityData = [{label: 'hai', value: ''}];
     this.genderData =  [{label: 'hai', value: 1234}];
@@ -163,30 +168,82 @@ export class ChildApplicationQuestionComponent implements OnInit {
 getIdentityData() {
   this._accountService.apiAccountIdentitiesGet().subscribe(data => {
       this.identityData = data;
-    });
-  };
+    },
+    (err: HttpErrorResponse) => {
+      if (err.error instanceof Error) {
+       //A client-side or network error occurred.
+       this._logger.log('error',err.error.message);
+      } else {
+          //Backend returns unsuccessful response codes such as 404, 500 etc.
+          this._logger.log('info',`Backend returned status code: ${err.status}`);
+          this._logger.log('info',`Response body: ${err.error}`);
+        }
+     });
+}
 
 getProvinceData() {
   this._accountService.apiAccountProvincesGet().subscribe(data1 => {
     this.provinceData = data1;
-  });
+  },
+  (err: HttpErrorResponse) => {
+    if (err.error instanceof Error) {
+     //A client-side or network error occurred.
+     this._logger.log('error',err.error.message);
+    } else {
+        //Backend returns unsuccessful response codes such as 404, 500 etc.
+        this._logger.log('info',`Backend returned status code: ${err.status}`);
+        this._logger.log('info',`Response body: ${err.error}`);
+      }
+   });
+}
 
-}
-getGenderyData() {
-  this._accountService.apiAccountGendersGet().subscribe(data2 => {
-      this.genderData =  data2;
-  });
-}
-getCourtLocationData() {
-  this._lookupService.courtlocationsGet().subscribe(data1 => {
-     this.courtLocationsData = data1;
+  getGenderyData() {
+    this._accountService.apiAccountGendersGet().subscribe(data2 => {
+        this.genderData =  data2;
+    },
+    (err: HttpErrorResponse) => {
+      if (err.error instanceof Error) {
+      //A client-side or network error occurred.
+      this._logger.log('error',err.error.message);
+      } else {
+          //Backend returns unsuccessful response codes such as 404, 500 etc.
+          this._logger.log('info',`Backend returned status code: ${err.status}`);
+          this._logger.log('info',`Response body: ${err.error}`);
+        }
     });
-}
-getReferalsData() {
-  this._accountService.apiAccountReferralsGet().subscribe(data1 => {
-      this.referalsData = data1;
-  });
-}
+  }
+
+  getCourtLocationData() {
+    this._lookupService.courtlocationsGet().subscribe(data1 => {
+      this.courtLocationsData = data1;
+      },
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+        //A client-side or network error occurred.
+        this._logger.log('error',err.error.message);
+        } else {
+            //Backend returns unsuccessful response codes such as 404, 500 etc.
+            this._logger.log('info',`Backend returned status code: ${err.status}`);
+            this._logger.log('info',`Response body: ${err.error}`);
+          }
+      });
+  }
+
+  getReferalsData() {
+    this._accountService.apiAccountReferralsGet().subscribe(data1 => {
+        this.referalsData = data1;
+    },
+    (err: HttpErrorResponse) => {
+      if (err.error instanceof Error) {
+      //A client-side or network error occurred.
+      this._logger.log('error',err.error.message);
+      } else {
+          //Backend returns unsuccessful response codes such as 404, 500 etc.
+          this._logger.log('info',`Backend returned status code: ${err.status}`);
+          this._logger.log('info',`Response body: ${err.error}`);
+        }
+    });
+  }
 
   callAntherchild(){
     const usersArray = this.fourthFormGroup1.controls.users as FormArray;
