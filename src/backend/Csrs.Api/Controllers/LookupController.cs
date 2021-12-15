@@ -6,7 +6,6 @@ using System.Net;
 
 namespace Csrs.Api.Controllers
 {
-    [ApiController]
     public class LookupController : CsrsControllerBase<LookupController>
     {
         public LookupController(IMediator mediator, ILogger<LookupController> logger) : base(mediator, logger)

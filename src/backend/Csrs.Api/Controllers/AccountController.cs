@@ -8,8 +8,6 @@ using System.Net;
 
 namespace Csrs.Api.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
     public class AccountController : CsrsControllerBase<AccountController>
     {
         public AccountController(IMediator mediator, ILogger<AccountController> logger)
