@@ -6,8 +6,6 @@ using System.Net;
 
 namespace Csrs.Api.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
     public class FeedbackController : CsrsControllerBase<FeedbackController>
     {
         public FeedbackController(IMediator mediator, ILogger<FeedbackController> logger)
