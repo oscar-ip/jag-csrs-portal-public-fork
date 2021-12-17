@@ -15,6 +15,7 @@ import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 
 @Component({
@@ -41,16 +42,19 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _accountService: AccountService;
   _lookupService: LookupService;
   _logger: LoggerService;
+  _oidc: OidcSecurityService;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
     @Inject(AccountService) private accountService,
     @Inject(LookupService) private lookupService,
-    @Inject(LoggerService) private logger) {}
+    @Inject(LoggerService) private logger,
+    @Inject(OidcSecurityService) private oidc) {}
 
   ngOnInit() {
     this._accountService = this.accountService;
     this._lookupService = this.lookupService;
     this._logger = this.logger;
+    this._oidc = this.oidc;
 
     this.provinceData = [{label: 'province', value: 'british columbia'}];
     this.identityData = [{label: 'hai', value: ''}];
@@ -168,8 +172,11 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
 }
   getIdentityData() {
+
+    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
       this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => this.identityData = data,
+
         error: (e) => {
           if (e.error instanceof Error) {
             this._logger.error(e.error.message);
@@ -183,6 +190,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
   getProvinceData() {
+    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountProvincesGet().subscribe({
       next: (data) => this.provinceData = data,
       error: (e) => {
@@ -198,6 +206,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
   getGenderyData() {
+    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountGendersGet().subscribe({
       next: (data) => this.genderData = data,
       error: (e) => {
@@ -213,6 +222,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
   getCourtLocationData() {
+    this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
       this._lookupService.courtlocationsGet().subscribe({
         next: (data) => this.courtLocationsData = data,
         error: (e) => {
@@ -228,6 +238,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
   getReferalsData() {
+    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountReferralsGet().subscribe({
       next: (data) => this.referalsData = data,
       error: (e) => {
