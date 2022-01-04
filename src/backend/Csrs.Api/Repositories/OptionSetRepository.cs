@@ -76,7 +76,10 @@ namespace Csrs.Api.Services
 
         private static Uri CreatePicklistUri(string entityName, string attributeName)
         {
+
             var text = $"EntityDefinitions(LogicalName='{entityName}')/Attributes/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$filter=LogicalName eq '{attributeName}'&$expand=OptionSet";
+            //var text = $"EntityDefinitions(LogicalName='{entityName}')/Attributes(LogicalName='{attributeName}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$filter=LogicalName eq '{attributeName}'&$expand=OptionSet";
+
             return new Uri(text, UriKind.RelativeOrAbsolute);
         }
 

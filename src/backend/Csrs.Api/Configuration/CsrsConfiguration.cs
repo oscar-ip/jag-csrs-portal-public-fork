@@ -15,6 +15,13 @@
         /// </summary>
         public OAuthConfiguration? OAuth { get; set; }
 
+        /// <summary>
+        /// Contains the Api GateWay options for accessing Dynamics
+        /// </summary>
+        public ApiGatewayOptions? ApiGateway { get; set; }
+
         public TracingConfiguration? Tracing { get; set; }
+
+
     }
 }

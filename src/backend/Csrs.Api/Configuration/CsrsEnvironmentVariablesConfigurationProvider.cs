@@ -14,6 +14,14 @@
 
             Add("JAEGER_HOST", $"{nameof(CsrsConfiguration.Tracing)}:{nameof(TracingConfiguration.Jaeger)}:{nameof(JaegerConfiguration.Host)}");
             Add("JAEGER_PORT", $"{nameof(CsrsConfiguration.Tracing)}:{nameof(TracingConfiguration.Jaeger)}:{nameof(JaegerConfiguration.Port)}");
+
+            Add("OAUTH_OAUTHURL", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.AuthorizationUrl)}");
+            Add("OAUTH_PASSWORD", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.Password)}");
+            Add("OAUTH_USERNAME", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.Username)}");
+            Add("OAUTH_SECRET", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.Secret)}");
+            Add("OAUTH_RESOURCEURL", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.ResourceUrl)}");
+            Add("OAUTH_CLIENTID", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.ClientId)}");
+            Add("APIGATEWAY_BASEPATH", $"{nameof(CsrsConfiguration.ApiGateway)}:{nameof(ApiGatewayOptions.BasePath)}");
         }
 
         /// <summary>

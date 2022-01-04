@@ -11,6 +11,6 @@ public static class ConfigurationManagerExtensions
     [ExcludeFromCodeCoverage]
     public static void AddCsrsEnvironmentVariables(this ConfigurationManager configurationManager)
     {
-        ((IConfigurationBuilder)configurationManager).Add(new CsrsEnvironmentVariablesConfigurationSource());
+        ((IConfigurationBuilder)configurationManager).Add(new CsrsEnvironmentVariablesConfigurationSource()).AddEnvironmentVariables();
     }
 }

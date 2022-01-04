@@ -41,31 +41,6 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
-
-////////////////////
-//import { ApiModule, Configuration } from '';
-/*@NgModule({
-    imports: [ ApiModule ],
-    declarations: [ AppComponent ],
-    providers: [
-      {
-        provide: Configuration,
-        useFactory: (authService: AuthService) => new Configuration(
-          {
-            basePath: environment.apiUrl,
-            accessToken: authService.getAccessToken.bind(authService)
-          }
-        ),
-        deps: [AuthService],
-        multi: false
-      }
-    ],
-    bootstrap: [ AppComponent ]
-})
-export class AppModule {}
-*/
-////////////////////
-
 @NgModule({
   declarations: [
     AppComponent,

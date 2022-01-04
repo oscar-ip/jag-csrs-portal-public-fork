@@ -4,8 +4,8 @@ services:
   # #############################################################################################
   # ###                                 Csrs FRONTEND                                         ###
   # #############################################################################################
-  csrs-portal:
-    container_name: csrs-portal
+  jag-csrs-frontend:
+    container_name: jag-csrs-frontend
     build:
       context: ./src/frontend/csrs-portal
     restart: always
@@ -15,13 +15,13 @@ services:
     ## time we change the nginx.conf
     #volumes:
     #  - ./src/frontend/csrs-portal/nginx.conf:/opt/app-root/etc/nginx.default.d/default.conf
-    depends_on: [csrs-portal-api, keycloak]
+    depends_on: [jag-csrs-api, keycloak]
 
   # #############################################################################################
   # ###                                 Csrs BACKEND                                          ###
   # #############################################################################################
-  csrs-portal-api:
-    container_name: csrs-portal-api
+  jag-csrs-api:
+    container_name: jag-csrs-api
     build:
       context: ./src/backend
     environment:

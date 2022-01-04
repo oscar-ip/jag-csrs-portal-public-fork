@@ -5,6 +5,7 @@ using Csrs.Api.Models;
 using Csrs.Api.Models.Dynamics;
 using Csrs.Api.Repositories;
 using Csrs.Api.Services;
+using Csrs.Api.ApiGateway;
 using Simple.OData.Client;
 using System.Configuration;
 
@@ -20,41 +21,51 @@ public static class WebApplicationBuilderExtensions
     {
         var configuration = builder.Configuration.Get<CsrsConfiguration>();
         OAuthConfiguration? oAuthOptions = configuration?.OAuth;
+        ApiGatewayOptions? apiGatewayOptions = configuration?.ApiGateway;
 
-        if (oAuthOptions is null || oAuthOptions.ResourceUrl is null)
+
+        if ((oAuthOptions is null || oAuthOptions.ResourceUrl is null) &&
+            (apiGatewayOptions is null || apiGatewayOptions.BasePath is null))
         {
-            throw new ConfigurationErrorsException("OAuth configuration is not set");
+            throw new ConfigurationErrorsException("OAuth and ApiGateWay configurations are not set");
         }
 
         var services = builder.Services;
 
         services.AddSingleton(oAuthOptions);
+        services.AddSingleton(apiGatewayOptions);
 
         services.AddMemoryCache();
 
         // Add OAuth Middleware
         services.AddTransient<OAuthHandler>();
+        // Add ApiGateway Middleware
+        services.AddTransient<ApiGatewayHandler>();
 
         // Register IOAuthApiClient and ODataClientSettings
         services.AddHttpClient<IOAuthApiClient, OAuthApiClient>(client =>
         {
-            client.Timeout = TimeSpan.FromSeconds(10); // set the auth timeout
+            client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
         });
 
         // Register httpClient for OdataClient with OAuthHandler
         services.AddHttpClient<ODataClientSettings>(client => 
-        { 
-            client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+
+        {
+            client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
             client.Timeout = TimeSpan.FromSeconds(30); // data timeout
         })
-        .AddHttpMessageHandler<OAuthHandler>();
+        .AddHttpMessageHandler<OAuthHandler>()
+        .AddHttpMessageHandler<ApiGatewayHandler>();
 
-        services.AddHttpClient<IOptionSetRepository, OptionSetRepository>(client => 
+        services.AddHttpClient<IOptionSetRepository, OptionSetRepository>(client =>
         {
-            client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
-            client.Timeout = TimeSpan.FromSeconds(10); // options timeout
+            client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
+            client.Timeout = TimeSpan.FromSeconds(110); // options timeout
+
         })
-        .AddHttpMessageHandler<OAuthHandler>();
+        .AddHttpMessageHandler<OAuthHandler>()
+        .AddHttpMessageHandler<ApiGatewayHandler>();
 
         services.AddTransient<IODataClient>(provider =>
         {

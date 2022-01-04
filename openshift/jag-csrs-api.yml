@@ -6,7 +6,7 @@ metadata:
   
 labels:
   app: ${APP_NAME}
-  app.kubernetes.io/name: ${COMPONENT_NAME}
+  app.kubernetes.io/name: ${APP_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 
   
@@ -18,19 +18,28 @@ parameters:
   value: jag-csrs
 
 - name: SPLUNK_CONFIG_NAME
-  description: The application name that each component is part of
+  description: Source of Splunk config values
   required: true
   value: blahblah
 
+- name: OAUTH_CONFIG_NAME
+  description: Source of Dynamics config values
+  required: true
+  value: blahblah
 - name: ROUTE_PREFIX
   description: The application name that each component is part of
   required: true
-  value: jag-csrs-portal-public
+  value: jag-csrs-frontend
 
 - name: COMPONENT_NAME
   description: The component name
   required: true
   value: jag-csrs-frontend
+
+- name: JWT_CONFIG_NAME
+  description: The jwt config name
+  required: true
+  value: jwt
 
 - name: API_COMPONENT_NAME
   description: The API component name
@@ -61,18 +70,18 @@ parameters:
   
 objects:
 
-### JAG-csrs Deployment Config ###
+### JAG-csrs API Deployment Config ###
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
-    name: ${COMPONENT_NAME}
+    name: ${API_COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
       
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${COMPONENT_NAME}
+      name: ${API_COMPONENT_NAME}
     strategy:
       type: Rolling
       maxSurge: 50%
@@ -80,19 +89,29 @@ objects:
     template:
       metadata:
         labels:
-          name: ${COMPONENT_NAME}
-          app.kubernetes.io/instance: ${COMPONENT_NAME}
-          app.openshift.io/runtime: angularjs
+          name: ${API_COMPONENT_NAME}
+          app.kubernetes.io/instance: ${API_COMPONENT_NAME}
+          app.openshift.io/runtime: dotnet
       spec:
         containers:
           # due to permission issue not using tools space; dev is pulling from dev
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_ENV}/${APP_NAME}:${OC_ENV}
-            name: ${COMPONENT_NAME} 
+            name: ${API_COMPONENT_NAME} 
             imagePullPolicy: Always
             ports:
-              - containerPort: 8080
+              - containerPort: 8081
             env:
+            - name: JWT_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: ${JWT_CONFIG_NAME}
+                  key: JWT__AUDIENCE
+            - name: JWT_AUTHORITY
+              valueFrom:
+                secretKeyRef:
+                  name: ${JWT_CONFIG_NAME}
+                  key: JWT__AUTHORITY
             - name: SPLUNK_URL
               valueFrom:
                 secretKeyRef:
@@ -108,6 +127,41 @@ objects:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_INDEX
+            - name: OAUTH_CLIENTID
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__CLIENTID
+            - name: OAUTH_OAUTHURL
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__OAUTHURL
+            - name: OAUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__PASSWORD
+            - name: OAUTH_RESOURCEURL
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__RESOURCEURL
+            - name: OAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__SECRET
+            - name: OAUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__USERNAME
+            - name: APIGATEWAY_BASEPATH
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: APIGATEWAY_BASEPATH
             - name: BCEID_URL
               value: ${BCEID_URL}
             resources:
@@ -115,7 +169,7 @@ objects:
                 cpu: 250m
                 memory: 1000Mi
               requests:
-                cpu: 125m
+                cpu: 250m
                 memory: 512Mi
             # Took away readiness and liveness probe until those end points are ready
     triggers:
@@ -124,50 +178,28 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${COMPONENT_NAME}
+            - ${API_COMPONENT_NAME}
           from:
             kind: ImageStreamTag
             namespace: ${OC_NAMESPACE}-${OC_ENV} #do not have permission to leverage tools
-            name: ${COMPONENT_NAME}:${OC_ENV}
+            name: ${API_COMPONENT_NAME}:${OC_ENV}
   status: {}
 
-
-
-### JAG-csrs Service ###
+# https://stackoverflow.com/a/61452441
+### JAG-csrs-backend Service ###
 - apiVersion: v1
   kind: Service
   metadata:
-    name: ${COMPONENT_NAME}
+    name: ${API_COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
   spec:
     ports:
       - name: http
         protocol: TCP
-        port: 80
-        targetPort: 8080
+        port: 8081
+        targetPort: 8081
     selector:
-      name: ${COMPONENT_NAME}
+      name: ${API_COMPONENT_NAME}
     sessionAffinity: None
     type: ClusterIP
 
-- apiVersion: route.openshift.io/v1
-  kind: Route
-  metadata:
-    name: ${ROUTE_PREFIX}
-    namespace: ${OC_NAMESPACE}-${OC_ENV}
-  annotations:
-    # if we do not use sticky-session, disable_cookies needs to be true
-    haproxy.router.openshift.io/disable_cookies: "true"
-    # balance algorithm
-    haproxy.router.openshift.io/balance: roundrobin
-  spec:
-    host: ${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
-    to:
-      kind: Service
-      name: ${COMPONENT_NAME}
-    port:
-      targetPort: http
-    tls:
-      termination: edge
-      insecureEdgeTerminationPolicy: Redirect
-    wildcardPolicy: None

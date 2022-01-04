@@ -8,7 +8,7 @@ on:
   # Trigger the this workflow on push/merge on main
   push:
     branches:
-      - 'main' 
+      - 'main'
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
