@@ -23,18 +23,12 @@ export class WelcomeUserComponent implements OnInit {
     this.accountService.apiAccountGet('response', false).subscribe({
       next: (data) => {
         this._reponse = data;
-        if (this._reponse.status === HttpStatusCode.NotFound) {
+        if (this._reponse.status === HttpStatusCode.NotFound ||
+            ( this._reponse.status === HttpStatusCode.Ok &&
+              (this._reponse.body.files === null || this._reponse.body.files.length === 0))) {
           //redirect to application form
           this.router.navigate(AppRoutes.routePath(AppRoutes.APPLICATIONFORM));
         }
-        else
-          if (this._reponse.status === HttpStatusCode.Ok) {
-            if (this._reponse.body.files === null || this._reponse.body.files.length === 0)
-            {
-              //redirect to application form
-              this.router.navigate(AppRoutes.routePath(AppRoutes.APPLICATIONFORM));
-            }
-          }
       },
       error: (e) => {
         if (e.error instanceof Error) {
