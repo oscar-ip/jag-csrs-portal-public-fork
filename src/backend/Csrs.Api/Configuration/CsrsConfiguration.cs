@@ -22,6 +22,9 @@
 
         public TracingConfiguration? Tracing { get; set; }
 
-
+        /// <summary>
+        /// Contains the configuration for FileManager service.
+        /// </summary>
+        public FileManagerConfiguration FileManager { get; set; }
     }
 }

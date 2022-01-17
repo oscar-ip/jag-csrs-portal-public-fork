@@ -8,6 +8,9 @@ using Csrs.Api.Services;
 using Csrs.Api.ApiGateway;
 using Simple.OData.Client;
 using System.Configuration;
+using Grpc.Net.Client;
+using Grpc.Core;
+using Grpc.Net.Client.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -67,6 +70,8 @@ public static class WebApplicationBuilderExtensions
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();
 
+        ConfigureFileManagerService(builder, configuration?.FileManager);
+
         services.AddTransient<IODataClient>(provider =>
         {
             var settings = provider.GetRequiredService<ODataClientSettings>();
@@ -96,6 +101,43 @@ public static class WebApplicationBuilderExtensions
         // mappers
         services.AddTransient<IInsertOrUpdateFieldMapper<Csrs.Api.Models.File, SSG_CsrsFile>, FileInsertOrUpdateFieldMapper>();
         services.AddTransient<IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty>, PartyInsertOrUpdateFieldMapper>();
+    }
 
+    private static void ConfigureFileManagerService(WebApplicationBuilder builder, FileManagerConfiguration? configuration)
+    {
+        if (string.IsNullOrWhiteSpace(configuration?.Address))
+        {
+            throw new ConfigurationErrorsException($"FileManager configuration is not set, {nameof(CsrsConfiguration.FileManager)}:{nameof(FileManagerConfiguration.Address)} is required.");
+        }
+
+        string address = configuration.Address;
+
+        // determine if we are using http or https
+        ChannelCredentials credentials = ChannelCredentials.Insecure;
+
+        bool? secure = configuration.Secure;
+
+        if (secure.HasValue && secure.Value)
+        {
+            credentials = ChannelCredentials.SecureSsl;
+        }
+
+        builder.Services.AddSingleton(services =>
+        {
+            var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
+            {
+                Credentials = credentials,
+                ServiceConfig = new ServiceConfig { LoadBalancingConfigs = { new RoundRobinConfig() } },
+                ServiceProvider = services
+            });
+
+            return channel;
+        });
+
+        builder.Services.AddTransient(services =>
+        {
+            GrpcChannel channel = services.GetRequiredService<GrpcChannel>();
+            return new Csrs.Services.FileManager.FileManager.FileManagerClient(channel);
+        });
     }
 }
