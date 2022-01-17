@@ -32,6 +32,7 @@ namespace Csrs.Interfaces
         public const string FederalReportListTitle = "adoxio_federalreportexport";
         public const string LicenceDocumentUrlTitle = "adoxio_licences";
         public const string LicenceDocumentListTitle = "Licence";
+        public const string SharePointSpaceCharacter = "_x0020_";
 
 
         private const int MaxUrlLength = 260; // default maximum URL length.
@@ -48,6 +49,22 @@ namespace Csrs.Interfaces
         private string Digest;
         private CookieContainer _CookieContainer;
         private HttpClientHandler _HttpClientHandler;
+
+        public class AddFileResponse
+        {
+            public string ETag { get; set; }
+            public ListItemAllFieldsObj ListItemAllFields { get; set; }
+        }
+
+        public class ListItemAllFieldsObj
+        {
+            public int ID { get; set; }
+        }
+
+        public class ContextInfoResponse
+        {
+            public string FormDigestValue { get; set; }
+        }
 
         public SharePointFileManager(IConfiguration Configuration)
         {
@@ -85,6 +102,12 @@ namespace Csrs.Interfaces
             // sometimes SharePoint could be using a different username / password.
             string sharePointSsgUsername = Configuration["SHAREPOINT_SSG_USERNAME"];
             string sharePointSsgPassword = Configuration["SHAREPOINT_SSG_PASSWORD"];
+
+            // Windows Authentication
+            string sharePointWindowsUsername = Configuration["SHAREPOINT_WINDOWS_USERNAME"];
+            string sharePointWindowsPassword = Configuration["SHAREPOINT_WINDOWS_PASSWORD"];
+            string sharePointWindowsDomain = Configuration["SHAREPOINT_WINDOWS_DOMAIN"];
+
 
             if (string.IsNullOrEmpty(sharePointSsgUsername))
             {
@@ -149,6 +172,13 @@ namespace Csrs.Interfaces
                 task.Wait();
                 authenticationResult = task.Result;
                 Authorization = authenticationResult.CreateAuthorizationHeader();
+            }
+            else if (!string.IsNullOrEmpty(sharePointWindowsUsername)
+                && !string.IsNullOrEmpty(sharePointWindowsPassword)
+                && !string.IsNullOrEmpty(sharePointWindowsDomain)
+                )
+            {
+                _HttpClientHandler.Credentials = new NetworkCredential(sharePointWindowsUsername, sharePointWindowsPassword, sharePointWindowsDomain);
             }
             else
             // Scenario #3 - Using an API Gateway with Basic Authentication.  The API Gateway will handle other authentication and have different credentials, which may be NTLM
@@ -270,7 +300,7 @@ namespace Csrs.Interfaces
 
             if ((int)_statusCode != 200)
             {
-                var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, null);
@@ -319,6 +349,11 @@ namespace Csrs.Interfaces
                     }
                 }
                 fileDetailsList.Add(searchResult);
+
+                if (searchResult.DocumentType == null)
+                {
+                    searchResult.DocumentType = string.Empty;
+                }
             }
 
             if (documentType != null)
@@ -406,7 +441,7 @@ namespace Csrs.Interfaces
             if (!(_statusCode == HttpStatusCode.OK || _statusCode == HttpStatusCode.Created))
             {
                 string _responseContent;
-                var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
                 _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
                 ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
@@ -462,7 +497,7 @@ namespace Csrs.Interfaces
             if (_statusCode != HttpStatusCode.Created)
             {
                 string _responseContent = null;
-                var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
                 _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
                 ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
@@ -531,7 +566,7 @@ namespace Csrs.Interfaces
             if (_statusCode != HttpStatusCode.Created)
             {
                 string _responseContent = null;
-                var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
                 _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
                 ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
@@ -559,6 +594,20 @@ namespace Csrs.Interfaces
                 __metadata = type,
                 BaseTemplate = 101,
                 Title = listName
+            };
+            return request;
+        }
+
+        private object CreateUpdateListItemRequestRequest(string title, string fileName, string listTitle)
+        {
+            string formattedTitle = listTitle.Replace(" ", SharePointSpaceCharacter);
+            string itemType = $"SP.Data.{formattedTitle}Item";
+            var type = new { type = itemType };
+            var request = new
+            {
+                __metadata = type,
+                FileLeafRef = fileName,
+                Title = title
             };
             return request;
         }
@@ -607,7 +656,7 @@ namespace Csrs.Interfaces
             else
             {
                 string _responseContent = null;
-                var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", response.StatusCode));
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
                 _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
                 ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
@@ -775,7 +824,14 @@ namespace Csrs.Interfaces
         private string GenerateUploadRequestUriString(string folderServerRelativeUrl, string fileName)
         {
             string requestUriString = ApiEndpoint + "web/getFolderByServerRelativeUrl('" + EscapeApostrophe(folderServerRelativeUrl) + "')/Files/add(url='"
-                + EscapeApostrophe(fileName) + "',overwrite=true)";
+                + EscapeApostrophe(fileName) + "',overwrite=true)?$expand=ListItemAllFields";
+            return requestUriString;
+        }
+
+        private string GenerateUpdateListItemUriString(string listTitle, string id)
+        {
+            string requestUriString = ApiEndpoint + "web/lists/getbytitle('" + EscapeApostrophe(listTitle) + "')/items("
+                + EscapeApostrophe(id) + ")";
             return requestUriString;
         }
 
@@ -872,15 +928,83 @@ namespace Csrs.Interfaces
 
                 // make the request.
                 var response = await _Client.SendAsync(endpointRequest);
+                var streamData = response.Content.ReadAsStringAsync().Result;
+
+                var listItemData = JsonConvert.DeserializeObject<AddFileResponse>(streamData);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     result = fileName;
+
+                    return await UpdateListItemFields(listItemData, listTitle, contentType, fileName); ;
                 }
                 else
                 {
                     string _responseContent = null;
-                    var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", response.StatusCode));
+                    var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
+                    _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
+                    ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+
+                    endpointRequest.Dispose();
+                    if (response != null)
+                    {
+                        response.Dispose();
+                    }
+                    throw ex;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Upload a file
+        /// </summary>
+        /// <param name="itemData"></param>
+        /// <param name="listTitle"></param>
+        /// <param name="contentType"></param>
+        /// <param name="fileName"></param>
+        /// <returns>Uploaded Filename, or Null if not successful.</returns>
+        public async Task<string> UpdateListItemFields(AddFileResponse itemData, string listTitle, string contentType, string fileName)
+        {
+            string result = null;
+            if (IsValid())
+            {
+                string requestUriString = GenerateUpdateListItemUriString(listTitle, itemData.ListItemAllFields.ID.ToString());
+
+                HttpRequestMessage endpointRequest = new HttpRequestMessage(HttpMethod.Post, requestUriString);
+
+                var listItem = CreateUpdateListItemRequestRequest(contentType, fileName, listTitle);
+
+                string jsonString = JsonConvert.SerializeObject(listItem);
+                StringContent strContent = new StringContent(jsonString, Encoding.UTF8);
+                strContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
+
+                endpointRequest.Headers.Add("Accept", "application/json;odata=verbose");
+                //endpointRequest.Headers.Add("Accept", "*/*");
+                endpointRequest.Headers.Add("X-Http-Method", "MERGE");
+                //endpointRequest.Headers.Add("X-Requested-With", "XMLHttpRequest");
+                endpointRequest.Headers.Add("IF-MATCH", "*");
+                //endpointRequest.Headers.Add("IF-MATCH", itemData.ETag);
+                endpointRequest.Headers.Add("odata-version", "3.0");
+                endpointRequest.Content = strContent;
+
+                //ByteArrayContent byteArrayContent = new ByteArrayContent(data);
+                //byteArrayContent.Headers.Add(@"content-length", data.Length.ToString());
+                //endpointRequest.Content = byteArrayContent;
+
+                // make the request.
+                var response = await _Client.SendAsync(endpointRequest);
+                var streamData = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    result = streamData;
+                }
+                else
+                {
+                    string _responseContent = null;
+                    var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
                     _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
                     ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
@@ -1024,7 +1148,7 @@ namespace Csrs.Interfaces
             else
             {
                 string _responseContent = null;
-                var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", response.StatusCode));
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
                 _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
                 ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
@@ -1062,7 +1186,7 @@ namespace Csrs.Interfaces
             else
             {
                 string _responseContent = null;
-                var ex = new SharePointRestException(string.Format("Operation returned an invalid status code '{0}'", response.StatusCode));
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
                 _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
                 ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
