@@ -2,7 +2,11 @@
 {
     public class FileManagerConfiguration
     {
-        public string Address { get; set; }
+        /// <summary>
+        /// The address file manager service.
+        /// Can be &quot;dns://host:port&quot; for dynamic dns discovery.
+        /// </summary>
+        public string? Address { get; set; }
 
         /// <summary>
         /// Use https
