@@ -30,11 +30,31 @@ services:
       - SERILOG__WRITETO__1__NAME=Seq
       - SERILOG__WRITETO__1__ARGS__SERVERURL=http://seq:5341
       - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      - FILEMANAGER__ADDRESS=https://localhost:8084
+      - FILEMANAGER__SECURE=true
     ports:
       - "8081:8080"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
     depends_on: [seq, zipkin]
+
+  # ------------------------------------------------------------------------------
+  # jag-csrs-file-manager
+  # 
+  # ------------------------------------------------------------------------------
+  jag-csrs-file-manager:
+    container_name: jag-csrs-file-manager
+    build:
+      context: ./src/backend
+      dockerfile: Csrs.Services.FileManager/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://0.0.0.0:8080
+    ports:
+      - "8084:8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   #############################################################################################
   ###                                  KEYCLOAK                                             ###
