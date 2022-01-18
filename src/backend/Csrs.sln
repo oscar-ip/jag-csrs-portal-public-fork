@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Csrs.Services.FileManager", "Csrs.Services.FileManager\Csrs.Services.FileManager.csproj", "{3DC41D65-A66C-461B-9E55-7A5A735AFD4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharePoint", "Csrs.Interfaces.SharePoint\SharePoint.csproj", "{1095653E-474E-4C3E-BDA2-6CC680346296}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{50D9B167-56C8-4829-833B-DAC8425BFD14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50D9B167-56C8-4829-833B-DAC8425BFD14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50D9B167-56C8-4829-833B-DAC8425BFD14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DC41D65-A66C-461B-9E55-7A5A735AFD4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DC41D65-A66C-461B-9E55-7A5A735AFD4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DC41D65-A66C-461B-9E55-7A5A735AFD4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DC41D65-A66C-461B-9E55-7A5A735AFD4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1095653E-474E-4C3E-BDA2-6CC680346296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1095653E-474E-4C3E-BDA2-6CC680346296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1095653E-474E-4C3E-BDA2-6CC680346296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1095653E-474E-4C3E-BDA2-6CC680346296}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
