@@ -6,6 +6,7 @@ import { AppRoutes } from './app.routes';
 import { ApplicationFormStepperComponent } from './components/application-form-stepper/application-form-stepper.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { QuestionnaireComponent } from './components/questionnaire/questionnaire.component';
+import { CommunicationComponent } from './components/communication/communication.component';
 
 const routes: Routes = [
 
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: AppRoutes.APPLICATIONFORM,
     component: ChildApplicationQuestionComponent,
+  },
+  {
+    path: AppRoutes.COMMUNICATIONFORM,
+    component: CommunicationComponent,
   },
   {
     path: '**',

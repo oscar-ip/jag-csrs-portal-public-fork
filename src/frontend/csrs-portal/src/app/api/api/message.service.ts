@@ -154,6 +154,7 @@ export class MessageService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    /*
     public apiMessageDeleteDelete(messageGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<string>;
     public apiMessageDeleteDelete(messageGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<string>>;
     public apiMessageDeleteDelete(messageGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<string>>;
@@ -198,17 +199,18 @@ export class MessageService {
         }
 
         return this.httpClient.delete<string>(`${this.configuration.basePath}/api/message/delete`,
-            //null,
+            null,
             {
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
+               ''
+                //params: localVarQueryParameters,
+                //responseType: <any>responseType_,
+                //withCredentials: this.configuration.withCredentials,
+                //headers: localVarHeaders,
+                //observe: observe,
+                //reportProgress: reportProgress
             }
         );
-    }
+    }*/
 
     /**
      * @param partyGuid

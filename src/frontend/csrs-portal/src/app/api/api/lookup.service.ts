@@ -89,10 +89,10 @@ export class LookupService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public courtlevelsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<SSGCsrsBCCourtLevel>>;
-    public courtlevelsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<SSGCsrsBCCourtLevel>>>;
-    public courtlevelsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<SSGCsrsBCCourtLevel>>>;
-    public courtlevelsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiLookupCourtlevelsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<SSGCsrsBCCourtLevel>>;
+    public apiLookupCourtlevelsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<SSGCsrsBCCourtLevel>>>;
+    public apiLookupCourtlevelsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<SSGCsrsBCCourtLevel>>>;
+    public apiLookupCourtlevelsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -123,7 +123,7 @@ export class LookupService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<Array<SSGCsrsBCCourtLevel>>(`${this.configuration.basePath}/courtlevels`,
+        return this.httpClient.get<Array<SSGCsrsBCCourtLevel>>(`${this.configuration.basePath}/api/lookup/courtlevels`,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -138,10 +138,10 @@ export class LookupService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public courtlocationsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<SSGIJSSBCCourtlocation>>;
-    public courtlocationsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<SSGIJSSBCCourtlocation>>>;
-    public courtlocationsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<SSGIJSSBCCourtlocation>>>;
-    public courtlocationsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiLookupCourtlocationsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<SSGIJSSBCCourtlocation>>;
+    public apiLookupCourtlocationsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<SSGIJSSBCCourtlocation>>>;
+    public apiLookupCourtlocationsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<SSGIJSSBCCourtlocation>>>;
+    public apiLookupCourtlocationsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -172,7 +172,7 @@ export class LookupService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<Array<SSGIJSSBCCourtlocation>>(`${this.configuration.basePath}/courtlocations`,
+        return this.httpClient.get<Array<SSGIJSSBCCourtlocation>>(`${this.configuration.basePath}/api/lookup/courtlocations`,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

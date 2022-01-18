@@ -34,7 +34,7 @@ import { YesNoPipe } from './pipes/yes-no.pipe';
     PageHeaderComponent,
     AlertComponent,
     HeaderComponent,
-    FooterComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -67,8 +67,10 @@ import { YesNoPipe } from './pipes/yes-no.pipe';
     AlertComponent,
     ConfigModule,
     HeaderComponent,
-    FooterComponent,
+    FooterComponent
   ],
-  entryComponents: [],
+  entryComponents: [
+
+  ],
 })
 export class SharedModule { }
