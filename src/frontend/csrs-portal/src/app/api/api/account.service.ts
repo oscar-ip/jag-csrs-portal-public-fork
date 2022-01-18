@@ -368,7 +368,6 @@ export class AccountService {
         let localVarCredential: string | undefined;
         // authentication (Bearer) required
         localVarCredential = this.configuration.lookupCredential('Bearer');
-        console.log('localVarCredential ' + localVarCredential);
         if (localVarCredential) {
             localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
         }

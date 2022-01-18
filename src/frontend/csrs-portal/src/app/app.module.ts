@@ -103,8 +103,7 @@ import { FormsModule } from '@angular/forms';
         }
       ),
       deps: [OidcSecurityService],
-      multi: false,
-
+      multi: false
     },
     WindowRefService,
   ],
