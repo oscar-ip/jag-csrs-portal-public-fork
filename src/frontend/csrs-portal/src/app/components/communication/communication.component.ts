@@ -97,8 +97,8 @@ export class CommunicationComponent implements OnInit {
       this.selectedFile = null;
       this.data = {
         type: 'error',
-        title: 'Selected File has not allowed extension',
-        content: 'Allowed extensions are .pdf,.gif,.jpg,.jpeg,.png',
+        title: 'Selected file is not a supported file type.',
+        content: 'Supported file types are .pdf, .gif, .jpg, .jpeg, .png.',
         weight: 'normal',
         color: 'red'
       };
@@ -110,8 +110,8 @@ export class CommunicationComponent implements OnInit {
       this.selectedFile = null;
       this.data = {
         type: 'error',
-        title: 'Selected File is exceeded allowed size',
-        content: 'Allowed size is 10 MB',
+        title: 'Selected file is over the maximum supported file size.',
+        content: 'Maximum supported file size is 10MB.',
         weight: 'normal',
         color: 'red'
       };
