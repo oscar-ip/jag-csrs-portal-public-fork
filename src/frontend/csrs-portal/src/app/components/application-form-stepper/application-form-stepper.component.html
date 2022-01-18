@@ -1,455 +1,694 @@
 <div class="container">
-  <div class="heading mt-5">
-    <h1>CSRS Application</h1>
-    <p>
-      To create your CSRS account, please complete the following application.
-    </p>
-    <mat-divider></mat-divider>
-  </div>
-  // vertical stepper
-  <mat-stepper orientation="vertical" [linear]="false" #stepper>
-    <mat-step>
-      <ng-template matStepLabel=""> Questionnaire complete </ng-template>
-      <ng-template matStepContent="">
-        <p>Review your responses to the questions, if:</p>
-        <mat-divider></mat-divider>
-        <h1><strong>I think I am eligible and want to enrol</strong></h1>
-        <hr style="opacity: 1" />
-        <p>
-          <strong
-            >After reviewing your answers and you believe you are eligible for
-            this service you may continue on to the application to create your
-            CSRS account.</strong
-          >
-        </p>
-        <div class="container mb-2">
-          <div #alertContent class="alert-content row">
-            <span class="col-sm-2">
-              <img
-                style="height: 70px; width: auto"
-                src="/assets/Questionnaire-icon.svg"
-              />
-            </span>
-            <div class="col-sm-10">
-              <h1>Before you start your application, make sure you have:</h1>
-              <ul class="text-dark">
-                <li>
-                  Contact information for you and the other party (to the best
-                  of your knowledge)
-                </li>
-                <li>A copy of your current order or written agreement</li>
-                <li>Child(ren) information</li>
-              </ul>
+  <section class="header-section">
+    <div>
+      <h2 class="mt-4 mb-0">Child Support Recalculation Application</h2>
+      <p class="text-dark">
+        To create your CSRS account, please complete the following application.
+      </p>
+      <hr style="opacity: 1; color: #fcba19" />
+    </div>
+  </section>
+  <section class="stepper-section">
+    <div class="flex-6-col">
+      <mat-stepper orientation="vertical" [linear]="true" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Getting Started</ng-template>
+            <div class="text-dark">
+              <div class="pb-1">
+                Fields marked <span class="text-danger">*</span> are required
+              </div>
+              <section class="text-dark">
+                <label class="w-100 py-1">
+                  <strong>What best describes your situation?<span class="text-danger">*</span>
+                  </strong>
+                </label>
+                <div class="row">
+                  <div class="col-12">
+                    <mat-radio-group formControlName="firstControl">
+                      <mat-radio-button class="radio-question" value="I am the receipent, i currently receive child support">
+                        <span class="wrap-mat-radio-label">
+                          I am the receipent, i currently receive child support
+                        </span>
+                      </mat-radio-button>
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="I am the payor, i current pay child support">
+                        <span class="wrap-mat-radio-label">
+                          I am the payor, i current pay child support
+                        </span>
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <label class="w-100 py-2">
+                  <strong>
+                    Do you have an order or filed written agreement ?<span class="text-danger">*</span></strong>
+                </label>
+                <div class="row">
+                  <div class="col-12">
+                    <mat-radio-group formControlName="secondControl">
+                      <mat-radio-button class="radio-question" value="Order">
+                        <span class="wrap-mat-radio-label"> Order </span>
+                      </mat-radio-button>
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="Written agreement">
+                        <span class="wrap-mat-radio-label">
+                          Written agreement
+                        </span>
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </section>
             </div>
-          </div>
-        </div>
-        <p>
-          Sign in with your BCeID to proceed, if you do not have a BCeID please
-          create an account first.
-        </p>
-        <div class="flex-6-col round3">
-          <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
-            <mat-grid-tile
-              class="mi-tile-contents-center"
-              aria-rowindex="0"
-              colspan="3"
-              rowspan="1"
-            >
-              <a class="useful-links bceIdLink" target="_blank" rel="noopener">
-                <button
-                  style="width: 400px"
-                  type="button"
-                  mat-flat-button
-                  color="primary"
-                >
-                  BCeID Login
-                </button>
-              </a>
-            </mat-grid-tile>
-            <mat-grid-tile
-              class="mi-tile-contents-center"
-              aria-rowindex="0"
-              colspan="3"
-              rowspan="1"
-            >
-              <a class="useful-links bceIdLink" target="_blank" rel="noopener">
-                <button style="width: 400px" mat-stroked-button color="primary">
-                  Register for a Basic BCeID
-                </button>
-              </a>
-            </mat-grid-tile>
-          </mat-grid-list>
-        </div>
-        <div class="container mt-4 mb-2">
-          <div #alertContent class="alert-text row">
-              <span class="text-dark"><strong style="color: #003366;">Prefer a pdf to complete your application? </strong>You can download the pdf version of the application.</span>
-          </div>
-        </div>
-        <p>
-          <strong>I’m not sure if I am eligible and have questions</strong>
-        </p>
-        <hr style="opacity: 1" />
-        <p>
-          If you have more questions about your eligibly, please contact:
-          <strong>Child Support Recalculation Service: </strong>
-        </p>
-        <ul>
-          <li><a href="tel:1-866-660-2684">1-866-660-2684</a></li>
-          <li><a href="tel:604-660-2528">604-660-2528</a></li>
-        </ul>
-      </ng-template>
-    </mat-step>
+            <mat-divider></mat-divider>
+            <div>
+              <button class="nextStep" [disabled]="!firstFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
+                Next >
+              </button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Your Personal Information</ng-template>            
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
+                  <input matInput formControlName="firstName" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Legal middle name</mat-label>
+                  <input matInput formControlName="givenNames" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
+                  <input matInput formControlName="lastName" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
 
-    <mat-step [stepControl]="secondFormGroup">
-      <ng-template matStepLabel>Your Personal Information</ng-template>
-      <form [formGroup]="secondFormGroup">
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Legal first name</mat-label>
-              <input matInput formControlName="firstName" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Legal middle name</mat-label>
-              <input matInput formControlName="middleName" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Legal lastname</mat-label>
-              <input matInput formControlName="lastName" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Preferred name</mat-label>
-              <input matInput formControlName="prefferedName" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Birthdate</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker"
-                formControlName="birthdate"
-                readonly
-                (click)="picker.open()"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="picker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #picker startView="multi-year"></mat-datepicker>
-              <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
-                        "error.required" | translate
-                        }}</mat-error> -->
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Street address 1</mat-label>
-              <input matInput formControlName="streetAddress1" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Street address 2</mat-label>
-              <input matInput formControlName="streetAddress2" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>City</mat-label>
-              <input matInput formControlName="city" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Province</mat-label>
-              <input matInput formControlName="province" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Postal code</mat-label>
-              <input
-                matInput
-                mask="S0S 0S0"
-                oninput="this.value = this.value.toUpperCase()"
-                formControlName="postalCode"
-                [showMaskTyped]="true"
-              />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Home phone number</mat-label>
-              <input
-                matInput
-                formControlName="homePhoneNumber"
-                mask="(000) 000-0000"
-                [showMaskTyped]="true"
-              />
-              <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                        "error.required" | translate
-                        }}</mat-error>
-                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Cell phone number</mat-label>
-              <input
-                matInput
-                formControlName="cellPhoneNumber"
-                mask="(000) 000-0000"
-                [showMaskTyped]="true"
-              />
-              <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                        "error.required" | translate
-                        }}</mat-error>
-                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Work phone number</mat-label>
-              <input
-                matInput
-                formControlName="workPhoneNumber"
-                mask="(000) 000-0000"
-                [showMaskTyped]="true"
-              />
-              <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                        "error.required" | translate
-                        }}</mat-error>
-                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Email</mat-label>
-              <input matInput formControlName="email" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field class="w-100">
-              <mat-label>Gender</mat-label>
-              <input matInput formControlName="gender" />
-              <mat-error>{{ "error.required" | translate }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Additional Information</ng-template>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Legal first name</mat-label>
-            <input matInput formControlName="firstName" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Legal middle name</mat-label>
-            <input matInput formControlName="middleName" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Legal lastname</mat-label>
-            <input matInput formControlName="lastName" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Preferred name</mat-label>
-            <input matInput formControlName="prefferedName" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Birthdate</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker"
-              formControlName="birthdate"
-              readonly
-              (click)="picker.open()"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker startView="multi-year"></mat-datepicker>
-            <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
-                      "error.required" | translate
-                      }}</mat-error> -->
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Street address 1</mat-label>
-            <input matInput formControlName="streetAddress1" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Street address 2</mat-label>
-            <input matInput formControlName="streetAddress2" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>City</mat-label>
-            <input matInput formControlName="city" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Province</mat-label>
-            <input matInput formControlName="province" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Postal code</mat-label>
-            <input
-              matInput
-              mask="S0S 0S0"
-              oninput="this.value = this.value.toUpperCase()"
-              formControlName="postalCode"
-              [showMaskTyped]="true"
-            />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Home phone number</mat-label>
-            <input
-              matInput
-              formControlName="homePhoneNumber"
-              mask="(000) 000-0000"
-              [showMaskTyped]="true"
-            />
-            <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                      "error.required" | translate
-                      }}</mat-error>
-                    <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Cell phone number</mat-label>
-            <input
-              matInput
-              formControlName="cellPhoneNumber"
-              mask="(000) 000-0000"
-              [showMaskTyped]="true"
-            />
-            <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                      "error.required" | translate
-                      }}</mat-error>
-                    <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Work phone number</mat-label>
-            <input
-              matInput
-              formControlName="workPhoneNumber"
-              mask="(000) 000-0000"
-              [showMaskTyped]="true"
-            />
-            <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                      "error.required" | translate
-                      }}</mat-error>
-                    <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field class="w-100">
-            <mat-label>Gender</mat-label>
-            <input matInput formControlName="gender" />
-            <mat-error>{{ "error.required" | translate }}</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-    </mat-step>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Preferred name</mat-label>
+                  <input matInput formControlName="PreferredName" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Birthdate</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="birthdate" 
+                    (click)="picker.open()" />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+                  <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
+                                        "error.required" | translate
+                                        }}</mat-error> -->
+                </mat-form-field>
+              </div>
+              <div class="col-md-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Street address 1<span class="text-danger">*</span></mat-label>
+                  <input matInput formControlName="address1" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
 
-    <mat-step>
-      <ng-template matStepLabel>Conditions of Enrolment</ng-template>
-      <!-- <app-step-count
-              id="stepCount"
-              [stepControl]="offence3Form"
-              [stepper]="disputeStepper"
-              (stepSave)="onStepSave($event)"></app-step-count> -->
-    </mat-step>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Street address 2</mat-label>
+                  <input matInput formControlName="saddress" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>City<span class="text-danger">*</span></mat-label>
+                  <input matInput formControlName="city" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
 
-    <mat-step>
-      <ng-template matStepLabel>Review and submit your application</ng-template>
-      <!-- <app-step-overview id="stepOverview" [stepper]="disputeStepper" [overviewTicket]="overviewTicket"
-              (busy)="(busy)" (stepSave)="onStepSave($event)"></app-step-overview> -->
-    </mat-step>
-  </mat-stepper>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Province<span class="text-danger">*</span></mat-label>
+                  <mat-select formControlName="province">
+                    <mat-option *ngFor="let provinceName of provinceData; index as pi" [value]="provinceName.value">
+                      {{ provinceName.value }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Postal code<span class="text-danger">*</span></mat-label>
+                  <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="postalCode" [showMaskTyped]="false" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Home phone number</mat-label>
+                  <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
+                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                                    "error.required" | translate
+                                    }}</mat-error>
+                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Cell phone number</mat-label>
+                  <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
+                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                                    "error.required" | translate
+                                    }}</mat-error>
+                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Work phone number</mat-label>
+                  <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
+                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
+                                    "error.required" | translate
+                                    }}</mat-error>
+                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Email<span class="text-danger">*</span></mat-label>
+                  <input matInput formControlName="email" />
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Gender</mat-label>
+                  <mat-select formControlName="gender">
+                    <mat-option *ngFor="let genderValue of genderData; index as pi" [value]="genderValue.value">
+                      {{ genderValue.value }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row text-dark pt-3">
+              <strong>What best describes your identity?</strong>
+              <div><strong style="color: #003366;">Note:</strong> The question is voluntary. The Child Support Recalculation Program wants to ensure that families can access its services.</div>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-label>Identity</mat-label>
+                  <mat-select formControlName="identity">
+                    <mat-option *ngFor="let idenityName of identityData; index as pi" value="identityName.value">
+                      {{ idenityName.value }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="nextButton">
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                < Back
+              </button>
+              <button class="nextStep" [disabled]="!secondFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
+                Next >
+              </button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="sixFormGroup">
+          <form [formGroup]="sixFormGroup">
+            <ng-template matStepLabel>Additional Information</ng-template>
+            <div class="row text-dark mt-4">
+              <div class="col-md-6">
+                <p>Do you have any concerns for your safety or your children’s
+                  safety?
+                </p>
+              </div>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="childSafety" aria-label="Select an option">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
+                  <mat-radio-button value="I don't know">I don't know</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="example-container width100">
+              <mat-form-field appearance="fill">
+                <mat-label>If yes, please provide any details including if there any
+                  protection orders in place involving you or the other
+                  party?</mat-label>
+                <input matInput #input/>
+              </mat-form-field>
+            </div>
+            <div class="row text-dark mt-4">
+              <div class="col-md-6">
+                <p>What is your preferred method of contact?
+                </p>
+              </div>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="contactMethod" aria-label="Select an option">
+                  <mat-radio-button value="Email">Email</mat-radio-button>
+                  <mat-radio-button value="Paper Mail">Paper Mail</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="row text-dark mt-4">
+              <div class="col-md-6">
+                <p> Are you enrolled in the Family Maintenance Enforcement Program?</p>
+              </div>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="enrollFMEP" aria-label="Select an option">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <!-- <div class="stepRow">
+              <div>
+                Are you enrolled in the Family Maintenance Enforcement Program?
+              </div>
+              <mat-radio-group aria-label="Select an option">
+                <mat-radio-button value="1">Yes</mat-radio-button>
+                <mat-radio-button value="2">No</mat-radio-button>
+              </mat-radio-group>
+            </div> -->
+            <div class="example-container">
+              <mat-form-field appearance="fill">
+                <mat-label>My FMEP file # is:</mat-label>
+                <input formControlName="FMEPinput" matInput #input />
+              </mat-form-field>
+            </div>
+            <div class="row text-dark mt-4">
+              <div class="col-md-6">
+                <p> Are you currently on income assistance?</p>
+              </div>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
+                  <mat-radio-button value="I don't know">I don't know</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="row text-dark pt-2">
+              <span>How did you hear about the Child Support Recalculation Service (CSRS)?</span>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-select formControlName="referals">
+                    <mat-option *ngFor="let referalsValue of referalsData; index as pi" value='referalsValue.value'>
+                      {{referalsValue.value}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="nextButton">
+              <button mat-stroked-button color="basic" matStepperPrevious>
+               < Back
+              </button>
+              <button class="nextStep" [disabled]="!sixFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
+                Next >
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- <mat-step [stepControl]="seventhFormGroup">
+          <form [formGroup]="seventhFormGroup">
+            <ng-template matStepLabel>Upload your documents</ng-template>
+            <div>
+              Please attach your most recent
+              <strong>Child Support Order</strong> or filed
+              <strong>Written Agreement</strong>
+            </div>
+            <div class="document-drag-container">
+              <div class="dropzone">
+                <input class="drop-file" type="file" #fileDropRef id="fileDropRef" multiple />
+                <h3>Drag and drop file here</h3>
+                <h3>or</h3>
+                <label class="browse-file" for="fileDropRef">Choose Documents</label>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div>
+              <button mat-stroked-button color="basic" matStepperPrevious>
+                Back
+              </button>
+              <button mat-button matStepperPrevious>
+                Save my application for later
+              </button>
+              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
+                Next
+              </button>
+            </div>
+          </form>
+        </mat-step> -->
+
+        <mat-step [stepControl]="eFormGroup">
+          <form [formGroup]="eFormGroup">
+            <ng-template matStepLabel>Conditions of Enrolment</ng-template>
+            <div class="heading">
+              Please review and accept the conditions of enrolment:
+            </div>
+            <div class="text-dark">
+              <ul>
+                <li>
+                  I will notify the recalculation service of any changes in my
+                  contact information or any legal action which may impact the
+                  recalculation of my child support
+                </li>
+                <li>
+                  I understand the recalculation service may access Court
+                  Services Online to obtain copies of the child support order or
+                  written agreement.
+                </li>
+                <li>
+                  Unless a court orders otherwise, I may withdraw from the
+                  recalculation service providing that the other party also
+                  agrees to withdraw.
+                </li>
+                <li>
+                  I understand that if I do not provide my income tax
+                  information, as requested by the recalculation service, the
+                  service may adjust my annual income amount using rate
+                  increases set out under the Family Law Act Regulation
+                </li>
+                <li>
+                  I understand the use of the information I provide to the
+                  recalculation service is for the purposes of child support
+                  recalculation. If I am involved with the Family Maintenance
+                  Enforcement Program, my information may be shared with this
+                  program.
+                </li>
+              </ul>
+              <p>
+                <strong>Collection Notices:</strong>Your personal information is
+                collected by Ministry of Attorney General’s Maintenance
+                Enforcement and Locate Services (MELS) pursuant to section 26(a)
+                and (c) of the Freedom of Information and Protection of Privacy
+                Act and the Family Law Act. MELS uses this information for the
+                purposes of establishing, recalculating or enforcing child
+                support. Should you have any questions about the collection, use
+                or disclosure of your personal information, please contact a
+                Client Relations Officer: Address: 203 - 865 Hornby Street,
+                Vancouver, BC Phone Number: (604) 660-2528.
+              </p>
+              <mat-checkbox color="primary"  formControlName="secondCtrl" class="example-margin">I accept and acknowledge the terms and conditions listed
+                above.</mat-checkbox>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="nextButton">
+              <button mat-stroked-button color="basic" matStepperPrevious>
+               < Back
+              </button>
+              <button class="nextStep"  [disabled]="!eFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
+                Next >
+              </button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="nineFormGroup">
+          <form [formGroup]="nineFormGroup" class="text-dark">
+            <ng-template matStepLabel>Review and submit your application
+            </ng-template>
+            <div>
+              Review all application details below to ensure information is
+              correct, you can go back and edit any of the information before
+              submission.
+            </div>
+            <div class="submit-layer">
+              <div class="stepRow spaceAround leftRight">
+                <strong class="submit-text-color">Getting Started</strong>
+                <a class="edit-text-color" (click)="editPage(stepper,0)">Edit</a>
+              </div>
+              <div class="stepRow spaceAround leftRight">
+                <div>What best describes your situation?</div>
+                <div class="bold">{{firstFormGroup.value.firstControl}}
+                </div>
+              </div>
+              <div class="stepRow spaceAround leftRight">
+                <div>Do you have an order or filed written agreement?</div>
+                <div class="bold">{{firstFormGroup.value.secondControl}}</div>
+              </div>
+            </div>
+            <br />
+            <div class="submit-layer">
+              <div class="stepRow spaceAround leftRight">
+                <strong class="submit-text-color">Your Personal Information</strong>
+                <a class="edit-text-color" (click)="editPage(stepper,1)">Edit</a>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Legal first name:</div>
+                  <div class="bold">{{secondFormGroup.value.firstName }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Legal middle name(s):</div>
+                  <div class="bold">{{(secondFormGroup.value.givenNames)?secondFormGroup.value.givenNames:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Legal last name:</div>
+                  <div class="bold">{{secondFormGroup.value.lastName }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Preferred name:</div>
+                  <div class="bold">{{(secondFormGroup.value.PreferredName)?secondFormGroup.value.PreferredName:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Date of birth:</div>
+                  <div class="bold">{{(secondFormGroup.value.birthdate)?secondFormGroup.value.birthdate:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Street address 1:</div>
+                  <div class="bold">{{(secondFormGroup.value.address1)?secondFormGroup.value.address1:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Street address 2:</div>
+                  <div class="bold">{{(secondFormGroup.value.saddress)?secondFormGroup.value.saddress:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>City:</div>
+                  <div class="bold">{{(secondFormGroup.value.city)?secondFormGroup.value.city:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Province</div>
+                  <div class="bold">{{(secondFormGroup.value.Province)?secondFormGroup.value.Province:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Postal Code:</div>
+                  <div class="bold">{{(secondFormGroup.value.postalCode)?secondFormGroup.value.postalCode:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Home Phone number:</div>
+                  <div class="bold">{{(secondFormGroup.value.phoneNumber)?secondFormGroup.value.phoneNumber:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Cell Phone number:</div>
+                  <div class="bold">{{(secondFormGroup.value.cellNumber)?secondFormGroup.value.cellNumber:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Work Phone number</div>
+                  <div class="bold">{{(secondFormGroup.value.workNumber)?secondFormGroup.value.workNumber:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Email:</div>
+                  <div class="bold">{{(secondFormGroup.value.email)?secondFormGroup.value.email:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Gender:</div>
+                  <div class="bold">{{(secondFormGroup.value.gender)?secondFormGroup.value.gender:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Identity:</div>
+                  <div class="bold">{{(secondFormGroup.value.identity)?secondFormGroup.value.identity:'-' }}</div>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="submit-layer">
+              <div class="stepRow spaceAround leftRight">
+                <strong class="submit-text-color">Additional Information</strong>
+                <a class="edit-text-color" (click)="editPage(stepper,2)">Edit</a>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    Do you have any concerns for your safety or your children's safety?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.childSafety:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    What is your preferred method of contact?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow leftRight">
+                  <div class="bold">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.contactMethod:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    Are you enrolled in the Family Maintenance and Enforcement Program?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.enrollFMEP)?sixFormGroup.value.enrollFMEP:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    My FMEP file number is: 
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.FMEPinput)?sixFormGroup.value.FMEPinput:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    Are you currently on income assistance?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.incomeAssistance)?sixFormGroup.value.incomeAssistance:'-' }}</div>
+v                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    How did you hear about Child Support Recalculation Service(CSRS)?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow">
+                  <div class="bold">FMEP</div>
+                </div>
+              </div>
+            </div>
+            <br/>
+            <div class="submit-layer">
+              <div class="stepRow spaceAround leftRight">
+                <strong class="submit-text-color">Conditions of Enrolment</strong>
+                <a class="edit-text-color" (click)="editPage(stepper,3)">Edit</a>
+              </div>
+              <div class="text-dark">
+                <ul>
+                  <li>
+                    I will notify the recalculation service of any changes in my
+                    contact information or any legal action which may impact the
+                    recalculation of my child support
+                  </li>
+                  <li>
+                    I understand the recalculation service may access Court
+                    Services Online to obtain copies of the child support order
+                    or written agreement.
+                  </li>
+                  <li>
+                    Unless a court orders otherwise, I may withdraw from the
+                    recalculation service providing that the other party also
+                    agrees to withdraw.
+                  </li>
+                  <li>
+                    I understand that if I do not provide my income tax
+                    information, as requested by the recalculation service, the
+                    service may adjust my annual income amount using rate
+                    increases set out under the Family Law Act Regulation
+                  </li>
+                  <li>
+                    I understand the use of the information I provide to the
+                    recalculation service is for the purposes of child support
+                    recalculation. If I am involved with the Family Maintenance
+                    Enforcement Program, my information may be shared with this
+                    program.
+                  </li>
+                </ul>
+                <mat-checkbox  [checked]="eFormGroup.value.secondCtrl" [disabled]="eFormGroup.value.secondCtrl" form class="example-margin">I accept and acknowledge the terms and conditions listed
+                  above.</mat-checkbox>
+              </div>
+            </div>
+            <mat-checkbox color="primary"
+            [class.mat-checkbox-disabled]="false"
+            >All of the information above is correct to the best of my knowledge</mat-checkbox>
+            <app-alert type="warning" icon="info">
+              <ng-container #alertContent class="alert-content">
+                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission. 
+                </strong>
+              </ng-container>
+            </app-alert>
+            <mat-divider></mat-divider>
+            <div class="nextButton">
+              <button mat-stroked-button color="basic" matStepperPrevious>
+               < Back
+              </button>
+              <!-- <button mat-flat-button color="primary" matStepperPrevious>
+                Save my application for later
+              </button> -->
+              <button routerLink="/mailbox" (click)="openDialog()" class="submitStep" mat-stroked-button color="basic" matStepperNext>
+                Submit account setup request
+              </button>
+            </div>
+          </form>
+        </mat-step>
+      </mat-stepper>
+      <!-- <div>
+        <button mat-button (click)="saveLater()">Save fot later</button>
+        <button mat-button (click)="save()">Save</button>
+      </div> -->
+    </div>
+  </section>
 </div>

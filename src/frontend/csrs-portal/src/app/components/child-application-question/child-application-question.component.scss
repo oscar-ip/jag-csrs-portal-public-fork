@@ -3,14 +3,13 @@
   }
   
   .mat-form-field {
-    margin-top: 16px;
+    margin-top: 2px;
   }
   .heading{
     font-size: 15px;
     font-weight: 800;
     color: black;
     padding-bottom: 10px;
-    
   }
   .firstQuestionRadio{
       padding-bottom: 10px;
@@ -39,11 +38,16 @@
     border-style: dotted;
     border-radius: 5px;
   }
-  .submit-layer{
+  .submit-layer {
     min-height: 100px;
     background-color: rgb(246, 246, 246);
     border-radius: 5px;
     padding-bottom: 10px;
+  }
+  .agreement{
+    .leftRight{
+      padding-left: 42px;
+    }
   }
   .spaceAround{
     justify-content: space-between;
@@ -57,21 +61,29 @@
     padding-left: 25px;
     padding-right: 25px;
   }
+  .displayDetails{
+    padding-left: 40px;
+    padding-right: 75px;
+    div{
+      width: 50%;
+      word-break: break-all;
+    }
+  }
   div.row-height {
     height: 90px;
-    vertical-align: middle;
-    float: none;
   }
   button.nextStep{
-    width: 100px;
     float: right;
-    border: 1px solid white;
-    background-color: #003366;
-    color: #ffffff;
+    // border: 1px solid white;
+    // background-color: #003366;
+    // color: #ffffff;
   }
   .submit-text-color {
     font-size: 20px;;
     color: #003366;
+  }
+  .nextButton{
+    margin-top: 20px;
   }
   .dropzone {
     width: 450px;
@@ -105,4 +117,17 @@
 .add-child{
   margin-left: 85%;
   border: 1px solid #003366;  
+}
+.edit-text-color{
+  color: #009CDE;
+  
+}
+// .header-section,.stepper-section{
+//   width:90%;
+// }
+button.submitStep{
+  float: right;
+  border: 1px solid white;
+  background-color: green;
+  color: #ffffff;
 }

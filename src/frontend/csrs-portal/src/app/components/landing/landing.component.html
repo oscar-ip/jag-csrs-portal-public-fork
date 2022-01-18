@@ -56,15 +56,15 @@
             <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0">
               <p class="text-left-inside-grid" style="font-size: 28px; font-weight:bolder;">
                 Is the recalculation service right for you?
-                <mat-divider style="margin-top:15px;"></mat-divider>
+                <mat-divider style="margin-top:15px; width: 154%;"></mat-divider>
               </p>
             </mat-grid-tile>
             <mat-grid-tile colspan="3" rowspan="1" aria-rowindex="1" class="text-left-inside-grid" style="font-size: 18px;">
               <p style="color:black">Complete the questionnaire to obtain important information
                 about eligibility for the service to help you decide whether to apply.</p>
             </mat-grid-tile>
-            <mat-grid-tile colspan="2" rowspan="1" aria-rowindex="1">
-              <button mat-flat-button type="button" class="large" color="accent" routerLink="/questionnaire">
+            <mat-grid-tile colspan="2" rowspan="1"   aria-rowindex="1">
+              <button mat-flat-button type="button" style="margin-right: 20px;" class="large" color="accent" routerLink="/questionnaire">
                 Start questionnaire
               </button>
             </mat-grid-tile>
@@ -119,12 +119,10 @@
             <div class="col pr-2">
               <p class="color_black">If you already have a Basic BCeID account log
                 <a
-                  class ='btn'
+                  class ='account-link'
                   style="cursor:pointer"
                   (click)="login();"
-                >
-                  in here.
-                </a>
+                >in here.</a>
               </p>
             </div>
             <div class="col-sm-1"></div>
@@ -135,7 +133,7 @@
             <div class="col pr-2">
               <p class="color_black"><strong>Were you provided a file number and password and
                 requested to enrol?</strong>
-              <mat-expansion-panel  #expPanel hideToggle="true">
+              <mat-expansion-panel  style="box-shadow: none;" class="p-2" #expPanel hideToggle="true">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       {{expPanel.expanded? '- See less information

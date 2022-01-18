@@ -16,7 +16,8 @@ import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-
+import {MatDialog} from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-child-application-question',
@@ -43,12 +44,15 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _lookupService: LookupService;
   _logger: LoggerService;
   _oidc: OidcSecurityService;
+  today = new Date(); 
+  isEditable: boolean = false;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
-    @Inject(AccountService) private accountService,
-    @Inject(LookupService) private lookupService,
-    @Inject(LoggerService) private logger,
-    @Inject(OidcSecurityService) private oidc) {}
+              @Inject(AccountService) private accountService,
+              @Inject(LookupService) private lookupService,
+              @Inject(LoggerService) private logger,
+              @Inject(OidcSecurityService) private oidc,
+              public dialog: MatDialog) {}
 
   ngOnInit() {
     this._accountService = this.accountService;
@@ -56,9 +60,12 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this._logger = this.logger;
     this._oidc = this.oidc;
 
-    this.provinceData = [{label: 'province', value: 'british columbia'}];
-    this.identityData = [{label: 'hai', value: ''}];
-    this.genderData =  [{label: 'hai', value: 1234}];
+    this.provinceData = [{label: 'province', value: 'British Columbia'}];
+    this.identityData = [{label: 'identity', value: 'Native'}];
+    this.genderData =  [{label: 'gender', value: 'Male'}];
+    this.courtLocationsData =  [{label: 'courtLocation', ssg_bccourtlocationname: 'Victoria Court'}];
+    this.referalsData = [{label: 'referal', value: 'FMEP'}];
+
     this.getReferalsData();
     this.getCourtLocationData();
     this.getIdentityData();
@@ -66,7 +73,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.getGenderyData();
 
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
+      firstControl: ['', Validators.required],
       secondControl: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
@@ -89,15 +96,21 @@ export class ChildApplicationQuestionComponent implements OnInit {
     });
     this.thirdFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
+      givenNames: [''],
       lastName: ['', Validators.required],
       pname: [],
       birthdate: [],
-      givenNames: [],
-      saddress: [],
-      sadress1: [],
+      saddress1: [],
+      saddress2: [],
+      city: [''],
       province: [],
       postalCode: [],
-      phoneNumber: []
+      homePhoneNumber: [],
+      cellPhoneNumber: [],
+      workPhoneNumber: [],
+      email: ['', Validators.required],
+      gender: []
+
     });
 
     this.fourthFormGroup1 = this._formBuilder.group({
@@ -106,7 +119,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
           firstName: [''],
           lastName: [''],
           birthdate: [],
-          givenNames: [],
+          childDependency: [],
           middleName: []
         })
 
@@ -120,17 +133,27 @@ export class ChildApplicationQuestionComponent implements OnInit {
     //   middleName: []
     // });
     this.fifthFormGroup = this._formBuilder.group({
-      firstName: [''],
-      birthdate: [],
+      orderDate: [],
+      courtLocation: [],
+      payorIncome: [],
+      recalculationOrdered: [],
+      isSpecifiedIncome: [],
     });
     this.sixFormGroup = this._formBuilder.group({
       // secondCtrl: ['', Validators.required],
+      childSafety: [''],
+      contactMethod: [''],
+      enrollFMEP: [''],
+      FMEPinput: [''],
+      incomeAssistance: [''],
+      referals: [''],
+
     });
     this.seventhFormGroup = this._formBuilder.group({
       secondCtrl: [''],
     });
     this.eFormGroup = this._formBuilder.group({
-      secondCtrl: [''],
+      secondCtrl: ['', Validators.required],
     });
     this.nineFormGroup = this._formBuilder.group({
       secondCtrl: [''],
@@ -171,22 +194,37 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
 }
+
+openDialog() {
+  const dialogRef = this.dialog.open(ConfirmDialogComponent,{
+    width: '550px'
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(`Dialog result: ${result}`);
+  });
+}
+
+editPage(stepper, index){
+  this.isEditable = true;
+  stepper.selectedIndex = index;
+}
   getIdentityData() {
 
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-      this._accountService.apiAccountIdentitiesGet().subscribe({
+    this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => this.identityData = data,
 
         error: (e) => {
           if (e.error instanceof Error) {
             this._logger.error(e.error.message);
           } else {
-              //Backend returns unsuccessful response codes such as 404, 500 etc.
+              // Backend returns unsuccessful response codes such as 404, 500 etc.
               this._logger.info('Backend returned ', e);
             }
         },
         complete: () => this._logger.info('apiAccountIdentitiesGet is completed')
-    })
+    });
   }
 
   getProvinceData() {

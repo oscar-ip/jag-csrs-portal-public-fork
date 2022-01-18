@@ -1,17 +1,17 @@
 <div class="container">
-  <section>
+  <section class="header-section">
     <div>
-      <h1 class="mb-1">Child Support Recalculation Application</h1>
-      <p>
+      <h2 class="mt-4 mb-0">Child Support Recalculation Application</h2>
+      <p class="text-dark">
         To create your CSRS account, please complete the following application.
       </p>
       <hr style="opacity: 1; color: #fcba19" />
     </div>
   </section>
-  <section>
+  <section class="stepper-section">
     <div class="flex-6-col">
-      <mat-stepper orientation="vertical" [linear]="true" #stepper>
-        <mat-step [stepControl]="firstFormGroup">
+      <mat-stepper orientation="vertical" [linear]="true"  #stepper>
+        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Getting Started</ng-template>
             <div class="text-dark">
@@ -25,15 +25,15 @@
                 </label>
                 <div class="row">
                   <div class="col-12">
-                    <mat-radio-group formControlName="firstCtrl">
-                      <mat-radio-button class="radio-question" value="1">
+                    <mat-radio-group formControlName="firstControl">
+                      <mat-radio-button class="radio-question" value="I am the receipent, i currently receive child support">
                         <span class="wrap-mat-radio-label">
                           I am the receipent, i currently receive child support
                         </span>
                       </mat-radio-button>
-                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="2">
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="I am the payor, i current pay child support">
                         <span class="wrap-mat-radio-label">
-                          I am the payer, i current pay child support
+                          I am the payor, i current pay child support
                         </span>
                       </mat-radio-button>
                     </mat-radio-group>
@@ -48,10 +48,10 @@
                 <div class="row">
                   <div class="col-12">
                     <mat-radio-group formControlName="secondControl">
-                      <mat-radio-button class="radio-question" value="1">
+                      <mat-radio-button class="radio-question" value="Order">
                         <span class="wrap-mat-radio-label"> Order </span>
                       </mat-radio-button>
-                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="2">
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="Written agreement">
                         <span class="wrap-mat-radio-label">
                           Written agreement
                         </span>
@@ -61,19 +61,19 @@
                 </div>
               </section>
             </div>
-            <hr style="opacity: 1" />
+            <mat-divider></mat-divider>
             <div>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
+              <button class="nextStep" [disabled]="!firstFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
+                Next >
               </button>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="secondFormGroup">
+        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
           <form [formGroup]="secondFormGroup">
-            <ng-template matStepLabel>Your Personal Information</ng-template>
-            <div class="row row-height">
+            <ng-template matStepLabel>Your Personal Information</ng-template>            
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
@@ -89,10 +89,10 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Legal lastname<span class="text-danger">*</span></mat-label>
+                  <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="lastName" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
@@ -106,21 +106,28 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <div class="row">
               <div class="col-md-6">
-                <mat-form-field class="w-100">
+                <!-- <mat-form-field class="w-100">
                   <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="birthdate" readonly
+                  <input matInput [matDatepicker]="picker2" [max]="today" formControlName="birthdate" readonly
                     (click)="picker.open()" />
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2 startView="multi-year"></mat-datepicker> -->
                   <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
                                     "error.required" | translate
                                     }}</mat-error> -->
+                <!-- </mat-form-field> -->
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
+                  <input matInput [matDatepicker]="picker2" formControlName="birthdate">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
               </div>
+              <div class="col-md-6"></div>
             </div>
-            <div class="row row-height">
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Street address 1<span class="text-danger">*</span></mat-label>
@@ -137,7 +144,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>City<span class="text-danger">*</span></mat-label>
@@ -150,7 +157,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Province<span class="text-danger">*</span></mat-label>
                   <mat-select formControlName="province">
-                    <mat-option *ngFor="let provinceName of provinceData; index as pi" value="provinceName.value">
+                    <mat-option *ngFor="let provinceName of provinceData; index as pi" [value]="provinceName.value">
                       {{ provinceName.value }}
                     </mat-option>
                   </mat-select>
@@ -158,12 +165,12 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Postal code<span class="text-danger">*</span></mat-label>
-                  <input matInput mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="postalCode" [showMaskTyped]="true" />
+                  <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="postalCode" [showMaskTyped]="false" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -171,7 +178,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Home phone number</mat-label>
-                  <input matInput formControlName="phoneNumber" mask="(000) 000-0000" [showMaskTyped]="true" />
+                  <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
                   <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
                                     "error.required" | translate
                                     }}</mat-error>
@@ -179,11 +186,11 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Cell phone number</mat-label>
-                  <input matInput formControlName="cellNumber" mask="(000) 000-0000" [showMaskTyped]="true" />
+                  <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
                   <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
                                     "error.required" | translate
                                     }}</mat-error>
@@ -193,7 +200,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Work phone number</mat-label>
-                  <input matInput formControlName="workNumber" mask="(000) 000-0000" [showMaskTyped]="true" />
+                  <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
                   <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
                                     "error.required" | translate
                                     }}</mat-error>
@@ -201,11 +208,11 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email<span class="text-danger">*</span></mat-label>
-                  <input matInput formControlName="email" />
+                  <input type="email" matInput formControlName="email" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -214,7 +221,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Gender</mat-label>
                   <mat-select formControlName="gender">
-                    <mat-option *ngFor="let genderValue of genderData; index as pi" value="genderValue.value">
+                    <mat-option *ngFor="let genderValue of genderData; index as pi" [value]="genderValue.value">
                       {{ genderValue.value }}
                     </mat-option>
                   </mat-select>
@@ -227,7 +234,7 @@
               <div><strong style="color: #003366;">Note:</strong> The question is voluntary. The Child Support Recalculation Program wants to ensure that families can access its services.</div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Gender</mat-label>
+                  <mat-label>Identity</mat-label>
                   <mat-select formControlName="identity">
                     <mat-option *ngFor="let idenityName of identityData; index as pi" value="identityName.value">
                       {{ idenityName.value }}
@@ -237,18 +244,19 @@
                 </mat-form-field>
               </div>
             </div>
-            <div>
+            <mat-divider></mat-divider>
+            <div class="nextButton">
               <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
+                < Back
               </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
+              <button class="nextStep" [disabled]="!secondFormGroup.valid" mat-raised-button color="primary"  matStepperNext>
+                Next >
               </button>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="thirdFormGroup">
+        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
           <form [formGroup]="thirdFormGroup">
             <ng-template matStepLabel>Information about the other party (parent, caregiver, guardian)
             </ng-template>
@@ -275,7 +283,7 @@
             <div class="row row-height">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Legal lastname</mat-label>
+                  <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="lastName" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
@@ -291,15 +299,21 @@
             </div>
             <div class="row row-height">
               <div class="col-md-6">
-                <mat-form-field class="w-100">
+                <!-- <mat-form-field class="w-100">
                   <mat-label>Birthdate</mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="birthdate" readonly
+                  <input matInput [matDatepicker]="picker" [max]="today" formControlName="birthdate" readonly
                     (click)="picker.open()" />
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+                  <mat-datepicker #picker startView="multi-year"></mat-datepicker> -->
                   <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
                                         "error.required" | translate
                                         }}</mat-error> -->
+                <!-- </mat-form-field> -->
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Date of birth</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="birthdate">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -307,7 +321,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Street address 1</mat-label>
-                  <input matInput formControlName="saddress" />
+                  <input matInput formControlName="saddress1" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -315,7 +329,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Street address 2</mat-label>
-                  <input matInput formControlName="sadress1" />
+                  <input matInput formControlName="saddress2" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -324,7 +338,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>City</mat-label>
-                  <input matInput formControlName="lastName" />
+                  <input matInput formControlName="city" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -334,7 +348,7 @@
                   <mat-label>Province</mat-label>
 
                   <mat-select formControlName="province">
-                    <mat-option *ngFor="let provinceName of provinceData; index as pi" value="provinceName.value">
+                    <mat-option *ngFor="let provinceName of provinceData; index as pi" [value]="provinceName.value">
                       {{ provinceName.value }}
                     </mat-option>
                   </mat-select>
@@ -347,8 +361,8 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Postal code</mat-label>
-                  <input matInput mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="postalCode" [showMaskTyped]="true" />
+                  <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
+                    formControlName="postalCode" [showMaskTyped]="false" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -356,7 +370,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Home phone number</mat-label>
-                  <input matInput formControlName="phoneNumber" mask="(000) 000-0000" [showMaskTyped]="true" />
+                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="homePhoneNumber" mask="(000) 000-0000" [showMaskTyped]="false" />
                   <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
                                         "error.required" | translate
                                         }}</mat-error>
@@ -368,7 +382,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Cell phone number</mat-label>
-                  <input matInput formControlName="phoneNumber" mask="(000) 000-0000" [showMaskTyped]="true" />
+                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="cellPhoneNumber" mask="(000) 000-0000" [showMaskTyped]="false" />
                   <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
                                         "error.required" | translate
                                         }}</mat-error>
@@ -378,7 +392,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Work phone number</mat-label>
-                  <input matInput formControlName="phoneNumber" mask="(000) 000-0000" [showMaskTyped]="true" />
+                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="workPhoneNumber" mask="(000) 000-0000" [showMaskTyped]="false" />
                   <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
                                         "error.required" | translate
                                         }}</mat-error>
@@ -390,7 +404,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email</mat-label>
-                  <input matInput formControlName="lastName" />
+                  <input type="email" matInput formControlName="email" />
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
@@ -405,18 +419,20 @@
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
-            <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
-              </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
-              </button>
-            </div>
+           
+          </div>
+          <mat-divider></mat-divider>
+          <div class="nextButton">
+            <button mat-stroked-button color="basic" matStepperPrevious>
+              < Back
+            </button>
+            <button class="nextStep" [disabled]="!thirdFormGroup.valid" mat-raised-button color="primary"  matStepperNext>
+              Next >
+            </button>
           </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="fourthFormGroup1">
+        <mat-step [stepControl]="fourthFormGroup1" [editable]="isEditable">
           <form [formGroup]="fourthFormGroup1">
             <ng-template matStepLabel>Information about the Child(ren)</ng-template>
             <div class="heading">
@@ -428,11 +444,11 @@
                   'controls'
                 ];
                 let i = index
-              ">
-              <div class="row row-height" [formGroup]="userFormGroup">
+              " [formGroup]="userFormGroup">
+              <div class="row row-height" >
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
-                    <mat-label>Legal first name</mat-label>
+                    <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
                     <input matInput formControlName="firstName" />
                     <mat-error>{{ "error.required" | translate }}</mat-error>
                   </mat-form-field>
@@ -448,18 +464,18 @@
               <div class="row row-height">
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
-                    <mat-label>Legal lastname</mat-label>
+                    <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                     <input matInput formControlName="lastName" />
                     <mat-error>{{ "error.required" | translate }}</mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
-                    <mat-label>Birthdate</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="birthdate" readonly
+                    <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
+                    <input matInput [matDatepicker]="picker4" [max]="today" formControlName="birthdate" readonly
                       (click)="picker.open()" />
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
                     <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
                                         "error.required" | translate
                                         }}</mat-error> -->
@@ -472,10 +488,10 @@
                   </p>
                 </div>
                 <div class="col-md-6">
-                  <mat-radio-group aria-label="Select an option">
-                    <mat-radio-button value="1">Yes</mat-radio-button>
-                    <mat-radio-button value="2">No</mat-radio-button>
-                    <mat-radio-button value="3">I don't know</mat-radio-button>
+                  <mat-radio-group formControlName="childDependency" aria-label="Select an option">
+                    <mat-radio-button value="Yes">Yes</mat-radio-button>
+                    <mat-radio-button value="No">No</mat-radio-button>
+                    <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                   </mat-radio-group>
                 </div>
               </div>
@@ -486,18 +502,18 @@
               </div>
             </ng-container>
           </form>
-          <hr style="opacity: 1" />
-          <div>
+          <mat-divider></mat-divider>
+          <div class="nextButton">
             <button mat-stroked-button color="basic" matStepperPrevious>
-              Back
+             < Back
             </button>
-            <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-              Next
+            <button class="nextStep" [disabled]="!fourthFormGroup1.valid" mat-raised-button color="primary"  matStepperNext>
+              Next >
             </button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="fifthFormGroup">
-          <form [formGroup]="fifthFormGroup">
+        <mat-step [stepControl]="fifthFormGroup" [editable]="isEditable">
+          <form [formGroup]="fifthFormGroup" >
             <ng-template matStepLabel>Details about the Court Order or Written Agreement</ng-template>
             <div class="heading">
               It would be helpful if you had a copy of your court order or
@@ -507,8 +523,7 @@
               <div class="col-md-6">
                 <span>Court location</span>
                 <mat-form-field class="w-100">
-                  <input matInput formControlName="firstName" />
-                  <mat-select formControlName="gender">
+                  <mat-select formControlName="courtLocation">
                     <mat-option *ngFor="let locationValue of courtLocationsData; index as pi" value='locationValue.value'>
                       {{locationValue.ssg_bccourtlocationname}}
                     </mat-option>
@@ -517,12 +532,12 @@
                 </mat-form-field>
               </div>
               <div class="col-md-6">
-                <span>Date of order or agreement</span>
+                <span>Date of order or agreement<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></span>
                 <mat-form-field class="w-100">
-                  <input matInput [matDatepicker]="picker" formControlName="birthdate" readonly
+                  <input matInput [matDatepicker]="picker1" [max]="today" formControlName="orderDate" readonly
                     (click)="picker.open()" />
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1 startView="multi-year"></mat-datepicker>
                   <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
                                         "error.required" | translate
                                         }}</mat-error> -->
@@ -530,105 +545,97 @@
               </div>
             </div>
             <div class="row text-dark">
-              <p>Payor's income amount from the order or written agreement</p>
+              <p>Payor's income amount from the order or written agreement<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
-                  <input matInput #input />
+                  <input matInput #input formControlName="payorIncome"/>
                   <mat-icon matSuffix>attach_money</mat-icon>
                 </mat-form-field>
               </div>
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Recalculation ordered by the court</p>
+                <p>Recalculation ordered by the court<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               </div>
               <div class="col-md-6">
-                <mat-radio-group aria-label="Select an option">
-                  <mat-radio-button value="1">Yes</mat-radio-button>
-                  <mat-radio-button value="2">No</mat-radio-button>
-                  <mat-radio-button value="3">I don't know</mat-radio-button>
+                <mat-radio-group aria-label="Select an option" formControlName="recalculationOrdered">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Does the order specify pattern of income?</p>
+                <p>Does the order specify pattern of income?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               </div>
               <div class="col-md-6">
-                <mat-radio-group aria-label="Select an option">
-                  <mat-radio-button value="1">Yes</mat-radio-button>
-                  <mat-radio-button value="2">No</mat-radio-button>
-                  <mat-radio-button value="3">I don't know</mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </div>
-            <div class="row text-dark"></div>
-            <div class="col-md-6">
-              <mat-form-field class="w-100" appearance="fill">
-                <mat-label>Income year 1</mat-label>
-                <input matInput #input />
-                <mat-icon matSuffix>attach_money</mat-icon>
-              </mat-form-field>
-            </div>
-            <div class="col-md-6">
-              <mat-form-field class="w-100" appearance="fill">
-                <mat-label>Income year 2</mat-label>
-                <input matInput #input />
-                <mat-icon matSuffix>attach_money</mat-icon>
-              </mat-form-field>
-            </div>
-            <div class="col-md-6">
-              <mat-form-field class="w-100" appearance="fill">
-                <mat-label>Income year 3</mat-label>
-                <input matInput #input />
-                <mat-icon matSuffix>attach_money</mat-icon>
-              </mat-form-field>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <p>Does the order include special expenses?</p>
-              </div>
-              <div class="col-md-6">
-                <mat-radio-group aria-label="Select an option">
-                  <mat-radio-button value="1">Yes</mat-radio-button>
-                  <mat-radio-button value="2">No</mat-radio-button>
-                  <mat-radio-button value="3">I don't know</mat-radio-button>
+                <mat-radio-group aria-label="Select an option" formControlName="isSpecifiedIncome">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
+                  <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
             <mat-divider></mat-divider>
-            <div>
+            <div class="nextButton">
               <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
+               < Back
               </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
+              <button class="nextStep" [disabled]="!fifthFormGroup.valid" mat-raised-button color="primary"  matStepperNext>
+                Next >
               </button>
             </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="sixFormGroup">
+        <mat-step [stepControl]="sixFormGroup" [editable]="isEditable">
           <form [formGroup]="sixFormGroup">
             <ng-template matStepLabel>Additional Information</ng-template>
-            <div class="stepRow">
-              <div>
-                Do you have any concerns for your safety or your children’s
-                safety?
+            <div class="row text-dark mt-4">
+              <div class="col-md-6">
+                <p>Do you have any concerns for your safety or your children’s
+                  safety?
+                </p>
               </div>
-              <mat-radio-group aria-label="Select an option">
-                <mat-radio-button value="1">Yes</mat-radio-button>
-                <mat-radio-button value="2">No</mat-radio-button>
-              </mat-radio-group>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="childSafety" aria-label="Select an option">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
+                  <mat-radio-button value="I don't know">I don't know</mat-radio-button>
+                </mat-radio-group>
+              </div>
             </div>
             <div class="example-container width100">
               <mat-form-field appearance="fill">
                 <mat-label>If yes, please provide any details including if there any
                   protection orders in place involving you or the other
                   party?</mat-label>
-                <input matInput #input />
+                <input matInput #input/>
               </mat-form-field>
             </div>
-            <div class="stepRow">
+            <div class="row text-dark mt-2">
+              <div class="col-md-6">
+                <p>What is your preferred method of contact?
+                </p>
+              </div>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="contactMethod" aria-label="Select an option">
+                  <mat-radio-button value="Email">Email</mat-radio-button>
+                  <mat-radio-button value="Paper Mail">Paper Mail</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="row text-dark mt-2">
+              <div class="col-md-6">
+                <p> Are you enrolled in the Family Maintenance Enforcement Program?</p>
+              </div>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="enrollFMEP" aria-label="Select an option">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <!-- <div class="stepRow">
               <div>
                 Are you enrolled in the Family Maintenance Enforcement Program?
               </div>
@@ -636,46 +643,51 @@
                 <mat-radio-button value="1">Yes</mat-radio-button>
                 <mat-radio-button value="2">No</mat-radio-button>
               </mat-radio-group>
-            </div>
+            </div> -->
             <div class="example-container">
               <mat-form-field appearance="fill">
                 <mat-label>My FMEP file # is:</mat-label>
-                <input matInput #input />
+                <input formControlName="FMEPinput" matInput #input />
               </mat-form-field>
             </div>
-            <div class="stepRow">
-              <div>Are you currently on income assistance?</div>
-              <mat-radio-group aria-label="Select an option">
-                <mat-radio-button value="1">Yes</mat-radio-button>
-                <mat-radio-button value="2">No</mat-radio-button>
-              </mat-radio-group>
+            <div class="row text-dark mt-2">
+              <div class="col-md-6">
+                <p> Are you currently on income assistance?</p>
+              </div>
+              <div class="col-md-6">
+                <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
+                  <mat-radio-button value="I don't know">I don't know</mat-radio-button>
+                </mat-radio-group>
+              </div>
             </div>
-            <div class="example-container width100">
-              <mat-form-field appearance="fill">
-                <mat-label>How did you hear about the Child Support Recalculation
-                  Service (CSRS)?
-                </mat-label>
-               <mat-select formControlName="gender">
-                    <mat-option *ngFor="let identityValue of identityData; index as pi" value='identityValue.value'>
-                      {{identityValue.value}}
+            <div class="row text-dark pt-2">
+              <span>How did you hear about the Child Support Recalculation Service (CSRS)?</span>
+              <div class="col-md-6">
+                <mat-form-field class="w-100">
+                  <mat-select formControlName="referals">
+                    <mat-option *ngFor="let referalsValue of referalsData; index as pi" value='referalsValue.value'>
+                      {{referalsValue.value}}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
-              </mat-form-field>
+                </mat-form-field>
+              </div>
             </div>
             <mat-divider></mat-divider>
-            <div>
+            <div class="nextButton">
               <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
+               < Back
               </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
+              <button class="nextStep"  [disabled]="!sixFormGroup.valid" mat-raised-button color="primary"  matStepperNext>
+                Next >
               </button>
             </div>
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="seventhFormGroup">
+        <!-- <mat-step [stepControl]="seventhFormGroup">
           <form [formGroup]="seventhFormGroup">
             <ng-template matStepLabel>Upload your documents</ng-template>
             <div>
@@ -704,9 +716,9 @@
               </button>
             </div>
           </form>
-        </mat-step>
+        </mat-step> -->
 
-        <mat-step [stepControl]="eFormGroup">
+        <mat-step [stepControl]="eFormGroup" [editable]="isEditable">
           <form [formGroup]="eFormGroup">
             <ng-template matStepLabel>Conditions of Enrolment</ng-template>
             <div class="heading">
@@ -755,16 +767,16 @@
                 Client Relations Officer: Address: 203 - 865 Hornby Street,
                 Vancouver, BC Phone Number: (604) 660-2528.
               </p>
-              <mat-checkbox class="example-margin">I accept and acknowledge the terms and conditions listed
+              <mat-checkbox color="primary"  formControlName="secondCtrl" class="example-margin">I accept and acknowledge the terms and conditions listed
                 above.</mat-checkbox>
             </div>
             <mat-divider></mat-divider>
-            <div>
+            <div class="nextButton">
               <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
+               < Back
               </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
+              <button class="nextStep"   [disabled]="!eFormGroup.valid" mat-raised-button color="primary"  matStepperNext>
+                Next >
               </button>
             </div>
           </form>
@@ -779,211 +791,262 @@
               submission.
             </div>
             <div class="submit-layer">
-              <div class="stepRow spaceAround">
+              <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Getting Started</strong>
-                <a>Edit</a>
+                <a class="edit-text-color" (click)="editPage(stepper,0)">Edit</a>
               </div>
-              <div class="stepRow spaceAround">
+              <div class="stepRow spaceAround leftRight">
                 <div>What best describes your situation?</div>
-                <div class="bold">Payor, I pay child support</div>
+                <div class="bold">{{firstFormGroup.value.firstControl}}
+                </div>
               </div>
-              <div class="stepRow spaceAround">
+              <div class="stepRow spaceAround leftRight">
                 <div>Do you have an order or filed written agreement?</div>
-                <div class="bold">Yes</div>
+                <div class="bold">{{firstFormGroup.value.secondControl}}</div>
               </div>
             </div>
             <br />
             <div class="submit-layer">
-              <div class="stepRow spaceAround">
+              <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Your Personal Information</strong>
-                <a>Edit</a>
+                <a class="edit-text-color" (click)="editPage(stepper,1)" >Edit</a>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal first name:</div>
-                  <div class="bold">Susan</div>
+                  <div class="bold">{{secondFormGroup.value.firstName }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal middle name(s):</div>
-                  <div class="bold">Jane</div>
+                  <div class="bold">{{(secondFormGroup.value.givenNames)?secondFormGroup.value.givenNames:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal last name:</div>
-                  <div class="bold">Susan</div>
+                  <div class="bold">{{secondFormGroup.value.lastName }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Preferred name:</div>
-                  <div class="bold">-</div>
+                  <div class="bold">{{(secondFormGroup.value.PreferredName)?secondFormGroup.value.PreferredName:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Date of birth:</div>
-                  <div class="bold">1988/05/05</div>
+                  <div class="bold">{{(secondFormGroup.value.birthdate)?(secondFormGroup.value.birthdate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Street address 1:</div>
-                  <div class="bold">123 Surrey Avenue</div>
+                  <div class="bold">{{(secondFormGroup.value.address1)?secondFormGroup.value.address1:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Street address 2:</div>
-                  <div class="bold">1988/05/05</div>
+                  <div class="bold">{{(secondFormGroup.value.saddress)?secondFormGroup.value.saddress:'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>City:</div>
-                  <div class="bold">123 Surrey Avenue</div>
+                  <div class="bold">{{(secondFormGroup.value.city)?secondFormGroup.value.city:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Province</div>
-                  <div class="bold">British Columbia</div>
+                  <div class="bold">{{(secondFormGroup.value.Province)?secondFormGroup.value.Province:'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Postal Code:</div>
-                  <div class="bold">123 Surrey Avenue</div>
+                  <div class="bold">{{(secondFormGroup.value.postalCode)?secondFormGroup.value.postalCode:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Home Phone number:</div>
+                  <div class="bold">{{(secondFormGroup.value.phoneNumber)?secondFormGroup.value.phoneNumber:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Cell Phone number:</div>
+                  <div class="bold">{{(secondFormGroup.value.cellNumber)?secondFormGroup.value.cellNumber:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Work Phone number</div>
+                  <div class="bold">{{(secondFormGroup.value.workNumber)?secondFormGroup.value.workNumber:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Email:</div>
+                  <div class="bold">{{(secondFormGroup.value.email)?secondFormGroup.value.email:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Gender:</div>
+                  <div class="bold">{{(secondFormGroup.value.gender)?secondFormGroup.value.gender:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Identity:</div>
+                  <div class="bold">{{(secondFormGroup.value.identity)?secondFormGroup.value.identity:'-' }}</div>
                 </div>
               </div>
             </div>
             <br />
             <div class="submit-layer">
-              <div class="stepRow spaceAround">
+              <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Information about third party</strong>
-                <a>Edit</a>
+                <a class="edit-text-color"(click)="editPage(stepper,2)">Edit</a>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal first name:</div>
-                  <div class="bold">Susan</div>
+                  <div class="bold">{{thirdFormGroup.value.firstName }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal middle name(s):</div>
-                  <div class="bold">Jane</div>
+                  <div class="bold">{{(thirdFormGroup.value.givenNames)?thirdFormGroup.value.givenNames:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal last name:</div>
-                  <div class="bold">Susan</div>
+                  <div class="bold">{{thirdFormGroup.value.lastName }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Preferred name:</div>
                   <div class="bold">-</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Date of birth:</div>
-                  <div class="bold">1988/05/05</div>
+                  <div class="bold">{{(thirdFormGroup.value.birthdate)?(thirdFormGroup.value.birthdate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Street address 1:</div>
-                  <div class="bold">123 Surrey Avenue</div>
+                  <div class="bold">{{(thirdFormGroup.value.saddress1)?thirdFormGroup.value.saddress1:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Street address 2:</div>
-                  <div class="bold">1988/05/05</div>
+                  <div class="bold">{{(thirdFormGroup.value.saddress2)?thirdFormGroup.value.saddress2:'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>City:</div>
-                  <div class="bold">123 Surrey Avenue</div>
+                  <div class="bold">{{(thirdFormGroup.value.city)?thirdFormGroup.value.city:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Province</div>
-                  <div class="bold">British Columbia</div>
+                  <div class="bold">{{(thirdFormGroup.value.province)?thirdFormGroup.value.province:'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Postal Code:</div>
-                  <div class="bold">123 Surrey Avenue</div>
+                  <div class="bold">{{(thirdFormGroup.value.postalCode)?thirdFormGroup.value.postalCode:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Home Phone number:</div>
+                  <div class="bold">{{(thirdFormGroup.value.homePhoneNumber)?thirdFormGroup.value.homePhoneNumber:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Cell Phone number:</div>
+                  <div class="bold">{{(thirdFormGroup.value.cellPhoneNumber)?thirdFormGroup.value.cellPhoneNumber:'-' }}</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Work Phone number</div>
+                  <div class="bold">{{(thirdFormGroup.value.workPhoneNumber)?thirdFormGroup.value.workPhoneNumber:'-' }}</div>
+                </div>
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div>Email:</div>
+                  <div class="bold">{{(thirdFormGroup.value.email)?thirdFormGroup.value.email:'-' }}</div>
                 </div>
               </div>
             </div>
             <br />
-            <div class="submit-layer">
-              <div class="stepRow spaceAround">
+            <div class="submit-layer" *ngFor="
+            let userFormGroup of this.fourthFormGroup1.get('users')[
+              'controls'
+            ];
+            let i = index
+          " >
+              <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Information about the Child(ren)</strong>
-                <a>Edit</a>
+                <a class="edit-text-color" (click)="editPage(stepper,3)">Edit</a>
               </div>
-              <div class="stepRow spaceAround">
+              <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Child 1</strong>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal first name:</div>
-                  <div class="bold">Susan</div>
+                  <div class="bold">{{(userFormGroup.value.firstName)?userFormGroup.value.firstName:'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal middle name(s):</div>
-                  <div class="bold">Jane</div>
+                  <div class="bold">{{(userFormGroup.value.middleName)?userFormGroup.value.middleName:'-' }}</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Legal last name:</div>
-                  <div class="bold">Susan</div>
+                  <div class="bold">{{(userFormGroup.value.lastName)?userFormGroup.value.lastName:'-' }}</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Date of birth:</div>
-                  <div class="bold">1988/05/05</div>
+                  <div class="bold">{{(userFormGroup.value.birthdate)?(userFormGroup.value.birthdate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
               </div>
             </div>
             <br />
-            <div class="submit-layer">
-              <div class="stepRow spaceAround">
+            <div class="submit-layer ">
+              <div class="stepRow spaceAround leftRight ">
                 <strong class="submit-text-color">Details about the court order or wirtten agreement</strong>
-                <a>Edit</a>
+                <a class="edit-text-color"(click)="editPage(stepper,4)">Edit</a>
               </div>
               <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
-                  <div>Orderend by court</div>
-                  <div class="bold">Yes</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Court Location</div>
-                  <div class="bold">Vancouver Provincial Court</div>
+                  <!-- <div class="bold">{{(fifthFormGroup.value.courtLocation)?fifthFormGroup.value.courtLocation:'-' }}</div> -->
+                  <div class="bold">Victoria Court</div>
                 </div>
-                <div class="col-md-6 stepRow spaceAround leftRight">
+                <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Date of order</div>
-                  <div class="bold">1988/05/05</div>
+                  <div class="bold">{{(fifthFormGroup.value.orderdate)?fifthFormGroup.value.orderDate:'-' }}</div>
                 </div>
               </div>
-              <div class="stepRow spaceAround">
+              <!-- <div class="stepRow spaceAround">
                 <strong class="submit-text-color">Income</strong>
-              </div>
-              <div class="row">
-                <div class="col-md-10 stepRow spaceAround leftRight">
+              </div> -->
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
                   <div>
-                    <strong>Receipent: </strong>Guidelines income amount from
-                    the Order
+                    Payor's income amount from the order or written agreement
                   </div>
                 </div>
-                <div class="col-md-2 stepRow spaceAround leftRight pl-5">
+                <div class="col-md-2 stepRow  ">
                   <div class="bold">Vancouver</div>
                 </div>
-                <div class="row">
-                  <div class="col-md-10 stepRow spaceAround leftRight">
+                </div>
+                <div class="row agreement">
+                  <div class="col-md-8 stepRow  leftRight">
                     <div>
                       <strong>Payor: </strong>Guidelines income amount from the
                       Order
                     </div>
                   </div>
-                  <div class="col-md-2 stepRow spaceAround leftRight">
+                  <div class="col-md-2 stepRow  ">
                     <div class="bold">Vancouver</div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-10 stepRow spaceAround leftRight">
+                <!-- <div class="row">
+                  <div class="col-md-10 stepRow  displayDetails">
                     <div>
                       Does the order specify pattern of income
                       <ol>
@@ -994,7 +1057,7 @@
                       Does the order include specific expenses?
                     </div>
                   </div>
-                  <div class="col-md-2 stepRow spaceAround leftRight">
+                  <div class="col-md-2 stepRow  leftRight">
                     <div>
                       Yes
                       <ul style="list-style: none; padding-left: 0px">
@@ -1005,14 +1068,80 @@
                       No
                     </div>
                   </div>
-                </div>
-              </div>
+                </div> -->
             </div>
             <br />
             <div class="submit-layer">
-              <div class="stepRow spaceAround">
+              <div class="stepRow spaceAround leftRight">
+                <strong class="submit-text-color">Additional Information</strong>
+                <a class="edit-text-color" (click)="editPage(stepper,5)">Edit</a>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    Do you have any concerns for your safety or your children's safety?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.childSafety:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    What is your preferred method of contact?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow">
+                  <div class="bold">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.contactMethod:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    Are you enrolled in the Family Maintenance and Enforcement Program?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.enrollFMEP)?sixFormGroup.value.enrollFMEP:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    My FMEP file number is: 
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.FMEPinput)?sixFormGroup.value.FMEPinput:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    Are you currently on income assistance?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow ">
+                  <div class="bold">{{(sixFormGroup.value.incomeAssistance)?sixFormGroup.value.incomeAssistance:'-'}}</div>
+v                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-8 stepRow leftRight">
+                  <div>
+                    How did you hear about Child Support Recalculation Service(CSRS)?
+                  </div>
+                </div>
+                <div class="col-md-2 stepRow">
+                  <div class="bold">FMEP</div>
+                </div>
+              </div>
+            </div>
+            <br/>
+            <div class="submit-layer">
+              <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Conditions of Enrolment</strong>
-                <a>Edit</a>
+                <a class="edit-text-color"(click)="editPage(stepper,6)">Edit</a>
               </div>
               <div class="text-dark">
                 <ul>
@@ -1045,36 +1174,38 @@
                     program.
                   </li>
                 </ul>
-                <mat-checkbox class="example-margin">I accept and acknowledge the terms and conditions listed
+                <mat-checkbox  [checked]="eFormGroup.value.secondCtrl" [disabled]="eFormGroup.value.secondCtrl" form class="example-margin">I accept and acknowledge the terms and conditions listed
                   above.</mat-checkbox>
               </div>
             </div>
+            <mat-checkbox color="primary"
+            [class.mat-checkbox-disabled]="false"
+            >All of the information above is correct to the best of my knowledge</mat-checkbox>
             <app-alert type="warning" icon="info">
               <ng-container #alertContent class="alert-content">
-                <strong>If you choose to not appear in court, you must submit written
-                  reasons for each request to ask for more time or a fine
-                  reduction for each count.</strong>
+                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission. 
+                </strong>
               </ng-container>
             </app-alert>
             <mat-divider></mat-divider>
-            <div>
+            <div class="nextButton">
               <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
+               < Back
               </button>
-              <button mat-flat-button color="primary" matStepperPrevious>
+              <!-- <button mat-flat-button color="primary" matStepperPrevious>
                 Save my application for later
-              </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
+              </button> -->
+              <button (click)="openDialog()" routerLink="/mailbox" class="submitStep" mat-stroked-button color="basic" matStepperNext>
+                Submit Application
               </button>
             </div>
           </form>
         </mat-step>
       </mat-stepper>
-      <div>
+      <!-- <div>
         <button mat-button (click)="saveLater()">Save fot later</button>
         <button mat-button (click)="save()">Save</button>
-      </div>
+      </div> -->
     </div>
   </section>
 </div>

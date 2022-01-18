@@ -206,6 +206,9 @@ mat-divider {
  color: #000;
 }
 .toolTipIcon{
+  display: inline-flex;
+    vertical-align:top;
+  transform: scale(0.75);
   color: #009cde;
 
 }
@@ -224,17 +227,21 @@ mat-divider {
   height:175px;
   padding: 30px;
   padding-left: 10px;
-  margin-left: 10px;
+  margin-left: 0px;
   }
   .alert-text{
       border: 1px solid gray;;
       border-left: 4px solid darkblue;
-      height: 50px;
+      height: 60px;
       margin-left: 10px;
   }
   .alert-text2{
     border: 1px solid gray;;
     border-left: 4px solid darkblue;
     height: 75px;
-    margin-left: 10px;
+    margin-left: -15px;
+}
+
+.round3 a{
+ margin-left: 60px !important;
 }

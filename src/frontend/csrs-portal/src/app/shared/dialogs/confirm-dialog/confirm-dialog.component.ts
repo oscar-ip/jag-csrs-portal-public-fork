@@ -1,10 +1,11 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+// import {  MatDialogRef } from '@angular/material/dialog';
 
 import { DialogDefaultOptions } from '../dialog-default-options.model';
 import { DialogOptions } from '../dialog-options.model';
 import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 import { DialogContentOutput } from '../dialog-output.model';
+import { MatDialog, MatDialogModule, MAT_DIALOG_DATA, MatDialogConfig,MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-dialog',

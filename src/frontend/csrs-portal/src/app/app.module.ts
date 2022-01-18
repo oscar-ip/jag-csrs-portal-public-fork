@@ -3,7 +3,7 @@ import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgBusyModule } from 'ng-busy';
@@ -37,6 +37,7 @@ import { AuthConfigModule } from './auth/auth-config.module';
 import { ApiModule } from './api/api.module';
 import { Configuration } from './api/configuration';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { MailboxComponent } from './components/mailbox/mailbox.component';
 import { CommunicationComponent } from './components/communication/communication.component';
 import { MatIconModule } from '@angular/material/icon'
 import { MatDialogModule, MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
@@ -57,6 +58,7 @@ import { FormsModule } from '@angular/forms';
     WelcomeUserComponent,
     ApplicationFormStepperComponent,
     ChildApplicationQuestionComponent,
+    MailboxComponent,
     CommunicationComponent,
     ModalDialogComponent,
   ],
@@ -74,6 +76,7 @@ import { FormsModule } from '@angular/forms';
     MatGridListModule,
     AuthConfigModule,
     ApiModule,
+    MatDialogModule,
     MatTabsModule,
     MatIconModule,
     MatDialogModule,
