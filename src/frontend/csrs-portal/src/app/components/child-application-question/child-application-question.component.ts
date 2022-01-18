@@ -223,7 +223,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
   getCourtLocationData() {
     this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
-      this._lookupService.courtlocationsGet().subscribe({
+      this._lookupService.apiLookupCourtlocationsGet().subscribe({
         next: (data) => this.courtLocationsData = data,
         error: (e) => {
           if (e.error instanceof Error) {
