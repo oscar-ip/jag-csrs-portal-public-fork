@@ -1,5 +1,5 @@
-REM Fetch the latest version of the citizen api spec
-REM 
+REM Fetch the latest version of the csrs api spec
+REM
 REM    curl -o swagger.json https://localhost:6001/swagger/v1/swagger.json
 REM
 
