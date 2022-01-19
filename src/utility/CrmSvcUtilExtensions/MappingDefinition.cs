@@ -165,6 +165,14 @@ namespace CrmSvcUtilExtensions
                     new AttributeMappingDefinition() { LogicalName = "ssg_csrsfileid", Name =  "CsrsFileId" },
                     new AttributeMappingDefinition() { LogicalName = "ssg_filenumber", Name =  "FileNumber" },
                     new AttributeMappingDefinition() { LogicalName = "ssg_autonumber", Name =  "AutoNumber" },
+
+                    new AttributeMappingDefinition() { LogicalName = "ssg_partyenrolled", Name =  "PartyEnrolled"  },
+
+                    new AttributeMappingDefinition() { LogicalName = "ssg_payorssafetyconcerndescription", Name =  "SafetyConcernDescriptionPayor" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyalertpayor", Name =  "SafetyAlertPayor" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyalert", Name =  "SafetyAlertRecipient" },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyconcerndescription", Name =  "SafetyConcernDescriptionPayorRecipient" },
+
                     // skipped
                     new AttributeMappingDefinition() { LogicalName = "ssg_recipientschildsupportonorder", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_recipientschildsupportonorder_base", Skip =  true },
@@ -193,14 +201,9 @@ namespace CrmSvcUtilExtensions
                     new AttributeMappingDefinition() { LogicalName = "ssg_fmepfilenumber", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_latestduplicatefile", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_numberofrecalculations", Skip =  true },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_partyenrolled", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_patternofincomepayor", Skip =  true },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_payorssafetyconcerndescription", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_recalculationorderedbythecourt", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_recipientsincomeneeded", Skip =  true },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyalert", Skip =  true },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyalertpayor", Skip =  true },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_safetyconcerndescription", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_section7expenses", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_section7expensesrecalculated", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_section7payorsproportion", Skip =  true },
