@@ -315,6 +315,18 @@ namespace Csrs.Api.Models.Dynamics
         public const string EntityLogicalName = "ssg_csrscommunicationmessage";
 
         /// <summary>
+        /// Allows the user to deactivate the message instead of sending it - triggers cancellation process. Logical name ssg_cancelmessage.
+        /// </summary>
+        [JsonPropertyName("ssg_cancelmessage")]
+        public string? CancelMessage { get; set; }
+
+        /// <summary>
+        /// Used to identify where the message originated from (for future use). Logical name ssg_communicationsource.
+        /// </summary>
+        [JsonPropertyName("ssg_communicationsource")]
+        public string? CommunicationSource { get; set; }
+
+        /// <summary>
         /// Unique identifier for entity instances. Logical name ssg_csrscommunicationmessageid.
         /// </summary>
         /// <returns>
@@ -353,7 +365,7 @@ namespace Csrs.Api.Models.Dynamics
         public string? csrsMessageFolder { get; set; }
 
         /// <summary>
-        /// Logical name ssg_csrsmessageread.
+        /// Indicator whether the message has been read by the Party via the Portal. Logical name ssg_csrsmessageread.
         /// </summary>
         [JsonPropertyName("ssg_csrsmessageread")]
         public bool? Read { get; set; }
@@ -365,15 +377,39 @@ namespace Csrs.Api.Models.Dynamics
         public string? Subject { get; set; }
 
         /// <summary>
-        /// https://justice.gov.bc.ca/jira/browse/CSRS-56. Logical name ssg_csrssubjecttype.
+        /// FOR FUTURE USE: To identify which party sent the message from the Portal. Logical name ssg_fromparty.
         /// </summary>
-        [JsonPropertyName("ssg_csrssubjecttype")]
-        public string? csrsSubjectType { get; set; }
+        [JsonPropertyName("ssg_fromparty")]
+        public SSG_CsrsParty? FromParty { get; set; }
+
+        /// <summary>
+        /// FOR FUTURE USE: List of Subject Types that the Party can select from when sending a communication to the Program. Logical name ssg_incomingsubjecttype.
+        /// </summary>
+        [JsonPropertyName("ssg_incomingsubjecttype")]
+        public string? IncomingSubjectType { get; set; }
+
+        /// <summary>
+        /// List of subject types for outgoing messages to the Party/Portal. Logical name ssg_outgoingsubjecttype.
+        /// </summary>
+        [JsonPropertyName("ssg_outgoingsubjecttype")]
+        public string? OutgoingSubjectType { get; set; }
+
+        /// <summary>
+        /// Select intended message recipient from dropdown. Logical name ssg_sendmessageto.
+        /// </summary>
+        [JsonPropertyName("ssg_sendmessageto")]
+        public string? SendMessageTo { get; set; }
+
+        /// <summary>
+        /// Identify the receiving Party for the message. Logical name ssg_toparty.
+        /// </summary>
+        [JsonPropertyName("ssg_toparty")]
+        public SSG_CsrsParty? ToParty { get; set; }
 
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsCommunicationMessage, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.csrscommunicationmessageId, _.File, _.csrsMessage, _.HasAttachment, _.csrsMessageFolder, _.Read, _.Subject, _.csrsSubjectType, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsCommunicationMessage, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.CancelMessage, _.CommunicationSource, _.csrscommunicationmessageId, _.File, _.csrsMessage, _.HasAttachment, _.csrsMessageFolder, _.Read, _.Subject, _.FromParty, _.IncomingSubjectType, _.OutgoingSubjectType, _.SendMessageTo, _.ToParty, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -403,6 +439,10 @@ namespace Csrs.Api.Models.Dynamics
             public const string owningbusinessunit = "owningbusinessunit";
             public const string owningteam = "owningteam";
             public const string owninguser = "owninguser";
+            public const string ssg_cancelmessage = "ssg_cancelmessage";
+            public const string ssg_cancelmessagename = "ssg_cancelmessagename";
+            public const string ssg_communicationsource = "ssg_communicationsource";
+            public const string ssg_communicationsourcename = "ssg_communicationsourcename";
             public const string ssg_csrscommunicationmessageid = "ssg_csrscommunicationmessageid";
             public const string ssg_csrsfile = "ssg_csrsfile";
             public const string ssg_csrsfilename = "ssg_csrsfilename";
@@ -414,8 +454,16 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsmessageread = "ssg_csrsmessageread";
             public const string ssg_csrsmessagereadname = "ssg_csrsmessagereadname";
             public const string ssg_csrsmessagesubject = "ssg_csrsmessagesubject";
-            public const string ssg_csrssubjecttype = "ssg_csrssubjecttype";
-            public const string ssg_csrssubjecttypename = "ssg_csrssubjecttypename";
+            public const string ssg_fromparty = "ssg_fromparty";
+            public const string ssg_frompartyname = "ssg_frompartyname";
+            public const string ssg_incomingsubjecttype = "ssg_incomingsubjecttype";
+            public const string ssg_incomingsubjecttypename = "ssg_incomingsubjecttypename";
+            public const string ssg_outgoingsubjecttype = "ssg_outgoingsubjecttype";
+            public const string ssg_outgoingsubjecttypename = "ssg_outgoingsubjecttypename";
+            public const string ssg_sendmessageto = "ssg_sendmessageto";
+            public const string ssg_sendmessagetoname = "ssg_sendmessagetoname";
+            public const string ssg_toparty = "ssg_toparty";
+            public const string ssg_topartyname = "ssg_topartyname";
             public const string statecode = "statecode";
             public const string statecodename = "statecodename";
             public const string statuscode = "statuscode";
@@ -437,6 +485,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrscommunicationmessage_MailboxTrackingFolders = "ssg_csrscommunicationmessage_MailboxTrackingFolders";
             public const string ssg_csrscommunicationmessage_PrincipalObjectAttributeAccesses = "ssg_csrscommunicationmessage_PrincipalObjectAttributeAccesses";
             public const string ssg_csrscommunicationmessage_ProcessSession = "ssg_csrscommunicationmessage_ProcessSession";
+            public const string ssg_csrscommunicationmessage_SharePointDocumentLocations = "ssg_csrscommunicationmessage_SharePointDocumentLocations";
+            public const string ssg_csrscommunicationmessage_SharePointDocuments = "ssg_csrscommunicationmessage_SharePointDocuments";
             public const string ssg_csrscommunicationmessage_SyncErrors = "ssg_csrscommunicationmessage_SyncErrors";
             public const string ssg_csrscommunicationmessage_UserEntityInstanceDatas = "ssg_csrscommunicationmessage_UserEntityInstanceDatas";
         }
@@ -452,6 +502,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string lk_ssg_csrscommunicationmessage_modifiedby = "lk_ssg_csrscommunicationmessage_modifiedby";
             public const string lk_ssg_csrscommunicationmessage_modifiedonbehalfby = "lk_ssg_csrscommunicationmessage_modifiedonbehalfby";
             public const string owner_ssg_csrscommunicationmessage = "owner_ssg_csrscommunicationmessage";
+            public const string ssg_csrsparty_ssg_csrscommunicationmessage_FromParty = "ssg_csrsparty_ssg_csrscommunicationmessage_FromParty";
+            public const string ssg_csrsparty_ssg_csrscommunicationmessage_ToParty = "ssg_csrsparty_ssg_csrscommunicationmessage_ToParty";
             public const string ssg_ssg_csrsfile_ssg_csrscommunicationmessage_File = "ssg_ssg_csrsfile_ssg_csrscommunicationmessage_File";
             public const string team_ssg_csrscommunicationmessage = "team_ssg_csrscommunicationmessage";
             public const string user_ssg_csrscommunicationmessage = "user_ssg_csrscommunicationmessage";
@@ -642,10 +694,28 @@ namespace Csrs.Api.Models.Dynamics
         public string? FileNumber { get; set; }
 
         /// <summary>
+        /// Auto-generated PIN to be sent to File Respondent in order to validate them in the Portal. Logical name ssg_filereferencenumber.
+        /// </summary>
+        [JsonPropertyName("ssg_filereferencenumber")]
+        public string? FileReferenceNumber { get; set; }
+
+        /// <summary>
+        /// Specify which Party enrolled for the CSRS Program. Logical name ssg_partyenrolled.
+        /// </summary>
+        [JsonPropertyName("ssg_partyenrolled")]
+        public int? PartyEnrolled { get; set; }
+
+        /// <summary>
         /// Select the party who provides (pays for) support. Logical name ssg_payor.
         /// </summary>
         [JsonPropertyName("ssg_payor")]
         public SSG_CsrsParty? Payor { get; set; }
+
+        /// <summary>
+        /// Description of the Safety Concerns from Payor's perspective. Logical name ssg_payorssafetyconcerndescription.
+        /// </summary>
+        [JsonPropertyName("ssg_payorssafetyconcerndescription")]
+        public string? SafetyConcernDescriptionPayor { get; set; }
 
         /// <summary>
         /// Select the party who receives support. Logical name ssg_recipient.
@@ -658,6 +728,24 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         [JsonPropertyName("ssg_registrationdate")]
         public string? RegistrationDateString { get; set; }
+
+        /// <summary>
+        /// Indicate whether there is a Safety Alert from the Recipient that applies to the file. Logical name ssg_safetyalert.
+        /// </summary>
+        [JsonPropertyName("ssg_safetyalert")]
+        public bool? SafetyAlertRecipient { get; set; }
+
+        /// <summary>
+        /// Indicate whether there is a Safety Alert from the Payor that applies to the file. Logical name ssg_safetyalertpayor.
+        /// </summary>
+        [JsonPropertyName("ssg_safetyalertpayor")]
+        public bool? SafetyAlertPayor { get; set; }
+
+        /// <summary>
+        /// Description of the Safety Concerns from Recipient's perspective. Logical name ssg_safetyconcerndescription.
+        /// </summary>
+        [JsonPropertyName("ssg_safetyconcerndescription")]
+        public string? SafetyConcernDescriptionPayorRecipient { get; set; }
 
         /// <summary>
         /// Date/time the application or file was first submitted to the Program. Logical name ssg_submissiondate.
@@ -674,7 +762,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Contains all the attributes/columns on this class.
         /// </summary>
-        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFile, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.BCCourtLevel, _.BCCourtLocation, _.CourtFileNumber, _.CourtFileType, _.CourtLocation, _.CsrsFileId, _.FileNumber, _.Payor, _.Recipient, _.RegistrationDateString, _.SubmissionDateString, _.TerminationDateString, _.StateCode, _.StatusCode };
+        public static readonly System.Linq.Expressions.Expression<Func<SSG_CsrsFile, object>> AllProperties = _ => new { _.CreatedOn, _.ModifiedOn, _.BCCourtLevel, _.BCCourtLocation, _.CourtFileNumber, _.CourtFileType, _.CourtLocation, _.CsrsFileId, _.FileNumber, _.FileReferenceNumber, _.PartyEnrolled, _.Payor, _.SafetyConcernDescriptionPayor, _.Recipient, _.RegistrationDateString, _.SafetyAlertRecipient, _.SafetyAlertPayor, _.SafetyConcernDescriptionPayorRecipient, _.SubmissionDateString, _.TerminationDateString, _.StateCode, _.StatusCode };
 
         /// <summary>
         /// Contains all the normal attributes on this entity.
@@ -730,6 +818,7 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_fileclosedatenrollment = "ssg_fileclosedatenrollment";
             public const string ssg_fileclosedatenrollmentname = "ssg_fileclosedatenrollmentname";
             public const string ssg_filenumber = "ssg_filenumber";
+            public const string ssg_filereferencenumber = "ssg_filereferencenumber";
             public const string ssg_fmepfileactive = "ssg_fmepfileactive";
             public const string ssg_fmepfileactivename = "ssg_fmepfileactivename";
             public const string ssg_fmepfilenumber = "ssg_fmepfilenumber";
@@ -1096,6 +1185,7 @@ namespace Csrs.Api.Models.Dynamics
         /// </summary>
         public static class OneToManyRelationships
         {
+            public const string ssg_csrsparty_ActivityParties = "ssg_csrsparty_ActivityParties";
             public const string ssg_csrsparty_AsyncOperations = "ssg_csrsparty_AsyncOperations";
             public const string ssg_csrsparty_BulkDeleteFailures = "ssg_csrsparty_BulkDeleteFailures";
             public const string ssg_csrsparty_DuplicateBaseRecord = "ssg_csrsparty_DuplicateBaseRecord";
@@ -1108,6 +1198,8 @@ namespace Csrs.Api.Models.Dynamics
             public const string ssg_csrsparty_ssg_csrsarchivedpartycontact_PartyName = "ssg_csrsparty_ssg_csrsarchivedpartycontact_PartyName";
             public const string ssg_csrsparty_ssg_csrschild_ChildsFather = "ssg_csrsparty_ssg_csrschild_ChildsFather";
             public const string ssg_csrsparty_ssg_csrschild_Mother = "ssg_csrsparty_ssg_csrschild_Mother";
+            public const string ssg_csrsparty_ssg_csrscommunicationmessage_FromParty = "ssg_csrsparty_ssg_csrscommunicationmessage_FromParty";
+            public const string ssg_csrsparty_ssg_csrscommunicationmessage_ToParty = "ssg_csrsparty_ssg_csrscommunicationmessage_ToParty";
             public const string ssg_csrsparty_ssg_csrsfile_Payor = "ssg_csrsparty_ssg_csrsfile_Payor";
             public const string ssg_csrsparty_ssg_csrsfile_Recipient = "ssg_csrsparty_ssg_csrsfile_Recipient";
             public const string ssg_csrsparty_ssg_csrsparty_LatestDuplicateParty = "ssg_csrsparty_ssg_csrsparty_LatestDuplicateParty";

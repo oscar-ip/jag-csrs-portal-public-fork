@@ -38,12 +38,12 @@ namespace Csrs.Api.Repositories
             this Dictionary<string, object?> data,
             string field,
             TModel model,
-            Expression<Func<TModel, string>> modelOropertyAccessor,
+            Expression<Func<TModel, string?>> modelOropertyAccessor,
             TEntity entity,
-            Expression<Func<TEntity, string>> entityPropertyAccessor)
+            Expression<Func<TEntity, string?>> entityPropertyAccessor)
         {
-            string newValue = modelOropertyAccessor.Compile().Invoke(model);
-            string oldValue = entityPropertyAccessor.Compile().Invoke(entity);
+            string? newValue = modelOropertyAccessor.Compile().Invoke(model);
+            string? oldValue = entityPropertyAccessor.Compile().Invoke(entity);
 
             // old value      new value   action
             // ---------      ---------   ------
