@@ -22,6 +22,11 @@ parameters:
   required: true
   value: blahblah
 
+- name: FILEMANAGER_CONFIG_NAME
+  description: Source of FILE MANAGER config values
+  required: true
+  value: blahblah
+
 - name: OAUTH_CONFIG_NAME
   description: Source of Dynamics config values
   required: true
@@ -117,6 +122,16 @@ objects:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_URL
+            - name: FILEMANAGER_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: FILEMANAGER_ADDRESS
+            - name: FILEMANAGER_SECURE
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: FILEMANAGER_SECURE               
             - name: SPLUNK_TOKEN
               valueFrom:
                 secretKeyRef:
