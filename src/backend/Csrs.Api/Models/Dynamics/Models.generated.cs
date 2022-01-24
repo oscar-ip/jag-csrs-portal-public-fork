@@ -22,7 +22,7 @@ namespace Csrs.Api.Models.Dynamics
         /// <summary>
         /// Primary id alias, should only be used in Key expressions
         /// </summary>
-        public Guid Key { get; }
+        public abstract Guid Key { get; }
 
         /// <summary>
         /// Date and time when the record was created. Logical name createdon.
