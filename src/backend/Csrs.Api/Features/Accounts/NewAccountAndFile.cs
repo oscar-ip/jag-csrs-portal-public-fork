@@ -68,15 +68,7 @@ namespace Csrs.Api.Features.Accounts
 
                 if (party is not null)
                 {
-                    _logger.LogDebug("Party already exists, checking if party already has draft file");
-
-                    // check to see if they have already have an draft file
-                    var files = await _fileService.GetPartyFileSummariesAsync(party.PartyId, cancellationToken);
-                    if (files.Any(_ => _.Status == FileStatus.Draft))
-                    {
-                        _logger.LogInformation("User already has a draft file, cannot create new file");
-                        return new Response(Guid.Empty);
-                    }
+                    _logger.LogDebug("Party already exists");
                 } 
                 else
                 {

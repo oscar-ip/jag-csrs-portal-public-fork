@@ -6,6 +6,8 @@
         {
             Add("SPLUNK_URL", $"{nameof(CsrsConfiguration.Splunk)}:{nameof(SplunkConfiguration.Url)}");
             Add("SPLUNK_TOKEN", $"{nameof(CsrsConfiguration.Splunk)}:{nameof(SplunkConfiguration.Token)}");
+            Add("FILEMANAGER_ADDRESS", $"{nameof(CsrsConfiguration.FileManager)}:{nameof(FileManagerConfiguration.Address)}");
+            Add("FILEMANAGER_SECURE", $"{nameof(CsrsConfiguration.FileManager)}:{nameof(FileManagerConfiguration.Secure)}");
             Add("SPLUNK_VALIDATE_SERVER_CERTIFICATE", $"{nameof(CsrsConfiguration.Splunk)}:{nameof(SplunkConfiguration.ValidatServerCertificate)}");
 
             Add("SPLUNK_MINIMUMLEVEL", $"{nameof(CsrsConfiguration.Splunk)}:{nameof(SplunkConfiguration.MinimumLevel)}");

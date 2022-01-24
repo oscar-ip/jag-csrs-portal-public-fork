@@ -73,8 +73,7 @@ namespace Csrs.Api.Services
         private FileStatus GetFileStatus(int statusCode)
         {
             if (statusCode == SSG_CsrsFile.Active.Id) return FileStatus.Active;
-            if (statusCode == SSG_CsrsFile.Draft.Id) return FileStatus.Draft;
-
+ 
             _logger.LogInformation("Could not decode {EntityLogicalName} status code value {StatusCode}, file status will be Unknown", SSG_CsrsFile.EntityLogicalName, statusCode);
             return FileStatus.Unknown;
         }
@@ -88,6 +87,7 @@ namespace Csrs.Api.Services
             {
                 _logger.LogDebug("Setting party as recipient");
                 fields.Add(SSG_CsrsFile.Attributes.ssg_recipient, party.PartyId);
+                fields.Add(SSG_CsrsFile.Attributes.ssg_partyenrolled, SSG_CsrsFile.PartyEnrolledIsRecipient);
 
                 if (otherParty is not null)
                 {
@@ -99,6 +99,7 @@ namespace Csrs.Api.Services
             {
                 _logger.LogDebug("Setting party as payor");
                 fields.Add(SSG_CsrsFile.Attributes.ssg_payor, party.PartyId);
+                fields.Add(SSG_CsrsFile.Attributes.ssg_partyenrolled, SSG_CsrsFile.PartyEnrolledIsPayor);
 
                 if (otherParty is not null)
                 {
@@ -124,14 +125,13 @@ namespace Csrs.Api.Services
                     // add link to child
                     childFields.Add(SSG_CsrsChild.Attributes.ssg_filenumber, csrsFile.CsrsFileId);
 
-                    _childRepository.InsertAsync(childFields, cancellationToken);
+                    await _childRepository.InsertAsync(childFields, cancellationToken);
                 }
             }
             else
             {
                 _logger.LogInformation("New file contains no children");
             }
-
 
             file = _mapper.Map<File>(csrsFile);
 
