@@ -105,7 +105,7 @@ namespace CrmSvcUtilExtensions
             buffer.AppendLine("/// <summary>");
             buffer.AppendLine("/// Primary id alias, should only be used in Key expressions");
             buffer.AppendLine("/// </summary>");
-            buffer.AppendLine("public Guid Key { get; }");
+            buffer.AppendLine("public abstract Guid Key { get; }");
             buffer.AppendLine();
 
             buffer.AppendLine("/// <summary>");
@@ -201,6 +201,11 @@ namespace CrmSvcUtilExtensions
             buffer.Indent();
             buffer.AppendLine($"public const string EntityLogicalName = \"{entity.LogicalName}\";");
             buffer.AppendLine();
+
+            // create the primary key attribute
+            AttributeMetadata primaryIdAttribute = entity.Attributes.Single(_ => _.IsPrimaryId.HasValue && _.IsPrimaryId.Value);
+            var primaryIdName = GetNameForAttribute(entity, primaryIdAttribute);
+            buffer.AppendLine($"public override Guid Key => {primaryIdName} ?? Guid.Empty;");
 
             List<string> attributesNames = new List<string>();
             attributesNames.Add("CreatedOn");
@@ -305,6 +310,19 @@ namespace CrmSvcUtilExtensions
             buffer.UnindentAndAppendLine("}");
         }
 
+        public string GetNameForAttribute(EntityMetadata entityMetadata, AttributeMetadata attributeMetadata)
+        {
+            MappingDefinition mappings = MappingDefinition.Current;
+            // entity level attributes
+            var attributeMapping = mappings.GetAttributeMapping(entityMetadata, attributeMetadata);
+            if (attributeMapping?.Name != null)
+            {
+                return attributeMapping.Name;
+            }
+
+            return attributeMetadata.LogicalName;
+        }
+
         private string BuildAttribute(
             EntityMetadata[] entities,
             EntityMetadata entity,
@@ -325,11 +343,16 @@ namespace CrmSvcUtilExtensions
                 return string.Empty;
             }
 
-            //if (attribute.LogicalName == "statuscode") { System.Diagnostics.Debugger.Launch(); }
-            string attributeType = GetAttributeType(attribute.AttributeType.Value);
-            if (string.IsNullOrEmpty(attributeType))
+            // does this attribute have a custom type?
+            string attributeType = GetAttributeMappingDefinition(entity.LogicalName, attribute.LogicalName)?.Type;
+
+            if (attributeType == null)
             {
-                return string.Empty;
+                attributeType = GetAttributeType(attribute.AttributeType.Value);
+                if (string.IsNullOrEmpty(attributeType))
+                {
+                    return string.Empty;
+                }
             }
 
             if (attribute.AttributeType.Value == AttributeTypeCode.Lookup)
@@ -347,7 +370,7 @@ namespace CrmSvcUtilExtensions
 
             // avoid type 'Microsoft.OData.Edm.Date' cannot be converted to type 'System.Nullable`1[System.DateTime]'.
             //if (attributeType == nameof(DateTime)) nullable = string.Empty;
-
+            
             var attributeName = namingService.GetNameForAttribute(entity, attribute, services);
             if (attribute.AttributeType == AttributeTypeCode.DateTime)
             {
@@ -401,6 +424,17 @@ namespace CrmSvcUtilExtensions
             buffer.AppendLine();
 
             return attributeName;
+        }
+
+        private AttributeMappingDefinition GetAttributeMappingDefinition(string entityLogicalName, string attributesLogicalName)
+        {
+            MappingDefinition mappings = MappingDefinition.Current;
+
+            AttributeMappingDefinition attributeMappingDefinition = mappings
+                .Entities.SingleOrDefault(_ => _.LogicalName == entityLogicalName)?.
+                Attributes.SingleOrDefault(_ => _.LogicalName == attributesLogicalName);
+
+            return attributeMappingDefinition;
         }
 
         private string GetAttributeType(AttributeTypeCode attributeTypeCode)

@@ -13,5 +13,7 @@
         /// The party creating the file is the Recipient.
         /// </summary>
         public static readonly int PartyEnrolledIsRecipient = 867670001;
-    }
+
+        public override Guid Key => CsrsFileId ?? Guid.Empty;
+  }
 }

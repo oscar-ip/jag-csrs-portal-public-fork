@@ -166,7 +166,7 @@ namespace CrmSvcUtilExtensions
                     new AttributeMappingDefinition() { LogicalName = "ssg_filenumber", Name =  "FileNumber" },
                     new AttributeMappingDefinition() { LogicalName = "ssg_autonumber", Name =  "AutoNumber" },
 
-                    new AttributeMappingDefinition() { LogicalName = "ssg_partyenrolled", Name =  "PartyEnrolled"  },
+                    new AttributeMappingDefinition() { LogicalName = "ssg_partyenrolled", Name =  "PartyEnrolled", Type = "int" },
 
                     new AttributeMappingDefinition() { LogicalName = "ssg_payorssafetyconcerndescription", Name =  "SafetyConcernDescriptionPayor" },
                     new AttributeMappingDefinition() { LogicalName = "ssg_safetyalertpayor", Name =  "SafetyAlertPayor" },
@@ -215,7 +215,6 @@ namespace CrmSvcUtilExtensions
                     new AttributeMappingDefinition() { LogicalName = "ssg_styleofcauserespondent", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_submissiondate", Skip =  false },
                     new AttributeMappingDefinition() { LogicalName = "ssg_terminationdate", Skip =  false },
-                    new AttributeMappingDefinition() { LogicalName = "ssg_act", Skip =  true },
                     new AttributeMappingDefinition() { LogicalName = "ssg_act", Skip =  true },
                 }
             });
