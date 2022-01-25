@@ -1,0 +1,40 @@
+<div class="container mt-5 mb-2">
+    <h1>Welcome Susan,</h1>
+<mat-divider></mat-divider>
+
+<mat-button-toggle-group class="toggle-button" style = "border: 0px;">
+    <mat-button-toggle value="Inbox">Inbox</mat-button-toggle>
+    <mat-button-toggle value="Upload">Upload Documents</mat-button-toggle>
+    <mat-button-toggle value="Contact">Contact Us</mat-button-toggle>
+  </mat-button-toggle-group>
+      <div>
+        <div>
+            Please attach your most recent
+            <strong>Child Support Order</strong> or filed
+            <strong>Written Agreement</strong>
+          </div>
+          <div class="document-drag-container">
+            <div class="dropzone">
+              <input class="drop-file" type="file" #fileDropRef id="fileDropRef" multiple />
+              <h3>Drag and drop file here</h3>
+              <h3>or</h3>
+              <label class="browse-file" for="fileDropRef">Choose Documents</label>
+            </div>
+          </div>
+      </div>
+      <div class="footer row">
+        <span class="icon-col col-md-1">
+          <img class="icon-size5" src="/assets/Support_icon.svg" />
+        </span>
+        <div class="col-md-11">
+          <h1>
+            <strong>Have questions or Looking for more support?</strong>
+          </h1>
+          <p class="text-body">
+            Contact the Recalculation Service toll free
+            <a href="tel:+18776618026">1-877-661-8026</a>,
+            or learn more about the progrom
+          </p>
+        </div>
+      </div>
+</div>

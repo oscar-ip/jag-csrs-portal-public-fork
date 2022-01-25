@@ -1,0 +1,13 @@
+<div class="border_dialog">
+  <h1 mat-dialog-title [ngStyle]="{'font-weight': data.weight, 'color': data.color}" [ngSwitch]="data.type">
+    <mat-icon *ngSwitchCase="'info'">check</mat-icon>
+    <mat-icon *ngSwitchCase="'error'">error</mat-icon>
+    {{data.title}}</h1>
+  <div mat-dialog-content>
+    <p [ngStyle]="{'font-weight': data.weight}">{{data.content}}</p>
+  </div>
+  <div mat-dialog-actions align="end" style="color: #009CDE;">
+      <button mat-button mat-dialog-close>Close window X</button>
+  </div>
+</div>
+

@@ -1,0 +1,39 @@
+.mat-divider {
+    border-top-width: 3px;
+    border-top-color: #facc00;
+  }
+  
+  .alert-content {
+  border: 1px solid gray;
+  width: 100%;
+  height: 50%;
+  border-left: 4px solid darkblue;
+  margin-left: 40px;
+  }
+  .start-button {
+    float: right;
+    margin-bottom: 40px;
+    width:50%
+  }
+  .footer {
+    width:100%;
+    padding-top: 24px;
+    margin-left:15px;
+    border: 3px solid #facc00;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  .left-line{
+    float:left; 
+    width: 48%;
+    padding-left: 1.5%;
+    padding-right: 1%;
+  }
+  .right-line{
+    float:right; 
+    width: 48%;
+  }
+  .create-account{
+    float: right;
+    width: 48%;
+  }

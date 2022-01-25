@@ -1,0 +1,15 @@
+export * from './account.service';
+import { AccountService } from './account.service';
+export * from './document.service';
+import { DocumentService } from './document.service';
+export * from './feedback.service';
+import { FeedbackService } from './feedback.service';
+export * from './file.service';
+import { FileService } from './file.service';
+export * from './lookup.service';
+import { LookupService } from './lookup.service';
+export * from './message.service';
+import { MessageService } from './message.service';
+export * from './userRequest.service';
+import { UserRequestService } from './userRequest.service';
+export const APIS = [AccountService, DocumentService, FeedbackService, FileService, LookupService, MessageService, UserRequestService];

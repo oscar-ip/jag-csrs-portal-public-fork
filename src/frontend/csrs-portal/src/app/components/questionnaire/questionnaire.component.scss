@@ -1,0 +1,247 @@
+@import "palette";
+@import "bootstrap/bootstrap-imports";
+
+
+div.landing-summary {
+  background: url("/assets/landing-page-background.jpg") no-repeat !important;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.summary-header-links {
+  list-style: none;
+  margin-bottom: 0;
+  text-align: center;
+  padding: 0;
+
+  li {
+    line-height: 2em;
+  }
+
+  a {
+    font-size: 1.125em;
+    color: #fff !important;
+    font-weight: 400;
+  }
+}
+
+.divider {
+  color: #fff;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .divider {
+    display: inline-block;
+  }
+
+  .summary-header-links {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    list-style: none;
+
+    li {
+      margin-bottom: 0;
+      margin-left: 1em;
+      margin-right: 1em;
+      line-height: unset;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    a {
+      font-size: 1.125em;
+      color: #fff !important;
+      font-weight: 400;
+    }
+  }
+}
+
+div.summary-header {
+  background-color: #38598A;
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 0;
+  margin-bottom: 30px;
+  opacity: 0.8;
+}
+
+.yesNocontent{
+  margin-top: 40px;
+}
+.body-text{
+  padding-bottom: 0px;
+}
+button.nextStep{
+  min-width: 150px;
+  float: right;
+  border: 1px solid white;
+  background-color: #003366;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+button.nextStep:disabled,
+button.nextStep[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
+div.container {
+    opacity: unset;
+
+    button a {
+      color: #003366;
+    }
+
+    a {
+      color: theme-palette(blue, link);
+      white-space: nowrap;
+    }
+
+    .main-body-navigation:hover {
+      text-decoration: none;
+    }
+  }
+
+.button-row button,
+.button-row a {
+  margin-right: 20px;
+  margin-left: 20px;
+  max-width: 50px ;
+  max-height: 40px;
+}
+
+.mat-stroked-button {
+    min-width: 200px;
+    background-color: white;
+    color: #003366;
+
+    &.large {
+      height: 46px;
+      font-size: 1.125rem;
+      margin-bottom: 1.2rem;
+    }
+  }
+
+.mat-expansion-panel{
+    box-shadow: none !important;
+}
+
+section.summary-section {
+    min-height: 300px;
+    margin-bottom: 3em;
+  }
+
+  section {
+    margin-bottom: 1em;
+  }
+
+::ng-deep .mat-expansion-panel-header{
+    /* styles that were added to panel before */
+    background: #fff;
+    color: rgba(0,0,0,.87);
+}
+
+.prevent-click{
+    pointer-events: none;
+}
+.authorize-click{
+pointer-events: auto;
+}
+
+
+mat-divider {
+  border-top-color: #FCBA19;
+  opacity: 1;
+}
+
+.myRed{
+  background : #D8292F;
+  color: white;
+  border: 1px solid #003366;
+}
+
+.myGreen{
+  background : #2E8540;
+  color: white;
+}
+.toggle-button {
+  min-width:fit-content;
+  font-size: 20px;
+  border: 2px solid #003366;
+}
+.list-item {
+  font-weight: bold;;
+}
+.myBlue{
+  max-width : 200px;
+  width: 195px;
+  background : blueviolet;
+  color: black;
+}
+
+.colorRed{
+  color: red;
+}
+
+.colorGreen{
+  color: green;
+}
+
+.colorBlue{
+  color: blueviolet;
+}
+
+.colorTransparent{
+  color: transparent;
+}
+.content-data body{
+ color: #000;
+}
+.toolTipIcon{
+  display: inline-flex;
+    vertical-align:top;
+  transform: scale(0.75);
+  color: #009cde;
+
+}
+::ng-deep .mat-tooltip {
+  font-size: 15px;
+  white-space: pre-wrap;
+  color: black !important;
+  background-color: rgba(255, 255, 255, .9);
+  border: 4px solid rgb(255, 191, 0);
+ }
+//  .mat-step-icon-content, .mat-step-icon .mat-icon{
+//   style="transform: translate(-55%, -90%);}
+.alert-content {
+  border: 1px solid darkblue;;
+  border-left: 4px solid darkblue;
+  height:175px;
+  padding: 30px;
+  padding-left: 10px;
+  margin-left: 0px;
+  }
+  .alert-text{
+      border: 1px solid gray;;
+      border-left: 4px solid darkblue;
+      height: 60px;
+      margin-left: 10px;
+  }
+  .alert-text2{
+    border: 1px solid gray;;
+    border-left: 4px solid darkblue;
+    height: 75px;
+    margin-left: -15px;
+}
+
+.round3 a{
+ margin-left: 60px !important;
+}

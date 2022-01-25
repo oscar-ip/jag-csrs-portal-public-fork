@@ -1,0 +1,50 @@
+@import "palette";
+
+.header {
+  background-color: theme-palette(blue);
+}
+
+.fill_space {
+ flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  height: 70px;
+  padding: 0;
+
+  img {
+    margin-top: -15px;
+
+    &.hasMobileSidemenu {
+      // Provide space between sidemenu toggle and BC Gov. logo
+      margin-left: 15px;
+    }
+  }
+
+  .mat-icon {
+    transform: scale(0.75);
+ }
+
+  .language {
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    font-weight: 300;
+  }
+
+  .fullName {
+    font-size: 0.8rem;
+  }
+
+  .mat-icon {
+    cursor: pointer;
+    font-size: 1.5em;
+    margin-top: 0.4em;
+    user-select: none;
+  }
+
+  .logout {
+    margin-left: 1.2em;
+    margin-right: 1.2em;
+  }
+}
