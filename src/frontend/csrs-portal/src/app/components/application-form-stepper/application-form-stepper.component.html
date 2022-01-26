@@ -11,64 +11,6 @@
   <section class="stepper-section">
     <div class="flex-6-col">
       <mat-stepper orientation="vertical" [linear]="true" #stepper>
-        <mat-step [stepControl]="firstFormGroup">
-          <form [formGroup]="firstFormGroup">
-            <ng-template matStepLabel>Getting Started</ng-template>
-            <div class="text-dark">
-              <div class="pb-1">
-                Fields marked <span class="text-danger">*</span> are required
-              </div>
-              <section class="text-dark">
-                <label class="w-100 py-1">
-                  <strong>What best describes your situation?<span class="text-danger">*</span>
-                  </strong>
-                </label>
-                <div class="row">
-                  <div class="col-12">
-                    <mat-radio-group formControlName="firstControl">
-                      <mat-radio-button class="radio-question" value="I am the receipent, i currently receive child support">
-                        <span class="wrap-mat-radio-label">
-                          I am the receipent, i currently receive child support
-                        </span>
-                      </mat-radio-button>
-                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="I am the payor, i current pay child support">
-                        <span class="wrap-mat-radio-label">
-                          I am the payor, i current pay child support
-                        </span>
-                      </mat-radio-button>
-                    </mat-radio-group>
-                  </div>
-                </div>
-              </section>
-              <section>
-                <label class="w-100 py-2">
-                  <strong>
-                    Do you have an order or filed written agreement ?<span class="text-danger">*</span></strong>
-                </label>
-                <div class="row">
-                  <div class="col-12">
-                    <mat-radio-group formControlName="secondControl">
-                      <mat-radio-button class="radio-question" value="Order">
-                        <span class="wrap-mat-radio-label"> Order </span>
-                      </mat-radio-button>
-                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="Written agreement">
-                        <span class="wrap-mat-radio-label">
-                          Written agreement
-                        </span>
-                      </mat-radio-button>
-                    </mat-radio-group>
-                  </div>
-                </div>
-              </section>
-            </div>
-            <mat-divider></mat-divider>
-            <div>
-              <button class="nextStep" [disabled]="!firstFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
-                Next >
-              </button>
-            </div>
-          </form>
-        </mat-step>
         <mat-step [stepControl]="secondFormGroup">
           <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Your Personal Information</ng-template>            
@@ -453,22 +395,6 @@
             </div>
             <div class="submit-layer">
               <div class="stepRow spaceAround leftRight">
-                <strong class="submit-text-color">Getting Started</strong>
-                <a class="edit-text-color" (click)="editPage(stepper,0)">Edit</a>
-              </div>
-              <div class="stepRow spaceAround leftRight">
-                <div>What best describes your situation?</div>
-                <div class="bold">{{firstFormGroup.value.firstControl}}
-                </div>
-              </div>
-              <div class="stepRow spaceAround leftRight">
-                <div>Do you have an order or filed written agreement?</div>
-                <div class="bold">{{firstFormGroup.value.secondControl}}</div>
-              </div>
-            </div>
-            <br />
-            <div class="submit-layer">
-              <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Your Personal Information</strong>
                 <a class="edit-text-color" (click)="editPage(stepper,1)">Edit</a>
               </div>
@@ -678,7 +604,7 @@ v                </div>
               <!-- <button mat-flat-button color="primary" matStepperPrevious>
                 Save my application for later
               </button> -->
-              <button routerLink="/mailbox" (click)="openDialog()" class="submitStep" mat-stroked-button color="basic" matStepperNext>
+              <button routerLink="/communication" class="submitStep" mat-stroked-button color="basic" matStepperNext>
                 Submit account setup request
               </button>
             </div>

@@ -71,10 +71,6 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.getProvinceData();
     this.getGenderyData();
 
-    this.firstFormGroup = this._formBuilder.group({
-      firstControl: ['', Validators.required],
-      secondControl: ['', Validators.required]
-    });
     this.secondFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
       givenNames: [''],

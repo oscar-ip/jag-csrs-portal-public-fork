@@ -12,7 +12,100 @@
           <ng-template mat-tab-label>
             <h1 class="mb-1 tabHeader">Inbox (1)</h1>
           </ng-template>
-          <p>Inbox</p>
+          <div class="step1" style="border: 1px solid black;" *ngIf="!toggleRow">
+            <div class="mb-3 mt-5">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-1">
+                    <h2 style="font-weight: bold;">File #:</h2>
+                  </div>
+                  <div class="col-md-1">
+                    <input style="width: 100%;" type="input" #fileNumber value="4652" class="font_bold"/>
+                  </div>
+                  <div class="col-md-10">
+                    <div style="float: right;">
+                      <h2 class="font_normal">
+                        New message
+                      </h2>
+                    </div>
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="mt-0 mb-4" style="opacity: 0.5">
+          
+            <table mat-table [dataSource]="dataSource">
+          
+              <ng-container   matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
+                <td mat-cell  *matCellDef="let element"> {{element.date}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> File # </th>
+                <td mat-cell *matCellDef="let element"> {{element.file}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="username">
+                <th mat-header-cell *matHeaderCellDef> Subject </th>
+                <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> Attachment </th>
+                <td mat-cell *matCellDef="let element"> {{element.attachment}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td class="font_normal" mat-cell *matCellDef="let element"> <a target="blank" (click)="ontable(element)" >View</a> </td>
+              </ng-container>
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          
+            </table>
+          </div>
+
+          <div class="step2" *ngIf="toggleRow">
+            <div class="mb-3 mt-5">
+              <div class="container">
+                <p class="back-to-messages" (click)="ontable('')"><mat-icon style="vertical-align:middle;">arrow_back</mat-icon>  Back to all messages</p>
+                <div class="row">
+                  <div class="col-md-2">
+                    <h2 style="font-weight: bold;">File #: <span style="font-size: 14px;color: black;" >4652</span>  </h2>
+                  </div>
+                  <div class="col-md-5">
+                    <h2 style="font-weight: bold;">Date : <span  style="font-size: 14px;color: black;" >10/12/2021</span> </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="mt-0 mb-4" style="opacity: 1">
+          
+            <div class="section">
+              <h2>Message</h2>
+              <div class="message-data">
+                 <h2><strong>Your Notice of assessment for 2021 is availble</strong></h2>
+                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              </div>
+              <table class="table">
+                <tr>
+                  <th>Attachment(s)</th>
+                  <th>File size</th>
+                  <th>Actions</th>
+                </tr>
+ 
+                <tr class="text-dark">
+                 <td><strong>Notice-Assessment-10203.pdf</strong></td>
+                 <td>1 MB</td>
+                 <td><a href="#">Download</a></td>
+               </tr>
+            
+               </table>
+            </div>
+          </div>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
@@ -29,7 +122,7 @@
                     <input type="input" #fileNumber value="4652" class="font_bold"/>
                   </div>
                   <div class="col-8">
-                    <h2 class="font_normal">
+                    <h2 class="text-dark">
                       You may only upload one document at a time
                     </h2>
                   </div>
@@ -52,7 +145,7 @@
                   Choose Documents.
                   </a>
                 </h2>
-                <p class="font_normal">(one document per upload - 10 MB max)</p>
+                <p class="text-dark">(one document per upload - 10 MB max)</p>
               </div>
             </div>
 
@@ -156,4 +249,19 @@
       </mat-tab-group>
     </div>
   </section>
+  <div class="footer row">
+    <span class="icon-col col-md-1">
+      <img class="icon-size5" src="/assets/Support_icon.svg" />
+    </span>
+    <div class="col-md-11">
+      <h1>
+        <strong>Have questions or Looking for more support?</strong>
+      </h1>
+      <p class="text-body">
+        Contact the Recalculation Service toll free
+        <a href="tel:+18776618026">1-877-661-8026</a>,
+        or learn more about the progrom
+      </p>
+    </div>
+  </div>
 </div>

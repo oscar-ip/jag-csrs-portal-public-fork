@@ -117,7 +117,7 @@
 
   .font_normal {
     font-weight: normal;
-    color:black
+    color: #009cde;
   }
 
   .font_bold {
@@ -128,4 +128,34 @@
   .border_dialog{
     border-width: 2px;
     border-color: orange;
+  }
+  table {
+    width: 100%;
+  }
+
+  table th {
+    font-size: 15px;
+    color: #003366;
+    font-weight: 600;
+  }
+
+  .message-data{
+    background-color: white;
+    color: gray;
+    padding: 15px;
+  }
+  .message-data h2{
+    color: black;
+  }
+  .footer {
+    width:100%;
+    padding-top: 24px;
+    margin-left:15px;
+    border: 3px solid #facc00;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  .back-to-messages{
+    cursor: pointer;
+    color: #009cde;
   }
