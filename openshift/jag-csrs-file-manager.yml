@@ -1,0 +1,200 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ${APP_NAME}
+  description: Deployment template for the JAG-csrs
+  
+labels:
+  app: ${APP_NAME}
+  app.kubernetes.io/name: ${APP_NAME}
+  app.kubernetes.io/part-of: ${APP_NAME}
+
+# First Iteration : Other Appropriate Parameters like API GW end point for SharePoint etc. 
+# would be gradually added. 
+parameters:
+
+- name: APP_NAME
+  description: The application name that each component is part of
+  required: true
+  value: jag-csrs
+
+- name: SPLUNK_CONFIG_NAME
+  description: Source of Splunk config values
+  required: true
+  value: blahblah
+
+- name: FILEMANAGER_CONFIG_NAME
+  description: Source of FILE MANAGER config values
+  required: true
+  value: blahblah
+
+- name: OAUTH_CONFIG_NAME
+  description: Source of Dynamics and Sharepoint config values
+  required: true
+  value: blahblah
+- name: ROUTE_PREFIX
+  description: The application name that each component is part of
+  required: true
+  value: jag-csrs-file-manager
+
+- name: FILEMANAGER_COMPONENT_NAME
+  description: File Manager component name
+  required: true
+  value: jag-csrs-file-manager
+  
+- name: OC_NAMESPACE
+  description: The OpenShift namespace prefix
+  required: true
+  value: blahblah
+  
+- name: OC_ENV
+  description: The OpenShift environment, ie dev, test or prod
+  required: true
+  value: dev
+
+- name: DNS
+  description: The application name that each component is part of
+  required: false
+  value: apps.silver.devops.gov.bc.ca
+
+
+objects:
+
+### JAG-csrs FILEMANAGER Deployment Config ###
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${FILEMANAGER_COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+      
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${FILEMANAGER_COMPONENT_NAME}
+    strategy:
+      type: Rolling
+      maxSurge: 50%
+      maxUnavailable: 0
+    template:
+      metadata:
+        labels:
+          name: ${FILEMANAGER_COMPONENT_NAME}
+          app.kubernetes.io/instance: ${FILEMANAGER_COMPONENT_NAME}
+          app.openshift.io/runtime: dotnet
+      spec:
+        containers:
+          # due to permission issue not using tools space; dev is pulling from dev
+          - image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_ENV}/${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
+            name: ${FILEMANAGER_COMPONENT_NAME} 
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 8080
+            env:    
+            - name: SPLUNK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_URL
+            - name: FILEMANAGER_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: FILEMANAGER_ADDRESS
+            - name: FILEMANAGER_SECURE
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: FILEMANAGER_SECURE               
+            - name: SPLUNK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_TOKEN
+            - name: SPLUNK_INDEX
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_INDEX
+            - name: SHAREPOINT_STS_TOKEN_URI
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__OAUTHURL
+            - name: SHAREPOINT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__PASSWORD
+            - name: SHAREPOINT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__USERNAME
+            - name: SHAREPOINT_RELYING_PARTY_IDENTIFIER
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: SHAREPOINT_RELYING_PARTY_IDENTIFIER                 
+            # Would need adjustments ; SharePoint API GW EndPoint    
+            - name: SHAREPOINT_ODATA_URI
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: APIGATEWAY_BASEPATH_SP
+            - name: SHAREPOINT_NATIVE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: SHAREPOINT_NATIVE_BASE_URI                  
+            resources:
+              limits:
+                cpu: 250m
+                memory: 1000Mi
+              requests:
+                cpu: 250m
+                memory: 512Mi
+            # Took away readiness and liveness probe until those end points are ready
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${FILEMANAGER_COMPONENT_NAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${OC_NAMESPACE}-${OC_ENV} #do not have permission to leverage tools
+            name: ${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
+  status: {}
+
+
+- apiVersion: v1
+  kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${FILEMANAGER_COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+  annotations:
+    description: File Manager Service to Enable Communication with SharePoint
+    service.alpha.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1598301121
+    service.beta.openshift.io/serving-cert-secret-name: file-manager-cert
+    service.beta.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1598301121
+  labels:
+    app: file-manager
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: file-manager
+    app.kubernetes.io/name: file-manager
+    app.kubernetes.io/part-of: jag-csrs
+  spec:
+    ports:
+      - name: https
+        protocol: TCP
+        port: 8080
+        targetPort: 8080
+    selector:
+      name: file-manager
+    clusterIP: None
+    sessionAffinity: None
+
