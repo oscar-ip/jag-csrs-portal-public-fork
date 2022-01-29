@@ -120,8 +120,8 @@ objects:
             - name: SHAREPOINT_STS_TOKEN_URI
               valueFrom:
                 secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__OAUTHURL
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: SHAREPOINT_STS_TOKEN_URI
             - name: SHAREPOINT_PASSWORD
               valueFrom:
                 secretKeyRef:
