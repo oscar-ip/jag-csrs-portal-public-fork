@@ -9,6 +9,6 @@
         /// Gets the BCeID Guid from the current user.
         /// </summary>
         /// <returns>The user's BCeID Guid or <see cref="Guid.Empty"/> if not set.</returns>
-        Guid GetBCeIDUserId();
+        string GetBCeIDUserId();
     }
 }

@@ -13,13 +13,13 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Guid GetBCeIDUserId()
+        public string GetBCeIDUserId()
         {
             var context = _httpContextAccessor.HttpContext;
             if (context is null)
             {
                 _logger.LogInformation("HttpContext is null. Service may be been called outside of a api request");
-                return Guid.Empty;
+                return string.Empty;
             }
 
             ClaimsPrincipal principal = context.User;
@@ -28,18 +28,18 @@ namespace Csrs.Api.Services
             if (userid is null)
             {
                 _logger.LogInformation("Current user does not have a bceid_userid claim");
-                return Guid.Empty;
+                return string.Empty;
             }
 
             if (Guid.TryParse(userid.Value, out Guid id))
             {
-                return id;
+                return id.ToString("d"); // format with dashes : xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
             }
 
             using var scope = _logger.AddProperty("bceid_userid", userid.Value);
             _logger.LogInformation("Current user's bceid_userid cannot be parsed as a valid guid");
 
-            return Guid.Empty;
+            return string.Empty;
         }
     }
 }

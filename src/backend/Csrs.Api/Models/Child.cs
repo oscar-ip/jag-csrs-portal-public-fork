@@ -5,6 +5,11 @@ namespace Csrs.Api.Models
     public class Child
     {
         /// <summary>
+        /// The child id.
+        /// </summary>
+        public string? ChildId { get; set; }
+
+        /// <summary>
         /// Child's first name.
         /// </summary>
         public string? FirstName { get; set; }
