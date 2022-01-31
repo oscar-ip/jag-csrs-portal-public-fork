@@ -15,7 +15,7 @@ namespace Csrs.Api.Models
 
     public class FileSummary
     {
-        public Guid? FileId { get; set; }
+        public string? FileId { get; set; }
 
         /// <summary>
         /// The file status, Draft or Active.

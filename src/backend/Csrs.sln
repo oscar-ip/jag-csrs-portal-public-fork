@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Csrs.Services.FileManager",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharePoint", "Csrs.Interfaces.SharePoint\SharePoint.csproj", "{1095653E-474E-4C3E-BDA2-6CC680346296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Csrs.Interfaces.Dynamics2", "Csrs.Interfaces.Dynamics\Csrs.Interfaces.Dynamics.csproj", "{35218357-3E90-4C8D-BD3B-2F89DCFB33B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Csrs.Interfaces.Dynamics", "Csrs.Interfaces.Dynamics\Csrs.Interfaces.Dynamics.csproj", "{35218357-3E90-4C8D-BD3B-2F89DCFB33B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Csrs.TntegrationTest", "Csrs.TntegrationTest\Csrs.TntegrationTest.csproj", "{83EE5B16-54F7-4953-8F27-74BB97AAAB5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{35218357-3E90-4C8D-BD3B-2F89DCFB33B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35218357-3E90-4C8D-BD3B-2F89DCFB33B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35218357-3E90-4C8D-BD3B-2F89DCFB33B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83EE5B16-54F7-4953-8F27-74BB97AAAB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83EE5B16-54F7-4953-8F27-74BB97AAAB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83EE5B16-54F7-4953-8F27-74BB97AAAB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83EE5B16-54F7-4953-8F27-74BB97AAAB5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

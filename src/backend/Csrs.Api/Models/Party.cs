@@ -6,10 +6,10 @@ namespace Csrs.Api.Models
 {
     public class Party
     {
-        public Guid PartyId { get; set; }
+        public string PartyId { get; set; }
         
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public Guid BCeIDGuid { get; set; }
+        public string BCeIDGuid { get; set; }
 
         [Required]
         public string? FirstName { get; set; }

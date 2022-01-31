@@ -22,12 +22,12 @@ namespace Csrs.Api.Features.Accounts
 
         public class Response
         {
-            public Response(Guid id)
+            public Response(string id)
             {
                 Id = id;
             }
 
-            public Guid Id { get; init; }
+            public string Id { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -54,11 +54,11 @@ namespace Csrs.Api.Features.Accounts
             {
                 _logger.LogDebug("Checking current user for BCeID Guid");
 
-                Guid userId = _userService.GetBCeIDUserId();
-                if (userId == Guid.Empty)
+                string userId = _userService.GetBCeIDUserId();
+                if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot create account");
-                    return new Response(Guid.Empty);
+                    return new Response(String.Empty);
                 }
 
                 var bceidScope = _logger.AddBCeIdGuid(userId);

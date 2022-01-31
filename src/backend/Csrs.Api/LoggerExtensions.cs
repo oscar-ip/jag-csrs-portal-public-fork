@@ -4,17 +4,17 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class LoggerExtensions
 {
-    public static IDisposable AddPartyId(this ILogger logger, Guid value)
+    public static IDisposable AddPartyId(this ILogger logger, string value)
     {
         return logger.AddProperty("PartyId", value);
     }
 
-    public static IDisposable AddFileId(this ILogger logger, Guid value)
+    public static IDisposable AddFileId(this ILogger logger, string value)
     {
         return logger.AddProperty("FileId", value);
     }
 
-    public static IDisposable AddBCeIdGuid(this ILogger logger, Guid value)
+    public static IDisposable AddBCeIdGuid(this ILogger logger, string value)
     {
         return logger.AddProperty("BCeIdGuid", value);
     }

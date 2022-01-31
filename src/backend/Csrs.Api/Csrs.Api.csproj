@@ -54,6 +54,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Csrs.Interfaces.Dynamics\Csrs.Interfaces.Dynamics.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <Protobuf Include="..\Csrs.Services.FileManager\Protos\fileManager.proto" Link="Protos\fileManager.proto" GrpcServices="Client" />
   </ItemGroup>
 
