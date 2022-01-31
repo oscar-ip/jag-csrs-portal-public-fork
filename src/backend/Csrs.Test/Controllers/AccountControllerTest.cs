@@ -85,7 +85,7 @@ namespace Csrs.Test.Controllers
 
             mediator
                 .Setup(_ => _.Send(It.Is<NewAccountAndFile.Request>(_ => _.Applicant == account && _.File == file), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new NewAccountAndFile.Response(string.Empty))
+                .ReturnsAsync(new NewAccountAndFile.Response(string.Empty, string.Empty, string.Empty))
                 .Verifiable("Correct request was not sent.");
 
             var httpContextMock = new Mock<HttpContext>();
