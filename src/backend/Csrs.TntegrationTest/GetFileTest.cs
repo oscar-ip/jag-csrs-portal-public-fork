@@ -1,4 +1,5 @@
 ﻿using Csrs.Interfaces.Dynamics;
+using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading;
@@ -46,6 +47,29 @@ namespace Csrs.TntegrationTest
             var actual = await dynamicsClient.Ssgcsrsfiles.GetAsync(top: 5, filter: filter, expand: expand, cancellationToken: CancellationToken.None);
             Assert.NotNull(actual);
             Assert.NotEmpty(actual.Value);
+        }
+
+        [DebugOnlyFact]
+        public async Task create_new_file()
+        {
+            IDynamicsClient dynamicsClient = _serviceProvider.GetRequiredService<IDynamicsClient>();
+
+            MicrosoftDynamicsCRMssgCsrsfile file = new MicrosoftDynamicsCRMssgCsrsfile();
+
+            Assert.Null(file.SsgCsrsfileid);
+
+            file = await dynamicsClient.Ssgcsrsfiles.CreateAsync(file);
+            Assert.NotNull(file);
+            Assert.NotNull(file.SsgCsrsfileid);
+
+            await dynamicsClient.Ssgcsrsfiles.DeleteAsync(file.SsgCsrsfileid);
+        }
+
+        [DebugOnlyFact]
+        public async Task delete_file()
+        {
+            IDynamicsClient dynamicsClient = _serviceProvider.GetRequiredService<IDynamicsClient>();
+            await dynamicsClient.Ssgcsrsfiles.DeleteAsync("9351f6c3-b082-ec11-b831-00505683fbf4");
         }
     }
 }
