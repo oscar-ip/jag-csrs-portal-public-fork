@@ -1,6 +1,8 @@
 ﻿using Csrs.Api.Models;
 using Csrs.Api.Repositories;
 using Csrs.Api.Services;
+using Csrs.Interfaces.Dynamics;
+using Csrs.Interfaces.Dynamics.Models;
 using MediatR;
 using File = Csrs.Api.Models.File;
 
@@ -22,16 +24,21 @@ namespace Csrs.Api.Features.Accounts
 
         public class Response
         {
-            public Response(string id)
+            public Response(string partyId, string fileId, string fileNumber)
             {
-                Id = id;
+                PartyId = partyId;
+                FileId = fileId;
+                FileNumber = fileNumber;
             }
 
-            public string Id { get; init; }
+            public string PartyId { get; init; }
+            public string FileId { get; init; }
+            public string FileNumber { get; init; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
         {
+            private readonly IDynamicsClient _dynamicsClient;
             private readonly IUserService _userService;
             private readonly IAccountService _accountService;
             private readonly IFileService _fileService;
@@ -39,11 +46,13 @@ namespace Csrs.Api.Features.Accounts
             private readonly ILogger<Handler> _logger;
 
             public Handler(
+                IDynamicsClient dynamicsClient,
                 IUserService userService, 
                 IAccountService accountService,
                 IFileService fileService, 
                 ILogger<Handler> logger)
             {
+                _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
                 _userService = userService ?? throw new ArgumentNullException(nameof(userService));
                 _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
                 _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -58,38 +67,41 @@ namespace Csrs.Api.Features.Accounts
                 if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot create account");
-                    return new Response(String.Empty);
+                    return new Response(string.Empty, string.Empty, string.Empty);
                 }
 
                 var bceidScope = _logger.AddBCeIdGuid(userId);
 
-                // find to see if the person has an account already?
-                Party? party = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);
+                var dynamicsParty = request.Applicant.ToDynamicsModel();
 
-                if (party is not null)
+                // find to see if the person has an account already?
+                string partyId = await _dynamicsClient.GetPartyIdByBCeIdAsync(userId, cancellationToken);
+                
+                if (partyId is not null)
                 {
                     _logger.LogDebug("Party already exists");
-                } 
+                    dynamicsParty.SsgCsrspartyid = partyId;
+                    await _dynamicsClient.Ssgcsrsparties.UpdateAsync(partyId, dynamicsParty, cancellationToken);
+                }
                 else
                 {
                     // will case party to be created
                     _logger.LogDebug("Party does not exist, create new party");
-                    party = new Party();
-                    party.BCeIDGuid = userId;
+                    dynamicsParty.SsgBceidGuid = userId;
+                    dynamicsParty.SsgBceidLastUpdate = DateTimeOffset.Now;
+
+                    dynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: dynamicsParty, cancellationToken: cancellationToken);
+                    partyId = dynamicsParty.SsgCsrspartyid;
                 }
 
-                // create the party
-                _logger.LogInformation("Creating party");
-
-                party = await _accountService.CreateOrUpdateAsync(party, cancellationToken);
-
                 // create the other party
-                Party? otherParty = null;
+                MicrosoftDynamicsCRMssgCsrsparty? otherDynamicsParty = null;
                 if (request.File.OtherParty != null)
                 {
-                    _logger.LogInformation("Creating other party");
+                    otherDynamicsParty = request.File.OtherParty.ToDynamicsModel();
 
-                    otherParty = await _accountService.CreateOrUpdateAsync(request.File.OtherParty, cancellationToken);
+                    _logger.LogInformation("Creating other party");
+                    otherDynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: otherDynamicsParty, cancellationToken: cancellationToken);
                 }
                 else
                 {
@@ -97,10 +109,10 @@ namespace Csrs.Api.Features.Accounts
                 }
 
                 // create the file
-                var file = await _fileService.CreateFile(party, otherParty, request.File, cancellationToken);
+                var file = await _fileService.CreateFile(partyId, otherDynamicsParty?.SsgCsrspartyid, request.File, cancellationToken);
 
                 _logger.LogDebug("Party and file created successfully");
-                return new Response(party.PartyId);
+                return new Response(partyId, file.Item1, file.Item2);
             }
         }
     }

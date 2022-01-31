@@ -24,6 +24,23 @@ namespace Csrs.Api.Repositories
             return parties;
         }
 
+        public static async Task<string> GetPartyIdByBCeIdAsync(this IDynamicsClient dynamicsClient, string bceid, CancellationToken cancellationToken)
+        {
+            List<string> select = new List<string> { "ssg_csrspartyid" };
+            List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
+            string filter = $"ssg_bceid_userid eq '{bceid}' and statuscode eq {Active}";
+
+            var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
+
+            if (parties is not null && parties.Value is not null && parties.Value.Count > 0)
+            {
+                var party = parties.Value[0];
+                return party.SsgCsrspartyid;
+            }
+
+            return null;
+        }
+
         public static async Task<List<FileSummary>> GetFileSummaryByPartyAsync(this IDynamicsClient dynamicsClient, string partyId, CancellationToken cancellationToken)
         {
             var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and statuscode eq {Active}";

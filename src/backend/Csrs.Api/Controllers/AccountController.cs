@@ -134,7 +134,8 @@ namespace Csrs.Api.Controllers
 
             NewAccountAndFile.Request request = new(newFileRequest.User, newFileRequest.File);
             NewAccountAndFile.Response? response = await _mediator.Send(request, cancellationToken);
-            return Ok(response.Id);
+
+            return Ok(response);
         }
     }
 }
