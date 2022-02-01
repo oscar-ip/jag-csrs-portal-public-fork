@@ -40,4 +40,15 @@ public static class DynamicsClientExtensions
 
         return metadata;
     }
+
+    public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileForSharePointDocumentLocation(this IDynamicsClient dynamicsClient, string id, CancellationToken cancellationToken)
+    {
+        // get only the required fields for working with Sharepoint
+        List<string> select = new List<string> { "ssg_csrsfileid" };
+        List<string> expand = new List<string> { "ssg_csrsfile_SharePointDocumentLocations" };
+
+        var entity = await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(id, select: select, expand: expand, cancellationToken: cancellationToken);
+
+        return entity;
+    }
 }
