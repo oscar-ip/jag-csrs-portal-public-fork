@@ -1,6 +1,7 @@
 ﻿using Csrs.Api.Features.Documents;
 using Csrs.Api.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -14,39 +15,16 @@ namespace Csrs.Api.Controllers
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="regardingId">The id of ...</param>
-        /// <returns></returns>
-        [HttpGet("ListDocuments")]
+        [AllowAnonymous]
+        [HttpPost("UploadAttachment")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Document>> ListDocumentsAsync([Required]Guid? regardingId)
+        public async Task<IActionResult> UploadAttachmentAsync([Required] Guid fileId, string entityName, [Required] IFormFile file, [Required] string type)
         {
-            ListDocuments.Request request = new();
-            ListDocuments.Response response = await _mediator.Send(request);
+            //ListApplications.Request request = new();
+            //ListApplications.Response response = await _mediator.Send(request);
 
-            return Array.Empty<Document>();
+            return Ok();
         }
 
-        [HttpGet("DownloadDocument")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Document>> DownloadDocumentAsync([Required]Guid? fileId)
-        {
-            DownloadDocument.Request request = new();
-            DownloadDocument.Response response = await _mediator.Send(request);
-
-            return Array.Empty<Document>();
-        }
-
-        [HttpPost("UploadDocuments")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Document>> UploadDocumentsAsync(Document document)
-        {
-            UploadDocuments.Request request = new();
-            UploadDocuments.Response response = await _mediator.Send(request);
-
-            return Array.Empty<Document>();
-        }
     }
 }

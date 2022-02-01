@@ -55,16 +55,5 @@ namespace Csrs.Api.Controllers
             return Array.Empty<FileToCreate>();
         }
 
-        [AllowAnonymous]
-        [HttpPost("UploadAttachment")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UploadAttachmentAsync([Required] Guid fileId,[Required] IFormFile file,[Required] string type)
-        {
-            //ListApplications.Request request = new();
-            //ListApplications.Response response = await _mediator.Send(request);
-
-            return Ok();
-        }
-
     }
 }
