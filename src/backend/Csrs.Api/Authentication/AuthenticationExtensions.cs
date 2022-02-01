@@ -33,7 +33,7 @@ public static class AuthenticationExtensions
 
             // update the MetadataAddress if needed
             options.MetadataAddress = options.GetMetadataAddress();
-
+            options.RequireHttpsMetadata = false;
             options.Events = new JwtBearerEvents
             {
                 OnAuthenticationFailed = c =>
