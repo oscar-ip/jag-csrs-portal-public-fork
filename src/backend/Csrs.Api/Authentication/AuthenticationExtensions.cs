@@ -33,7 +33,12 @@ public static class AuthenticationExtensions
 
             // update the MetadataAddress if needed
             options.MetadataAddress = options.GetMetadataAddress();
-            options.RequireHttpsMetadata = false;
+
+            //For docker keycloak which does not use ssl
+            if  (options.GetMetadataAddress().Contains("http://")) { 
+                options.RequireHttpsMetadata = false;
+            }
+
             options.Events = new JwtBearerEvents
             {
                 OnAuthenticationFailed = c =>

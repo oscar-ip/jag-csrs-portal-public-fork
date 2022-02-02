@@ -91,7 +91,7 @@ namespace Csrs.Api.Controllers
             //ListApplications.Response response = await _mediator.Send(request);
 
             
-            return await UploadAttachmentInternal(CleanGuidForSharePoint(fileId.ToString()), entityName, file, type, true);
+            return await UploadAttachmentInternal(fileId.ToString(), entityName, file, type, true);
 
         }
         //TODO: This logic belong in a service
@@ -144,7 +144,7 @@ namespace Csrs.Api.Controllers
                 //return BadRequest("File can't be uploaded to no existent file");
                 //Create the file if it doesn't exist. This will be deleted.
                 dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile();
-                dynamicsFile.SsgCsrsfileid = entityId;
+                dynamicsFile.SsgCsrsfileid = CleanGuidForSharePoint(entityId);
 
                 dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.CreateAsync(dynamicsFile);
             }
