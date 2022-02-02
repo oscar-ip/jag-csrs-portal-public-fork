@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using static Csrs.Services.FileManager.FileManager;
 using static Csrs.Interfaces.Dynamics.Extensions.EntityDocumentExtensions;
 using Csrs.Api.Extensions;
+using Csrs.Interfaces.Dynamics.Models;
 
 namespace Csrs.Api.Controllers
 {
@@ -86,7 +87,13 @@ namespace Csrs.Api.Controllers
 
                 string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, documentType);
 
-                var folderName = "test";//await _dynamicsClient.GetFolderName(entityName, entityId).ConfigureAwait(true);
+                MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile();
+
+                dynamicsFile.SsgCsrsfileid = entityId;
+
+                dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.CreateAsync(dynamicsFile);
+
+                var folderName = dynamicsFile.GetDocumentFolderName();
 
                 //_dynamicsClient.CreateEntitySharePointDocumentLocation(entityName, entityId, folderName, folderName);
 
