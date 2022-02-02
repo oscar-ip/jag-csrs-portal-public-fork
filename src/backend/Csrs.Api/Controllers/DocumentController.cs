@@ -1,14 +1,10 @@
-﻿using Csrs.Api.Features.Documents;
-using Csrs.Api.Models;
-using Csrs.Interfaces.Dynamics;
+﻿using Csrs.Interfaces.Dynamics;
 using Csrs.Services.FileManager;
 using Google.Protobuf;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using System.Text.RegularExpressions;
 using static Csrs.Services.FileManager.FileManager;
 using static Csrs.Interfaces.Dynamics.Extensions.EntityDocumentExtensions;
 using Csrs.Api.Extensions;
@@ -34,7 +30,7 @@ namespace Csrs.Api.Controllers
 
         [HttpGet("DownloadAttachment")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DownloadAttachment(string fileId, string entityName, string fileName, string documentType)
+        public async Task<IActionResult> DownloadAttachment([Required] string fileId, [Required] string entityName, [Required] string fileName, [Required] string documentType)
         {
             return await DownloadAttachmentInternal(fileId, entityName, fileName, documentType, true).ConfigureAwait(true);
         }
@@ -89,7 +85,7 @@ namespace Csrs.Api.Controllers
 
         [HttpPost("UploadAttachment")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UploadAttachmentAsync([Required] Guid fileId, string entityName, [Required] IFormFile file, [Required] string type)
+        public async Task<IActionResult> UploadAttachmentAsync([Required] Guid fileId, [Required] string entityName, [Required] IFormFile file, [Required] string type)
         {
             //ListApplications.Request request = new();
             //ListApplications.Response response = await _mediator.Send(request);
