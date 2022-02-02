@@ -1,12 +1,17 @@
 ﻿using Csrs.Api.Features.Documents;
 using Csrs.Api.Models;
 using Csrs.Interfaces.Dynamics;
+using Csrs.Services.FileManager;
+using Google.Protobuf;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Text.RegularExpressions;
 using static Csrs.Services.FileManager.FileManager;
+using static Csrs.Interfaces.Dynamics.Extensions.EntityDocumentExtensions;
+using Csrs.Api.Extensions;
 
 namespace Csrs.Api.Controllers
 {
@@ -34,8 +39,82 @@ namespace Csrs.Api.Controllers
             //ListApplications.Request request = new();
             //ListApplications.Response response = await _mediator.Send(request);
 
-            return Ok();
-        }
+            
+            return await UploadAttachmentInternal(CleanGuidForSharePoint(fileId.ToString()), entityName, file, type, true);
 
+        }
+        private async Task<IActionResult> UploadAttachmentInternal(string entityId, string entityName,
+            IFormFile file, string documentType, bool checkUser)
+        {
+            FileSystemItem result = null;
+
+            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return BadRequest();
+
+            var hasAccess = true;
+            //if (checkUser)
+            //{
+            //    ValidateSession();
+            //    hasAccess = await CanAccessEntity(entityName, entityId, null).ConfigureAwait(true);
+            //}
+
+            if (!hasAccess) return new NotFoundResult();
+
+            var ms = new MemoryStream();
+            file.OpenReadStream().CopyTo(ms);
+            var data = ms.ToArray();
+
+            // Check for a bad file type.
+
+            //var mimeTypes = new MimeTypes();
+
+            //var mimeType = mimeTypes.GetMimeType(data);
+
+            // Add additional allowed mime types here
+            //if (mimeType == null || !(mimeType.Name.Equals("image/png") || mimeType.Name.Equals("image/jpeg") ||
+            //                         mimeType.Name.Equals("application/pdf")))
+            //{
+            //    _logger.LogError($"ERROR in uploading file due to invalid mime type {mimeType?.Name}");
+            //    return new NotFoundResult();
+            //}
+            //else
+            //{
+                // Sanitize file name
+                //var illegalInFileName = new Regex(@"[#%*<>?{}~¿""]");
+                //var fileName = illegalInFileName.Replace(file.FileName, "");
+                //illegalInFileName = new Regex(@"[&:/\\|]");
+                //fileName = illegalInFileName.Replace(fileName, "-");
+
+                string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, documentType);
+
+                var folderName = "test";//await _dynamicsClient.GetFolderName(entityName, entityId).ConfigureAwait(true);
+
+                //_dynamicsClient.CreateEntitySharePointDocumentLocation(entityName, entityId, folderName, folderName);
+
+                // call the web service
+                var uploadRequest = new UploadFileRequest
+                {
+                    ContentType = file.ContentType,
+                    Data = ByteString.CopyFrom(data),
+                    EntityName = entityName,
+                    FileName = fileName,
+                    FolderName = folderName
+                };
+
+                var uploadResult = _fileManagerClient.UploadFile(uploadRequest);
+
+                if (uploadResult.ResultStatus == ResultStatus.Success)
+                {
+                    // Update modifiedon to current time
+                    //UpdateEntityModifiedOnDate(entityName, entityId, true);
+                    _logger.LogInformation("Success");
+                }
+                else
+                {
+                    _logger.LogError(uploadResult.ResultStatus.ToString());
+                }
+            //}
+
+            return new JsonResult(result);
+        }
     }
 }
