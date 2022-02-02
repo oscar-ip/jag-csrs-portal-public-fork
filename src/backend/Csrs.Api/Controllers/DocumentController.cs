@@ -39,8 +39,9 @@ namespace Csrs.Api.Controllers
             return await DownloadAttachmentInternal(fileId, entityName, fileName, documentType, true).ConfigureAwait(true);
         }
 
+        //TODO: This logic belong in a service
         /// <summary>
-        /// Internal implementation of download attachment
+        /// Internal implementation of download attachment T
         /// </summary>
         /// <param name="entityId"></param>
         /// <param name="entityName"></param>
@@ -97,6 +98,7 @@ namespace Csrs.Api.Controllers
             return await UploadAttachmentInternal(CleanGuidForSharePoint(fileId.ToString()), entityName, file, type, true);
 
         }
+        //TODO: This logic belong in a service
         private async Task<IActionResult> UploadAttachmentInternal(string entityId, string entityName,
             IFormFile file, string documentType, bool checkUser)
         {
