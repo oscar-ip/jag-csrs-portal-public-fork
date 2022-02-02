@@ -34,8 +34,8 @@ namespace Csrs.Services.FileManager
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddDefaultTokenProviders();
 
             //if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             //    // Configure JWT authentication
@@ -78,8 +78,8 @@ namespace Csrs.Services.FileManager
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseHealthChecks("/hc/ready", new HealthCheckOptions
             {
