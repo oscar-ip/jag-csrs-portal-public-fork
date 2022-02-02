@@ -32,6 +32,59 @@ namespace Csrs.Api.Controllers
             _fileManagerClient = fileManagerClient;
         }
 
+        [HttpGet("DownloadAttachment")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DownloadAttachment(string fileId, string entityName, string fileName, string documentType)
+        {
+            return await DownloadAttachmentInternal(fileId, entityName, fileName, documentType, true).ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Internal implementation of download attachment
+        /// </summary>
+        /// <param name="entityId"></param>
+        /// <param name="entityName"></param>
+        /// <param name="fileName"></param>
+        /// <param name="documentType"></param>
+        /// <param name="checkUser"></param>
+        /// <returns></returns>
+        private async Task<IActionResult> DownloadAttachmentInternal(string entityId, string entityName, string fileName, string documentType, bool checkUser)
+        {
+            // get the file.
+            if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return BadRequest();
+
+            var hasAccess = true;
+            //if (checkUser)
+            //{
+            //    ValidateSession();
+            //    hasAccess = await CanAccessEntityFile(entityName, entityId, documentType, serverRelativeUrl).ConfigureAwait(true);
+            //}
+
+            if (!hasAccess) return BadRequest();
+
+            //var logUrl = WordSanitizer.Sanitize(serverRelativeUrl);
+
+
+            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
+
+            // call the web service
+            var downloadRequest = new DownloadFileRequest
+            {
+                ServerRelativeUrl = dynamicsFile.GetDocumentFolderName() + "\\" + fileName
+            };
+
+            var downloadResult = _fileManagerClient.DownloadFile(downloadRequest);
+
+            if (downloadResult.ResultStatus == ResultStatus.Success)
+            {
+                var fileContents = downloadResult.Data.ToByteArray();
+                return new FileContentResult(fileContents, "application/octet-stream");
+            }
+
+            //Download result failed
+            return NotFound();
+
+        }
 
         [HttpPost("UploadAttachment")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -85,41 +138,46 @@ namespace Csrs.Api.Controllers
                 //illegalInFileName = new Regex(@"[&:/\\|]");
                 //fileName = illegalInFileName.Replace(fileName, "-");
 
-                string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, documentType);
+            string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, documentType);
 
-                MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile();
-
+            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
+            //For Testing purposes only   
+            if (dynamicsFile is null) {
+                //return BadRequest("File can't be uploaded to no existent file");
+                //Create the file if it doesn't exist. This will be deleted.
+                dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile();
                 dynamicsFile.SsgCsrsfileid = entityId;
 
                 dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.CreateAsync(dynamicsFile);
+            }
 
-                var folderName = dynamicsFile.GetDocumentFolderName();
+            var folderName = dynamicsFile.GetDocumentFolderName();
 
-                //_dynamicsClient.CreateEntitySharePointDocumentLocation(entityName, entityId, folderName, folderName);
+            //_dynamicsClient.CreateEntitySharePointDocumentLocation(entityName, entityId, folderName, folderName);
 
-                // call the web service
-                var uploadRequest = new UploadFileRequest
-                {
-                    ContentType = file.ContentType,
-                    Data = ByteString.CopyFrom(data),
-                    EntityName = entityName,
-                    FileName = fileName,
-                    FolderName = folderName
-                };
+            // call the web service
+            var uploadRequest = new UploadFileRequest
+            {
+                ContentType = file.ContentType,
+                Data = ByteString.CopyFrom(data),
+                EntityName = entityName,
+                FileName = fileName,
+                FolderName = folderName
+            };
 
-                var uploadResult = _fileManagerClient.UploadFile(uploadRequest);
+            var uploadResult = _fileManagerClient.UploadFile(uploadRequest);
 
-                if (uploadResult.ResultStatus == ResultStatus.Success)
-                {
-                    // Update modifiedon to current time
-                    //UpdateEntityModifiedOnDate(entityName, entityId, true);
-                    _logger.LogInformation("Success");
-                }
-                else
-                {
-                    _logger.LogError(uploadResult.ResultStatus.ToString());
-                }
-            //}
+            if (uploadResult.ResultStatus == ResultStatus.Success)
+            {
+                // Update modifiedon to current time
+                //UpdateEntityModifiedOnDate(entityName, entityId, true);
+                _logger.LogInformation("Success");
+            }
+            else
+            {
+                _logger.LogError(uploadResult.ResultStatus.ToString());
+            }
+        //}
 
             return new JsonResult(result);
         }
