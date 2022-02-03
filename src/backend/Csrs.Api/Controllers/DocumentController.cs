@@ -10,6 +10,7 @@ using static Csrs.Interfaces.Dynamics.Extensions.EntityDocumentExtensions;
 using Csrs.Api.Extensions;
 using Csrs.Interfaces.Dynamics.Models;
 using Csrs.Api.Services;
+using Csrs.Api.Repositories;
 
 namespace Csrs.Api.Controllers
 {
@@ -192,12 +193,24 @@ namespace Csrs.Api.Controllers
 
         private async Task<bool> CanAccessDocument(string entityId, string entityName)
         {
+            
             if(String.IsNullOrEmpty(_userService.GetBCeIDUserId())) return false;
 
+            MicrosoftDynamicsCRMssgCsrspartyCollection partiesCollection = await _dynamicsClient.GetPartyByBCeIdAsync(_userService.GetBCeIDUserId(), cancellationToken: CancellationToken.None);
 
+            if (partiesCollection is null || partiesCollection.Value.Count == 0) return false;    
 
+            List<MicrosoftDynamicsCRMssgCsrsparty> parties = partiesCollection.Value.ToList();
 
-            return false;
+            string filter = String.Format($"_ssg_payor_value eq {0} or _ssg_recipient_value eq {0}", parties[0].SsgCsrspartyid);
+
+            var actual = await _dynamicsClient.Ssgcsrsfiles.GetAsync(top: 1, filter: filter, expand: null, cancellationToken: CancellationToken.None);
+
+            if (actual is null) return false;
+
+            if (actual.Value.Count == 0 || !actual.Value.ToList().Exists(file => file.SsgCsrsfileid.Equals(entityId))) return false;
+
+            return true;
 
         }
 
