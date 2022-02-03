@@ -29,7 +29,10 @@ namespace Csrs.Api.Controllers
         }
 
         [HttpGet("DownloadAttachment")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK),
+         ProducesResponseType((int)HttpStatusCode.Unauthorized),
+         ProducesResponseType((int)HttpStatusCode.NotFound),
+         ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DownloadAttachment([Required] string fileId, [Required] string entityName, [Required] string fileName, [Required] string documentType)
         {
             return await DownloadAttachmentInternal(fileId, entityName, fileName, documentType, true).ConfigureAwait(true);
@@ -84,7 +87,10 @@ namespace Csrs.Api.Controllers
         }
 
         [HttpPost("UploadAttachment")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK),
+         ProducesResponseType((int)HttpStatusCode.Unauthorized),
+         ProducesResponseType((int)HttpStatusCode.NotFound),
+         ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UploadAttachmentAsync([Required] Guid fileId, [Required] string entityName, [Required] IFormFile file, [Required] string type)
         {
             //ListApplications.Request request = new();
