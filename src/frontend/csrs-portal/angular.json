@@ -34,7 +34,8 @@
             ],
             "styles": [
               "./node_modules/bootstrap/scss/bootstrap.scss",
-              "src/scss/app.scss"
+              "src/scss/app.scss",
+              "src/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
