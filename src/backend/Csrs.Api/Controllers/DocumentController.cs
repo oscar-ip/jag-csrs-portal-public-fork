@@ -190,7 +190,12 @@ namespace Csrs.Api.Controllers
 
             return new JsonResult(result);
         }
-
+        /// <summary>
+        /// Initial Access Check
+        /// </summary>
+        /// <param name="entityId">File Id</param>
+        /// <param name="entityName">Unused currently</param>
+        /// <returns></returns>
         private async Task<bool> CanAccessDocument(string entityId, string entityName)
         {
             
