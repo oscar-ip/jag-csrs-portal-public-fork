@@ -9,6 +9,7 @@ using static Csrs.Services.FileManager.FileManager;
 using static Csrs.Interfaces.Dynamics.Extensions.EntityDocumentExtensions;
 using Csrs.Api.Extensions;
 using Csrs.Interfaces.Dynamics.Models;
+using Csrs.Api.Services;
 
 namespace Csrs.Api.Controllers
 {
@@ -16,15 +17,18 @@ namespace Csrs.Api.Controllers
     {
 
         private readonly IDynamicsClient _dynamicsClient;
+        private readonly IUserService _userService;
         private readonly FileManagerClient _fileManagerClient;
 
         public DocumentController(IMediator mediator, 
             ILogger<DocumentController> logger,
             IDynamicsClient dynamicsClient,
+            IUserService userService,
             FileManagerClient fileManagerClient)
             : base(mediator, logger)
         {
             _dynamicsClient = dynamicsClient;
+            _userService = userService;
             _fileManagerClient = fileManagerClient;
         }
 
@@ -60,7 +64,7 @@ namespace Csrs.Api.Controllers
             //    hasAccess = await CanAccessEntityFile(entityName, entityId, documentType, serverRelativeUrl).ConfigureAwait(true);
             //}
 
-            if (!hasAccess) return BadRequest();
+            if (!hasAccess) return Unauthorized();
 
             //var logUrl = WordSanitizer.Sanitize(serverRelativeUrl);
 
@@ -70,7 +74,7 @@ namespace Csrs.Api.Controllers
             // call the web service
             var downloadRequest = new DownloadFileRequest
             {
-                ServerRelativeUrl = dynamicsFile.GetDocumentFolderName() + "\\" + fileName
+                ServerRelativeUrl = dynamicsFile.GetDocumentFolderName() + "\\" + FileSystemItemExtensions.CombineNameDocumentType(fileName, documentType)
             };
 
             var downloadResult = _fileManagerClient.DownloadFile(downloadRequest);
@@ -115,7 +119,7 @@ namespace Csrs.Api.Controllers
             //    hasAccess = await CanAccessEntity(entityName, entityId, null).ConfigureAwait(true);
             //}
 
-            if (!hasAccess) return new NotFoundResult();
+            if (!hasAccess) return Unauthorized();
 
             var ms = new MemoryStream();
             file.OpenReadStream().CopyTo(ms);
@@ -185,5 +189,17 @@ namespace Csrs.Api.Controllers
 
             return new JsonResult(result);
         }
+
+        private async Task<bool> CanAccessDocument(string entityId, string entityName)
+        {
+            if(String.IsNullOrEmpty(_userService.GetBCeIDUserId())) return false;
+
+
+
+
+            return false;
+
+        }
+
     }
 }
