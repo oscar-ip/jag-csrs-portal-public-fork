@@ -81,7 +81,6 @@ export class LandingComponent implements OnInit {
   }
 
   public ngAfterViewInit(): void {
-    // refresh link urls now that we set the links
     this.snowplow.refreshLinkClickTracking();
   }
 }

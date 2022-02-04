@@ -18,6 +18,7 @@ import { of } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import {MatDialog} from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { SnowplowService } from '@core/services/snowplow.service';
 
 @Component({
   selector: 'app-child-application-question',
@@ -44,14 +45,16 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _lookupService: LookupService;
   _logger: LoggerService;
   _oidc: OidcSecurityService;
-  today = new Date(); 
+  today = new Date();
   isEditable: boolean = false;
+  public _snowplow: SnowplowService;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
               @Inject(LoggerService) private logger,
               @Inject(OidcSecurityService) private oidc,
+              @Inject(SnowplowService) private snowplow,
               public dialog: MatDialog) {}
 
   ngOnInit() {
@@ -59,6 +62,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this._lookupService = this.lookupService;
     this._logger = this.logger;
     this._oidc = this.oidc;
+    this._snowplow = this.snowplow;
 
     this.provinceData = [{label: 'province', value: 'British Columbia'}];
     this.identityData = [{label: 'identity', value: 'Native'}];
@@ -322,6 +326,10 @@ editPage(stepper, index){
   }
   save(){
     localStorage.getsetItemItem('formData', '');
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplow.refreshLinkClickTracking();
   }
 
 }
