@@ -28,6 +28,7 @@
             },
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/snowplow.js",
               "src/favicon.ico",
               "src/assets",
               "src/assets/i18n"
