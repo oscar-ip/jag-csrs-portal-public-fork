@@ -336,7 +336,15 @@ namespace Csrs.Interfaces.Dynamics
                 ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            try
+            {
+                _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+
             if (_shouldTrace)
             {
                 ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);

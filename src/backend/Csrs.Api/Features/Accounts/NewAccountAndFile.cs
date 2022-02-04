@@ -73,7 +73,7 @@ namespace Csrs.Api.Features.Accounts
                 var bceidScope = _logger.AddBCeIdGuid(userId);
 
                 var dynamicsParty = request.Applicant.ToDynamicsModel();
-
+                
                 // find to see if the person has an account already?
                 string partyId = await _dynamicsClient.GetPartyIdByBCeIdAsync(userId, cancellationToken);
                 
@@ -89,17 +89,20 @@ namespace Csrs.Api.Features.Accounts
                     _logger.LogDebug("Party does not exist, create new party");
                     dynamicsParty.SsgBceidGuid = userId;
                     dynamicsParty.SsgBceidLastUpdate = DateTimeOffset.Now;
+                    dynamicsParty.Statuscode = 1;
 
                     dynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: dynamicsParty, cancellationToken: cancellationToken);
                     partyId = dynamicsParty.SsgCsrspartyid;
                 }
 
                 // create the other party
-                MicrosoftDynamicsCRMssgCsrsparty? otherDynamicsParty = null;
+                //MicrosoftDynamicsCRMssgCsrsparty otherDynamicsParty;// = null;
+                MicrosoftDynamicsCRMssgCsrsparty otherDynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty();
                 if (request.File.OtherParty != null)
                 {
+                    request.File.OtherParty.PartyId = Guid.Empty.ToString();
                     otherDynamicsParty = request.File.OtherParty.ToDynamicsModel();
-
+                    //otherDynamicsParty.SsgBceidGuid = Guid.Empty.ToString();
                     _logger.LogInformation("Creating other party");
                     otherDynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: otherDynamicsParty, cancellationToken: cancellationToken);
                 }
@@ -109,7 +112,8 @@ namespace Csrs.Api.Features.Accounts
                 }
 
                 // create the file
-                var file = await _fileService.CreateFile(partyId, otherDynamicsParty?.SsgCsrspartyid, request.File, cancellationToken);
+                //var file = await _fileService.CreateFile(partyId, otherDynamicsParty?.SsgCsrspartyid, request.File, cancellationToken);
+                var file = await _fileService.CreateFile(dynamicsParty, otherDynamicsParty, request.File, cancellationToken);
 
                 _logger.LogDebug("Party and file created successfully");
                 return new Response(partyId, file.Item1, file.Item2);
