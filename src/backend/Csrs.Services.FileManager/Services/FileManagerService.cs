@@ -134,6 +134,9 @@ namespace Csrs.Services.FileManager
                 case "account":
                     listTitle = SharePointFileManager.DefaultDocumentListTitle;
                     break;
+                case "file":
+                    listTitle = "file";
+                    break;
                 case "application":
                     listTitle = SharePointFileManager.ApplicationDocumentListTitle;
                     break;
@@ -167,6 +170,9 @@ namespace Csrs.Services.FileManager
             {
                 case "account":
                     listTitle = SharePointFileManager.DefaultDocumentUrlTitle;
+                    break;
+                case "file":
+                    listTitle = "file";
                     break;
                 case "application":
                     listTitle = "adoxio_application";

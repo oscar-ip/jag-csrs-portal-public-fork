@@ -11,6 +11,7 @@ using Csrs.Api.Extensions;
 using Csrs.Interfaces.Dynamics.Models;
 using Csrs.Api.Services;
 using Csrs.Api.Repositories;
+using Microsoft.Rest;
 
 namespace Csrs.Api.Controllers
 {
@@ -21,7 +22,7 @@ namespace Csrs.Api.Controllers
         private readonly IUserService _userService;
         private readonly FileManagerClient _fileManagerClient;
 
-        public DocumentController(IMediator mediator, 
+        public DocumentController(IMediator mediator,
             ILogger<DocumentController> logger,
             IDynamicsClient dynamicsClient,
             IUserService userService,
@@ -62,7 +63,7 @@ namespace Csrs.Api.Controllers
             //if (checkUser)
             //{
             //    ValidateSession();
-            //    hasAccess = await CanAccessEntityFile(entityName, entityId, documentType, serverRelativeUrl).ConfigureAwait(true);
+            //    hasAccess = await CanAccessDocument(entityName, entityId).ConfigureAwait(true);
             //}
 
             if (!hasAccess) return Unauthorized();
@@ -101,7 +102,7 @@ namespace Csrs.Api.Controllers
             //ListApplications.Request request = new();
             //ListApplications.Response response = await _mediator.Send(request);
 
-            
+
             return await UploadAttachmentInternal(fileId.ToString(), entityName, file, type, true);
 
         }
@@ -116,8 +117,7 @@ namespace Csrs.Api.Controllers
             var hasAccess = true;
             //if (checkUser)
             //{
-            //    ValidateSession();
-            //    hasAccess = await CanAccessEntity(entityName, entityId, null).ConfigureAwait(true);
+            //    hasAccess = await CanAccessDocument(entityName, entityId).ConfigureAwait(true);
             //}
 
             if (!hasAccess) return Unauthorized();
@@ -141,17 +141,18 @@ namespace Csrs.Api.Controllers
             //}
             //else
             //{
-                // Sanitize file name
-                //var illegalInFileName = new Regex(@"[#%*<>?{}~¿""]");
-                //var fileName = illegalInFileName.Replace(file.FileName, "");
-                //illegalInFileName = new Regex(@"[&:/\\|]");
-                //fileName = illegalInFileName.Replace(fileName, "-");
+            // Sanitize file name
+            //var illegalInFileName = new Regex(@"[#%*<>?{}~¿""]");
+            //var fileName = illegalInFileName.Replace(file.FileName, "");
+            //illegalInFileName = new Regex(@"[&:/\\|]");
+            //fileName = illegalInFileName.Replace(fileName, "-");
 
             string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, documentType);
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
             //For Testing purposes only   
-            if (dynamicsFile is null) {
+            if (dynamicsFile is null)
+            {
                 //return BadRequest("File can't be uploaded to no existent file");
                 //Create the file if it doesn't exist. This will be deleted.
                 dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile();
@@ -162,7 +163,7 @@ namespace Csrs.Api.Controllers
 
             var folderName = dynamicsFile.GetDocumentFolderName();
 
-            //_dynamicsClient.CreateEntitySharePointDocumentLocation(entityName, entityId, folderName, folderName);
+            await CreateAccountDocumentLocation(dynamicsFile, folderName);
 
             // call the web service
             var uploadRequest = new UploadFileRequest
@@ -186,7 +187,7 @@ namespace Csrs.Api.Controllers
             {
                 _logger.LogError(uploadResult.ResultStatus.ToString());
             }
-        //}
+            //}
 
             return new JsonResult(result);
         }
@@ -198,18 +199,18 @@ namespace Csrs.Api.Controllers
         /// <returns></returns>
         private async Task<bool> CanAccessDocument(string entityId, string entityName)
         {
-            
-            if(String.IsNullOrEmpty(_userService.GetBCeIDUserId())) return false;
+
+            if (String.IsNullOrEmpty(_userService.GetBCeIDUserId())) return false;
 
             MicrosoftDynamicsCRMssgCsrspartyCollection partiesCollection = await _dynamicsClient.GetPartyByBCeIdAsync(_userService.GetBCeIDUserId(), cancellationToken: CancellationToken.None);
 
-            if (partiesCollection is null || partiesCollection.Value.Count == 0) return false;    
+            if (partiesCollection is null || partiesCollection.Value.Count == 0) return false;
 
             List<MicrosoftDynamicsCRMssgCsrsparty> parties = partiesCollection.Value.ToList();
 
             string filter = String.Format($"_ssg_payor_value eq {0} or _ssg_recipient_value eq {0}", parties[0].SsgCsrspartyid);
 
-            var actual = await _dynamicsClient.Ssgcsrsfiles.GetAsync(top: 1, filter: filter, expand: null, cancellationToken: CancellationToken.None);
+            var actual = await _dynamicsClient.Ssgcsrsfiles.GetAsync(top: 10, filter: filter, expand: null, cancellationToken: CancellationToken.None);
 
             if (actual is null) return false;
 
@@ -219,5 +220,140 @@ namespace Csrs.Api.Controllers
 
         }
 
+        private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName)
+        {
+            string parentDocumentLibraryReference = await GetDocumentLocationReferenceByRelativeURL("files");
+
+            // Create the SharePointDocumentLocation entity
+            var mdcsdl = new MicrosoftDynamicsCRMsharepointdocumentlocation
+            {
+                RegardingobjectidSsgCsrsfile = dynamicsFile,
+                _parentsiteorlocationValue = GetEntityURI("sharepointdocumentlocations", parentDocumentLibraryReference),
+                Relativeurl = folderName,
+                Description = "Files",
+                Name = folderName
+            };
+
+
+            var sharepointdocumentlocationid = DocumentLocationExistsWithCleanup(mdcsdl);
+
+            if (sharepointdocumentlocationid == null)
+            {
+                try
+                {
+                    mdcsdl = _dynamicsClient.Sharepointdocumentlocations.Create(mdcsdl);
+                }
+                catch (HttpOperationException odee)
+                {
+                    _logger.LogError(odee, "Error creating SharepointDocumentLocation");
+                    mdcsdl = null;
+                }
+                if (mdcsdl != null)
+                {
+                    try
+                    {
+                        dynamicsFile.SsgCsrsfileSharePointDocumentLocations.Add(mdcsdl);
+                        await _dynamicsClient.Ssgcsrsfiles.UpdateAsync(dynamicsFile.SsgCsrsfileid, dynamicsFile);
+                    }
+                    catch (HttpOperationException odee)
+                    {
+                        _logger.LogError(odee, "Error adding reference to SharepointDocumentLocation");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get a document location by reference
+        /// </summary>
+        /// <param name="relativeUrl"></param>
+        /// <returns></returns>
+        private async Task<string> GetDocumentLocationReferenceByRelativeURL(string relativeUrl)
+        {
+            string? result = null;
+            var sanitized = relativeUrl.Replace("'", "''");
+            // first see if one exists.
+            var locations = await _dynamicsClient.Sharepointdocumentlocations.GetAsync(filter: "relativeurl eq '" + sanitized + "'");
+
+            var location = locations.Value.FirstOrDefault();
+
+            if (location is null)
+            {
+                var newRecord = new MicrosoftDynamicsCRMsharepointdocumentlocation
+                {
+                    Relativeurl = relativeUrl
+                };
+                // create a new document location.
+                try
+                {
+                    location = await _dynamicsClient.Sharepointdocumentlocations.CreateAsync(newRecord);
+                }
+                catch (HttpOperationException httpOperationException)
+                {
+                    _logger.LogError(httpOperationException, "Error creating document location");
+                }
+            }
+
+            if (location != null) result = location.Sharepointdocumentlocationid;
+
+            return result;
+        }
+
+        private string GetEntityURI(string entityType, string id)
+        {
+            string result = "";
+            if (id != null)
+            {
+                result = string.Format("{0}{1}({2})", _dynamicsClient.BaseUri, entityType, id.Trim());
+            }
+            return result;
+        }
+
+        private async Task<string> DocumentLocationExistsWithCleanup(MicrosoftDynamicsCRMsharepointdocumentlocation mdcsdl)
+        {
+            var relativeUrl = mdcsdl.Relativeurl.Replace("'", "''");
+            var filter = $"relativeurl eq '{relativeUrl}'";
+            // start by getting the existing document locations.
+            string result = null;
+            try
+            {
+                var locations =
+                   await _dynamicsClient.Sharepointdocumentlocations.GetAsync(filter: filter);
+
+                foreach (var location in locations.Value.ToList())
+                    if (string.IsNullOrEmpty(location._regardingobjectidValue))
+                    {
+
+                        _logger.LogError($"Orphan Sharepointdocumentlocation found.  ID is {location.Sharepointdocumentlocationid}");
+                        // it is an invalid document location. cleanup.
+                        try
+                        {
+                            _dynamicsClient.Sharepointdocumentlocations.Delete(location.Sharepointdocumentlocationid);
+                        }
+                        catch (HttpOperationException odee)
+                        {
+                            _logger.LogError("Error caught?");
+                        }
+                    }
+                    else
+                    {
+                        if (result != null)
+                            _logger.LogError($"Duplicate Sharepointdocumentlocation found.  ID is {location.Sharepointdocumentlocationid}");
+                        else
+                            result = location.Sharepointdocumentlocationid;
+                    }
+            }
+            catch (HttpOperationException odee)
+            {
+                _logger.LogError(odee, "Error getting SharepointDocumentLocations");
+            }
+
+            return result;
+
+
+        }
+
     }
+
+
 }
