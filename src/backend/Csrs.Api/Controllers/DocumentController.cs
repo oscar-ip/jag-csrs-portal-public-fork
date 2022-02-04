@@ -222,7 +222,7 @@ namespace Csrs.Api.Controllers
 
         private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName)
         {
-            string parentDocumentLibraryReference = await GetDocumentLocationReferenceByRelativeURL("files");
+            string parentDocumentLibraryReference = await GetDocumentLocationReferenceByRelativeURL("ssg_csrsfiles");
 
             // Create the SharePointDocumentLocation entity
             var mdcsdl = new MicrosoftDynamicsCRMsharepointdocumentlocation
@@ -230,14 +230,14 @@ namespace Csrs.Api.Controllers
                 RegardingobjectidSsgCsrsfile = dynamicsFile,
                 _parentsiteorlocationValue = GetEntityURI("sharepointdocumentlocations", parentDocumentLibraryReference),
                 Relativeurl = folderName,
-                Description = "Files",
+                Description = "ssg_csrsfiles",
                 Name = folderName
             };
 
 
-            var sharepointdocumentlocationid = DocumentLocationExistsWithCleanup(mdcsdl);
+            var sharepointdocumentlocationid = await DocumentLocationExistsWithCleanup(mdcsdl);
 
-            if (sharepointdocumentlocationid == null)
+            if (sharepointdocumentlocationid is null)
             {
                 try
                 {
@@ -294,7 +294,7 @@ namespace Csrs.Api.Controllers
                 }
             }
 
-            if (location != null) result = location.Sharepointdocumentlocationid;
+            if (location is not null) result = location.Sharepointdocumentlocationid;
 
             return result;
         }
@@ -302,7 +302,7 @@ namespace Csrs.Api.Controllers
         private string GetEntityURI(string entityType, string id)
         {
             string result = "";
-            if (id != null)
+            if (id is not null)
             {
                 result = string.Format("{0}{1}({2})", _dynamicsClient.BaseUri, entityType, id.Trim());
             }

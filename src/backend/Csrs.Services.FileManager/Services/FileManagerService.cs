@@ -134,8 +134,9 @@ namespace Csrs.Services.FileManager
                 case "account":
                     listTitle = SharePointFileManager.DefaultDocumentListTitle;
                     break;
-                case "file":
-                    listTitle = "file";
+                case "ssg_csrsfiles":
+                    listTitle = "ssg_csrsfiles";
+                    listTitle = "ssg_csrsfiles";
                     break;
                 case "application":
                     listTitle = SharePointFileManager.ApplicationDocumentListTitle;
@@ -171,8 +172,8 @@ namespace Csrs.Services.FileManager
                 case "account":
                     listTitle = SharePointFileManager.DefaultDocumentUrlTitle;
                     break;
-                case "file":
-                    listTitle = "file";
+                case "ssg_csrsfiles":
+                    listTitle = "ssg_csrsfiles";
                     break;
                 case "application":
                     listTitle = "adoxio_application";
@@ -203,6 +204,7 @@ namespace Csrs.Services.FileManager
         private void CreateDocumentLibraryIfMissing(string listTitle, string documentTemplateUrl = null)
         {
             var _sharePointFileManager = new SharePointFileManager(_configuration);
+
             var exists = _sharePointFileManager.DocumentLibraryExists(listTitle).GetAwaiter().GetResult();
             if (!exists)
                 _sharePointFileManager.CreateDocumentLibrary(listTitle, documentTemplateUrl).GetAwaiter().GetResult();
