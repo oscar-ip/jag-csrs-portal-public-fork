@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
+import { SnowplowService } from '@core/services/snowplow.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -21,7 +22,7 @@ export class QuestionnaireComponent implements OnInit {
 
   public welcomeUser: string;
   public _config: AppConfigService;
-
+  public _snowplow: SnowplowService;
 
   data: any = [
     {
@@ -491,7 +492,8 @@ export class QuestionnaireComponent implements OnInit {
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
-              @Inject(AppConfigService) private appConfigService) {
+              @Inject(AppConfigService) private appConfigService,
+              @Inject(SnowplowService) private snowplow) {
 
           this._config = appConfigService;
           this._logger = logger;
@@ -508,6 +510,9 @@ export class QuestionnaireComponent implements OnInit {
           } else {
             this._logger.log('info', 'Questionnaire: not authenticated');
           }
+
+          this._snowplow = this.snowplow;
+
   }
 
   stringToHTML(i, yi, ci, str, idLabel) {
@@ -520,7 +525,7 @@ export class QuestionnaireComponent implements OnInit {
       document.querySelector(id).childElementCount === 0
     ) {
       document.querySelector(id).appendChild(doc.body);
-      
+
     }
     document.querySelector(id).setAttribute('color', 'color:#2E8540 !important');
 
@@ -577,6 +582,10 @@ export class QuestionnaireComponent implements OnInit {
     link.download = "Application.pdf";
     link.href = "assets/Application.pdf";
     link.click();
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplow.refreshLinkClickTracking();
   }
 
 }
