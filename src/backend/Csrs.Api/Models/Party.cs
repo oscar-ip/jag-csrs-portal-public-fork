@@ -8,9 +8,6 @@ namespace Csrs.Api.Models
     {
         public string PartyId { get; set; }
         
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public string BCeIDGuid { get; set; }
-
         [Required]
         public string? FirstName { get; set; }
         public string? MiddleName { get; set; }

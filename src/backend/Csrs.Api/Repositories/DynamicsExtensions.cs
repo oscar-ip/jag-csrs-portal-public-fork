@@ -18,8 +18,7 @@ namespace Csrs.Api.Repositories
         public static async Task<MicrosoftDynamicsCRMssgCsrspartyCollection> GetPartyByBCeIdAsync(this IDynamicsClient dynamicsClient, string bceid, CancellationToken cancellationToken)
         {
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_userid eq '{bceid}' and statuscode eq {Active}";
-
+            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
             var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
             return parties;
         }
@@ -28,14 +27,20 @@ namespace Csrs.Api.Repositories
         {
             List<string> select = new List<string> { "ssg_csrspartyid" };
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_userid eq '{bceid}' and statuscode eq {Active}";
-
-            var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
-
-            if (parties is not null && parties.Value is not null && parties.Value.Count > 0)
+            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
+            try
             {
-                var party = parties.Value[0];
-                return party.SsgCsrspartyid;
+                var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
+
+                if (parties is not null && parties.Value is not null && parties.Value.Count > 0)
+                {
+                    var party = parties.Value[0];
+                    return party.SsgCsrspartyid;
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
 
             return null;

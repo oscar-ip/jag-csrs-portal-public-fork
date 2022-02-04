@@ -62,6 +62,7 @@ public static class WebApplicationBuilderExtensions
         services.AddHttpClient<IOAuthApiClient, OAuthApiClient>(client =>
         {
             client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
+            //client.Timeout = TimeSpan.FromSeconds(150); 
         });
 
         // Register httpClient for OdataClient with OAuthHandler
@@ -69,6 +70,8 @@ public static class WebApplicationBuilderExtensions
         {
             client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
             client.Timeout = TimeSpan.FromSeconds(30); // data timeout
+            //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+            //client.Timeout = TimeSpan.FromSeconds(300); // data timeout
         })
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();
@@ -77,6 +80,8 @@ public static class WebApplicationBuilderExtensions
         {
             client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
             client.Timeout = TimeSpan.FromSeconds(30); // data timeout
+            //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+            //client.Timeout = TimeSpan.FromSeconds(300); // data timeout
         })
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();

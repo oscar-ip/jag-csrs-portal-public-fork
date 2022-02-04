@@ -5,6 +5,7 @@ using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 using File = Csrs.Api.Models.File;
+using PickLists = Csrs.Api.Models.PickupLists;
 
 namespace Csrs.Api.Services
 {
@@ -29,31 +30,73 @@ namespace Csrs.Api.Services
 
         // Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(string entityName, string attributeName, CancellationToken cancellationToken);
 
-        public async Task<Tuple<string,string>> CreateFile(string partyId, string? otherPartyId, File file, CancellationToken cancellationToken)
+        //public async Task<Tuple<string,string>> CreateFile(string partyId, string? otherPartyId, File file, CancellationToken cancellationToken)
+        public async Task<Tuple<string, string>> CreateFile(MicrosoftDynamicsCRMssgCsrsparty party, MicrosoftDynamicsCRMssgCsrsparty otherParty, File file, CancellationToken cancellationToken)
         {
-            var partyEnrolled = _dynamicsClient.GetPicklistOptionSetMetadataAsync("", "ssg_partyenrolled", _cache, cancellationToken);
+            //var partyEnrolled = _dynamicsClient.GetPicklistOptionSetMetadataAsync("", "ssg_partyenrolled", _cache, cancellationToken);
 
-            MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel();
+            //MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel();
+            MicrosoftDynamicsCRMssgCsrsfile csrsFile = new MicrosoftDynamicsCRMssgCsrsfile();
+            csrsFile.SsgCourtfiletype = PickLists.GetCourtFileTypes("Court Order");
+            csrsFile.SsgAct = PickLists.GetCourtFileTypes("Court Order");
+            csrsFile.SsgFmepfileactive = true;
+            csrsFile.SsgSafetyalert = true;
+            csrsFile.SsgSafetyalertpayor = true;
+            csrsFile.SsgSafetyconcerndescription = "Safety Concern description";
+            csrsFile.SsgSharedparenting = true;
+            csrsFile.SsgSplitparentingarrangement = true;
+
+
+            //csrsFile.SsgSection7expenses = 867670000;
+            //csrsFile.SsgSection7payorsamount = 1000.00m;
+            //csrsFile.SsgSection7recipientsamount = 400.00m;
+
+            //csrsFile.SsgSection7payorsproportion = 20;
+
+            
+            csrsFile.SsgBCCourtLevel = new MicrosoftDynamicsCRMssgCsrsbccourtlevel {SsgCourtlevellabel = "Provincial" };
+            //csrsFile.SsgBCCourtLocation = new MicrosoftDynamicsCRMssgIjssbccourtlocation { SsgIjssbccourtlocationid =  "Victoria Court" };
+
+
 
             //// map the party and other party to recipient and payor
             if (file.UsersRole == PartyRole.Recipient)
             {
-                csrsFile._ssgRecipientValue = partyId;
-                csrsFile.SsgPartyenrolled = 0; // recipient
+                //csrsFile._ssgRecipientValue = partyId;
+                //csrsFile.SsgPartyenrolled = 0; // recipient
+                csrsFile.SsgPartyenrolled = PickLists.GetPartyEnrolled("Recipient");
+               // csrsFile.SsgRecipient = party;
+                    //new MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = party.SsgCsrspartyid };
 
-                if (otherPartyId is not null)
+                //csrsFile.SsgRecipient.SsgCsrspartyid = partyId;
+                //csrsFile.SsgRecipient = party;
+
+                //if (otherPartyId is not null)
+                if (otherParty is not null)
                 {
-                    csrsFile._ssgPayorValue = otherPartyId;
+                    //csrsFile._ssgPayorValue = otherPartyId;
+                    //csrsFile.SsgPayor = otherParty;
+                   // csrsFile.SsgPayor = otherParty;
+                        //new MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = otherParty.SsgCsrspartyid };
                 }
             }
             else if (file.UsersRole == PartyRole.Payor)
             {
-                csrsFile._ssgPayorValue = partyId;
-                csrsFile.SsgPartyenrolled = 0; // payor
+                //csrsFile._ssgPayorValue = partyId;
+                //csrsFile.SsgPartyenrolled = 0; // payor
+                csrsFile.SsgPartyenrolled = PickLists.GetPartyEnrolled("Payor");
+                //csrsFile.SsgPayor = party;
+                //new MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = party.SsgCsrspartyid };
+                // csrsFile.SsgPayor = party;
 
-                if (otherPartyId is not null)
+
+                //if (otherPartyId is not null)
+                if (otherParty is not null)
                 {
-                    csrsFile._ssgRecipientValue = otherPartyId;
+                    //csrsFile._ssgRecipientValue = otherPartyId;
+                    //csrsFile.SsgRecipient = otherParty;
+                  //  csrsFile.SsgRecipient = otherParty;
+                        //new MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = otherParty.SsgCsrspartyid };
                 }
             }
 
@@ -64,7 +107,7 @@ namespace Csrs.Api.Services
                 foreach (var child in file.Children)
                 {
                     var csrsChild = child.ToDynamicsModel();
-                    csrsChild._ssgFilenumberValue = csrsFile.SsgCsrsfileid;
+                    //csrsChild._ssgFilenumberValue = csrsFile.SsgCsrsfileid;
                     csrsChild = await _dynamicsClient.Ssgcsrschildren.CreateAsync(csrsChild, cancellationToken: cancellationToken);
                 }
             }
