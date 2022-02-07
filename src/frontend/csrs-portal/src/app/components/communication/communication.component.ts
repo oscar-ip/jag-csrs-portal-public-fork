@@ -16,11 +16,14 @@ import { FileService } from 'app/api/api/file.service';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { DatePipe } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-communication',
   templateUrl: './communication.component.html',
-  styleUrls: ['./communication.component.scss']
+  styleUrls: ['./communication.component.scss'],
+  providers: [DatePipe]
 })
 
 export class CommunicationComponent implements OnInit {
@@ -46,8 +49,28 @@ export class CommunicationComponent implements OnInit {
 
   data: any = null;
   selectedDocumentType = '';
-  _reponse: HttpResponse<null> ;
+  _reponse: HttpResponse<null>;
+  contactFormGroup: FormGroup;
+  files = [
+    { id: 1, name: "1234" },
+    { id: 2, name: "1235" },
+    { id: 3, name: "1236" },
+    { id: 4, name: "1237" },
+    { id: 5, name: "1238" }
+  ];
+  curDate = new Date();
+  curDateStr: string
+  contactSubjects = [
+    { id: 1, name: "Subject One" },
+    { id: 2, name: "Subject Two" },
+    { id: 3, name: "Subject Three" },
+    { id: 4, name: "Subject Four" },
+    { id: 5, name: "Other" }
+  ];
   
+              public dialog: MatDialog,
+              private datePipe: DatePipe) {
+    this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
   
   public toggleRow = false;
   ngOnInit(): void {
@@ -65,8 +88,34 @@ export class CommunicationComponent implements OnInit {
     ];
 
     this._token = '';
-    // this.openConfirmationDialog();
+
+    this.contactFormGroup = this._formBuilder.group({
+      contactFile: [null, Validators.required],
+      contactSubject: [null, Validators.required],
+      contactMessage: [null, [Validators.required, Validators.maxLength(500)]]
+    });
   }
+  get contactFile() {
+    return this.contactFormGroup.get('contactFile');
+  }
+  get contactDate() {
+    return this.curDateStr;
+  }
+  get contactSubject() {
+    return this.contactFormGroup.get('contactSubject');
+  }
+  get contactMessage() {
+    return this.contactFormGroup.get('contactMessage');
+  }
+  onFileChange(ob) {
+    console.log('File changed...');
+    let file = ob.value;
+    console.log(file);
+  }
+  clearContactForm(): void {
+    console.log('Form reset...');
+    this.contactFormGroup.reset();
+  }  
 
   getRemoteData() {
 
@@ -95,6 +144,14 @@ export class CommunicationComponent implements OnInit {
       
     ];
     this.dataSource.data = remoteDummyData;
+    }
+    
+  sendContact(): void {
+    if (this.contactFormGroup.valid) {
+
+    } else {
+      console.log('Form invalid...');
+    }
   }
 
 
