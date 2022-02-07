@@ -65,7 +65,7 @@ namespace Csrs.Api.Services
                 //csrsFile._ssgRecipientValue = partyId;
                 //csrsFile.SsgPartyenrolled = 0; // recipient
                 csrsFile.SsgPartyenrolled = PickLists.GetPartyEnrolled("Recipient");
-               // csrsFile.SsgRecipient = party;
+                //csrsFile.SsgRecipient = party;
                     //new MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = party.SsgCsrspartyid };
 
                 //csrsFile.SsgRecipient.SsgCsrspartyid = partyId;

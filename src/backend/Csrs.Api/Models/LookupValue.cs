@@ -28,6 +28,34 @@ namespace Csrs.Api.Models
         private string DebuggerDisplay => $"{Value} ({Id})";
     }
 
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    public class CourtLookupValue
+    {
+        public CourtLookupValue(string guidId, string text)
+        {
+            Id = guidId;
+            Value = text;
+        }
+
+        public CourtLookupValue()
+        {
+        }
+
+        /// <summary>
+        /// The unique id of the value.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// The human readable value.
+        /// </summary>
+        public string Value { get; set; }
+
+        private string DebuggerDisplay => $"{Value} ({Id})";
+    }
+
+
+
 
     public class PickupLists
     {
@@ -39,6 +67,7 @@ namespace Csrs.Api.Models
         private static List<LookupValue> _partyEnrolled = new List<LookupValue>();
         private static List<LookupValue> _section7Expenses = new List<LookupValue>();
         private static List<LookupValue> _courtFileTypes = new List<LookupValue>();
+        private static List<LookupValue> _childADependents = new List<LookupValue>();
 
         public static List<LookupValue> GetGenders()
         {
@@ -213,6 +242,26 @@ namespace Csrs.Api.Models
             int id = 0;
             if (_courtFileTypes.Count == 0) GetCourtFileTypes();
             LookupValue item = _courtFileTypes.Find(x => x.Value.Equals(value));
+            if (item is not null)
+            {
+                id = item.Id;
+            }
+            return id;
+        }
+
+        public static List<LookupValue> GetChildADependents()
+        {
+            _childADependents.Add(new LookupValue { Id = 867670000, Value = "Yes" });
+            _childADependents.Add(new LookupValue { Id = 867670001, Value = "No" });
+            _childADependents.Add(new LookupValue { Id = 867670002, Value = "I do not know" });
+            return _courtFileTypes;
+        }
+
+        public static int GetChildADependents(string value)
+        {
+            int id = 0;
+            if (_childADependents.Count == 0) GetChildADependents();
+            LookupValue item = _childADependents.Find(x => x.Value.Equals(value));
             if (item is not null)
             {
                 id = item.Id;

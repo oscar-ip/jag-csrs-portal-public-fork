@@ -102,7 +102,6 @@ namespace Csrs.Api.Features.Accounts
                 {
                     request.File.OtherParty.PartyId = Guid.Empty.ToString();
                     otherDynamicsParty = request.File.OtherParty.ToDynamicsModel();
-                    //otherDynamicsParty.SsgBceidGuid = Guid.Empty.ToString();
                     _logger.LogInformation("Creating other party");
                     otherDynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: otherDynamicsParty, cancellationToken: cancellationToken);
                 }

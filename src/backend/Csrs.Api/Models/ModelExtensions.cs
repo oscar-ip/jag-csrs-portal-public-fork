@@ -19,7 +19,7 @@ namespace Csrs.Api.Models
                 LastName = dynamicsParty.SsgLastname,
                 PreferredName = dynamicsParty.SsgPreferredname,
                 Gender = await GetLookupValueAsync(dynamicsClient, "ssg_partygender", cache, dynamicsParty.SsgGender, cancellationToken),
-                DateOfBirth = dynamicsParty.SsgDateofbirth is not null ? dynamicsParty.SsgDateofbirth.Value.Date.ToString() : null, // TODO
+                DateOfBirth = "1999-01-01",//dynamicsParty.SsgDateofbirth is not null ? dynamicsParty.SsgDateofbirth.Value.Date.ToString() : null, // TODO
 
                 AddressStreet1 = dynamicsParty.SsgStreet1,
                 AddressStreet2 = dynamicsParty.SsgStreet2,
