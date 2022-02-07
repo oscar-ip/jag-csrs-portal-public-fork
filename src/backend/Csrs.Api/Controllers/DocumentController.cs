@@ -222,15 +222,14 @@ namespace Csrs.Api.Controllers
 
         private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName)
         {
-            string parentDocumentLibraryReference = await GetDocumentLocationReferenceByRelativeURL("ssg_csrsfiles");
+            string parentDocumentLibraryReference = await GetDocumentLocationReferenceByRelativeURL("CSRS File");
 
             // Create the SharePointDocumentLocation entity
             var mdcsdl = new MicrosoftDynamicsCRMsharepointdocumentlocation
             {
                 RegardingobjectidSsgCsrsfile = dynamicsFile,
-                _parentsiteorlocationValue = GetEntityURI("sharepointdocumentlocations", parentDocumentLibraryReference),
                 Relativeurl = folderName,
-                Description = "ssg_csrsfiles",
+                Description = "ssg_csrsfile",
                 Name = folderName
             };
 

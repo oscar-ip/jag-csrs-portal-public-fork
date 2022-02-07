@@ -115,9 +115,9 @@ namespace Csrs.Interfaces
 
             var sharepointSite = new
             {
-                Wctx = samlServer + "_layouts/Authenticate.aspx?Source=%2F",
-                Wtrealm = samlServer,
-                Wreply = $"{samlServer}_trust/"
+                Wctx = samlServerRoot.ToString() + "_layouts/Authenticate.aspx?Source=%2F",
+                Wtrealm = samlServerRoot.ToString(),
+                Wreply = $"{samlServerRoot}_trust/"
             };
 
             // create the body of the POST
@@ -130,13 +130,13 @@ namespace Csrs.Interfaces
             var cookieUri = new Uri(sharepointSite.Wreply);
 
             // if we are using an API gateway we need to restructure the fedAuth cookie.
-            //if (!string.Equals(sharepointSite.Wreply, $"{cookieUri.Scheme}://{cookieUri.Authority}"))
-            //{
-            //    var cookies = cookieContainer.GetCookies(cookieUri);
-            //    string fedAuthCookieValue = cookies["FedAuth"].Value;
+            if (!string.Equals(sharepointSite.Wreply, $"{cookieUri.Scheme}://{cookieUri.Authority}"))
+            {
+                var cookies = cookieContainer.GetCookies(cookieUri);
+                string fedAuthCookieValue = cookies["FedAuth"].Value;
 
-            //    cookieContainer.Add(new Uri($"{cookieUri.Scheme}://{cookieUri.Authority}"), new Cookie("FedAuth", fedAuthCookieValue, "/"));
-            //}
+                cookieContainer.Add(new Uri($"{cookieUri.Scheme}://{cookieUri.Authority}"), new Cookie("FedAuth", fedAuthCookieValue, "/"));
+            }
 
         }
 
