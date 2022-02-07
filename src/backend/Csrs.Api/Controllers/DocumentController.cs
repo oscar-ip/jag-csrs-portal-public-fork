@@ -191,6 +191,101 @@ namespace Csrs.Api.Controllers
 
             return new JsonResult(result);
         }
+
+
+        /// <summary>
+        /// Get the file details list in folder associated to the application folder and document type
+        /// </summary>
+        /// <param name="entityId"></param>
+        /// <param name="documentType"></param>
+        /// <returns></returns>
+        [HttpGet("GetAttachmentList")]
+        public async Task<IActionResult> GetAttachmentList(string entityId, string entityName, string documentType)
+        {
+            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return BadRequest();
+
+            var hasAccess = true;
+
+            //if (checkUser)
+            //{
+            //    ValidateSession();
+            //    hasAccess = await CanAccessEntity(entityName, entityId, null);
+            //}
+
+            if (!hasAccess) return new NotFoundResult();
+
+            var fileSystemItemVMList = await GetListFilesInFolder(entityId, entityName, documentType);
+            return new JsonResult(fileSystemItemVMList);
+        }
+
+        /// <summary>
+        /// Return the list of files in a given folder.
+        /// </summary>
+        /// <param name="entityId"></param>
+        /// <param name="entityName"></param>
+        /// <param name="documentType"></param>
+        /// <returns></returns>
+        private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType)
+        {
+            var fileSystemItemVMList = new List<FileSystemItem>();
+
+
+            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return fileSystemItemVMList;
+            //Three retries? Why only here?
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
+                    MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
+                    // call the web service
+                    var request = new FolderFilesRequest
+                    {
+                        DocumentType = documentType,
+                        EntityId = entityId,
+                        EntityName = entityName,
+                        FolderName = dynamicsFile.GetDocumentFolderName()
+                };
+
+                    var result = _fileManagerClient.FolderFiles(request);
+
+                    if (result.ResultStatus == ResultStatus.Success)
+                    {
+
+                        // convert the results to the view model.
+                        foreach (var fileDetails in result.Files)
+                        {
+                            var fileSystemItemVM = new FileSystemItem
+                            {
+                                // remove the document type text from file name
+                                Name = fileDetails.Name.Substring(fileDetails.Name.IndexOf("__") + 2),
+                                // convert size from bytes (original) to KB
+                                Size = fileDetails.Size,
+                                ServerRelativeUrl = fileDetails.ServerRelativeUrl,
+                                TimeCreated = fileDetails.TimeCreated,
+                                TimeLastModified = fileDetails.TimeLastModified,
+                                DocumentType = fileDetails.DocumentType
+                            };
+
+                            fileSystemItemVMList.Add(fileSystemItemVM);
+
+                        }
+
+                        return fileSystemItemVMList;
+
+                    }
+
+                    _logger.LogError($"ERROR in getting folder files for entity {entityName}, entityId {entityId}, docuemnt type {documentType} ");
+
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error getting SharePoint File List");
+                }
+            }
+            return fileSystemItemVMList;
+        }
+
+
         /// <summary>
         /// Initial Access Check
         /// </summary>
@@ -222,7 +317,6 @@ namespace Csrs.Api.Controllers
 
         private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName)
         {
-            string parentDocumentLibraryReference = await GetDocumentLocationReferenceByRelativeURL("CSRS File");
 
             // Create the SharePointDocumentLocation entity
             var mdcsdl = new MicrosoftDynamicsCRMsharepointdocumentlocation
@@ -232,7 +326,6 @@ namespace Csrs.Api.Controllers
                 Description = "ssg_csrsfile",
                 Name = folderName
             };
-
 
             var sharepointdocumentlocationid = await DocumentLocationExistsWithCleanup(mdcsdl);
 
@@ -260,52 +353,6 @@ namespace Csrs.Api.Controllers
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Get a document location by reference
-        /// </summary>
-        /// <param name="relativeUrl"></param>
-        /// <returns></returns>
-        private async Task<string> GetDocumentLocationReferenceByRelativeURL(string relativeUrl)
-        {
-            string? result = null;
-            var sanitized = relativeUrl.Replace("'", "''");
-            // first see if one exists.
-            var locations = await _dynamicsClient.Sharepointdocumentlocations.GetAsync(filter: "relativeurl eq '" + sanitized + "'");
-
-            var location = locations.Value.FirstOrDefault();
-
-            if (location is null)
-            {
-                var newRecord = new MicrosoftDynamicsCRMsharepointdocumentlocation
-                {
-                    Relativeurl = relativeUrl
-                };
-                // create a new document location.
-                try
-                {
-                    location = await _dynamicsClient.Sharepointdocumentlocations.CreateAsync(newRecord);
-                }
-                catch (HttpOperationException httpOperationException)
-                {
-                    _logger.LogError(httpOperationException, "Error creating document location");
-                }
-            }
-
-            if (location is not null) result = location.Sharepointdocumentlocationid;
-
-            return result;
-        }
-
-        private string GetEntityURI(string entityType, string id)
-        {
-            string result = "";
-            if (id is not null)
-            {
-                result = string.Format("{0}{1}({2})", _dynamicsClient.BaseUri, entityType, id.Trim());
-            }
-            return result;
         }
 
         private async Task<string> DocumentLocationExistsWithCleanup(MicrosoftDynamicsCRMsharepointdocumentlocation mdcsdl)
