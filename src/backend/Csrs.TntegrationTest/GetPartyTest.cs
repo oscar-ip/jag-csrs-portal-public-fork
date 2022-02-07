@@ -66,12 +66,6 @@ namespace Csrs.TntegrationTest
             string userId = "WWHITE";
             string filter = $"ssg_bceid_userid eq '{userId}'";
 
-
-            /*List<string> filter = new List<string>
-            {
-                $"ssg_bceid_userid eq '{userId}'"
-            };*/
-
             List<string> expand = new List<string>
             {
                 /*"createdby",*/
@@ -88,11 +82,10 @@ namespace Csrs.TntegrationTest
                 "ssg_csrsparty_ssg_csrsparty_MasterPartyRecord"*/
             };
 
-            Interfaces.Dynamics.Models.MicrosoftDynamicsCRMssgCsrspartyCollection dads = null;
+            MicrosoftDynamicsCRMssgCsrspartyCollection dads = null;
             try
             {
-                dads = await _dynamicsClient.Ssgcsrsparties.GetAsync(top: 10, filter: filter, /*expand: expand,*/ cancellationToken: CancellationToken.None);
-
+                dads = await _dynamicsClient.Ssgcsrsparties.GetAsync(top: 10, filter: filter, cancellationToken: CancellationToken.None);
             }
             catch (Exception ex)
             {
@@ -108,34 +101,19 @@ namespace Csrs.TntegrationTest
                 }
             }
 
-            string? fatherId = father?.SsgCsrspartyid;
-
-            Interfaces.Dynamics.Models.MicrosoftDynamicsCRMssgCsrsparty fatherExt = null;
-            try
-            { 
-                 /*var*/ fatherExt = await _dynamicsClient.Ssgcsrsparties.GetByKeyAsync(fatherId, expand: expand, cancellationToken: CancellationToken.None);
-                //var versionnumber = fatherExt.Versionnumber.Value;
-                //var versionnumber = fatherExt.SsgCsrspartySsgCsrschildChildsFather[0].Versionnumber.Value;
-            }
-            catch (Exception ex)
-            {
-            }
-
-
-
             MicrosoftDynamicsCRMssgCsrschild csrsChild = new MicrosoftDynamicsCRMssgCsrschild
             {
                 Statecode = 0,
                 Statuscode = 1,
-                //SsgCsrschildid = child.ChildId,
                 SsgFirstname = "Alex",
                 SsgMiddlename = "David",
                 SsgLastname = "Kiselev",
-                SsgDateofbirth = "2008-02-02",
-                SsgChildisadependent = 867670001, // Yes
+                SsgDateofbirth = DateTimeOffset.Parse("2008-02-02"),
+                SsgChildisadependent = (int)ChildIsDependent.Yes,
+                SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", father?.SsgCsrspartyid), 
                 //SsgChildsFather = //fatherExt,
                 //SsgChildsMother = fatherExt
-                 //   new Interfaces.Dynamics.Models.MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = fatherId },
+                //   new Interfaces.Dynamics.Models.MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = fatherId },
                 //SsgChildsFather = father
                 //SsgFileNumber = ssgFileNumber;
                 //_ssgChildsfatherValue = fatherId,
@@ -157,29 +135,29 @@ namespace Csrs.TntegrationTest
             {
             }
 
-            string childid = csrsChild.SsgCsrschildid;
-            /*string*/
-            filter = $"ssg_csrschildid eq '{childid}'";
-            //List<string> expand = new List<string> { "createdby" };
+            //string childid = csrsChild.SsgCsrschildid;
+            ///*string*/
+            //filter = $"ssg_csrschildid eq '{childid}'";
+            ////List<string> expand = new List<string> { "createdby" };
 
 
-            if (father.SsgCsrspartySsgCsrschildChildsFather is null ||
-                    father.SsgCsrspartySsgCsrschildChildsFather.Count == 0)
-            {
-                father.SsgCsrspartySsgCsrschildChildsFather = new List<MicrosoftDynamicsCRMssgCsrschild>();
+            //if (father.SsgCsrspartySsgCsrschildChildsFather is null ||
+            //        father.SsgCsrspartySsgCsrschildChildsFather.Count == 0)
+            //{
+            //    father.SsgCsrspartySsgCsrschildChildsFather = new List<MicrosoftDynamicsCRMssgCsrschild>();
 
 
-            }
+            //}
 
-            father.SsgCsrspartySsgCsrschildChildsFather.Add(csrsChild);
+            //father.SsgCsrspartySsgCsrschildChildsFather.Add(csrsChild);
 
-            try
-            {
-                await _dynamicsClient.Ssgcsrsparties.UpdateAsync(fatherId, body: father, cancellationToken: CancellationToken.None);
-            }
-            catch (Exception ex)
-            {
-            }
+            //try
+            //{
+            //    await _dynamicsClient.Ssgcsrsparties.UpdateAsync(fatherId, body: father, cancellationToken: CancellationToken.None);
+            //}
+            //catch (Exception ex)
+            //{
+            //}
 
 
             //try
@@ -249,7 +227,7 @@ namespace Csrs.TntegrationTest
                 SsgReferral = 867670000,
                 SsgCellphone = "403-7002156",//party.CellPhone,
                 SsgFirstname = "Sergey",//party.FirstName,
-                SsgDateofbirth = "1966-08-26",//new DateTimeOffset(new DateTime(2022,02,02),TimeSpan.Zero),
+                SsgDateofbirth = new DateTimeOffset(new DateTime(1966,8,25),TimeSpan.Zero),
                 SsgLastname = "Kiselev",//party.LastName,
                 //SsgReferencenumber = ssgReferencenumber,
                 SsgPartygender = 867670000,
@@ -293,7 +271,7 @@ namespace Csrs.TntegrationTest
                 SsgReferral = 867670000,
                 SsgCellphone = "500-7891111",
                 SsgFirstname = "Tanya",
-                SsgDateofbirth = "1969-03-17",
+                SsgDateofbirth = DateTimeOffset.Parse("1969-03-17"),
                 SsgLastname = "Kharetskaya",
                 SsgPartygender = 867670001,
                 SsgPreferredcontactmethod = 867670000,
@@ -361,7 +339,7 @@ namespace Csrs.TntegrationTest
                 SsgFirstname = "Alex",
                 SsgMiddlename = "David",
                 SsgLastname = "Kiselev",
-                SsgDateofbirth = "2008-02-02",
+                SsgDateofbirth = DateTimeOffset.Parse("2008-02-02"),
                 SsgChildisadependent = 867670000
             };
 
@@ -378,7 +356,7 @@ namespace Csrs.TntegrationTest
                 SsgFirstname = "Katya",
                 SsgMiddlename = "Katharina",
                 SsgLastname = "Kiseleva",
-                SsgDateofbirth = "2003-12-05",
+                SsgDateofbirth = DateTimeOffset.Parse("2003-12-05"),
                 SsgChildisadependent = 867670001
             };
 
