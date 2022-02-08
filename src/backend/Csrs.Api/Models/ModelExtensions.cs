@@ -3,6 +3,7 @@ using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 using System.Globalization;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Csrs.Api.Models
 {
@@ -19,110 +20,75 @@ namespace Csrs.Api.Models
                 LastName = dynamicsParty.SsgLastname,
                 PreferredName = dynamicsParty.SsgPreferredname,
                 Gender = await GetLookupValueAsync(dynamicsClient, "ssg_partygender", cache, dynamicsParty.SsgGender, cancellationToken),
-                DateOfBirth = "1999-01-01",//dynamicsParty.SsgDateofbirth is not null ? dynamicsParty.SsgDateofbirth.Value.Date.ToString() : null, // TODO
-
+                DateOfBirth = dynamicsParty.SsgDateofbirth is not null ? dynamicsParty.SsgDateofbirth.Value.Date.ToString() : null, 
                 AddressStreet1 = dynamicsParty.SsgStreet1,
                 AddressStreet2 = dynamicsParty.SsgStreet2,
                 City = dynamicsParty.SsgCity,
                 Province = await GetLookupValueAsync(dynamicsClient, "ssg_provinceterritory", cache, dynamicsParty.SsgProvinceterritory, cancellationToken),
                 PostalCode = dynamicsParty.SsgAreapostalcode,
-
                 //BCeIDGuid = dynamicsParty.SsgBceidGuid,
                 Email = dynamicsParty.SsgEmail,
                 CellPhone = dynamicsParty.SsgCellphone,
                 HomePhone = dynamicsParty.SsgHomephone,
                 WorkPhone = dynamicsParty.SsgWorkphone,
 
-                //OptOutElectronicDocuments = dynamicsParty.SSg
-
                 Referral = await GetLookupValueAsync(dynamicsClient, "ssg_referral", cache, dynamicsParty.SsgReferral, cancellationToken),
-                Identity = await GetLookupValueAsync(dynamicsClient, "ssg_identity", cache, dynamicsParty.SsgIdentity, cancellationToken)
+                Identity = await GetLookupValueAsync(dynamicsClient, "ssg_identity", cache, dynamicsParty.SsgIdentity, cancellationToken),
+                PreferredContactMethod = await GetLookupValueAsync(dynamicsClient, "ssg_preferredcontactmethod", cache, dynamicsParty.SsgPreferredcontactmethod, cancellationToken)
             };
-
             return party;
         }
-
-        private static DateTimeOffset GetDateFromString(/*string sdt*/)
+    
+        private static DateTimeOffset? ConvertToDTOffset(string? value)
         {
-
-
-
-            CultureInfo provider = CultureInfo.InvariantCulture;
-            // Parse date and time with custom specifier.
-            string dateString = "15 Jun 2008 8:30 AM -08:00";
-            string format = "dd MMM yyyy h:mm tt zzz";
-            DateTimeOffset result = new DateTimeOffset();
-            try
+            if (value is null)
             {
-                result = DateTimeOffset.ParseExact(dateString, format, provider);
+                return null;
             }
-            catch (FormatException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return result;
-
-            /*
-            string pattern = "yyyy-MM-ddThh:mm:ssZ";
-            DateTime parsedDate = DateTime.MinValue;
-            sdt = "2019-02-28 01:45:00.0000000 -08:00";
-            */
-            //if (!string.IsNullOrEmpty(sdt) && //DateFormatConverter()
-            //                                  //DateTime.TryParseExact(sdt, pattern, null, DateTimeStyles.None, out parsedDate)) { }
-            //    DateTime.TryParse(sdt, out parsedDate)) { }
-            //
-            //return new DateTimeOffset(parsedDate);//, TimeSpan.Zero);
-
-            /*
-            DateTimeFormatInfo fmt = new CultureInfo("en-CA").DateTimeFormat;
-            string dateString = "Wed. 2 Feb 2022 1:00:00 +1:00";
-            return DateTimeOffset.Parse(dateString, fmt);
-            */
+            return DateTimeOffset.Parse(value);
         }
+
+        private static Decimal? ConvertToDecimal(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+            return Decimal.Parse(value);
+        }
+
         public static MicrosoftDynamicsCRMssgCsrsparty ToDynamicsModel(this Party party)
         {
             MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty
             {
 
-                //Statecode = 0,
-                //SsgStagingfilenumber = ssgStagingfilenumber;
+                Statecode = 0,
+                Statuscode = 1,
                 //SsgIncomeassistance = ssgIncomeassistance;
-                SsgReferral = 867670000,
+                SsgReferral = party.Referral?.Id,
                 SsgCellphone = party.CellPhone,
                 SsgFirstname = party.FirstName,
-                //SsgCsrspartyid = party.PartyId,
-                //SsgDateofbirth = new DateTimeOffset(new DateTime(2022,02,02),TimeSpan.Zero),
+                SsgDateofbirth = ConvertToDTOffset(party.DateOfBirth),
                 SsgLastname = party.LastName,
-                //SsgReferencenumber = ssgReferencenumber,
-                SsgPartygender = 867670000,
-                //SsgBceidUserid = ssgBceidUserid,
-                SsgPreferredcontactmethod = 867670000,
+                SsgReferencenumber = party.ReferenceNumber,
+                SsgPartygender = party.Gender?.Id,
+                SsgPreferredcontactmethod = party.PreferredContactMethod?.Id,
                 SsgCity = party.City,
                 SsgWorkphone = party.WorkPhone,
-                SsgProvinceterritory = 867670000,
+                SsgProvinceterritory = party.Province?.Id,
                 SsgMiddlename = party.MiddleName,
-                //SsgFullname = party.LastName + ", " + party.FirstName,
-                SsgGender = 867670000,
+                SsgGender = party.Gender?.Id,
                 SsgHomephone = party.HomePhone,
-                //Statuscode = 1,
                 SsgStreet2 = party.AddressStreet2,
-                //SsgStagingid = ssgStagingid,
                 SsgAreapostalcode = party.PostalCode,
                 SsgEmail = party.Email,
-                //SsgBceidLastUpdate = ssgBceidLastUpdate,
+                //SsgBceidLastUpdate = ssgBceidLastUpdate, ????
                 SsgPreferredname = party.PreferredName,
-                //SsgPortalaccess = ssgPortalaccess,
-                SsgIdentity = 867670000,
-                //SsgBceidDisplayname = (party.FirstName[0] + party.LastName).ToUpper(),
-                //SsgIdentityotherdetails = ssgIdentityotherdetails,
+                //SsgPortalaccess = ssgPortalaccess, ????
+                SsgIdentity = party.Identity?.Id,
+                //SsgIdentityotherdetails = ssgIdentityotherdetails, ???
                 SsgStreet1 = party.AddressStreet1
-                //SsgBceidGuid = ssgBceidGuid
             };
-
-            //if (!string.IsNullOrEmpty(party.DateOfBirth))
-            //   dynamicsParty.SsgDateofbirth = GetDateFromString(party.DateOfBirth);
-
             return dynamicsParty;
         }
 
@@ -131,90 +97,61 @@ namespace Csrs.Api.Models
             return null;
         }
 
-        public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this File file)
+        private static int? GetSection7Expenses(string? value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+            return value.Equals("Yes") ? (int)Section7Expenses.Yes :
+                   value.Equals("No") ? (int)Section7Expenses.No :
+                                         (int)Section7Expenses.IDontKnow;
+        }
+
+        private static int? GetPartyEnrolled(string? value)
+        {
+            if (value is null) return null;
+            return value.Equals("Recipient") ? (int)PartyEnrolled.Recipient : (int)PartyEnrolled.Payor;
+        }
+
+        private static bool? ConvertToBool(string? value)
+        {
+            if (value is null) return null;
+            return value.Equals("Yes") ? true :
+                value.Equals("No") ? false : null;
+        }
+
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> ToDynamicsModel(this File file, IDynamicsClient dynamicsClient, CancellationToken cancellationToken)
+        {
+            string courtlevelId = await GetCourtLevelValueAsync(dynamicsClient, file.BCCourtLevel, cancellationToken);
+            string courtLocationId = await GetCourtLocationValueAsync(dynamicsClient, file.BCCourtLocation, cancellationToken);
+
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
-                //SsgCourtfilenumber = ssgCourtfilenumber;
-                //SsgDateoforderorwa = ssgDateoforderorwa;
-                /*
-                SsgIncomeonorderBase = ssgIncomeonorderBase;
-                SsgTerminationdate = ssgTerminationdate;
-                SsgSplitparentingarrangement = ssgSplitparentingarrangement;
-                SsgRecipientsincomeonorderBase = ssgRecipientsincomeonorderBase;
-                SsgSection7recipientsproportion = ssgSection7recipientsproportion;
-                SsgDateordercommences = ssgDateordercommences;
-                SsgSection7payorsamountBase = ssgSection7payorsamountBase;
-                SsgStyleofcauseapplicant = ssgStyleofcauseapplicant;
-                SsgAutonumber = ssgAutonumber;
-                SsgSection7totalamount = ssgSection7totalamount;
-                SsgPayorssafetyconcerndescription = ssgPayorssafetyconcerndescription;
-                SsgSubmissiondate = ssgSubmissiondate;
-                SsgSection7expenses = ssgSection7expenses;
-                SsgOffsetchildsupportamountonorderBase = ssgOffsetchildsupportamountonorderBase;
-                SsgSafetyalert = ssgSafetyalert;
-                SsgAct = ssgAct;
-                SsgFmepfilenumber = ssgFmepfilenumber;
-                Importsequencenumber = importsequencenumber;
-                Utcconversiontimezonecode = utcconversiontimezonecode;
-                SsgFileclosedatenrollment = ssgFileclosedatenrollment;
-                SsgCourtfiletype = ssgCourtfiletype;
-                SsgDaysofmonthpayable = ssgDaysofmonthpayable;
-                SsgCsrsfileid = ssgCsrsfileid;
-                SsgSharedparenting = ssgSharedparenting;
-                SsgRecipientschildsupportonorder = ssgRecipientschildsupportonorder;
-                SsgChildsupportonorderBase = ssgChildsupportonorderBase;
-                SsgFilealreadyexists = ssgFilealreadyexists;
-                Timezoneruleversionnumber = timezoneruleversionnumber;
-                SsgOffsetchildsupportamountonorder = ssgOffsetchildsupportamountonorder;
-                SsgIncomeonorder = ssgIncomeonorder;
-                SsgSafetyalertpayor = ssgSafetyalertpayor;
-                SsgRecalculationorderedbythecourt = ssgRecalculationorderedbythecourt;
-                SsgNumberofrecalculations = ssgNumberofrecalculations;
-                SsgCourtlocation = ssgCourtlocation;
-                SsgSafetyconcerndescription = ssgSafetyconcerndescription;
-                Versionnumber = versionnumber;
-                SsgRecipientschildsupportonorderBase = ssgRecipientschildsupportonorderBase;
-                SsgSection7recipientsamountBase = ssgSection7recipientsamountBase;
-                SsgSection7payorsamount = ssgSection7payorsamount;
-                SsgChildsupportonorder = ssgChildsupportonorder;
-                SsgFmepfileactive = ssgFmepfileactive;
-                SsgRecipientsincomeneeded = ssgRecipientsincomeneeded;
-                SsgFilenumber = ssgFilenumber;
-                SsgSpecialexpenseswithdrawndate = ssgSpecialexpenseswithdrawndate;
-                SsgRegistrationdate = ssgRegistrationdate;
-                Statuscode = statuscode;
-                SsgSection7recipientsamount = ssgSection7recipientsamount;
-                Overriddencreatedon = overriddencreatedon;
-                Statecode = statecode;
-                SsgSection7payorsproportion = ssgSection7payorsproportion;
-                Exchangerate = exchangerate;
-                SsgSection7totalamountBase = ssgSection7totalamountBase;
-                SsgPartyenrolled = ssgPartyenrolled;
-                SsgRecipientsincomeonorder = ssgRecipientsincomeonorder;
-                SsgRecipient = ssgRecipient;
-                SsgPayor = ssgPayor;
-                SsgBCCourtLocation = ssgBCCourtLocation;
-                SsgBCCourtLevel = ssgBCCourtLevel;
+                SsgCourtfiletype = file.CourtFileType?.Id,
+                SsgFmepfileactive = ConvertToBool(file.IsFMEPFileActive),
+                SsgFmepfilenumber = file.FMEPFileNumber,
 
-                public string FileNumber { get; set; }
-                public string PartyEnrolled { get; set; }
-                public string CourtFileType { get; set; }
-                public string BCCourtLevel { get; set; } // default value is "Provincial";
-                public string BCCourtLocation { get; set; }
-                public string DateOfOrderOrWA { get; set; }
-                public string PayorIncomeAmountOnOrder { get; set; } = "0";
-                public string RecalculationOrderedByCourt { get; set; } = "false";
-                public string Section7Expenses { get; set; }
-                public string SafetyAlertRecipient { get; set; } = "false";
-                public string RecipientSafetyConcernDescription { get; set; }
-                public string SafetyAlertPayor { get; set; } = "false";
-                public string PayorSafetyConcernDescription { get; set; }
-                public string IsFMEPFileActive { get; set; } = "false";
-                public string FMEPFileNumber { get; set; } */
+                SsgSafetyalert = ConvertToBool(file.SafetyAlertRecipient),
+                SsgSafetyconcerndescription = file.RecipientSafetyConcernDescription,
+                SsgSafetyalertpayor = ConvertToBool(file.SafetyAlertPayor),
+                SsgPayorssafetyconcerndescription = file.PayorSafetyConcernDescription,
 
+                SsgSection7expenses = GetSection7Expenses(file.Section7Expenses),
+                SsgDateoforderorwa = ConvertToDTOffset(file.DateOfOrderOrWA),
+                SsgIncomeonorder = ConvertToDecimal(file.IncomeOnOrder),
+                SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
+
+                //SsgSharedparenting = true; ???
+                //SsgSplitparentingarrangement = true; ??
+                //SsgRegistrationdate = ConvertToDTOffset(file.), ??
+                //SsgStyleofcauseapplicant = "Applicant", ??
+                //SsgStyleofcauserespondent = "Respondent", ??
+
+                SsgBCCourtLevelODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtlevelId),
+                SsgBCCourtLocationODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtLocationId),
+                    
             };
-
             return  dynamicsFile;
         }
 
@@ -223,16 +160,25 @@ namespace Csrs.Api.Models
             return null;
         }
 
+        private static int? GetChildIsDependent(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+            return value.Equals("Yes") ? (int)ChildIsDependent.Yes :
+                   value.Equals("No") ? (int)ChildIsDependent.No :
+                                         (int)ChildIsDependent.IDontKnow;
+        }
         public static MicrosoftDynamicsCRMssgCsrschild ToDynamicsModel(this Child child)
         {
             MicrosoftDynamicsCRMssgCsrschild dynamicsChild = new MicrosoftDynamicsCRMssgCsrschild
             {
-                //SsgCsrschildid = child.ChildId,
                 SsgFirstname = child.FirstName,
                 SsgMiddlename = child.MiddleName,
                 SsgLastname = child.LastName,
-                //SsgDateofbirth = child.DateOfBirth is not null ? DateTimeOffset.Parse(child.DateOfBirth) : null,
-                //SsgChildisadependent = 867670000
+                SsgDateofbirth = ConvertToDTOffset(child.DateOfBirth),
+                SsgChildisadependent = GetChildIsDependent(child.ChildIsDependent)
             };
 
             return dynamicsChild;
@@ -253,8 +199,60 @@ namespace Csrs.Api.Models
 
             var metadata = await dynamicsClient.GetPicklistOptionSetMetadataAsync("ssg_csrsparty", attributeName, cache, cancellationToken);
             var values = metadata.ToViewModel();
-            var value = values.SingleOrDefault(_ => _.Id == id.Value);
+            var value = values.Where(_ => _.Id == id.Value).SingleOrDefault();
             return value;
+        }
+
+        private static async Task<string?> GetCourtLocationValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
+        {
+            if (label is null)
+            {
+                return null;
+            }
+
+            MicrosoftDynamicsCRMssgIjssbccourtlocationCollection locations =  
+                await dynamicsClient.Ssgijssbccourtlocations.GetAsync(cancellationToken: cancellationToken);
+            
+            IList<CourtLookupValue> courtLocations = new List<CourtLookupValue>();
+            foreach (MicrosoftDynamicsCRMssgIjssbccourtlocation location in locations.Value)
+            {
+                CourtLookupValue item = courtLocations.FirstOrDefault(_ => _.Value == location.SsgBccourtlocationname);
+
+                if (item is null)
+                {
+                    courtLocations.Add(new CourtLookupValue
+                    {
+                        Id = location.SsgIjssbccourtlocationid,
+                        Value = location.SsgBccourtlocationname
+                    });
+                }
+            }
+
+            var id = courtLocations.Where(_ => _.Value == label).SingleOrDefault().Id;
+            return id;
+        }
+
+        private static async Task<string?> GetCourtLevelValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
+        {
+            if (label is null)
+            {
+                return null;
+            }
+
+            MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection levels = await dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(top: 2, cancellationToken: cancellationToken);
+
+            List<CourtLookupValue> courtLevels = new List<CourtLookupValue>();
+            foreach (MicrosoftDynamicsCRMssgCsrsbccourtlevel level in levels.Value)
+            {
+                courtLevels.Add(new CourtLookupValue
+                {
+                    Id = level.SsgCsrsbccourtlevelid,
+                    Value = level.SsgCourtlevellabel
+                });
+            }
+
+            var id = courtLevels.SingleOrDefault(_ => _.Value == label)?.Id;
+            return id;
         }
 
         private static IEnumerable<LookupValue> AsViewModel(PicklistOptionSetMetadata metadata)

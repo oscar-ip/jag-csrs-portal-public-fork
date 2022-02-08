@@ -31,7 +31,7 @@ namespace Csrs.Test.Controllers
 
             var sut = new DocumentController(mediator.Object, logger.Object);
 
-            var actual = await sut.ListDocumentsAsync(System.Guid.Empty);
+            //var actual = await sut.ListDocumentsAsync(System.Guid.Empty);
 
             mediator.Verify();
         }
@@ -50,7 +50,7 @@ namespace Csrs.Test.Controllers
 
             var sut = new DocumentController(mediator.Object, logger.Object);
 
-            var actual = await sut.UploadDocumentsAsync(new Document()); ;
+            //var actual = await sut.UploadDocumentsAsync(new Document()); ;
 
             mediator.Verify();
         }
@@ -68,7 +68,7 @@ namespace Csrs.Test.Controllers
 
             var sut = new DocumentController(mediator.Object, logger.Object);
 
-            var actual = await sut.DownloadDocumentAsync(System.Guid.Empty);
+            //var actual = await sut.DownloadDocumentAsync(System.Guid.Empty);
 
             mediator.Verify();
         }

@@ -226,9 +226,9 @@ namespace Csrs.TntegrationTest
                 //SsgIncomeassistance = ssgIncomeassistance;
                 SsgReferral = 867670000,
                 SsgCellphone = "403-7002156",//party.CellPhone,
-                SsgFirstname = "Sergey",//party.FirstName,
-                SsgDateofbirth = new DateTimeOffset(new DateTime(1966,8,25),TimeSpan.Zero),
-                SsgLastname = "Kiselev",//party.LastName,
+                SsgFirstname = "Serrr",//party.FirstName,
+                SsgDateofbirth = new DateTimeOffset(new DateTime(1976,1,25),TimeSpan.Zero),
+                SsgLastname = "Kiiiiii",//party.LastName,
                 //SsgReferencenumber = ssgReferencenumber,
                 SsgPartygender = 867670000,
                 //SsgBceidUserid = "26336072-cba4-4b6e-871b-5355d27df9b3",//ssgBceidUserid,
@@ -239,19 +239,19 @@ namespace Csrs.TntegrationTest
                 SsgMiddlename = "Michael",//party.MiddleName,
                 //SsgFullname = party.LastName + ", " + party.FirstName,
                 SsgGender = 867670000,
-                SsgHomephone = "403-3381907",//party.HomePhone,
+                SsgHomephone = "403-456789",//party.HomePhone,
                 Statuscode = 1,
                 SsgStreet2 = String.Empty,
                 //SsgStagingid = ssgStagingid,
                 SsgAreapostalcode = "T3L 1J8",//party.PostalCode,
-                SsgEmail = "sergey,kiselev@telus.net",//party.Email,
+                SsgEmail = "sk@telus.net",//party.Email,
                 //SsgBceidLastUpdate = ssgBceidLastUpdate,
-                SsgPreferredname = "Serge",//party.PreferredName,
+                SsgPreferredname = "Ssss",//party.PreferredName,
                 //SsgPortalaccess = ssgPortalaccess,
                 SsgIdentity = 867670000,
                 //SsgBceidDisplayname = (party.FirstName[0] + party.LastName).ToUpper(),
                 //SsgIdentityotherdetails = ssgIdentityotherdetails,
-                SsgStreet1 = "103 Scenic Glen Cres NW"//party.AddressStreet1
+                SsgStreet1 = "103 Scenic Public NW"//party.AddressStreet1
             };
             dynamicsParty.SsgBceidGuid = userId;
 
@@ -269,25 +269,25 @@ namespace Csrs.TntegrationTest
             {
                 Statecode = 0,
                 SsgReferral = 867670000,
-                SsgCellphone = "500-7891111",
-                SsgFirstname = "Tanya",
-                SsgDateofbirth = DateTimeOffset.Parse("1969-03-17"),
-                SsgLastname = "Kharetskaya",
+                SsgCellphone = "500-71111",
+                SsgFirstname = "Tan",
+                SsgDateofbirth = DateTimeOffset.Parse("1950-03-17"),
+                SsgLastname = "Kha",
                 SsgPartygender = 867670001,
                 SsgPreferredcontactmethod = 867670000,
                 SsgCity = "Calgary",
                 SsgWorkphone = "403-1234567",
                 SsgProvinceterritory = 867670000,
-                SsgMiddlename = "Anatol",
+                SsgMiddlename = "Ana",
                 SsgGender = 867670001,
                 SsgHomephone = "403-3381907",
                 Statuscode = 1,
                 SsgStreet2 = String.Empty,
                 SsgAreapostalcode = "T3L 1J8",
-                SsgEmail = "tanya.kharets@gmail.com",
-                SsgPreferredname = "Tanya",
+                SsgEmail = "tk@gmail.com",
+                SsgPreferredname = "Ta",
                 SsgIdentity = 867670000,
-                SsgStreet1 = "103 Scenic Glen Cres NW"
+                SsgStreet1 = "123 Scenic School NW"
             };
 
             try
@@ -311,18 +311,26 @@ namespace Csrs.TntegrationTest
             csrsFile.SsgSharedparenting = true;
             csrsFile.SsgSplitparentingarrangement = true;
 
-            //csrsFile.SsgSection7expenses = 867670000;
+            csrsFile.SsgSection7expenses = 867670000;
             //csrsFile.SsgSection7payorsamount = 1000.00m;
             //csrsFile.SsgSection7recipientsamount = 400.00m;
             //csrsFile.SsgSection7payorsproportion = 20;
 
+            csrsFile.SsgRegistrationdate = "2008-02-02";
+            csrsFile.SsgDateoforderorwa = DateTimeOffset.Parse("2008-02-02");
+
+            csrsFile.SsgStyleofcauseapplicant = "Applicant";
+            csrsFile.SsgStyleofcauserespondent = "Respondent";
+            csrsFile.SsgIncomeonorder = 20000.00m;
+            csrsFile.SsgRecalculationorderedbythecourt = true;
+
             csrsFile.SsgBCCourtLevel = new MicrosoftDynamicsCRMssgCsrsbccourtlevel { SsgCourtlevellabel = "Provincial" };
-            csrsFile.SsgBCCourtLocation = new MicrosoftDynamicsCRMssgIjssbccourtlocation {  SsgIjssbccourtlocationid =  "99e9c19d-0af5-e911-b811-00505683fbf4" };
+            csrsFile.SsgBCCourtLocationODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", "99e9c19d-0af5-e911-b811-00505683fbf4");
 
             csrsFile.SsgPartyenrolled = PickLists.GetPartyEnrolled("Recipient");
             csrsFile.SsgCourtfilenumber = "123-ABC";
-            //csrsFile.SsgRecipient = new MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = dynamicsParty.SsgCsrspartyid };
-            //csrsFile.SsgPayor = new MicrosoftDynamicsCRMssgCsrsparty { SsgCsrspartyid = otherParty.SsgCsrspartyid };
+            csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", dynamicsParty.SsgCsrspartyid);
+            csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
 
             try
             {
@@ -336,15 +344,20 @@ namespace Csrs.TntegrationTest
 
             MicrosoftDynamicsCRMssgCsrschild alexChild = new MicrosoftDynamicsCRMssgCsrschild
             {
-                SsgFirstname = "Alex",
-                SsgMiddlename = "David",
-                SsgLastname = "Kiselev",
-                SsgDateofbirth = DateTimeOffset.Parse("2008-02-02"),
+                SsgFirstname = "Aaaa",
+                SsgMiddlename = "Dddd",
+                SsgLastname = "Kkkk",
+                SsgDateofbirth = DateTimeOffset.Parse("2010-01-01"),
                 SsgChildisadependent = 867670000
             };
 
+            alexChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", dynamicsParty.SsgCsrspartyid);
+            alexChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+            alexChild.SsgFileNumberODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", csrsFile.SsgCsrsfileid);
+
             try
             {
+
                 alexChild = await _dynamicsClient.Ssgcsrschildren.CreateAsync(body: alexChild, cancellationToken: CancellationToken.None);
             }
             catch (Exception ex)
@@ -353,12 +366,16 @@ namespace Csrs.TntegrationTest
 
             MicrosoftDynamicsCRMssgCsrschild katChild = new MicrosoftDynamicsCRMssgCsrschild
             {
-                SsgFirstname = "Katya",
-                SsgMiddlename = "Katharina",
-                SsgLastname = "Kiseleva",
-                SsgDateofbirth = DateTimeOffset.Parse("2003-12-05"),
+                SsgFirstname = "Katt",
+                SsgMiddlename = "Kaaa",
+                SsgLastname = "Kgggg",
+                SsgDateofbirth = DateTimeOffset.Parse("2002-11-03"),
                 SsgChildisadependent = 867670001
             };
+
+            katChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", dynamicsParty.SsgCsrspartyid);
+            katChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+            katChild.SsgFileNumberODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", csrsFile.SsgCsrsfileid);
 
             try
             {

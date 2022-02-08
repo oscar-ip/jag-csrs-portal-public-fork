@@ -137,5 +137,37 @@ namespace Csrs.Api.Controllers
 
             return Ok(response);
         }
+
+
+        /// <summary>
+        /// Gets the valid court level values.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("CourtLevels")]
+        [ProducesResponseType(typeof(IList<CourtLookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> GetCourtLevelsAsync(CancellationToken cancellationToken)
+        {
+            IList<CourtLookupValue>? values = await _accountService.GetCourtLevelsAsync(cancellationToken);
+            return Ok(values);
+        }
+
+        /// <summary>
+        /// Gets the valid court locations values.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("CourtLocations")]
+        [ProducesResponseType(typeof(IList<CourtLookupValue>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> GetCourtLocationsAsync(CancellationToken cancellationToken)
+        {
+            IList<CourtLookupValue>? values = await _accountService.GetCourtLocationsAsync(cancellationToken);
+            return Ok(values);
+        }
+
     }
 }

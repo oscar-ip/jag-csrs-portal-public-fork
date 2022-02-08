@@ -17,7 +17,10 @@ namespace Csrs.Interfaces.Dynamics.Models
         public string SsgChildsFatherODataBind { get; set; }
 
         [JsonProperty(PropertyName = "ssg_ChildsMother@odata.bind")]
-        public string ssg_ChildsMotherODataBind { get; set; }
+        public string SsgChildsMotherODataBind { get; set; }
 
+        [JsonProperty(PropertyName = "ssg_FileNumber@odata.bind")]
+        public string SsgFileNumberODataBind { get; set; }
+       
     }
 }
