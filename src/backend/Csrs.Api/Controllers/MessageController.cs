@@ -26,17 +26,11 @@ namespace Csrs.Api.Controllers
         public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
 
-            IList<Message> messages = await _messageService.GetPartyMessages(cancellationToken);
+            Read.Request request = new Read.Request();
+            Read.Response? response = await _mediator.Send(request, cancellationToken);
 
-            if (messages is not null && messages.Count > 0) 
-            {
-                return Ok(messages);
-            }
-            else
-            {
-                return NotFound();
-            }
-            
+            return response != Read.Response.Empty ? Ok(response.Messages) : NotFound();
+
         }
 
         [HttpGet("Read")]

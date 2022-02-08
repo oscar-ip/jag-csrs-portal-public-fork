@@ -4,8 +4,8 @@ namespace Csrs.Api.Services
 {
     public interface IMessageService
     {
-        Task<IList<Message>> GetPartyMessages(CancellationToken cancellationToken);
-        Task SetMessageRead(Guid MessageGuid);
+        Task<IList<Message>> GetPartyMessages(String partyId);
+        Task SetMessageRead(Guid messageGuid);
 
     }
 }
