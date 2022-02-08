@@ -39,9 +39,9 @@ namespace Csrs.Api.Controllers
          ProducesResponseType((int)HttpStatusCode.Unauthorized),
          ProducesResponseType((int)HttpStatusCode.NotFound),
          ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> DownloadAttachment([Required] string fileId, [Required] string entityName, [Required] string fileName, [Required] string documentType)
+        public async Task<IActionResult> DownloadAttachment([Required] string fileId, [Required] string entityName, [Required] string serverRelativeUrl, [Required] string documentType)
         {
-            return await DownloadAttachmentInternal(fileId, entityName, fileName, documentType, true).ConfigureAwait(true);
+            return await DownloadAttachmentInternal(fileId, entityName, serverRelativeUrl, documentType, true).ConfigureAwait(true);
         }
 
         //TODO: This logic belong in a service
@@ -54,10 +54,10 @@ namespace Csrs.Api.Controllers
         /// <param name="documentType"></param>
         /// <param name="checkUser"></param>
         /// <returns></returns>
-        private async Task<IActionResult> DownloadAttachmentInternal(string entityId, string entityName, string fileName, string documentType, bool checkUser)
+        private async Task<IActionResult> DownloadAttachmentInternal(string entityId, string entityName, string serverRelativeUrl, string documentType, bool checkUser)
         {
             // get the file.
-            if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return BadRequest();
+            if (string.IsNullOrEmpty(serverRelativeUrl) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return BadRequest();
 
             var hasAccess = true;
             //if (checkUser)
@@ -76,7 +76,7 @@ namespace Csrs.Api.Controllers
             // call the web service
             var downloadRequest = new DownloadFileRequest
             {
-                ServerRelativeUrl = dynamicsFile.GetDocumentFolderName() + "\\" + FileSystemItemExtensions.CombineNameDocumentType(fileName, documentType)
+                ServerRelativeUrl = serverRelativeUrl
             };
 
             var downloadResult = _fileManagerClient.DownloadFile(downloadRequest);
