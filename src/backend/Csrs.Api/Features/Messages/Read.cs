@@ -9,23 +9,19 @@ namespace Csrs.Api.Features.Messages
     {
         public class Request : IRequest<Response>
         {
+            public Request(string messageId)
+            {
+                MessageId = messageId ?? throw new ArgumentNullException(nameof(messageId));
+            }
+
+            public string MessageId { get; init; }
         }
         public class Response
         {
-            public static Response Empty = new Response();
-
-            private Response()
+            public Response()
             {
-                Messages = null;
             }
 
-            public Response(IList<Message> messages)
-            {
-                ArgumentNullException.ThrowIfNull(messages);
-                Messages = messages;
-            }
-
-            public IList<Message>? Messages { get; init; }
         }
         public class Handler : IRequestHandler<Request, Response>
         {
@@ -52,25 +48,10 @@ namespace Csrs.Api.Features.Messages
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
 
-                string userId = _userService.GetBCeIDUserId();
+                await _messageService.SetMessageRead(request.MessageId);
 
+                return new Response();
 
-                if (userId == string.Empty)
-                {
-                    // no bceid value
-                    return Response.Empty;
-                }
-
-                Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);
-
-                if (accountParty == null)
-                {
-                    return Response.Empty;
-                }
-
-                IList<Message> messages = await _messageService.GetPartyMessages(accountParty.PartyId);
-
-                return new Response(messages);
             }
         }
     }

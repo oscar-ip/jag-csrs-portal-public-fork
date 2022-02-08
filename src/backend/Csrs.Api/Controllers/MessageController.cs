@@ -26,21 +26,21 @@ namespace Csrs.Api.Controllers
         public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
 
-            Read.Request request = new Read.Request();
-            Read.Response? response = await _mediator.Send(request, cancellationToken);
+            List.Request request = new List.Request();
+            List.Response? response = await _mediator.Send(request, cancellationToken);
 
-            return response != Read.Response.Empty ? Ok(response.Messages) : NotFound();
+            return response != List.Response.Empty ? Ok(response.Messages) : NotFound();
 
         }
 
         [HttpGet("Read")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Message>> ReadAsync([Required] string messageGuid)
+        public async Task<IActionResult> ReadAsync([Required] string messageGuid)
         {
-            Read.Request request = new();
+            Read.Request request = new(messageGuid);
             Read.Response response = await _mediator.Send(request);
 
-            return Array.Empty<Message>();
+            return Ok("Updated");
         }
 
         [HttpPost("Create")]

@@ -244,6 +244,24 @@ namespace Csrs.Api.Models
             return viewModel;
         }
 
+        public static Message ToMessage(MicrosoftDynamicsCRMssgCsrscommunicationmessage inMessage, List<Document> documents)
+        {
+            Message message = new Message();
+
+            message.MessageId = inMessage.SsgCsrscommunicationmessageid;
+            message.FileId = inMessage._ssgCsrsfileValue;
+            message.Attachment = inMessage.SsgCsrsmessageattachment;
+            message.Status = inMessage.Statuscode;
+            message.Documents = documents;
+            message.RecievingParty = inMessage._ssgTopartyValue;
+            message.Content = inMessage.SsgCsrsmessage;
+            message.Subject = inMessage.SsgCsrsmessagesubject;
+            message.Date = inMessage.SsgSentreceiveddate;
+            message.IsRead = inMessage.SsgCsrsmessageread;
+
+            return message;
+        }
+
         private static async Task<LookupValue?> GetLookupValueAsync(IDynamicsClient dynamicsClient, string attributeName, IMemoryCache cache, int? id, CancellationToken cancellationToken)
         {
             if (id is null)

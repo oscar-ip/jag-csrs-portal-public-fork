@@ -27,8 +27,8 @@ namespace Csrs.TntegrationTest
         {
             IDynamicsClient dynamicsClient = _serviceProvider.GetRequiredService<IDynamicsClient>();
             //var actual = await dynamicsClient.GetPartyByBCeIdAsync("f418274f-b10f-ea11-b814-00505683fbf4", cancellationToken: CancellationToken.None);
-            string actual = await dynamicsClient.GetPartyByBCeIdAsync("5beb7384-eb6d-4fd4-8918-c3bb1a5c", cancellationToken: CancellationToken.None);
-            Assert.NotNull(actual);
+            //string actual = await dynamicsClient.GetPartyByBCeIdAsync("5beb7384-eb6d-4fd4-8918-c3bb1a5c", cancellationToken: CancellationToken.None);
+            //Assert.NotNull(actual);
         }
     }
 }

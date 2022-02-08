@@ -1,5 +1,7 @@
 ﻿using Csrs.Api.Models;
+using Csrs.Api.Repositories;
 using Csrs.Interfaces.Dynamics;
+using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Csrs.Api.Services
@@ -20,12 +22,33 @@ namespace Csrs.Api.Services
             _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        public Task<IList<Message>> GetPartyMessages(String partyId)
+        public async Task<IList<Message>> GetPartyMessages(string partyId)
         {
-            throw new NotImplementedException();
+            string filter = $"_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}";
+            List<string> select = new List<string> { "ssg_csrsfileid" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby , filter: filter, expand: null, cancellationToken: CancellationToken.None);
+
+            List<Message> messages = new List<Message>();
+            //This is inefficient. This may work better if we query only communication messages on Part To and Party From fields
+            foreach (var file in files.Value.ToList())
+            {
+                MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await _dynamicsClient.GetCommunicationMessagesByFile(file.SsgCourtfilenumber);
+
+                foreach (var message in dynamicsMessages.Value.ToList())
+                {
+                    //TODO get attachment meta from fileManager
+                    //Temporary add empty array of documents
+                    messages.Add(ModelExtensions.ToMessage(message, new List<Document>()));
+                }
+
+            }
+
+            return messages;
         }
 
-        public Task SetMessageRead(Guid messageGuid)
+        public async Task SetMessageRead(string messageGuid)
         {
             throw new NotImplementedException();
         }

@@ -74,5 +74,17 @@ namespace Csrs.Api.Repositories
 
             return results;
         }
+
+        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId)
+        {
+            string filter = $"_ssg_csrsfile_value eq {fileId}";
+            List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", "statuscode", "_ssg_toparty_value" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: CancellationToken.None);
+
+            return messages;
+
+        }
     }
 }
