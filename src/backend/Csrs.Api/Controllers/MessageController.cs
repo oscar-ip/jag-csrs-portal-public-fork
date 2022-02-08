@@ -1,5 +1,6 @@
 ﻿using Csrs.Api.Features.Messages;
 using Csrs.Api.Models;
+using Csrs.Api.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -9,19 +10,33 @@ namespace Csrs.Api.Controllers
 {
     public class MessageController : CsrsControllerBase<MessageController>
     {
-        public MessageController(IMediator mediator, ILogger<MessageController> logger)
+
+        private readonly IMessageService _messageService;
+
+        public MessageController(IMessageService messageService, IMediator mediator, ILogger<MessageController> logger)
             : base(mediator, logger)
         {
+            _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
         }
 
         [HttpGet("List")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Message>> GetAsync([Required]string partyGuid)
+        [ProducesResponseType(typeof(IList<Message>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
-            List.Request request = new();
-            List.Response response = await _mediator.Send(request);
 
-            return Array.Empty<Message>();
+            IList<Message> messages = await _messageService.GetPartyMessages(cancellationToken);
+
+            if (messages is not null && messages.Count > 0) 
+            {
+                return Ok(messages);
+            }
+            else
+            {
+                return NotFound();
+            }
+            
         }
 
         [HttpGet("Read")]

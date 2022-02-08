@@ -11,8 +11,12 @@ namespace Csrs.Api.Models
         public string? FileNo { get; set; }
         [Required]
         public string? Subject { get; set; }
+        public string? Content { get; set; }
+
+        public string? RecievingParty { get; set; }
         public string? Date { get; set; }
         public bool Attachment { get; set; }
+        public List<Document>? Documents { get; set; }
         public bool IsRead { get; set; }
     }
 }

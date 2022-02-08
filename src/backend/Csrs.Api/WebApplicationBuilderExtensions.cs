@@ -100,7 +100,7 @@ public static class WebApplicationBuilderExtensions
 
         // Add services
         services.AddTransient<ITokenService, TokenService>();
-
+        services.AddTransient<IMessageService, MessageService>();
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IUserService, UserService>();
