@@ -33,6 +33,6 @@ namespace Csrs.Api.Models
         /// <summary>
         /// Child is a dependent.
         /// </summary>
-        public bool? ChildIsDependent { get; set; }
+        public string? ChildIsDependent { get; set; }
     }
 }

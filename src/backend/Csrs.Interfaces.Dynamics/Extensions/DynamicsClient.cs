@@ -100,4 +100,14 @@ public partial class DynamicsClient
 
         return new Uri(text, UriKind.RelativeOrAbsolute);
     }
+
+    public string GetEntityURI(string entityType, string id)
+    {
+        string result = "";
+        if (id != null)
+        {            
+            result = BaseUri + entityType + "(" + id.Trim() + ")";
+        }
+        return result;
+    }
 }

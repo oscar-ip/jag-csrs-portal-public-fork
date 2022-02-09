@@ -29,8 +29,11 @@ namespace Csrs.Api.Models
         public string? CellPhone { get; set; }
         [Required]
         public string? Email { get; set; }
-        public bool OptOutElectronicDocuments { get; set; }
+        public bool? OptOutElectronicDocuments { get; set; }
         public LookupValue? Identity { get; set; }
         public LookupValue? Referral { get; set; }
+
+        public LookupValue? PreferredContactMethod { get; set; }
+        public string? ReferenceNumber { get; set; }
     }
 }

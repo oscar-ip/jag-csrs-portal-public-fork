@@ -1,0 +1,126 @@
+http://dev.childsupportrecalc.gov.bc.ca
+https://jsb-fams.dev.jag.gov.bc.ca/main.aspx#246821950
+userId = 26336072-cba4-4b6e-871b-5355d27df9b3
+{
+  "user": {
+    "partyId": "00000000-0000-0000-0000-000000000000",
+    "firstName": "Sergey",
+    "middleName": "Michael",
+    "lastName": "Kis",
+    "preferredName": "",
+    "dateOfBirth": "2022-01-27",
+    "gender": {
+      "id": 867670000,
+      "value": "Male"
+    },
+    "addressStreet1": "103 Scenic Road",
+    "addressStreet2": "",
+    "city": "Calgary",
+    "province": {
+      "id": 867670000,
+      "value": "AB"
+    },
+    "postalCode": "T3L 1J8",
+    "homePhone": "403 338-1234",
+    "workPhone": "403 700-2341",
+    "cellPhone": "403 700-3412",
+    "email": "sk@gmail.com",
+    "optOutElectronicDocuments": true,
+    "identity": {
+      "id": 867670001,
+      "value": "White (e.g. German, Irish, English, Italian, Polish, French Canadian)"
+    },
+    "referral": {
+      "id": 867670000,
+      "value": "Family Maintenance Enforcement Program (FMEP)"
+    },
+	"referenceNumber": "",
+	"preferredcontactmethod": {
+      "id": 867670000,
+      "value": "Email"
+    }
+  },
+  "file": {
+    "fileId": "00000000-0000-0000-0000-000000000000",
+	"courtFileType": {
+      "id": 867670000,
+      "value": "Court Order"
+    },
+    "status": "Active",
+    "usersRole": "Payor",
+    "fileNumber": "",
+    "partyEnrolled": "Payor",
+    "bcCourtLevel": "Provincial",
+    "bcCourtLocation": "Victoria Court",
+    "dateOfOrderOrWA": "2021-01-02",
+    "payorIncomeAmountOnOrder": "1234.45",
+    "recalculationOrderedByCourt": "Yes",
+    "section7Expenses": "Yes",
+    "safetyAlertRecipient": "Yes",
+    "recipientSafetyConcernDescription": "Recipient Safety Concern Description",
+    "safetyAlertPayor": "Yes",
+    "payorSafetyConcernDescription": "Payor Safety Concern Description",
+    "isFMEPFileActive": "Yes",
+    "fmepFileNumber": "123456",
+	"safetyAlertRecipient": "Yes",
+    "recipientSafetyConcernDescription": "Recipient Safety Concern",
+	"safetyAlertPayor": "Yes",
+    "payorSafetyConcernDescription": "Payor Safety Concern",
+	"section7Expenses": "Yes",
+    "incomeOnOrder": "1200.00",
+    "otherParty": {
+      "partyId": "00000000-0000-0000-0000-000000000000",
+      "firstName": "Tata",
+      "middleName": "Ira",
+      "lastName": "Kharets",
+      "preferredName": "Ma",
+      "dateOfBirth": "1980-01-02",
+      "gender": {
+		"id": 867670001,
+		"value": "Female"
+      },
+      "addressStreet1": "107 Scenic 1 Cres",
+      "addressStreet2": "",
+      "city": "Calgary",
+      "province": {
+         "id": 867670000,
+		 "value": "AB"
+      },
+      "postalCode": "T3L 1J8",
+      "homePhone": "500 338-4567",
+      "workPhone": "500 338-5678",
+      "cellPhone": "500 338-7865",
+      "email": "tk@gmail.com",
+      "optOutElectronicDocuments": true,
+      "identity": {
+        "id": 867670001,
+		"value": "White (e.g. German, Irish, English, Italian, Polish, French Canadian)"
+      },
+      "referral": {
+        "id": 867670000,
+		"value": "Family Maintenance Enforcement Program (FMEP)"
+      },
+	  "referenceNumber": "",
+	  "preferredcontactmethod": {
+		  "id": 867670000,
+		  "value": "Email"
+	  }
+    },
+    "children": [
+      {
+        "firstName": "Alex",
+        "middleName": "Great",
+        "lastName": "Macedonsky",
+        "dateOfBirth": "2008-01-02",
+        "childIsDependent": "Yes"
+      },
+	  {
+        "firstName": "Katya",
+        "middleName": "Great",
+        "lastName": "Queen",
+        "dateOfBirth": "2005-12-05",
+        "childIsDependent": "No"
+      }
+    ]
+  }
+}
