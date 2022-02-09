@@ -15,6 +15,7 @@ git_push.sh
 index.ts
 model/accountFileSummary.model.ts
 model/child.model.ts
+model/courtLookupValue.model.ts
 model/document.model.ts
 model/feedback.model.ts
 model/file.model.ts
@@ -28,7 +29,5 @@ model/newFileRequest.model.ts
 model/party.model.ts
 model/partyRole.model.ts
 model/problemDetails.model.ts
-model/sSGCsrsBCCourtLevel.model.ts
-model/sSGIJSSBCCourtlocation.model.ts
 model/userRequest.model.ts
 variables.ts

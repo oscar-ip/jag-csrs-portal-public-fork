@@ -13,6 +13,10 @@
 
 export interface Child { 
     /**
+     * The child id.
+     */
+    childId?: string | null;
+    /**
      * Child\'s first name.
      */
     firstName?: string | null;
@@ -31,6 +35,6 @@ export interface Child {
     /**
      * Child is a dependent.
      */
-    childIsDependent?: boolean | null;
+    childIsDependent?: string | null;
 }
 

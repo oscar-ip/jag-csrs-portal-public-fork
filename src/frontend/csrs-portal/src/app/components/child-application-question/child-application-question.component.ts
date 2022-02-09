@@ -46,6 +46,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _oidc: OidcSecurityService;
   today = new Date();
   isEditable: boolean = false;
+  _idToken: string = '';
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
@@ -59,6 +60,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this._lookupService = this.lookupService;
     this._logger = this.logger;
     this._oidc = this.oidc;
+    //this._idToken = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJLVmdsS1VDb3ZSLW5QVjNiMnRQY0hHOGM1eVVia3NnMmtZbGk5c2hfUFlNIn0.eyJleHAiOjE2NDQ0MzMwNTIsImlhdCI6MTY0NDQzMjc1MiwiYXV0aF90aW1lIjoxNjQ0NDMxMTgyLCJqdGkiOiI0MzlhNzFmMS0xOWE5LTQ4NGQtYjM2Ni1lMWFlMjU2NWUzNWIiLCJpc3MiOiJodHRwczovL2Rldi5vaWRjLmdvdi5iYy5jYS9hdXRoL3JlYWxtcy9vbmVzdG9wYXV0aC1iYXNpYyIsImF1ZCI6ImpzYi1jc3JzLTk5MSIsInN1YiI6IjY1YjAzNDI0LWUyNTQtNDhiNy04NDAzLWM3MTNjMGQ1ODQ0MyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImpzYi1jc3JzLTk5MSIsIm5vbmNlIjoiZTExZjBjNTM1NDA5MzE1MGQ5NGFmMWYyZWIxYjAzNTFjMkF0Ym00Y0EiLCJzZXNzaW9uX3N0YXRlIjoiODY1ZjYwNGItY2ExYS00ZmFhLTg0NDgtNjRhZmU3ZWE4ODVjIiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2Rldi5jaGlsZHN1cHBvcnRyZWNhbGMuZ292LmJjLmNhIl0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJpZGVudGl0eV9wcm92aWRlciI6ImJjZWlkLWJhc2ljIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJiY2VpZF91c2VyaWQiOiIyNjMzNjA3MkNCQTQ0QjZFODcxQjUzNTVEMjdERjlCMyIsInByZWZlcnJlZF91c2VybmFtZSI6Imhhbjk5QGJjZWlkLWJhc2ljIiwiZW1haWwiOiJoYW5zb2xvQHN0YXJ3YXJzLmNvbSJ9.MEDx__kEKNrsvLGImvlyfEs4l3g7qtwK_byMOOGTa6kQ5TyrMBmFBbGKzi-b4XCDSAU1AH8UGH23vm62aADqzDECC7BJgBtGK-xy3jw_SNviS0okFup8BhFG23llpvRRPCxyxKPYgpdzGg2q2OZdBSAHWLFt8PIQWGcQpvG7pAiI-zASK6tZNdWpKB13T2OTE1jWOEVlvAsVaRc2-ys5FVe773NihIrpuWdU9CRHB8PbFLjCYNNo6sR7RIT7fhi4RafzTQ-r9ZKpSKmY-Uav1INeLj3Xnn6mvIy3OwBrcenYoLAgACi0qRTrqGo1cPBjvqboYGLXdOCL6uHp7UKhng';
+
 
     this.provinceData = [{label: 'province', value: 'British Columbia'}];
     this.identityData = [{label: 'identity', value: 'Native'}];
@@ -212,6 +215,7 @@ editPage(stepper, index){
   getIdentityData() {
 
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => this.identityData = data,
 
@@ -229,6 +233,7 @@ editPage(stepper, index){
 
   getProvinceData() {
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountProvincesGet().subscribe({
       next: (data) => this.provinceData = data,
       error: (e) => {
@@ -244,6 +249,7 @@ editPage(stepper, index){
   }
 
   getGenderyData() {
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountGendersGet().subscribe({
       next: (data) => this.genderData = data,
@@ -260,6 +266,7 @@ editPage(stepper, index){
   }
 
   getCourtLocationData() {
+    //this._lookupService.configuration.accessToken =  this._idToken;
     this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
       this._lookupService.apiLookupCourtlocationsGet().subscribe({
         next: (data) => this.courtLocationsData = data,
@@ -276,6 +283,7 @@ editPage(stepper, index){
   }
 
   getReferalsData() {
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountReferralsGet().subscribe({
       next: (data) => this.referalsData = data,
@@ -300,6 +308,7 @@ editPage(stepper, index){
       lastName: [''],
       birthdate: [],
       givenNames: [],
+      childDependency: [],
       middleName: []
     });
 
