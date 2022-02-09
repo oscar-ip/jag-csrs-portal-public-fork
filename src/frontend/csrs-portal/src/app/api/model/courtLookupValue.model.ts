@@ -9,11 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Party } from './party.model';
 
 
-export interface NewFileRequest { 
-    user: Party;
-    file: any;
+export interface CourtLookupValue { 
+    /**
+     * The unique id of the value.
+     */
+    id?: string | null;
+    /**
+     * The human readable value.
+     */
+    value?: string | null;
 }
 
