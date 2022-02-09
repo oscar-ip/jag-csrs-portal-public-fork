@@ -45,7 +45,7 @@ namespace Csrs.TntegrationTest
         {
             IDynamicsClient dynamicsClient = _serviceProvider.GetRequiredService<IDynamicsClient>();
 
-            string filter = string.Format("_ssg_payor_value eq {0} or _ssg_recipient_value eq {0}", "fc7702c0-0d89-ec11-b831-00505683fbf4");
+            string filter = string.Format("_ssg_payor_value eq {0} or _ssg_recipient_value eq {0}", "481019e4-7939-ea11-b814-00505683fbf4");
             List<string> select = new List<string> { "ssg_csrsfileid" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 

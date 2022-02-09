@@ -31,7 +31,7 @@ namespace Csrs.Api.Services
             //This is inefficient. This may work better if we query only communication messages on Part To and Party From fields
             foreach (var file in files.Value.ToList())
             {
-                MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await _dynamicsClient.GetCommunicationMessagesByFile(file.SsgCourtfilenumber);
+                MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await _dynamicsClient.GetCommunicationMessagesByFile(file.SsgCsrsfileid);
 
                 foreach (var message in dynamicsMessages.Value.ToList())
                 {
@@ -43,6 +43,7 @@ namespace Csrs.Api.Services
             }
 
             return messages;
+
         }
 
         public async Task SetMessageRead(string messageGuid)
