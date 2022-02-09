@@ -6,16 +6,16 @@ using Xunit;
 
 namespace Csrs.Test.Interfaces.Dynamics.Models
 {
-    public class MicrosoftDynamicsCRMssgCsrspartyTest : ModelTestBase
+    public class MicrosoftDynamicsCRMssgCsrschildTest : ModelTestBase
     {
-        [Fact]
-        public void party_date_of_birth_should_be_serialized_as_yyyy_mm_dd()
+        [Fact]  
+        public void child_date_of_birth_should_be_serialized_as_yyyy_mm_dd()
         {
             Fixture fixture = new Fixture();
- 
-            var dob = fixture.Create<DateTimeOffset>();
 
-            MicrosoftDynamicsCRMssgCsrsparty sut = new MicrosoftDynamicsCRMssgCsrsparty();
+            DateTimeOffset dob = fixture.Create<DateTimeOffset>();
+
+            MicrosoftDynamicsCRMssgCsrschild sut = new MicrosoftDynamicsCRMssgCsrschild();
             sut.SsgDateofbirth = dob;
             var expected = $"{{\"ssg_dateofbirth\":\"{dob.Year:d4}-{dob.Month:d2}-{dob.Day:d2}\"}}";
 

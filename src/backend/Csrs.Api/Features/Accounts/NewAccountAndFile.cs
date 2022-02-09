@@ -96,13 +96,11 @@ namespace Csrs.Api.Features.Accounts
                 }
 
                 // create the other party
-                //MicrosoftDynamicsCRMssgCsrsparty otherDynamicsParty;// = null;
                 MicrosoftDynamicsCRMssgCsrsparty otherDynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty();
                 if (request.File.OtherParty != null)
                 {
                     request.File.OtherParty.PartyId = Guid.Empty.ToString();
                     otherDynamicsParty = request.File.OtherParty.ToDynamicsModel();
-                    //otherDynamicsParty.SsgBceidGuid = Guid.Empty.ToString();
                     _logger.LogInformation("Creating other party");
                     otherDynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: otherDynamicsParty, cancellationToken: cancellationToken);
                 }
@@ -112,7 +110,6 @@ namespace Csrs.Api.Features.Accounts
                 }
 
                 // create the file
-                //var file = await _fileService.CreateFile(partyId, otherDynamicsParty?.SsgCsrspartyid, request.File, cancellationToken);
                 var file = await _fileService.CreateFile(dynamicsParty, otherDynamicsParty, request.File, cancellationToken);
 
                 _logger.LogDebug("Party and file created successfully");
