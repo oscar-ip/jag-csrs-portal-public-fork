@@ -36,7 +36,8 @@ export class CommunicationComponent implements OnInit {
               @Inject(FileService) private fileService,
               @Inject(OidcSecurityService) private oidc,
               private _http: HttpClient,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private datePipe: DatePipe  ) {
    }
 
   uploadFormGroup: FormGroup;
@@ -68,12 +69,10 @@ export class CommunicationComponent implements OnInit {
     { id: 5, name: "Other" }
   ];
   
-              public dialog: MatDialog,
-              private datePipe: DatePipe) {
-    this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
   
   public toggleRow = false;
   ngOnInit(): void {
+    this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.getRemoteData();
     this.uploadFormGroup = this._formBuilder.group({
       secondCtrl: [''],
