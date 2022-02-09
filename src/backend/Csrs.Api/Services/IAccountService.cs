@@ -17,10 +17,6 @@ namespace Csrs.Api.Services
         Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);
 
         Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken);
-
-        Task<IList<CourtLookupValue>> GetCourtLevelsAsync(CancellationToken cancellationToken);
-
-        Task<IList<CourtLookupValue>> GetCourtLocationsAsync(CancellationToken cancellationToken);
-
+        
     }
 }

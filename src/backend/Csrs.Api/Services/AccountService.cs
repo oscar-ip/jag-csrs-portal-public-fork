@@ -51,68 +51,7 @@ namespace Csrs.Api.Services
             IList<LookupValue>? values = await GetPicklistOptionSetMetadataAsync("ssg_csrsparty", "ssg_referral", cancellationToken);
             return values;
         }
-
-        public async Task<IList<CourtLookupValue>> GetCourtLocationsAsync(CancellationToken cancellationToken)
-        {
-            MicrosoftDynamicsCRMssgIjssbccourtlocationCollection locations = 
-                new MicrosoftDynamicsCRMssgIjssbccourtlocationCollection();
-
-            try
-            {
-                locations = await _dynamicsClient.Ssgijssbccourtlocations.GetAsync(cancellationToken: cancellationToken);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Exception is AccountService.GetCourtLocationsAsync");
-                throw ex;
-            }
-
-            List<CourtLookupValue> courtLocations = new List<CourtLookupValue>();
-
-            foreach (MicrosoftDynamicsCRMssgIjssbccourtlocation location in locations.Value)
-            {
-                CourtLookupValue item = 
-                    courtLocations.Where(x => x.Value == location.SsgBccourtlocationname).FirstOrDefault();
-
-                if (item is null)
-                {
-                    courtLocations.Add(new CourtLookupValue
-                    {
-                        Id = location.SsgIjssbccourtlocationid,
-                        Value = location.SsgBccourtlocationname
-                    });
-                }
-            }
-            return courtLocations;
-        }
-        public async Task<IList<CourtLookupValue>> GetCourtLevelsAsync(CancellationToken cancellationToken)
-        {
-            MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection levels = 
-                new MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection();
-
-            try
-            {
-                levels = await _dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(top:2, cancellationToken: cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception is AccountService.GetCourtLevelsAsync");
-                throw ex;
-            }
-
-            List<CourtLookupValue> courtLevels = new List<CourtLookupValue>();
-
-            foreach (MicrosoftDynamicsCRMssgCsrsbccourtlevel level in levels.Value)
-            {
-                courtLevels.Add(new CourtLookupValue
-                {
-                    Id = level.SsgCsrsbccourtlevelid,
-                    Value = level.SsgCourtlevellabel
-                });
-            }
-            return courtLevels;
-        }
-
+        
         public async Task<Party?> GetPartyByBCeIdAsync(string bceidGuid, CancellationToken cancellationToken)
         {
             using var scope = _logger.AddBCeIdGuid(bceidGuid);
