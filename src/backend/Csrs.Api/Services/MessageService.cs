@@ -24,11 +24,8 @@ namespace Csrs.Api.Services
         }
         public async Task<IList<Message>> GetPartyMessages(string partyId)
         {
-            string filter = $"_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}";
-            List<string> select = new List<string> { "ssg_csrsfileid" };
-            List<string> orderby = new List<string> { "modifiedon desc" };
 
-            MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby , filter: filter, expand: null, cancellationToken: CancellationToken.None);
+            MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.GetFilesByParty(partyId);
 
             List<Message> messages = new List<Message>();
             //This is inefficient. This may work better if we query only communication messages on Part To and Party From fields

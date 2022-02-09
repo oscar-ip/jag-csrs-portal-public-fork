@@ -75,6 +75,18 @@ namespace Csrs.Api.Repositories
             return results;
         }
 
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfileCollection> GetFilesByParty(this IDynamicsClient dynamicsClient, string partyId)
+        {
+
+            string filter = $"_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}";
+            List<string> select = new List<string> { "ssg_csrsfileid" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            MicrosoftDynamicsCRMssgCsrsfileCollection files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: CancellationToken.None);
+
+            return files;
+
+        }
         public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId)
         {
             string filter = $"_ssg_csrsfile_value eq {fileId}";
