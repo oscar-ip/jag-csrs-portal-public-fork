@@ -35,6 +35,10 @@ namespace Csrs.Api.Services
                 foreach (var message in dynamicsMessages.Value.ToList())
                 {
                     //TODO get attachment meta from fileManager
+                    if (message.SsgCsrsmessageattachment is not null && message.SsgCsrsmessageattachment.Value)
+                    {
+                        //Get documents from fileManager
+                    }
                     //Temporary add empty array of documents
                     messages.Add(ModelExtensions.ToMessage(message, new List<Document>()));
                 }
