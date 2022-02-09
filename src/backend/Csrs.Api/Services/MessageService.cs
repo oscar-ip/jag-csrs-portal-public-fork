@@ -9,21 +9,20 @@ namespace Csrs.Api.Services
     public class MessageService : IMessageService
     {
 
-        private readonly IMemoryCache _cache;
         private readonly IDynamicsClient _dynamicsClient;
         private readonly ILogger<MessageService> _logger;
 
         public MessageService(
-            IMemoryCache cache,
             IDynamicsClient dynamicsClient,
             ILogger<MessageService> logger)
         {
-            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public async Task<IList<Message>> GetPartyMessages(string partyId)
         {
+
+            _logger.LogDebug("Get party messages request recieved");
 
             MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.GetFilesByParty(partyId);
 
@@ -48,6 +47,9 @@ namespace Csrs.Api.Services
 
         public async Task SetMessageRead(string messageGuid)
         {
+
+            _logger.LogDebug("Set party message read request recieved");
+
             throw new NotImplementedException();
         }
 
