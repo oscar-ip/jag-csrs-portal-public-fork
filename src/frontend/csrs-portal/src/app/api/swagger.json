@@ -464,59 +464,8 @@
         }
       }
     },
-    "/api/document/listdocuments": {
-      "get": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "",
-        "parameters": [
-          {
-            "name": "regardingId",
-            "in": "query",
-            "description": "The id of ...",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/document/downloaddocument": {
-      "get": {
+    "/api/document/uploadattachment": {
+      "post": {
         "tags": [
           "Document"
         ],
@@ -529,94 +478,49 @@
               "type": "string",
               "format": "uuid"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              }
+          },
+          {
+            "name": "entityName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        }
-      }
-    },
-    "/api/document/uploaddocuments": {
-      "post": {
-        "tags": [
-          "Document"
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Document"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Document"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Document"
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Document"
-                  }
-                }
-              }
-            }
+            "description": "Success"
           }
         }
       }
@@ -861,65 +765,12 @@
         }
       }
     },
-    "/api/file/uploadattachment": {
-      "post": {
-        "tags": [
-          "File"
-        ],
-        "parameters": [
-          {
-            "name": "fileId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "required": [
-                  "file"
-                ],
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "file": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/api/lookup/courtlevels": {
       "get": {
         "tags": [
           "Lookup"
         ],
+        "summary": "Gets the valid court level values.",
         "responses": {
           "200": {
             "description": "Success",
@@ -928,7 +779,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SSG_CsrsBCCourtLevel"
+                    "$ref": "#/components/schemas/CourtLookupValue"
                   }
                 }
               },
@@ -936,7 +787,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SSG_CsrsBCCourtLevel"
+                    "$ref": "#/components/schemas/CourtLookupValue"
                   }
                 }
               },
@@ -944,8 +795,28 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SSG_CsrsBCCourtLevel"
+                    "$ref": "#/components/schemas/CourtLookupValue"
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -958,6 +829,7 @@
         "tags": [
           "Lookup"
         ],
+        "summary": "Gets the valid court locations values.",
         "responses": {
           "200": {
             "description": "Success",
@@ -966,7 +838,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SSG_IJSSBCCourtlocation"
+                    "$ref": "#/components/schemas/CourtLookupValue"
                   }
                 }
               },
@@ -974,7 +846,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SSG_IJSSBCCourtlocation"
+                    "$ref": "#/components/schemas/CourtLookupValue"
                   }
                 }
               },
@@ -982,8 +854,28 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SSG_IJSSBCCourtlocation"
+                    "$ref": "#/components/schemas/CourtLookupValue"
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -996,16 +888,6 @@
         "tags": [
           "Message"
         ],
-        "parameters": [
-          {
-            "name": "partyGuid",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -1032,6 +914,46 @@
                   "items": {
                     "$ref": "#/components/schemas/Message"
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1056,33 +978,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Message"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Message"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Message"
-                  }
-                }
-              }
-            }
+            "description": "Success"
           }
         }
       }
@@ -1249,6 +1145,11 @@
       "Child": {
         "type": "object",
         "properties": {
+          "childId": {
+            "type": "string",
+            "description": "The child id.",
+            "nullable": true
+          },
           "firstName": {
             "type": "string",
             "description": "Child's first name.",
@@ -1271,8 +1172,24 @@
             "nullable": true
           },
           "childIsDependent": {
-            "type": "boolean",
+            "type": "string",
             "description": "Child is a dependent.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CourtLookupValue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique id of the value.",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "description": "The human readable value.",
             "nullable": true
           }
         },
@@ -1338,16 +1255,71 @@
         ],
         "type": "object",
         "properties": {
-          "fileId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
           "status": {
             "$ref": "#/components/schemas/FileStatus"
           },
           "usersRole": {
             "$ref": "#/components/schemas/PartyRole"
+          },
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "partyEnrolled": {
+            "type": "string",
+            "nullable": true
+          },
+          "courtFileType": {
+            "$ref": "#/components/schemas/LookupValue"
+          },
+          "bcCourtLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcCourtLocation": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfOrderOrWA": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "incomeOnOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "section7Expenses": {
+            "type": "string",
+            "nullable": true
+          },
+          "safetyAlertRecipient": {
+            "type": "string",
+            "nullable": true
+          },
+          "recipientSafetyConcernDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "safetyAlertPayor": {
+            "type": "string",
+            "nullable": true
+          },
+          "payorSafetyConcernDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFMEPFileActive": {
+            "type": "string",
+            "nullable": true
+          },
+          "fmepFileNumber": {
+            "type": "string",
+            "nullable": true
           },
           "otherParty": {
             "$ref": "#/components/schemas/Party"
@@ -1379,7 +1351,6 @@
         "properties": {
           "fileId": {
             "type": "string",
-            "format": "uuid",
             "nullable": true
           },
           "status": {
@@ -1447,53 +1418,64 @@
       },
       "Message": {
         "required": [
-          "fileGuid",
-          "fileNo",
+          "fileId",
           "subject"
         ],
         "type": "object",
         "properties": {
-          "messageGuid": {
+          "messageId": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
           },
-          "fileGuid": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "fileNo": {
+          "fileId": {
             "type": "string"
           },
           "subject": {
             "type": "string"
           },
-          "date": {
+          "content": {
             "type": "string",
             "nullable": true
           },
+          "recievingParty": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "attachment": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            },
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "isRead": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
       "NewFileRequest": {
         "required": [
-          "bCeiD",
           "file",
           "user"
         ],
         "type": "object",
         "properties": {
-          "bCeiD": {
-            "type": "string",
-            "description": "This is a TEMPORARY field until login is implemented. The BCeiD Guid should come from the auth token",
-            "format": "uuid",
-            "deprecated": true
-          },
           "user": {
             "$ref": "#/components/schemas/Party"
           },
@@ -1515,7 +1497,7 @@
         "properties": {
           "partyId": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
           },
           "firstName": {
             "type": "string"
@@ -1573,13 +1555,21 @@
             "type": "string"
           },
           "optOutElectronicDocuments": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "identity": {
             "$ref": "#/components/schemas/LookupValue"
           },
           "referral": {
             "$ref": "#/components/schemas/LookupValue"
+          },
+          "preferredContactMethod": {
+            "$ref": "#/components/schemas/LookupValue"
+          },
+          "referenceNumber": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1618,119 +1608,6 @@
           }
         },
         "additionalProperties": { }
-      },
-      "SSG_CsrsBCCourtLevel": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "description": "Primary id alias, should only be used in Key expressions",
-            "format": "uuid",
-            "readOnly": true
-          },
-          "createdon": {
-            "type": "string",
-            "description": "Date and time when the record was created. Logical name createdon.",
-            "format": "date-time"
-          },
-          "modifiedon": {
-            "type": "string",
-            "description": "Date and time when the record was modified. Logical name modifiedon.",
-            "format": "date-time"
-          },
-          "statecode": {
-            "type": "integer",
-            "description": "Logical name statecode.",
-            "format": "int32"
-          },
-          "statuscode": {
-            "type": "integer",
-            "description": "Logical name statuscode.",
-            "format": "int32"
-          },
-          "ssg_courtlevellabel": {
-            "type": "string",
-            "description": "The label for the court level. Logical name ssg_courtlevellabel.",
-            "nullable": true
-          },
-          "ssg_csrsbccourtlevelid": {
-            "type": "string",
-            "description": "Unique identifier for entity instances. Logical name ssg_csrsbccourtlevelid.",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Background entity to capture levels of BC Courts - used to filter BC Court lookup on CSRS File. Logical name ssg_csrsbccourtlevel."
-      },
-      "SSG_IJSSBCCourtlocation": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "description": "Primary id alias, should only be used in Key expressions",
-            "format": "uuid",
-            "readOnly": true
-          },
-          "createdon": {
-            "type": "string",
-            "description": "Date and time when the record was created. Logical name createdon.",
-            "format": "date-time"
-          },
-          "modifiedon": {
-            "type": "string",
-            "description": "Date and time when the record was modified. Logical name modifiedon.",
-            "format": "date-time"
-          },
-          "statecode": {
-            "type": "integer",
-            "description": "Logical name statecode.",
-            "format": "int32"
-          },
-          "statuscode": {
-            "type": "integer",
-            "description": "Logical name statuscode.",
-            "format": "int32"
-          },
-          "ssg_bccourtlocationname": {
-            "type": "string",
-            "description": "The name of the BC court. Logical name ssg_bccourtlocationname.",
-            "nullable": true
-          },
-          "ssg_city": {
-            "type": "string",
-            "description": "Enter the city in BC where the court is located. Logical name ssg_city.",
-            "nullable": true
-          },
-          "ssg_courtlevel": {
-            "type": "string",
-            "description": "Select the level for this court. Logical name ssg_courtlevel.",
-            "nullable": true
-          },
-          "ssg_ijssbccourtlocationid": {
-            "type": "string",
-            "description": "Unique identifier for entity instances. Logical name ssg_ijssbccourtlocationid.",
-            "format": "uuid",
-            "nullable": true
-          },
-          "ssg_provinceterritory": {
-            "type": "string",
-            "description": "This field always defaults to BC. Logical name ssg_provinceterritory.",
-            "nullable": true
-          },
-          "ssg_street1": {
-            "type": "string",
-            "description": "Enter the street address for the court. Logical name ssg_street1.",
-            "nullable": true
-          },
-          "ssg_street2": {
-            "type": "string",
-            "description": "Enter additional address details (unit #, entrance, etc.) for the court. Logical name ssg_street2.",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Information about the BC Court where the Court Order/Service Request was executed. Logical name ssg_ijssbccourtlocation."
       },
       "UserRequest": {
         "required": [

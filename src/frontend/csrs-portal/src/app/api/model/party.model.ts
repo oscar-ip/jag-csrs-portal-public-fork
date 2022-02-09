@@ -13,7 +13,7 @@ import { LookupValue } from './lookupValue.model';
 
 
 export interface Party { 
-    partyId?: string;
+    partyId?: string | null;
     firstName: string;
     middleName?: string | null;
     lastName: string;
@@ -29,8 +29,10 @@ export interface Party {
     workPhone?: string | null;
     cellPhone?: string | null;
     email: string;
-    optOutElectronicDocuments?: boolean;
+    optOutElectronicDocuments?: boolean | null;
     identity?: LookupValue;
     referral?: LookupValue;
+    preferredContactMethod?: LookupValue;
+    referenceNumber?: string | null;
 }
 
