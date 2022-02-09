@@ -11,12 +11,9 @@ namespace Csrs.Api.Controllers
     public class MessageController : CsrsControllerBase<MessageController>
     {
 
-        private readonly IMessageService _messageService;
-
-        public MessageController(IMessageService messageService, IMediator mediator, ILogger<MessageController> logger)
+        public MessageController(IMediator mediator, ILogger<MessageController> logger)
             : base(mediator, logger)
         {
-            _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
         }
 
         [HttpGet("List")]
