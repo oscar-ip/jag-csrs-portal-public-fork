@@ -61,4 +61,9 @@
 	  <Protobuf Include="..\Csrs.Services.FileManager\Protos\fileManager.proto" Link="Protos\fileManager.proto" GrpcServices="Client" />
   </ItemGroup>
 
+  <Target Name="PostClean" AfterTargets="Clean">
+	<RemoveDir Directories="$(BaseIntermediateOutputPath)" /><!-- obj -->
+	<RemoveDir Directories="$(BaseOutputPath)" /><!-- bin -->
+  </Target>
+
 </Project>
