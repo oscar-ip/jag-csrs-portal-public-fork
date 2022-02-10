@@ -81,7 +81,7 @@ namespace Csrs.Interfaces.Dynamics
             return results;
         }
 
-        public static async Task<MicrosoftDynamicsCRMssgCsrsfileCollection> GetFilesByParty(this IDynamicsClient dynamicsClient, string partyId)
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfileCollection> GetFilesByParty(this IDynamicsClient dynamicsClient, string partyId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
@@ -89,12 +89,12 @@ namespace Csrs.Interfaces.Dynamics
             List<string> select = new List<string> { "ssg_csrsfileid" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
-            MicrosoftDynamicsCRMssgCsrsfileCollection files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: CancellationToken.None);
+            MicrosoftDynamicsCRMssgCsrsfileCollection files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: cancellationToken);
 
             return files;
 
         }
-        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId)
+        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
@@ -102,7 +102,7 @@ namespace Csrs.Interfaces.Dynamics
             List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", "statuscode", "_ssg_toparty_value" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
-            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: CancellationToken.None);
+            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
 
             return messages;
 

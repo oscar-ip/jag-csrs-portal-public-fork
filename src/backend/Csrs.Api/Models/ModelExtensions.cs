@@ -131,7 +131,7 @@ namespace Csrs.Api.Models
             return viewModel;
         }
 
-        public static Message ToMessage(MicrosoftDynamicsCRMssgCsrscommunicationmessage inMessage, List<Document> documents)
+        public static Message ToViewModel(MicrosoftDynamicsCRMssgCsrscommunicationmessage inMessage, List<Document> documents)
         {
             Message message = new Message();
 
