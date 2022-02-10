@@ -32,7 +32,7 @@ namespace Csrs.TntegrationTest
             {
                 //TODO get attachment meta from fileManager
                 //Temporary add empty array of documents
-                messages.Add(ModelExtensions.ToMessage(message, new List<Document>()));
+                messages.Add(ModelExtensions.ToViewModel(message, new List<Document>()));
             }
 
             Assert.NotNull(dynamicsMessages);
