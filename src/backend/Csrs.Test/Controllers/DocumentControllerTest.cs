@@ -15,7 +15,7 @@ namespace Csrs.Test.Controllers
         {
             var logger = GetMockLogger();
             var mediator = GetMockMediator();
-            new DocumentController(mediator.Object, logger.Object);
+            new DocumentController(mediator.Object, logger.Object, null, null, null);
         }
     }
 }

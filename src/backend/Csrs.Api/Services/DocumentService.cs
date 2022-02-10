@@ -30,7 +30,7 @@ namespace Csrs.Api.Services
         public async Task<IActionResult> DownloadAttachmentInternal(string entityId, string entityName, string serverRelativeUrl, string documentType, CancellationToken cancellationToken)
         {
             // get the file.
-            if (string.IsNullOrEmpty(serverRelativeUrl) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return BadRequest();
+            if (string.IsNullOrEmpty(serverRelativeUrl) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return new BadRequestResult();
 
             var hasAccess = true;
             //if (checkUser)
@@ -63,7 +63,7 @@ namespace Csrs.Api.Services
 
         public async Task<IActionResult> GetAttachmentList(string entityId, string entityName, string documentType, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return BadRequest();
+            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return new BadRequestResult();
 
             var hasAccess = true;
 
