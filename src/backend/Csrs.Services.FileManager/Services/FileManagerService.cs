@@ -172,7 +172,7 @@ namespace Csrs.Services.FileManager
                     listTitle = SharePointFileManager.DefaultDocumentUrlTitle;
                     break;
                 case "ssg_csrsfile":
-                    listTitle = "CSRS File";
+                    listTitle = "ssg_csrsfile";
                     break;
                 case "application":
                     listTitle = "adoxio_application";
