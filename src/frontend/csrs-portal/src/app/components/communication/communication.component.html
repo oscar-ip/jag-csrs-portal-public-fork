@@ -255,8 +255,8 @@
                     <mat-form-field>
                       <mat-label>Select File</mat-label>
                       <mat-select formControlName="contactFile">
-                        <mat-option *ngFor="let file of files" [value]="file.id">
-                          {{file.name}}
+                        <mat-option *ngFor="let file of files" [value]="file.fileId">
+                          {{file.fileId}}
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="contactFile.hasError('required')">
@@ -269,9 +269,12 @@
                     {{contactDate}}
                   </div>
                   <div class="col">
-                    
+
                   </div>
-                  </div>
+                </div>
+                <div class="row">
+                  <hr size="4" width="90%">
+                </div>
                   <div class="row">
                     <div class="col-1 w-100">
                       <label style="font-weight: bold;">Subject:</label>
@@ -292,7 +295,7 @@
                     <div class="md-textarea">
                       <label style="font-weight: bold;">Message:</label>
                       <mat-form-field class="w-100">
-                        <textarea  matInput
+                        <textarea matInput
                                   placeholder="Type your message here ... 500 character max"
                                   [formControl]="contactMessage"
                                   rows="4">
@@ -320,13 +323,13 @@
                       </button>
                     </div>
                     <div class="col">
-                       
+
                     </div>
-                    <div class="col-8">
+                    <div class="col-8" style="text-align: right;">
                       <button mat-flat-button
                               type="button"
                               class="BC-Gov-PrimaryButton"
-                              style="width: 250px;"
+                              style="width: 250px; float:right;"
                               (click)="sendContact()">
                         Send
                       </button>

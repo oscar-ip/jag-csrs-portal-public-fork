@@ -18,6 +18,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { DatePipe } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { AccountService } from 'app/api/api/account.service';
+import { AccountFileSummary } from 'app/api/model/accountFileSummary.model';
 
 @Component({
   selector: 'app-communication',
@@ -35,6 +37,7 @@ export class CommunicationComponent implements OnInit {
               @Inject(AppConfigService) private appConfigService,
               @Inject(FileService) private fileService,
               @Inject(OidcSecurityService) private oidc,
+              @Inject(AccountService) private accountService,
               private _http: HttpClient,
               public dialog: MatDialog,
               private datePipe: DatePipe  ) {
@@ -52,13 +55,7 @@ export class CommunicationComponent implements OnInit {
   selectedDocumentType = '';
   _reponse: HttpResponse<null>;
   contactFormGroup: FormGroup;
-  files = [
-    { id: 1, name: "1234" },
-    { id: 2, name: "1235" },
-    { id: 3, name: "1236" },
-    { id: 4, name: "1237" },
-    { id: 5, name: "1238" }
-  ];
+  files: any[];
   curDate = new Date();
   curDateStr: string
   contactSubjects = [
@@ -69,10 +66,31 @@ export class CommunicationComponent implements OnInit {
     { id: 5, name: "Other" }
   ];
   
-  
+  accountSummary: HttpResponse<AccountFileSummary>;
   public toggleRow = false;
   ngOnInit(): void {
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
+    console.log('Account Get');
+    this.accountService.apiAccountGet('response', false).subscribe({
+      next: (data) => {
+        this.accountSummary = data;
+        console.log('Files size' + this.accountSummary.body.files.length);
+        if ( this.accountSummary.status === HttpStatusCode.Ok &&
+              (this.accountSummary.body.files != null || this.accountSummary.body.files.length > 0)) {
+          console.log('Files size' + this.accountSummary.body.files.length);
+          this.files = this.accountSummary.body.files;
+        }
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this.logger.error(e.error.message);
+        } else {
+            //Backend returns unsuccessful response codes such as: 500 etc.
+            this.logger.info('Backend returned ', e);
+          }
+      },
+      complete: () => this.logger.info('apiAccountGet<AccountFileSummary> is completed')
+    })
     this.getRemoteData();
     this.uploadFormGroup = this._formBuilder.group({
       secondCtrl: [''],
