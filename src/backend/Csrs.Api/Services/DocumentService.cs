@@ -1,60 +1,33 @@
-﻿using Csrs.Interfaces.Dynamics;
+﻿using Csrs.Api.Extensions;
+using Csrs.Interfaces.Dynamics;
+using Csrs.Interfaces.Dynamics.Extensions;
+using Csrs.Interfaces.Dynamics.Models;
+using static Csrs.Interfaces.Dynamics.Extensions.EntityDocumentExtensions;
 using Csrs.Services.FileManager;
 using Google.Protobuf;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using static Csrs.Services.FileManager.FileManager;
-using static Csrs.Interfaces.Dynamics.Extensions.EntityDocumentExtensions;
-using Csrs.Api.Extensions;
-using Csrs.Interfaces.Dynamics.Models;
-using Csrs.Api.Services;
-using Csrs.Api.Repositories;
 using Microsoft.Rest;
+using static Csrs.Services.FileManager.FileManager;
 
-namespace Csrs.Api.Controllers
+namespace Csrs.Api.Services
 {
-    public class DocumentController : CsrsControllerBase<DocumentController>
+    public class DocumentService : IDocumentService
     {
 
         private readonly IDynamicsClient _dynamicsClient;
-        private readonly IUserService _userService;
+        private readonly ILogger<MessageService> _logger;
         private readonly FileManagerClient _fileManagerClient;
 
-        public DocumentController(IMediator mediator,
-            ILogger<DocumentController> logger,
+        public DocumentService(
             IDynamicsClient dynamicsClient,
-            IUserService userService,
+            ILogger<MessageService> logger,
             FileManagerClient fileManagerClient)
-            : base(mediator, logger)
         {
-            _dynamicsClient = dynamicsClient;
-            _userService = userService;
-            _fileManagerClient = fileManagerClient;
+            _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _fileManagerClient = fileManagerClient ?? throw new ArgumentNullException(nameof(fileManagerClient));
         }
-
-        [HttpGet("DownloadAttachment")]
-        [ProducesResponseType((int)HttpStatusCode.OK),
-         ProducesResponseType((int)HttpStatusCode.Unauthorized),
-         ProducesResponseType((int)HttpStatusCode.NotFound),
-         ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> DownloadAttachment([Required] string fileId, [Required] string entityName, [Required] string serverRelativeUrl, [Required] string documentType)
-        {
-            return await DownloadAttachmentInternal(fileId, entityName, serverRelativeUrl, documentType, true).ConfigureAwait(true);
-        }
-
-        //TODO: This logic belong in a service
-        /// <summary>
-        /// Internal implementation of download attachment T
-        /// </summary>
-        /// <param name="entityId"></param>
-        /// <param name="entityName"></param>
-        /// <param name="fileName"></param>
-        /// <param name="documentType"></param>
-        /// <param name="checkUser"></param>
-        /// <returns></returns>
-        private async Task<IActionResult> DownloadAttachmentInternal(string entityId, string entityName, string serverRelativeUrl, string documentType, bool checkUser)
+        public async Task<IActionResult> DownloadAttachmentInternal(string entityId, string entityName, string serverRelativeUrl, string documentType, CancellationToken cancellationToken)
         {
             // get the file.
             if (string.IsNullOrEmpty(serverRelativeUrl) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return BadRequest();
@@ -66,10 +39,7 @@ namespace Csrs.Api.Controllers
             //    hasAccess = await CanAccessDocument(entityName, entityId).ConfigureAwait(true);
             //}
 
-            if (!hasAccess) return Unauthorized();
-
-            //var logUrl = WordSanitizer.Sanitize(serverRelativeUrl);
-
+            if (!hasAccess) return new UnauthorizedResult();
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
 
@@ -88,31 +58,32 @@ namespace Csrs.Api.Controllers
             }
 
             //Download result failed
-            return NotFound();
-
+            return new NotFoundResult();
         }
 
-        [HttpPost("UploadAttachment")]
-        [ProducesResponseType((int)HttpStatusCode.OK),
-         ProducesResponseType((int)HttpStatusCode.Unauthorized),
-         ProducesResponseType((int)HttpStatusCode.NotFound),
-         ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> UploadAttachmentAsync([Required] string entityId, [Required] string entityName, [Required] IFormFile file, [Required] string type)
+        public async Task<IActionResult> GetAttachmentList(string entityId, string entityName, string documentType, CancellationToken cancellationToken)
         {
-            //ListApplications.Request request = new();
-            //ListApplications.Response response = await _mediator.Send(request);
+            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return BadRequest();
 
+            var hasAccess = true;
 
-            return await UploadAttachmentInternal(entityId, entityName, file, type, true);
+            //if (checkUser)
+            //{
+            //    ValidateSession();
+            //    hasAccess = await CanAccessEntity(entityName, entityId, null);
+            //}
 
+            if (!hasAccess) return new NotFoundResult();
+
+            var fileSystemItemVMList = await GetListFilesInFolder(entityId, entityName, documentType);
+            return new JsonResult(fileSystemItemVMList);
         }
-        //TODO: This logic belong in a service
-        private async Task<IActionResult> UploadAttachmentInternal(string entityId, string entityName,
-            IFormFile file, string documentType, bool checkUser)
+
+        public async Task<IActionResult> UploadAttachmentInternal(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
         {
             FileSystemItem result = null;
 
-            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return BadRequest();
+            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(type)) return new BadRequestResult();
 
             var hasAccess = true;
             //if (checkUser)
@@ -120,7 +91,7 @@ namespace Csrs.Api.Controllers
             //    hasAccess = await CanAccessDocument(entityName, entityId).ConfigureAwait(true);
             //}
 
-            if (!hasAccess) return Unauthorized();
+            if (!hasAccess) return new UnauthorizedResult();
 
             var ms = new MemoryStream();
             file.OpenReadStream().CopyTo(ms);
@@ -147,7 +118,7 @@ namespace Csrs.Api.Controllers
             //illegalInFileName = new Regex(@"[&:/\\|]");
             //fileName = illegalInFileName.Replace(fileName, "-");
 
-            string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, documentType);
+            string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, type);
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
             //For Testing purposes only   
@@ -191,33 +162,6 @@ namespace Csrs.Api.Controllers
 
             return new JsonResult(result);
         }
-
-
-        /// <summary>
-        /// Get the file details list in folder associated to the application folder and document type
-        /// </summary>
-        /// <param name="entityId"></param>
-        /// <param name="documentType"></param>
-        /// <returns></returns>
-        [HttpGet("GetAttachmentList")]
-        public async Task<IActionResult> GetAttachmentList(string entityId, string entityName, string documentType)
-        {
-            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return BadRequest();
-
-            var hasAccess = true;
-
-            //if (checkUser)
-            //{
-            //    ValidateSession();
-            //    hasAccess = await CanAccessEntity(entityName, entityId, null);
-            //}
-
-            if (!hasAccess) return new NotFoundResult();
-
-            var fileSystemItemVMList = await GetListFilesInFolder(entityId, entityName, documentType);
-            return new JsonResult(fileSystemItemVMList);
-        }
-
         /// <summary>
         /// Return the list of files in a given folder.
         /// </summary>
@@ -244,7 +188,7 @@ namespace Csrs.Api.Controllers
                         EntityId = entityId,
                         EntityName = entityName,
                         FolderName = dynamicsFile.GetDocumentFolderName()
-                };
+                    };
 
                     var result = _fileManagerClient.FolderFiles(request);
 
@@ -292,20 +236,18 @@ namespace Csrs.Api.Controllers
         /// <param name="entityId">File Id</param>
         /// <param name="entityName">Unused currently</param>
         /// <returns></returns>
-        private async Task<bool> CanAccessDocument(string entityId, string entityName)
+        private async Task<bool> CanAccessDocument(string entityId, string entityName, string BCeIDUserId, CancellationToken cancellationToken)
         {
 
-            if (String.IsNullOrEmpty(_userService.GetBCeIDUserId())) return false;
+            if (String.IsNullOrEmpty(BCeIDUserId)) return false;
 
-            MicrosoftDynamicsCRMssgCsrspartyCollection partiesCollection = await _dynamicsClient.GetPartyByBCeIdAsync(_userService.GetBCeIDUserId(), cancellationToken: CancellationToken.None);
+            MicrosoftDynamicsCRMssgCsrspartyCollection partiesCollection = await _dynamicsClient.GetPartyByBCeIdAsync(BCeIDUserId, cancellationToken);
 
             if (partiesCollection is null || partiesCollection.Value.Count == 0) return false;
 
-            List<MicrosoftDynamicsCRMssgCsrsparty> parties = partiesCollection.Value.ToList();
+            MicrosoftDynamicsCRMssgCsrsparty parties = partiesCollection.Value.FirstOrDefault();
 
-            string filter = String.Format($"_ssg_payor_value eq {0} or _ssg_recipient_value eq {0}", parties[0].SsgCsrspartyid);
-
-            var actual = await _dynamicsClient.Ssgcsrsfiles.GetAsync(top: 10, filter: filter, expand: null, cancellationToken: CancellationToken.None);
+            var actual = await _dynamicsClient.GetFilesByParty(parties.SsgCsrspartyid);
 
             if (actual is null) return false;
 
@@ -370,7 +312,7 @@ namespace Csrs.Api.Controllers
                     if (string.IsNullOrEmpty(location._regardingobjectidValue))
                     {
 
-                        _logger.LogError($"Orphan Sharepointdocumentlocation found.  ID is {location.Sharepointdocumentlocationid}");
+                        _logger.LogError($"Orphan Sharepointdocumentlocation found. ID is {location.Sharepointdocumentlocationid}");
                         // it is an invalid document location. cleanup.
                         try
                         {
@@ -400,6 +342,5 @@ namespace Csrs.Api.Controllers
         }
 
     }
-
 
 }
