@@ -33,12 +33,15 @@ namespace Csrs.TntegrationTest
             // Register IOAuthApiClient and ODataClientSettings
             services.AddHttpClient<IOAuthApiClient, OAuthApiClient>(client =>
             {
-                client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
+                //client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
+                client.Timeout = TimeSpan.FromSeconds(150); 
             });
 
             services.AddHttpClient<IDynamicsClient, DynamicsClient>(client =>
             {
-                client.BaseAddress = new Uri(csrsConfiguration.ApiGateway.BasePath);
+                //client.BaseAddress = new Uri(csrsConfiguration.ApiGateway.BasePath);
+                //client.Timeout = TimeSpan.FromSeconds(30); // data timeout
+                client.BaseAddress = new Uri(csrsConfiguration.OAuth.ResourceUrl);
                 client.Timeout = TimeSpan.FromSeconds(30); // data timeout
             })
             .AddHttpMessageHandler<OAuthHandler>()

@@ -5,6 +5,7 @@ using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 using File = Csrs.Api.Models.File;
+using PickLists = Csrs.Api.Models.PickupLists;
 
 namespace Csrs.Api.Services
 {
@@ -14,7 +15,10 @@ namespace Csrs.Api.Services
         private readonly IDynamicsClient _dynamicsClient;
         private readonly IMapper _mapper;
         private readonly ILogger<FileService> _logger;
+        private readonly int   _male = 867670000;
+        private readonly int _female = 867670001;
 
+        
         public FileService(
             IMemoryCache cache,
             IDynamicsClient dynamicsClient,
@@ -27,45 +31,76 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        // Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(string entityName, string attributeName, CancellationToken cancellationToken);
-
-        public async Task<Tuple<string,string>> CreateFile(string partyId, string? otherPartyId, File file, CancellationToken cancellationToken)
+        public async Task<Tuple<string, string>> CreateFile(MicrosoftDynamicsCRMssgCsrsparty party, 
+            MicrosoftDynamicsCRMssgCsrsparty otherParty, File file, CancellationToken cancellationToken)
         {
-            var partyEnrolled = _dynamicsClient.GetPicklistOptionSetMetadataAsync("", "ssg_partyenrolled", _cache, cancellationToken);
 
-            MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel();
+            MicrosoftDynamicsCRMssgCsrsfile csrsFile = await file.ToDynamicsModel(_dynamicsClient, cancellationToken);
 
-            //// map the party and other party to recipient and payor
+            // map the party and other party to recipient and payor
             if (file.UsersRole == PartyRole.Recipient)
             {
-                csrsFile._ssgRecipientValue = partyId;
-                csrsFile.SsgPartyenrolled = 0; // recipient
+                csrsFile.SsgPartyenrolled = (int)PartyEnrolled.Recipient;
+                csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", party.SsgCsrspartyid);
 
-                if (otherPartyId is not null)
+                if (otherParty is not null)
                 {
-                    csrsFile._ssgPayorValue = otherPartyId;
+                    csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
                 }
             }
             else if (file.UsersRole == PartyRole.Payor)
             {
-                csrsFile._ssgPayorValue = partyId;
-                csrsFile.SsgPartyenrolled = 0; // payor
+                csrsFile.SsgPartyenrolled = (int)PartyEnrolled.Payor;
+                csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", party.SsgCsrspartyid);
 
-                if (otherPartyId is not null)
+                if (otherParty is not null)
                 {
-                    csrsFile._ssgRecipientValue = otherPartyId;
+                    csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
                 }
             }
 
-            csrsFile = await _dynamicsClient.Ssgcsrsfiles.CreateAsync(csrsFile, cancellationToken: cancellationToken);
+            try
+            {
+                csrsFile = await _dynamicsClient.Ssgcsrsfiles.CreateAsync(csrsFile, cancellationToken: cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception in FileService.CreateFile");
+            }
 
             if (file.Children is not null)
             {
                 foreach (var child in file.Children)
                 {
                     var csrsChild = child.ToDynamicsModel();
-                    csrsChild._ssgFilenumberValue = csrsFile.SsgCsrsfileid;
-                    csrsChild = await _dynamicsClient.Ssgcsrschildren.CreateAsync(csrsChild, cancellationToken: cancellationToken);
+                    if (party.SsgPartygender == _male)
+                    {
+                        csrsChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
+                    }
+                    else if (party.SsgPartygender == _female)
+                    {
+                        csrsChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
+                    }
+
+                    if (otherParty is not null && otherParty.SsgPartygender == _male)
+                    {
+                        csrsChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+                    }
+                    else if (otherParty is not null && otherParty.SsgPartygender == _female)
+                    {
+                        csrsChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+                    }
+
+                    csrsChild.SsgFileNumberODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", csrsFile.SsgCsrsfileid);
+
+                    try
+                    {
+                        csrsChild = await _dynamicsClient.Ssgcsrschildren.CreateAsync(csrsChild, cancellationToken: cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Exception in FileService.CreateChildren");
+                    }
                 }
             }
 

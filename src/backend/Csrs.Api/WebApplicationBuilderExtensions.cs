@@ -4,7 +4,6 @@ using Csrs.Api.Configuration;
 using Csrs.Api.Models;
 using Csrs.Api.Services;
 using Csrs.Api.ApiGateway;
-using Simple.OData.Client;
 using System.Configuration;
 using Grpc.Net.Client;
 using Grpc.Core;
@@ -58,25 +57,19 @@ public static class WebApplicationBuilderExtensions
         // Add ApiGateway Middleware
         services.AddTransient<ApiGatewayHandler>();
 
-        // Register IOAuthApiClient and ODataClientSettings
+        // Register IOAuthApiClient
         services.AddHttpClient<IOAuthApiClient, OAuthApiClient>(client =>
         {
             client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
+            //client.Timeout = TimeSpan.FromSeconds(150); 
         });
-
-        // Register httpClient for OdataClient with OAuthHandler
-        services.AddHttpClient<ODataClientSettings>(client => 
-        {
-            client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
-            client.Timeout = TimeSpan.FromSeconds(30); // data timeout
-        })
-        .AddHttpMessageHandler<OAuthHandler>()
-        .AddHttpMessageHandler<ApiGatewayHandler>();
 
         services.AddHttpClient<IDynamicsClient, DynamicsClient>(client =>
         {
             client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
             client.Timeout = TimeSpan.FromSeconds(30); // data timeout
+            //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+            //client.Timeout = TimeSpan.FromSeconds(300); // data timeout
         })
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();
@@ -84,18 +77,11 @@ public static class WebApplicationBuilderExtensions
         logger.Debug("Configuing FileManager Service");
         ConfigureFileManagerService(builder, configuration?.FileManager, logger);
 
-        services.AddTransient<IODataClient>(provider =>
-        {
-            var settings = provider.GetRequiredService<ODataClientSettings>();
-            settings.IgnoreUnmappedProperties = true;
-            return new ODataClient(settings);
-        });
-
         services.AddHttpContextAccessor();
 
         // Add services
         services.AddTransient<ITokenService, TokenService>();
-
+        services.AddTransient<IMessageService, MessageService>();
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IUserService, UserService>();

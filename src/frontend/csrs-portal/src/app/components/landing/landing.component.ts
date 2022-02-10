@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewEncapsulation  } from '@angular/core';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { AppConfigService } from 'app/services/app-config.service';
+import { SnowplowService } from '@core/services/snowplow.service';
 
 @Component({
   selector: 'app-landing',
@@ -22,16 +23,19 @@ export class LandingComponent implements OnInit {
   public code: string;
   public _logger: LoggerService;
   public _config: AppConfigService;
+  public _snowplow: SnowplowService;
 
   constructor(@Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
-              @Inject(AppConfigService) private appConfigService) {
+              @Inject(AppConfigService) private appConfigService,
+              @Inject(SnowplowService) private snowplow) {
 
     this._config = appConfigService;
     this._logger = logger;
     this._logger.log('info', 'logger:constructor');
+    this._snowplow = snowplow;
 
     const accessToken = oidcSecurityService.getAccessToken();
 
@@ -74,5 +78,9 @@ export class LandingComponent implements OnInit {
   logout() {
     this._logger.log('info','inside logout');
     this.oidcSecurityService.logoff();
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplow.refreshLinkClickTracking();
   }
 }

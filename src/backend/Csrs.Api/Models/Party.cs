@@ -8,9 +8,6 @@ namespace Csrs.Api.Models
     {
         public string PartyId { get; set; }
         
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public string BCeIDGuid { get; set; }
-
         [Required]
         public string? FirstName { get; set; }
         public string? MiddleName { get; set; }
@@ -32,8 +29,11 @@ namespace Csrs.Api.Models
         public string? CellPhone { get; set; }
         [Required]
         public string? Email { get; set; }
-        public bool OptOutElectronicDocuments { get; set; }
+        public bool? OptOutElectronicDocuments { get; set; }
         public LookupValue? Identity { get; set; }
         public LookupValue? Referral { get; set; }
+
+        public LookupValue? PreferredContactMethod { get; set; }
+        public string? ReferenceNumber { get; set; }
     }
 }

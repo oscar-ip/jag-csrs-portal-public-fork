@@ -13,12 +13,27 @@ import { PartyRole } from './partyRole.model';
 import { FileStatus } from './fileStatus.model';
 import { Party } from './party.model';
 import { Child } from './child.model';
+import { LookupValue } from './lookupValue.model';
 
 
 export interface ModelFile { 
-    fileId?: string | null;
     status?: FileStatus;
     usersRole: PartyRole;
+    fileId?: string | null;
+    fileNumber?: string | null;
+    partyEnrolled?: string | null;
+    courtFileType?: LookupValue;
+    bcCourtLevel?: string | null;
+    bcCourtLocation?: string | null;
+    dateOfOrderOrWA?: string | null;
+    incomeOnOrder?: string | null;
+    section7Expenses?: string | null;
+    safetyAlertRecipient?: string | null;
+    recipientSafetyConcernDescription?: string | null;
+    safetyAlertPayor?: string | null;
+    payorSafetyConcernDescription?: string | null;
+    isFMEPFileActive?: string | null;
+    fmepFileNumber?: string | null;
     otherParty?: Party;
     /**
      * The children on this file.

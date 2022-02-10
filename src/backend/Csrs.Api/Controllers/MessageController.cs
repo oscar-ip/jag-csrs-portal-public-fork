@@ -1,5 +1,6 @@
 ﻿using Csrs.Api.Features.Messages;
 using Csrs.Api.Models;
+using Csrs.Api.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -9,29 +10,34 @@ namespace Csrs.Api.Controllers
 {
     public class MessageController : CsrsControllerBase<MessageController>
     {
+
         public MessageController(IMediator mediator, ILogger<MessageController> logger)
             : base(mediator, logger)
         {
         }
 
         [HttpGet("List")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Message>> GetAsync([Required]string partyGuid)
+        [ProducesResponseType(typeof(IList<Message>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
-            List.Request request = new();
-            List.Response response = await _mediator.Send(request);
 
-            return Array.Empty<Message>();
+            List.Request request = new List.Request();
+            List.Response? response = await _mediator.Send(request, cancellationToken);
+
+            return response != List.Response.Empty ? Ok(response.Messages) : NotFound();
+
         }
 
         [HttpGet("Read")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IList<Message>> ReadAsync([Required] string messageGuid)
+        public async Task<IActionResult> ReadAsync([Required] string messageGuid)
         {
-            Read.Request request = new();
+            Read.Request request = new(messageGuid);
             Read.Response response = await _mediator.Send(request);
 
-            return Array.Empty<Message>();
+            return Ok("Updated");
         }
 
         [HttpPost("Create")]

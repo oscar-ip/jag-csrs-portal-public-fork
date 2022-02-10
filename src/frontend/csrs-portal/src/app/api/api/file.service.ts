@@ -47,19 +47,6 @@ export class FileService {
         this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
 
-    /**
-     * @param consumes string[] mime-types
-     * @return true: consumes contains 'multipart/form-data', false: otherwise
-     */
-    private canConsumeForm(consumes: string[]): boolean {
-        const form = 'multipart/form-data';
-        for (const consume of consumes) {
-            if (form === consume) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
         if (typeof value === "object" && value instanceof Date === false) {
@@ -329,92 +316,6 @@ export class FileService {
 
         return this.httpClient.patch<Array<object>>(`${this.configuration.basePath}/api/file/updateapplication`,
             null,
-            {
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param fileId 
-     * @param type 
-     * @param file 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public apiFileUploadattachmentPost(fileId: string, type: string, file: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<any>;
-    public apiFileUploadattachmentPost(fileId: string, type: string, file: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpResponse<any>>;
-    public apiFileUploadattachmentPost(fileId: string, type: string, file: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpEvent<any>>;
-    public apiFileUploadattachmentPost(fileId: string, type: string, file: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined}): Observable<any> {
-        if (fileId === null || fileId === undefined) {
-            throw new Error('Required parameter fileId was null or undefined when calling apiFileUploadattachmentPost.');
-        }
-        if (type === null || type === undefined) {
-            throw new Error('Required parameter type was null or undefined when calling apiFileUploadattachmentPost.');
-        }
-        if (file === null || file === undefined) {
-            throw new Error('Required parameter file was null or undefined when calling apiFileUploadattachmentPost.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (fileId !== undefined && fileId !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>fileId, 'fileId');
-        }
-        if (type !== undefined && type !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>type, 'type');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (Bearer) required
-        localVarCredential = this.configuration.lookupCredential('Bearer');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'multipart/form-data'
-        ];
-
-        const canConsumeForm = this.canConsumeForm(consumes);
-
-        let localVarFormParams: { append(param: string, value: any): any; };
-        let localVarUseForm = false;
-        let localVarConvertFormParamsToString = false;
-        if (localVarUseForm) {
-            localVarFormParams = new FormData();
-        } else {
-            localVarFormParams = new HttpParams({encoder: this.encoder});
-        }
-
-
-        let responseType_: 'text' | 'json' = 'json';
-        if(localVarHttpHeaderAcceptSelected && localVarHttpHeaderAcceptSelected.startsWith('text')) {
-            responseType_ = 'text';
-        }
-
-        return this.httpClient.post<any>(`${this.configuration.basePath}/api/file/uploadattachment`,
-            localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
             {
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,

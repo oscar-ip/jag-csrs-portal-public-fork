@@ -22,6 +22,18 @@ namespace Csrs.TntegrationTest
             Assert.NotNull(actual);
             Assert.NotEmpty(actual.Value);
         }
+        [DebugOnlyFact]
+        public async Task get_last_5_modified_files_payor_and_recipient()
+        {
+            IDynamicsClient dynamicsClient = _serviceProvider.GetRequiredService<IDynamicsClient>();
+
+            List<string> select = new List<string> { "ssg_csrsfileid", "_ssg_payor_value", "_ssg_recipient_value" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            var actual = await dynamicsClient.Ssgcsrsfiles.GetAsync(top: 5, select: select, orderby: orderby, cancellationToken: CancellationToken.None);
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual.Value);
+        }
 
         [DebugOnlyFact]
         public async Task get_file_by_payor()

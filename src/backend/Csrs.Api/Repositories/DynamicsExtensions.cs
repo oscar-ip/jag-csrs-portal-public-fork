@@ -1,8 +1,8 @@
 ﻿using Csrs.Api.Models;
-using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
+using Microsoft.Extensions.Caching.Memory;
 
-namespace Csrs.Api.Repositories
+namespace Csrs.Interfaces.Dynamics
 {
     public static class DynamicsExtensions
     {
@@ -17,25 +17,34 @@ namespace Csrs.Api.Repositories
         /// <returns></returns>
         public static async Task<MicrosoftDynamicsCRMssgCsrspartyCollection> GetPartyByBCeIdAsync(this IDynamicsClient dynamicsClient, string bceid, CancellationToken cancellationToken)
         {
-            List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_userid eq '{bceid}' and statuscode eq {Active}";
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
 
+            List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
+            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
             var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
             return parties;
         }
 
         public static async Task<string> GetPartyIdByBCeIdAsync(this IDynamicsClient dynamicsClient, string bceid, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
             List<string> select = new List<string> { "ssg_csrspartyid" };
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_userid eq '{bceid}' and statuscode eq {Active}";
-
-            var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
-
-            if (parties is not null && parties.Value is not null && parties.Value.Count > 0)
+            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
+            try
             {
-                var party = parties.Value[0];
-                return party.SsgCsrspartyid;
+                var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
+
+                if (parties is not null && parties.Value is not null && parties.Value.Count > 0)
+                {
+                    var party = parties.Value[0];
+                    return party.SsgCsrspartyid;
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
 
             return null;
@@ -43,6 +52,8 @@ namespace Csrs.Api.Repositories
 
         public static async Task<List<FileSummary>> GetFileSummaryByPartyAsync(this IDynamicsClient dynamicsClient, string partyId, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
             var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and statuscode eq {Active}";
             var orderby = new List<string> { "createdon" };
             var select = new List<string> { "ssg_filenumber", "_ssg_recipient_value", "_ssg_payor_value" };
@@ -68,6 +79,122 @@ namespace Csrs.Api.Repositories
             }
 
             return results;
+        }
+
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfileCollection> GetFilesByParty(this IDynamicsClient dynamicsClient, string partyId)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            string filter = $"_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}";
+            List<string> select = new List<string> { "ssg_csrsfileid" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            MicrosoftDynamicsCRMssgCsrsfileCollection files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: CancellationToken.None);
+
+            return files;
+
+        }
+        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            string filter = $"_ssg_csrsfile_value eq {fileId}";
+            List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", "statuscode", "_ssg_toparty_value" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: CancellationToken.None);
+
+            return messages;
+
+        }
+
+        public static async Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(
+            this IDynamicsClient dynamicsClient,
+            string entityName,
+            string attributeName,
+            IMemoryCache cache,
+            CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+            ArgumentNullException.ThrowIfNull(entityName);
+            ArgumentNullException.ThrowIfNull(attributeName);
+            ArgumentNullException.ThrowIfNull(cache);
+
+            string cacheKey = $"{entityName}-{attributeName}-Picklist";
+
+            if (!cache.TryGetValue(cacheKey, out PicklistOptionSetMetadata metadata))
+            {
+                metadata = await dynamicsClient.GetPicklistOptionSetMetadataAsync(entityName, attributeName, cancellationToken);
+                if (metadata is not null && metadata.Value is not null && metadata.Value.Count != 0)
+                {
+                    cache.Set(cacheKey, metadata, TimeSpan.FromHours(1));
+                }
+            }
+
+            if (metadata is null)
+            {
+                metadata = new PicklistOptionSetMetadata();
+            }
+
+            if (metadata.Value is null)
+            {
+                metadata.Value = new List<OptionSetMetadata>();
+            }
+
+            return metadata;
+        }
+
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileForSharePointDocumentLocation(this IDynamicsClient dynamicsClient, string id, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            // get only the required fields for working with Sharepoint
+            List<string> select = new List<string> { "ssg_csrsfileid" };
+            List<string> expand = new List<string> { "ssg_csrsfile_SharePointDocumentLocations" };
+
+            var entity = await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(id, select: select, expand: expand, cancellationToken: cancellationToken);
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Gets the list of active court locations. Returns only the
+        /// <see cref="MicrosoftDynamicsCRMssgIjssbccourtlocation.SsgIjssbccourtlocationid"/> and
+        /// <see cref="MicrosoftDynamicsCRMssgIjssbccourtlocation.SsgBccourtlocationname"/> properties.
+        /// </summary>
+        /// <param name="dynamicsClient"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<MicrosoftDynamicsCRMssgIjssbccourtlocationCollection> GetCourtLocationsAsync(this IDynamicsClient dynamicsClient, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            var filter = $"statuscode eq {Active}";
+            var select = new List<string> { "ssg_ijssbccourtlocationid", "ssg_bccourtlocationname" };
+
+            var values = await dynamicsClient.Ssgijssbccourtlocations.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
+
+            return values;
+        }
+
+        /// <summary>
+        /// Gets the list of active court levels. Returns only the
+        /// <see cref="MicrosoftDynamicsCRMssgCsrsbccourtlevel.SsgCsrsbccourtlevelid"/> and
+        /// <see cref="MicrosoftDynamicsCRMssgCsrsbccourtlevel.SsgCourtlevellabel"/> properties.
+        /// </summary>
+        /// <param name="dynamicsClient"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection> GetCourtLevelsAsync(this IDynamicsClient dynamicsClient, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            var filter = $"statuscode eq {Active}";
+            var select = new List<string> { "ssg_csrsbccourtlevelid", "ssg_courtlevellabel" };
+
+            var values = await dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
+
+            return values;
         }
     }
 }
