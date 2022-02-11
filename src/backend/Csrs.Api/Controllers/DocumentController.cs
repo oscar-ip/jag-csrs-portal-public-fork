@@ -12,6 +12,7 @@ using Csrs.Interfaces.Dynamics.Models;
 using Csrs.Api.Services;
 using Csrs.Api.Repositories;
 using Microsoft.Rest;
+using Csrs.Api.Features.Documents;
 
 namespace Csrs.Api.Controllers
 {
@@ -99,13 +100,14 @@ namespace Csrs.Api.Controllers
          ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UploadAttachmentAsync([Required] string entityId, [Required] string entityName, [Required] IFormFile file, [Required] string type)
         {
-            //ListApplications.Request request = new();
-            //ListApplications.Response response = await _mediator.Send(request);
 
+            UploadDocuments.Request request = new UploadDocuments.Request(entityId, entityName, file, type);
+            UploadDocuments.Response response = await _mediator.Send(request);
 
-            return await UploadAttachmentInternal(entityId, entityName, file, type, true);
+            return response.ActionResult;
 
         }
+
         //TODO: This logic belong in a service
         private async Task<IActionResult> UploadAttachmentInternal(string entityId, string entityName,
             IFormFile file, string documentType, bool checkUser)
@@ -374,7 +376,7 @@ namespace Csrs.Api.Controllers
                         // it is an invalid document location. cleanup.
                         try
                         {
-                            _dynamicsClient.Sharepointdocumentlocations.Delete(location.Sharepointdocumentlocationid);
+                            //_dynamicsClient.Sharepointdocumentlocations.Delete(location.Sharepointdocumentlocationid);
                         }
                         catch (HttpOperationException odee)
                         {

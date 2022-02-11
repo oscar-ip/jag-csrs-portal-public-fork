@@ -27,7 +27,7 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _fileManagerClient = fileManagerClient ?? throw new ArgumentNullException(nameof(fileManagerClient));
         }
-        public async Task<IActionResult> DownloadAttachmentInternal(string entityId, string entityName, string serverRelativeUrl, string documentType, CancellationToken cancellationToken)
+        public async Task<IActionResult> DownloadAttachment(string entityId, string entityName, string serverRelativeUrl, string documentType, CancellationToken cancellationToken)
         {
             // get the file.
             if (string.IsNullOrEmpty(serverRelativeUrl) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return new BadRequestResult();
@@ -41,7 +41,7 @@ namespace Csrs.Api.Services
 
             if (!hasAccess) return new UnauthorizedResult();
 
-            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
+            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null, cancellationToken);
 
             // call the web service
             var downloadRequest = new DownloadFileRequest
@@ -75,11 +75,11 @@ namespace Csrs.Api.Services
 
             if (!hasAccess) return new NotFoundResult();
 
-            var fileSystemItemVMList = await GetListFilesInFolder(entityId, entityName, documentType);
+            var fileSystemItemVMList = await GetListFilesInFolder(entityId, entityName, documentType, cancellationToken);
             return new JsonResult(fileSystemItemVMList);
         }
 
-        public async Task<IActionResult> UploadAttachmentInternal(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
+        public async Task<IActionResult> UploadAttachment(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
         {
             FileSystemItem result = null;
 
@@ -120,21 +120,16 @@ namespace Csrs.Api.Services
 
             string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, type);
 
-            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
+            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null, cancellationToken);
             //For Testing purposes only   
             if (dynamicsFile is null)
             {
-                //return BadRequest("File can't be uploaded to no existent file");
-                //Create the file if it doesn't exist. This will be deleted.
-                dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile();
-                dynamicsFile.SsgCsrsfileid = CleanGuidForSharePoint(entityId);
-
-                dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.CreateAsync(dynamicsFile);
+                return new BadRequestResult();
             }
 
             var folderName = dynamicsFile.GetDocumentFolderName();
 
-            await CreateAccountDocumentLocation(dynamicsFile, folderName);
+            await CreateAccountDocumentLocation(dynamicsFile, folderName, cancellationToken);
 
             // call the web service
             var uploadRequest = new UploadFileRequest
@@ -169,7 +164,7 @@ namespace Csrs.Api.Services
         /// <param name="entityName"></param>
         /// <param name="documentType"></param>
         /// <returns></returns>
-        private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType)
+        private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType, CancellationToken cancellationToken)
         {
             var fileSystemItemVMList = new List<FileSystemItem>();
 
@@ -180,7 +175,7 @@ namespace Csrs.Api.Services
             {
                 try
                 {
-                    MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null);
+                    MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null, cancellationToken);
                     // call the web service
                     var request = new FolderFilesRequest
                     {
@@ -247,7 +242,7 @@ namespace Csrs.Api.Services
 
             MicrosoftDynamicsCRMssgCsrsparty parties = partiesCollection.Value.FirstOrDefault();
 
-            var actual = await _dynamicsClient.GetFilesByParty(parties.SsgCsrspartyid);
+            var actual = await _dynamicsClient.GetFilesByParty(parties.SsgCsrspartyid, cancellationToken);
 
             if (actual is null) return false;
 
@@ -257,7 +252,7 @@ namespace Csrs.Api.Services
 
         }
 
-        private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName)
+        private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName, CancellationToken cancellationToken)
         {
 
             // Create the SharePointDocumentLocation entity
@@ -269,13 +264,13 @@ namespace Csrs.Api.Services
                 Name = folderName
             };
 
-            var sharepointdocumentlocationid = await DocumentLocationExistsWithCleanup(mdcsdl);
+            var sharepointdocumentlocationid = await DocumentLocationExistsWithCleanup(mdcsdl, cancellationToken);
 
             if (sharepointdocumentlocationid is null)
             {
                 try
                 {
-                    mdcsdl = _dynamicsClient.Sharepointdocumentlocations.Create(mdcsdl);
+                    mdcsdl = await _dynamicsClient.Sharepointdocumentlocations.CreateAsync(mdcsdl, null, cancellationToken);
                 }
                 catch (HttpOperationException odee)
                 {
@@ -297,7 +292,7 @@ namespace Csrs.Api.Services
             }
         }
 
-        private async Task<string> DocumentLocationExistsWithCleanup(MicrosoftDynamicsCRMsharepointdocumentlocation mdcsdl)
+        private async Task<string> DocumentLocationExistsWithCleanup(MicrosoftDynamicsCRMsharepointdocumentlocation mdcsdl, CancellationToken cancellationToken)
         {
             var relativeUrl = mdcsdl.Relativeurl.Replace("'", "''");
             var filter = $"relativeurl eq '{relativeUrl}'";
@@ -316,7 +311,7 @@ namespace Csrs.Api.Services
                         // it is an invalid document location. cleanup.
                         try
                         {
-                            _dynamicsClient.Sharepointdocumentlocations.Delete(location.Sharepointdocumentlocationid);
+                            //_dynamicsClient.Sharepointdocumentlocations.Delete(location.Sharepointdocumentlocationid);
                         }
                         catch (HttpOperationException odee)
                         {

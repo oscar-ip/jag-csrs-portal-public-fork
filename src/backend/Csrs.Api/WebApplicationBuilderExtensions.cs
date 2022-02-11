@@ -85,6 +85,8 @@ public static class WebApplicationBuilderExtensions
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IDocumentService, DocumentService>();
+
     }
 
     private static void ConfigureFileManagerService(WebApplicationBuilder builder, FileManagerConfiguration? configuration, Serilog.ILogger logger)
