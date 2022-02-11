@@ -57,6 +57,8 @@ namespace Csrs.Api.Models
         public string? IsFMEPFileActive { get; set; } = "No";
         public string? FMEPFileNumber { get; set; }
 
+        public string? RecalculationOrderByCourt { get; set; } = "No";
+
         /// <summary>
         /// The other party on the file. The other party could be recipient or payer.
         /// The other party cannot have the same role as the applying party.

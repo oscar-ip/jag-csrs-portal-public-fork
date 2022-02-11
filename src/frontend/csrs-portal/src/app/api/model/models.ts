@@ -15,3 +15,4 @@ export * from './problemDetails.model';
 export * from './sSGCsrsBCCourtLevel.model';
 export * from './sSGIJSSBCCourtlocation.model';
 export * from './userRequest.model';
+export * from './courtLookupValue.model';

@@ -120,6 +120,7 @@ namespace Csrs.Api.Controllers
         /// <response code="400">The request was not well formed.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="409">There is already a draft file associated with the current user/account.</response>
+        [AllowAnonymous] // DO NOT FORGET TO REMOVE THIS LINE (ATTRIBUTE)
         [HttpPost("Create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]

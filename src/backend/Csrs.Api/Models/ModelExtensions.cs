@@ -57,7 +57,7 @@ namespace Csrs.Api.Models
             return Decimal.Parse(value);
         }
 
-        public static MicrosoftDynamicsCRMssgCsrsparty ToDynamicsModel(this Party party)
+        public static async Task<MicrosoftDynamicsCRMssgCsrsparty> ToDynamicsModelAsync(this Party party, IDynamicsClient dynamicsClient, CancellationToken cancellationToken)
         {
             MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty
             {
@@ -65,19 +65,19 @@ namespace Csrs.Api.Models
                 Statecode = 0,
                 Statuscode = 1,
                 //SsgIncomeassistance = ssgIncomeassistance;
-                SsgReferral = party.Referral?.Id,
+                SsgReferral = await GetLookupValueAsync(dynamicsClient, "ssg_referral", party.Referral?.Value, cancellationToken),
                 SsgCellphone = party.CellPhone,
                 SsgFirstname = party.FirstName,
                 SsgDateofbirth = ConvertToDTOffset(party.DateOfBirth),
                 SsgLastname = party.LastName,
                 SsgReferencenumber = party.ReferenceNumber,
-                SsgPartygender = party.Gender?.Id,
-                SsgPreferredcontactmethod = party.PreferredContactMethod?.Id,
+                SsgPartygender = await GetLookupValueAsync(dynamicsClient, "ssg_partygender", party.Gender?.Value, cancellationToken),
+                SsgPreferredcontactmethod = await GetLookupValueAsync(dynamicsClient, "ssg_preferredcontactmethod", party.PreferredContactMethod?.Value, cancellationToken),
                 SsgCity = party.City,
                 SsgWorkphone = party.WorkPhone,
-                SsgProvinceterritory = party.Province?.Id,
+                SsgProvinceterritory = await GetLookupValueAsync(dynamicsClient, "ssg_provinceterritory", party.Province?.Value, cancellationToken),
                 SsgMiddlename = party.MiddleName,
-                SsgGender = party.Gender?.Id,
+                SsgGender = await GetLookupValueAsync(dynamicsClient, "ssg_partygender", party.Gender?.Value, cancellationToken),
                 SsgHomephone = party.HomePhone,
                 SsgStreet2 = party.AddressStreet2,
                 SsgAreapostalcode = party.PostalCode,
@@ -85,7 +85,7 @@ namespace Csrs.Api.Models
                 //SsgBceidLastUpdate = ssgBceidLastUpdate, ????
                 SsgPreferredname = party.PreferredName,
                 //SsgPortalaccess = ssgPortalaccess, ????
-                SsgIdentity = party.Identity?.Id,
+                SsgIdentity = await GetLookupValueAsync(dynamicsClient, "ssg_identity", party.Identity?.Value, cancellationToken),
                 //SsgIdentityotherdetails = ssgIdentityotherdetails, ???
                 SsgStreet1 = party.AddressStreet1
             };
@@ -141,6 +141,8 @@ namespace Csrs.Api.Models
                 SsgDateoforderorwa = ConvertToDTOffset(file.DateOfOrderOrWA),
                 SsgIncomeonorder = ConvertToDecimal(file.IncomeOnOrder),
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
+
+                SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
 
                 //SsgSharedparenting = true; ???
                 //SsgSplitparentingarrangement = true; ??
@@ -220,6 +222,27 @@ namespace Csrs.Api.Models
             var value = values.Where(_ => _.Id == id.Value).SingleOrDefault();
             return value;
         }
+
+        private static async Task<int?> GetLookupValueAsync(IDynamicsClient dynamicsClient, string attributeName, string? label, CancellationToken cancellationToken)
+        {
+            if (label is null)
+            {
+                return null;
+            }
+
+            var metadata = await dynamicsClient.GetPicklistOptionSetMetadataAsync("ssg_csrsparty", attributeName,cancellationToken);
+            var values = metadata.ToViewModel();
+            var value = values.Where(_ => _.Value == label).SingleOrDefault();
+
+            if (value is null)
+            {
+                return null;
+            }
+            {
+                return value.Id;
+            }
+        }
+
 
         private static async Task<string?> GetCourtLocationValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
         {

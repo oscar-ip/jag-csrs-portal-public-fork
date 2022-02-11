@@ -6,7 +6,7 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpStatusCode, HttpResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { JsonPipe } from '@angular/common';
@@ -18,6 +18,19 @@ import { of } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import {MatDialog} from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
+
+// -- import data structure
+import {
+  NewFileRequest,
+  PartyRole,
+  FileStatus,
+  Party,
+  Child,
+  LookupValue,
+  CourtLookupValue
+  } from 'app/api/model/models';
+
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-child-application-question',
@@ -46,13 +59,16 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _oidc: OidcSecurityService;
   today = new Date();
   isEditable: boolean = false;
+  child: Child;
+  _reponse: HttpResponse<any>;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
               @Inject(LoggerService) private logger,
               @Inject(OidcSecurityService) private oidc,
-              public dialog: MatDialog) {}
+              public dialog: MatDialog,
+              private datePipe: DatePipe) {}
 
   ngOnInit() {
     this._accountService = this.accountService;
@@ -63,7 +79,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.provinceData = [{label: 'province', value: 'British Columbia'}];
     this.identityData = [{label: 'identity', value: 'Native'}];
     this.genderData =  [{label: 'gender', value: 'Male'}];
-    this.courtLocationsData =  [{label: 'courtLocation', ssg_bccourtlocationname: 'Victoria Court'}];
+    this.courtLocationsData =  [{label: 'courtLocation', value: 'Victoria Court'}];
     this.referalsData = [{label: 'referal', value: 'FMEP'}];
 
     this.getReferalsData();
@@ -98,18 +114,18 @@ export class ChildApplicationQuestionComponent implements OnInit {
       firstName: ['', Validators.required],
       givenNames: [''],
       lastName: ['', Validators.required],
-      pname: [],
-      birthdate: [],
-      saddress1: [],
-      saddress2: [],
+      pname: [''],
+      birthdate: [''],
+      saddress1: [''],
+      saddress2: [''],
       city: [''],
-      province: [],
-      postalCode: [],
-      homePhoneNumber: [],
-      cellPhoneNumber: [],
-      workPhoneNumber: [],
+      province: [''],
+      postalCode: [''],
+      homePhoneNumber: [''],
+      cellPhoneNumber: [''],
+      workPhoneNumber: [''],
       email: ['', Validators.required],
-      gender: []
+      gender: ['']
 
     });
 
@@ -142,6 +158,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.sixFormGroup = this._formBuilder.group({
       // secondCtrl: ['', Validators.required],
       childSafety: [''],
+      childSafetyDescription: [''],
       contactMethod: [''],
       enrollFMEP: [''],
       FMEPinput: [''],
@@ -211,10 +228,12 @@ editPage(stepper, index){
 }
   getIdentityData() {
 
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountIdentitiesGet().subscribe({
-        next: (data) => this.identityData = data,
-
+        next: (data) => {
+          this.identityData = data;
+          this._logger.info('this.identityData',this.identityData);
+        },
         error: (e) => {
           if (e.error instanceof Error) {
             this._logger.error(e.error.message);
@@ -228,9 +247,12 @@ editPage(stepper, index){
   }
 
   getProvinceData() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountProvincesGet().subscribe({
-      next: (data) => this.provinceData = data,
+      next: (data) => {
+        this.provinceData = data;
+        this._logger.info('this.provinceData',this.provinceData);
+      },
       error: (e) => {
         if (e.error instanceof Error) {
           this._logger.error(e.error.message);
@@ -244,9 +266,12 @@ editPage(stepper, index){
   }
 
   getGenderyData() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountGendersGet().subscribe({
-      next: (data) => this.genderData = data,
+      next: (data) => {
+        this.genderData = data;
+        this._logger.info('this.genderData',this.genderData);
+      },
       error: (e) => {
         if (e.error instanceof Error) {
           this._logger.error(e.error.message);
@@ -260,9 +285,12 @@ editPage(stepper, index){
   }
 
   getCourtLocationData() {
-    this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
       this._lookupService.apiLookupCourtlocationsGet().subscribe({
-        next: (data) => this.courtLocationsData = data,
+        next: (data) => {
+          this.courtLocationsData = data;
+          this._logger.info('this.courtLocationsData',this.courtLocationsData);
+        },
         error: (e) => {
           if (e.error instanceof Error) {
             this._logger.error(e.error.message);
@@ -276,9 +304,12 @@ editPage(stepper, index){
   }
 
   getReferalsData() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountReferralsGet().subscribe({
-      next: (data) => this.referalsData = data,
+      next: (data) => {
+        this.referalsData = data;
+        this._logger.info('this.referalsData',this.referalsData);
+      },
       error: (e) => {
         if (e.error instanceof Error) {
           this._logger.error(e.error.message);
@@ -300,6 +331,7 @@ editPage(stepper, index){
       lastName: [''],
       birthdate: [],
       givenNames: [],
+      childDependency: [],
       middleName: []
     });
 
@@ -318,11 +350,201 @@ editPage(stepper, index){
       eFormGroup: this.eFormGroup.value,
       nineFormGroup: this.nineFormGroup.value,
     };
+
+    this._logger.info("formData", formData);
+    this.prepareData();
+
     localStorage.setItem('formData', JSON.stringify(formData));
   }
   save(){
+    this.prepareData();
+
     localStorage.getsetItemItem('formData', '');
   }
+
+  transformDate(date) {
+    return this.datePipe.transform(date, 'yyyy-MM-dd');
+  }
+
+  prepareData(){
+
+    // --- populate children
+    const users = this.fourthFormGroup1.value.users;
+    let childs: Array<Child> = new Array<Child>();
+
+    for(var i = 0; i < users.length;i++) {
+      let child: Child = {
+        firstName: users[i].firstName,
+        middleName: users[i].middleName,
+        lastName: users[i].lastName,
+        dateOfBirth: this.transformDate(users[i].birthdate),
+        childIsDependent: users[i].childDependency
+        //childIsDependent: users[i].childDependency == 'Yes' ? true :
+        //  users[i].childDependency == 'No'  ? false : null
+      };
+      childs.push(child)
+    }
+
+      // --- populate partyRole
+      const roleData = this.firstFormGroup.value;
+      let partyRole: PartyRole = PartyRole.Unknown;
+      let partyEnrolled = '';
+
+      if (roleData.firstControl == 'I am the receipent, i currently receive child support')
+      {
+        partyRole = PartyRole.Recipient;
+        partyEnrolled = 'Recipient';
+      }
+      else
+      {
+        partyRole = PartyRole.Payor;
+        partyEnrolled = 'Payor';
+      }
+
+      // --- populate party
+      const partyData = this.secondFormGroup.value;
+      const file1Data = this.fifthFormGroup.value;
+      const file2Data = this.sixFormGroup.value;
+
+      //let LookupValue
+      let inGender: LookupValue = { value: partyData.gender };
+      let inProvince: LookupValue = { value: partyData.province};
+      let inIdentityParty: LookupValue = { value: partyData.identity};
+      let inReferral: LookupValue = { value: file2Data.referals };
+
+      let inParty: Party = {
+          partyId: '00000000-0000-0000-0000-000000000000',
+          firstName: partyData.firstName,
+          middleName: partyData.givenNames,
+          lastName: partyData.lastName,
+          preferredName: partyData.PreferredName,
+          dateOfBirth: this.transformDate(partyData.birthdate),
+          gender: inGender,
+          addressStreet1: partyData.address1,
+          addressStreet2: partyData.saddress,
+          city: partyData.city,
+          province: inProvince,
+          postalCode: partyData.postalCode,
+          homePhone: partyData.phoneNumber,
+          workPhone: partyData.workNumber,
+          cellPhone: partyData.cellNumber,
+          email: partyData.email,
+          optOutElectronicDocuments: null,   // ??? may need to remove?
+          identity: inIdentityParty,
+          referral: inReferral
+          //preferredContactMethod = { value = inFile2.gender},
+          //referenceNumber = null
+      }
+
+      // --- populate other party
+      const otherPartyData = this.thirdFormGroup.value;
+      let inOtherGender: LookupValue = { value: otherPartyData.gender};
+      let inOtherProvince: LookupValue = { value: otherPartyData.province};
+
+      let inOtherParty: Party = {
+            partyId: "00000000-0000-0000-0000-000000000000",
+            firstName: otherPartyData.firstName,
+            middleName: otherPartyData.givenNames,
+            lastName: otherPartyData.lastName,
+            preferredName: otherPartyData.pname,
+            dateOfBirth: this.transformDate(otherPartyData.birthdate),
+            gender: inOtherGender,
+            addressStreet1: otherPartyData.saddress1,
+            addressStreet2: otherPartyData.saddress2,
+            city: otherPartyData.city,
+            province: inOtherProvince,
+            postalCode: otherPartyData.postalCode,
+            homePhone: otherPartyData.homePhoneNumber,
+            workPhone: otherPartyData.workPhoneNumber,
+            cellPhone: otherPartyData.cellPhoneNumber,
+            email: otherPartyData.email,
+            optOutElectronicDocuments: null,
+            identity: null,
+            referral: null,
+            //preferredContactMethod = null,
+            //referenceNumber = null
+      }
+
+      // --- populate file
+      let inCourtFileType: LookupValue = {value: roleData.secondControl};
+
+      //let inBcCourtLocation: CourtLookupValue = {value: file1Data.courtLocation.value};
+      let inBcCourtLocation: any;
+      if (typeof inBcCourtLocation === 'undefined') {
+        inBcCourtLocation = null;
+      }
+      else
+      {
+        inBcCourtLocation = file1Data.courtLocation;
+      }
+      this._logger.info('inBcCourtLocation',inBcCourtLocation);
+      this._logger.info('file1Data.courtLocation.value',file1Data.courtLocation.value);
+
+      let inFile:any = {
+          status: FileStatus.Unknown,
+          usersRole: partyRole,
+          fileId: '0',
+          fileNumber: null,
+          partyEnrolled: partyEnrolled,
+          courtFileType: inCourtFileType,
+          bcCourtLevel: 'Provincial',
+          bcCourtLocation: inBcCourtLocation,
+          dateOfOrderOrWA: this.transformDate(file1Data.orderDate),
+          incomeOnOrder: file1Data.payorIncome,
+          //file2Data.incomeAssistance,
+          section7Expenses: file1Data.isSpecifiedIncome,
+          safetyAlertRecipient: null,
+          recipientSafetyConcernDescription: null,
+          safetyAlertPayor: null,
+          payorSafetyConcernDescription: null,
+          isFMEPFileActive: file2Data.enrollFMEP,
+          fmepFileNumber: file2Data.FMEPinput,
+          recalculationOrderByCourt: file1Data.recalculationOrdered,
+          otherParty: inOtherParty,
+          children: childs
+      }
+
+      // --- populate
+      let newFileRequest: NewFileRequest = {
+        bCeiD: '26336072-cba4-4b6e-871b-5355d27df9b3',
+        user: inParty,
+        file: inFile,
+      }
+
+      //if (partyRole == PartyRole.Recipient)
+      if (partyEnrolled == 'Recipient')
+      {
+        newFileRequest.file.safetyAlertRecipient = file2Data.childSafety;
+        newFileRequest.file.recipientSafetyConcernDescription = file2Data.childSafetyDescription;
+      }
+      else
+      {
+        newFileRequest.file.safetyAlertPayor = file2Data.childSafety;
+        newFileRequest.file.payorSafetyConcernDescription = file2Data.childSafetyDescription;
+      }
+
+      this._logger.info("newFileRequest:", newFileRequest);
+
+    //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    this._accountService.apiAccountCreatePost(newFileRequest).subscribe({
+      next: (newFileRequest) => {
+        this._reponse = newFileRequest;
+        if ( this._reponse.status === HttpStatusCode.Ok) {
+          this._logger.info("_reponse:", this._reponse);
+        }
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this._logger.error(e.error.message);
+        } else {
+            //Backend returns unsuccessful response codes such as 404, 500 etc.
+            this._logger.info('Backend returned ', e);
+          }
+      },
+      complete: () => this._logger.info('apiAccountCreatePost is completed')
+    })
+
+    }
 
 
 }

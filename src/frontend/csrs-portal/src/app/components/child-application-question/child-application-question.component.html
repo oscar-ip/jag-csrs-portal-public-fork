@@ -72,7 +72,7 @@
 
         <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
           <form [formGroup]="secondFormGroup">
-            <ng-template matStepLabel>Your Personal Information</ng-template>            
+            <ng-template matStepLabel>Your Personal Information</ng-template>
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
@@ -419,7 +419,7 @@
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
-           
+
           </div>
           <mat-divider></mat-divider>
           <div class="nextButton">
@@ -525,7 +525,7 @@
                 <mat-form-field class="w-100">
                   <mat-select formControlName="courtLocation">
                     <mat-option *ngFor="let locationValue of courtLocationsData; index as pi" value='locationValue.value'>
-                      {{locationValue.ssg_bccourtlocationname}}
+                      {{locationValue.value}}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -609,7 +609,7 @@
                 <mat-label>If yes, please provide any details including if there any
                   protection orders in place involving you or the other
                   party?</mat-label>
-                <input matInput #input/>
+                <input formControlName="childSafetyDescription" matInput #input/>
               </mat-form-field>
             </div>
             <div class="row text-dark mt-2">
@@ -1109,7 +1109,7 @@
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
-                    My FMEP file number is: 
+                    My FMEP file number is:
                   </div>
                 </div>
                 <div class="col-md-2 stepRow ">
@@ -1124,7 +1124,7 @@
                 </div>
                 <div class="col-md-2 stepRow ">
                   <div class="bold">{{(sixFormGroup.value.incomeAssistance)?sixFormGroup.value.incomeAssistance:'-'}}</div>
-v                </div>
+                </div>
               </div>
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
@@ -1183,7 +1183,7 @@ v                </div>
             >All of the information above is correct to the best of my knowledge</mat-checkbox>
             <app-alert type="warning" icon="info">
               <ng-container #alertContent class="alert-content">
-                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission. 
+                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission.
                 </strong>
               </ng-container>
             </app-alert>
@@ -1202,10 +1202,10 @@ v                </div>
           </form>
         </mat-step>
       </mat-stepper>
-      <!-- <div>
+      <div>
         <button mat-button (click)="saveLater()">Save fot later</button>
         <button mat-button (click)="save()">Save</button>
-      </div> -->
+      </div>
     </div>
   </section>
 </div>

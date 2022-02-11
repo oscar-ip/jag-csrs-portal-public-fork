@@ -71,7 +71,7 @@ namespace Csrs.Api.Services
         {
             ArgumentNullException.ThrowIfNull(party);
 
-            MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = party.ToDynamicsModel();
+            MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = await party.ToDynamicsModelAsync(_dynamicsClient, cancellationToken);
 
             if (dynamicsParty.SsgCsrspartyid is null)
             {

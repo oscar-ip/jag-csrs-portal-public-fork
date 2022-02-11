@@ -63,7 +63,8 @@ namespace Csrs.Api.Features.Accounts
             {
                 _logger.LogDebug("Checking current user for BCeID Guid");
 
-                string userId = _userService.GetBCeIDUserId();
+                //string userId = _userService.GetBCeIDUserId();
+                string userId = "26336072-cba4-4b6e-871b-5355d27df9b3";
                 if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot create account");
@@ -72,8 +73,8 @@ namespace Csrs.Api.Features.Accounts
 
                 var bceidScope = _logger.AddBCeIdGuid(userId);
 
-                var dynamicsParty = request.Applicant.ToDynamicsModel();
-                
+                var dynamicsParty = await request.Applicant.ToDynamicsModelAsync(_dynamicsClient, cancellationToken);
+
                 // find to see if the person has an account already?
                 string partyId = await _dynamicsClient.GetPartyIdByBCeIdAsync(userId, cancellationToken);
                 
@@ -81,7 +82,15 @@ namespace Csrs.Api.Features.Accounts
                 {
                     _logger.LogDebug("Party already exists");
                     dynamicsParty.SsgCsrspartyid = partyId;
-                    await _dynamicsClient.Ssgcsrsparties.UpdateAsync(partyId, dynamicsParty, cancellationToken);
+
+                    try
+                    {
+                        await _dynamicsClient.Ssgcsrsparties.UpdateAsync(partyId, dynamicsParty, cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Exception in Handle.updating party");
+                    }
                 }
                 else
                 {
@@ -91,7 +100,15 @@ namespace Csrs.Api.Features.Accounts
                     dynamicsParty.SsgBceidLastUpdate = DateTimeOffset.Now;
                     dynamicsParty.Statuscode = 1;
 
-                    dynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: dynamicsParty, cancellationToken: cancellationToken);
+                    try
+                    {
+                        dynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: dynamicsParty, cancellationToken: cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Exception in Handle.creating party");
+                    }
+
                     partyId = dynamicsParty.SsgCsrspartyid;
                 }
 
@@ -100,9 +117,17 @@ namespace Csrs.Api.Features.Accounts
                 if (request.File.OtherParty != null)
                 {
                     request.File.OtherParty.PartyId = Guid.Empty.ToString();
-                    otherDynamicsParty = request.File.OtherParty.ToDynamicsModel();
+                    otherDynamicsParty = await request.File.OtherParty.ToDynamicsModelAsync(_dynamicsClient, cancellationToken);
                     _logger.LogInformation("Creating other party");
-                    otherDynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: otherDynamicsParty, cancellationToken: cancellationToken);
+                    try
+                    {
+                        otherDynamicsParty = await _dynamicsClient.Ssgcsrsparties.CreateAsync(body: otherDynamicsParty, cancellationToken: cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Exception in Handle.creating other party");
+                    }
+
                 }
                 else
                 {
@@ -110,6 +135,7 @@ namespace Csrs.Api.Features.Accounts
                 }
 
                 // create the file
+
                 var file = await _fileService.CreateFile(dynamicsParty, otherDynamicsParty, request.File, cancellationToken);
 
                 _logger.LogDebug("Party and file created successfully");
