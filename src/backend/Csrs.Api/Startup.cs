@@ -47,7 +47,7 @@ public static class Startup
                 Title = "CSRS API",
                 Description = "BC Child Support Recalculation Service API",
             });
-            /*
+            
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -58,7 +58,7 @@ public static class Startup
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement { {
             new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } }, new string[] { } } });
-            */
+            
             c.EnableAnnotations();
 
             // Set the comments path for the Swagger JSON and UI.

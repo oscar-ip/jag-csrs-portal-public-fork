@@ -61,27 +61,27 @@ public static class WebApplicationBuilderExtensions
         // Register IOAuthApiClient and ODataClientSettings
         services.AddHttpClient<IOAuthApiClient, OAuthApiClient>(client =>
         {
-            //client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
-            client.Timeout = TimeSpan.FromSeconds(150); 
+            client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
+            //client.Timeout = TimeSpan.FromSeconds(150); 
         });
 
         // Register httpClient for OdataClient with OAuthHandler
         services.AddHttpClient<ODataClientSettings>(client => 
         {
-            //client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
-            //client.Timeout = TimeSpan.FromSeconds(30); // data timeout
-            client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
-            client.Timeout = TimeSpan.FromSeconds(300); // data timeout
+            client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
+            client.Timeout = TimeSpan.FromSeconds(30); // data timeout
+            //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+            //client.Timeout = TimeSpan.FromSeconds(300); // data timeout
         })
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();
 
         services.AddHttpClient<IDynamicsClient, DynamicsClient>(client =>
         {
-            //client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
-            //client.Timeout = TimeSpan.FromSeconds(30); // data timeout
-            client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
-            client.Timeout = TimeSpan.FromSeconds(300); // data timeout
+            client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
+            client.Timeout = TimeSpan.FromSeconds(30); // data timeout
+            //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+            //client.Timeout = TimeSpan.FromSeconds(300); // data timeout
         })
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();
