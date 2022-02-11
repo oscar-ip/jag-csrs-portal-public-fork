@@ -19,12 +19,12 @@ namespace Csrs.Interfaces.Dynamics
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Entitydefinitions operations.
+    /// Tasks operations.
     /// </summary>
-    public partial class Entitydefinitions : IServiceOperations<DynamicsClient>, IEntitydefinitions
+    public partial class Tasks : IServiceOperations<DynamicsClient>, ITasks
     {
         /// <summary>
-        /// Initializes a new instance of the Entitydefinitions class.
+        /// Initializes a new instance of the Tasks class.
         /// </summary>
         /// <param name='client'>
         /// Reference to the service client.
@@ -32,7 +32,7 @@ namespace Csrs.Interfaces.Dynamics
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public Entitydefinitions(DynamicsClient client)
+        public Tasks(DynamicsClient client)
         {
             if (client == null)
             {
@@ -47,7 +47,7 @@ namespace Csrs.Interfaces.Dynamics
         public DynamicsClient Client { get; private set; }
 
         /// <summary>
-        /// Get entities from EntityDefinitions
+        /// Get entities from tasks
         /// </summary>
         /// <param name='top'>
         /// </param>
@@ -83,7 +83,7 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadataCollection>> GetWithHttpMessagesAsync(int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMtaskCollection>> GetWithHttpMessagesAsync(int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -105,7 +105,7 @@ namespace Csrs.Interfaces.Dynamics
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "EntityDefinitions").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "tasks").ToString();
             List<string> _queryParameters = new List<string>();
             if (top != null)
             {
@@ -208,7 +208,7 @@ namespace Csrs.Interfaces.Dynamics
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadataCollection>();
+            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMtaskCollection>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -217,7 +217,7 @@ namespace Csrs.Interfaces.Dynamics
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMEntityMetadataCollection>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMtaskCollection>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -237,7 +237,7 @@ namespace Csrs.Interfaces.Dynamics
         }
 
         /// <summary>
-        /// Add new entity to EntityDefinitions
+        /// Add new entity to tasks
         /// </summary>
         /// <param name='body'>
         /// New entity
@@ -267,7 +267,7 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadata>> CreateWithHttpMessagesAsync(MicrosoftDynamicsCRMEntityMetadata body, string prefer = "return=representation", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMtask>> CreateWithHttpMessagesAsync(MicrosoftDynamicsCRMtask body, string prefer = "return=representation", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (body == null)
             {
@@ -287,7 +287,7 @@ namespace Csrs.Interfaces.Dynamics
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "EntityDefinitions").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "tasks").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -367,7 +367,7 @@ namespace Csrs.Interfaces.Dynamics
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadata>();
+            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMtask>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -376,7 +376,7 @@ namespace Csrs.Interfaces.Dynamics
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMEntityMetadata>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMtask>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -396,10 +396,10 @@ namespace Csrs.Interfaces.Dynamics
         }
 
         /// <summary>
-        /// Get entity from EntityDefinitions by key
+        /// Get entity from tasks by key
         /// </summary>
-        /// <param name='metadataId'>
-        /// key: MetadataId of EntityMetadata
+        /// <param name='activityid'>
+        /// key: activityid of task
         /// </param>
         /// <param name='select'>
         /// Select properties to be returned
@@ -428,11 +428,11 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadata>> GetByKeyWithHttpMessagesAsync(string metadataId, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMtask>> GetByKeyWithHttpMessagesAsync(string activityid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (metadataId == null)
+            if (activityid == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "metadataId");
+                throw new ValidationException(ValidationRules.CannotBeNull, "activityid");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -441,7 +441,7 @@ namespace Csrs.Interfaces.Dynamics
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("metadataId", metadataId);
+                tracingParameters.Add("activityid", activityid);
                 tracingParameters.Add("select", select);
                 tracingParameters.Add("expand", expand);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -449,8 +449,8 @@ namespace Csrs.Interfaces.Dynamics
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "EntityDefinitions({MetadataId})").ToString();
-            _url = _url.Replace("{MetadataId}", System.Uri.EscapeDataString(metadataId));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "tasks({activityid})").ToString();
+            _url = _url.Replace("{activityid}", System.Uri.EscapeDataString(activityid));
             List<string> _queryParameters = new List<string>();
             if (select != null)
             {
@@ -529,7 +529,7 @@ namespace Csrs.Interfaces.Dynamics
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadata>();
+            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMtask>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -538,7 +538,7 @@ namespace Csrs.Interfaces.Dynamics
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMEntityMetadata>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMtask>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -558,10 +558,10 @@ namespace Csrs.Interfaces.Dynamics
         }
 
         /// <summary>
-        /// Update entity in EntityDefinitions
+        /// Update entity in tasks
         /// </summary>
-        /// <param name='metadataId'>
-        /// key: MetadataId of EntityMetadata
+        /// <param name='activityid'>
+        /// key: activityid of task
         /// </param>
         /// <param name='body'>
         /// New property values
@@ -584,11 +584,11 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(string metadataId, MicrosoftDynamicsCRMEntityMetadata body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(string activityid, MicrosoftDynamicsCRMtask body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (metadataId == null)
+            if (activityid == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "metadataId");
+                throw new ValidationException(ValidationRules.CannotBeNull, "activityid");
             }
             if (body == null)
             {
@@ -601,15 +601,15 @@ namespace Csrs.Interfaces.Dynamics
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("metadataId", metadataId);
+                tracingParameters.Add("activityid", activityid);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "Update", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "EntityDefinitions({MetadataId})").ToString();
-            _url = _url.Replace("{MetadataId}", System.Uri.EscapeDataString(metadataId));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "tasks({activityid})").ToString();
+            _url = _url.Replace("{activityid}", System.Uri.EscapeDataString(activityid));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -692,10 +692,10 @@ namespace Csrs.Interfaces.Dynamics
         }
 
         /// <summary>
-        /// Delete entity from EntityDefinitions
+        /// Delete entity from tasks
         /// </summary>
-        /// <param name='metadataId'>
-        /// key: MetadataId of EntityMetadata
+        /// <param name='activityid'>
+        /// key: activityid of task
         /// </param>
         /// <param name='ifMatch'>
         /// ETag
@@ -718,11 +718,11 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(string metadataId, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(string activityid, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (metadataId == null)
+            if (activityid == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "metadataId");
+                throw new ValidationException(ValidationRules.CannotBeNull, "activityid");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -731,15 +731,15 @@ namespace Csrs.Interfaces.Dynamics
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("metadataId", metadataId);
+                tracingParameters.Add("activityid", activityid);
                 tracingParameters.Add("ifMatch", ifMatch);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "Delete", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "EntityDefinitions({MetadataId})").ToString();
-            _url = _url.Replace("{MetadataId}", System.Uri.EscapeDataString(metadataId));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "tasks({activityid})").ToString();
+            _url = _url.Replace("{activityid}", System.Uri.EscapeDataString(activityid));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;

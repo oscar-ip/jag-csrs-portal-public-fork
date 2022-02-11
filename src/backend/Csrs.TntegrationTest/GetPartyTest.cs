@@ -316,7 +316,7 @@ namespace Csrs.TntegrationTest
             //csrsFile.SsgSection7recipientsamount = 400.00m;
             //csrsFile.SsgSection7payorsproportion = 20;
 
-            csrsFile.SsgRegistrationdate = "2008-02-02";
+            csrsFile.SsgRegistrationdate = DateTimeOffset.Parse("2008-02-02");
             csrsFile.SsgDateoforderorwa = DateTimeOffset.Parse("2008-02-02");
 
             csrsFile.SsgStyleofcauseapplicant = "Applicant";

@@ -220,7 +220,6 @@ namespace odata2openapi
             entities.Add("ssg_csrsbccourtlevels");
             entities.Add("ssg_ijssbccourtlocations");
 
-            entities.Add("entitydefinitions");
             entities.Add("sharepointsites");
             entities.Add("sharepointdocumentlocations");
 
@@ -1062,6 +1061,28 @@ namespace odata2openapi
             "Add new entity to ssg_csrsfeedbacks",
             "Update entity in ssg_csrsfeedbacks",
             "Delete entity from ssg_csrsfeedbacks",
+            //
+            "Get entities from ssg_csrsbccourtlevels",
+            "Get entity from ssg_csrsbccourtlevels by key",
+            "Add new entity to ssg_csrsbccourtlevels",
+            "Update entity in ssg_csrsbccourtlevels",
+            //"Delete entity from ssg_csrsbccourtlevels",
+            //
+            "Get entities from ssg_ijssbccourtlocations",
+            "Get entity from ssg_ijssbccourtlocations by key",
+            "Add new entity to ssg_ijssbccourtlocations",
+            "Update entity in ssg_ijssbccourtlocations",
+            //"Delete entity from ssg_csrsbccourtlevels",
+             //
+            "Get entities from sharepointsites",
+            "Get entity from sharepointsites by key",
+            "Add new entity to sharepointsites",
+            "Update entity in sharepointsites",
+            //
+            "Get entities from sharepointdocumentlocations",
+            "Get entity from sharepointdocumentlocations by key",
+            "Add new entity to sharepointdocumentlocations",
+            "Update entity in sharepointdocumentlocations",
             //
             "Get entities from tasks",
             "Get entity from tasks by key",

@@ -13,12 +13,12 @@ namespace Csrs.Interfaces.Dynamics
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Extension methods for Entitydefinitions.
+    /// Extension methods for Tasks.
     /// </summary>
-    public static partial class EntitydefinitionsExtensions
+    public static partial class TasksExtensions
     {
             /// <summary>
-            /// Get entities from EntityDefinitions
+            /// Get entities from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -42,13 +42,13 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='expand'>
             /// Expand related entities
             /// </param>
-            public static MicrosoftDynamicsCRMEntityMetadataCollection Get(this IEntitydefinitions operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
+            public static MicrosoftDynamicsCRMtaskCollection Get(this ITasks operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
             {
                 return operations.GetAsync(top, skip, search, filter, count, orderby, select, expand).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Get entities from EntityDefinitions
+            /// Get entities from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -75,7 +75,7 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<MicrosoftDynamicsCRMEntityMetadataCollection> GetAsync(this IEntitydefinitions operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<MicrosoftDynamicsCRMtaskCollection> GetAsync(this ITasks operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetWithHttpMessagesAsync(top, skip, search, filter, count, orderby, select, expand, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -84,7 +84,7 @@ namespace Csrs.Interfaces.Dynamics
             }
 
             /// <summary>
-            /// Add new entity to EntityDefinitions
+            /// Add new entity to tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -96,13 +96,13 @@ namespace Csrs.Interfaces.Dynamics
             /// Required in order for the service to return a JSON representation of the
             /// object.
             /// </param>
-            public static MicrosoftDynamicsCRMEntityMetadata Create(this IEntitydefinitions operations, MicrosoftDynamicsCRMEntityMetadata body, string prefer = "return=representation")
+            public static MicrosoftDynamicsCRMtask Create(this ITasks operations, MicrosoftDynamicsCRMtask body, string prefer = "return=representation")
             {
                 return operations.CreateAsync(body, prefer).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Add new entity to EntityDefinitions
+            /// Add new entity to tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -117,7 +117,7 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<MicrosoftDynamicsCRMEntityMetadata> CreateAsync(this IEntitydefinitions operations, MicrosoftDynamicsCRMEntityMetadata body, string prefer = "return=representation", CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<MicrosoftDynamicsCRMtask> CreateAsync(this ITasks operations, MicrosoftDynamicsCRMtask body, string prefer = "return=representation", CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateWithHttpMessagesAsync(body, prefer, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -126,13 +126,13 @@ namespace Csrs.Interfaces.Dynamics
             }
 
             /// <summary>
-            /// Get entity from EntityDefinitions by key
+            /// Get entity from tasks by key
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='metadataId'>
-            /// key: MetadataId of EntityMetadata
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='select'>
             /// Select properties to be returned
@@ -140,19 +140,19 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='expand'>
             /// Expand related entities
             /// </param>
-            public static MicrosoftDynamicsCRMEntityMetadata GetByKey(this IEntitydefinitions operations, string metadataId, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
+            public static MicrosoftDynamicsCRMtask GetByKey(this ITasks operations, string activityid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
             {
-                return operations.GetByKeyAsync(metadataId, select, expand).GetAwaiter().GetResult();
+                return operations.GetByKeyAsync(activityid, select, expand).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Get entity from EntityDefinitions by key
+            /// Get entity from tasks by key
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='metadataId'>
-            /// key: MetadataId of EntityMetadata
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='select'>
             /// Select properties to be returned
@@ -163,39 +163,39 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<MicrosoftDynamicsCRMEntityMetadata> GetByKeyAsync(this IEntitydefinitions operations, string metadataId, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<MicrosoftDynamicsCRMtask> GetByKeyAsync(this ITasks operations, string activityid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetByKeyWithHttpMessagesAsync(metadataId, select, expand, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetByKeyWithHttpMessagesAsync(activityid, select, expand, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// Update entity in EntityDefinitions
+            /// Update entity in tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='metadataId'>
-            /// key: MetadataId of EntityMetadata
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='body'>
             /// New property values
             /// </param>
-            public static void Update(this IEntitydefinitions operations, string metadataId, MicrosoftDynamicsCRMEntityMetadata body)
+            public static void Update(this ITasks operations, string activityid, MicrosoftDynamicsCRMtask body)
             {
-                operations.UpdateAsync(metadataId, body).GetAwaiter().GetResult();
+                operations.UpdateAsync(activityid, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Update entity in EntityDefinitions
+            /// Update entity in tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='metadataId'>
-            /// key: MetadataId of EntityMetadata
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='body'>
             /// New property values
@@ -203,36 +203,36 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateAsync(this IEntitydefinitions operations, string metadataId, MicrosoftDynamicsCRMEntityMetadata body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateAsync(this ITasks operations, string activityid, MicrosoftDynamicsCRMtask body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateWithHttpMessagesAsync(metadataId, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateWithHttpMessagesAsync(activityid, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
-            /// Delete entity from EntityDefinitions
+            /// Delete entity from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='metadataId'>
-            /// key: MetadataId of EntityMetadata
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='ifMatch'>
             /// ETag
             /// </param>
-            public static void Delete(this IEntitydefinitions operations, string metadataId, string ifMatch = default(string))
+            public static void Delete(this ITasks operations, string activityid, string ifMatch = default(string))
             {
-                operations.DeleteAsync(metadataId, ifMatch).GetAwaiter().GetResult();
+                operations.DeleteAsync(activityid, ifMatch).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Delete entity from EntityDefinitions
+            /// Delete entity from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='metadataId'>
-            /// key: MetadataId of EntityMetadata
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='ifMatch'>
             /// ETag
@@ -240,9 +240,9 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteAsync(this IEntitydefinitions operations, string metadataId, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteAsync(this ITasks operations, string activityid, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteWithHttpMessagesAsync(metadataId, ifMatch, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteWithHttpMessagesAsync(activityid, ifMatch, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
     }

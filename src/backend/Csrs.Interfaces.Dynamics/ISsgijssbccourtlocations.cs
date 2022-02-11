@@ -129,27 +129,5 @@ namespace Csrs.Interfaces.Dynamics
         /// Thrown when a required parameter is null
         /// </exception>
         Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(string ssgIjssbccourtlocationid, MicrosoftDynamicsCRMssgIjssbccourtlocation body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-        /// <summary>
-        /// Delete entity from ssg_ijssbccourtlocations
-        /// </summary>
-        /// <param name='ssgIjssbccourtlocationid'>
-        /// key: ssg_ijssbccourtlocationid of ssg_ijssbccourtlocation
-        /// </param>
-        /// <param name='ifMatch'>
-        /// ETag
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="Microsoft.Rest.HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="Microsoft.Rest.ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(string ssgIjssbccourtlocationid, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
