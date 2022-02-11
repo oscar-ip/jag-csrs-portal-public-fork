@@ -66,11 +66,6 @@ namespace Csrs.Interfaces.Dynamics
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Gets the IEntitydefinitions.
-        /// </summary>
-        public virtual IEntitydefinitions Entitydefinitions { get; private set; }
-
-        /// <summary>
         /// Gets the ISharepointdocumentlocations.
         /// </summary>
         public virtual ISharepointdocumentlocations Sharepointdocumentlocations { get; private set; }
@@ -116,14 +111,9 @@ namespace Csrs.Interfaces.Dynamics
         public virtual ISsgijssbccourtlocations Ssgijssbccourtlocations { get; private set; }
 
         /// <summary>
-        /// Gets the ISsgnotestemplateses.
+        /// Gets the ITasks.
         /// </summary>
-        public virtual ISsgnotestemplateses Ssgnotestemplateses { get; private set; }
-
-        /// <summary>
-        /// Gets the IUpdatestatevalue.
-        /// </summary>
-        public virtual IUpdatestatevalue Updatestatevalue { get; private set; }
+        public virtual ITasks Tasks { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the DynamicsClient class.
@@ -366,7 +356,6 @@ namespace Csrs.Interfaces.Dynamics
         /// </summary>
         private void Initialize()
         {
-            Entitydefinitions = new Entitydefinitions(this);
             Sharepointdocumentlocations = new Sharepointdocumentlocations(this);
             Sharepointsites = new Sharepointsites(this);
             Ssgcsrsbccourtlevels = new Ssgcsrsbccourtlevels(this);
@@ -376,8 +365,7 @@ namespace Csrs.Interfaces.Dynamics
             Ssgcsrsfiles = new Ssgcsrsfiles(this);
             Ssgcsrsparties = new Ssgcsrsparties(this);
             Ssgijssbccourtlocations = new Ssgijssbccourtlocations(this);
-            Ssgnotestemplateses = new Ssgnotestemplateses(this);
-            Updatestatevalue = new Updatestatevalue(this);
+            Tasks = new Tasks(this);
             BaseUri = new System.Uri("http://localhost");
             SerializationSettings = new JsonSerializerSettings
             {

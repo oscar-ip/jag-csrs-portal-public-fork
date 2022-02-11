@@ -10,246 +10,6 @@
     "http"
   ],
   "paths": {
-    "/EntityDefinitions": {
-      "get": {
-        "tags": [
-          "EntityDefinitions.EntityMetadata"
-        ],
-        "summary": "Get entities from EntityDefinitions",
-        "operationId": "Entitydefinitions_Get",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "$top",
-            "type": "integer"
-          },
-          {
-            "in": "query",
-            "name": "$skip",
-            "type": "integer"
-          },
-          {
-            "in": "query",
-            "name": "$search",
-            "type": "string"
-          },
-          {
-            "in": "query",
-            "name": "$filter",
-            "type": "string"
-          },
-          {
-            "in": "query",
-            "name": "$count",
-            "type": "boolean"
-          },
-          {
-            "in": "query",
-            "name": "$orderby",
-            "description": "Order items by property values",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv"
-          },
-          {
-            "in": "query",
-            "name": "$select",
-            "description": "Select properties to be returned",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv"
-          },
-          {
-            "in": "query",
-            "name": "$expand",
-            "description": "Expand related entities",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Retrieved entities",
-            "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.EntityMetadataCollection"
-            }
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "EntityDefinitions.EntityMetadata"
-        ],
-        "summary": "Add new entity to EntityDefinitions",
-        "operationId": "Entitydefinitions_Create",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Prefer",
-            "description": "Required in order for the service to return a JSON representation of the object.",
-            "type": "string",
-            "default": "return=representation"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "New entity",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.EntityMetadata"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created entity",
-            "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.EntityMetadata"
-            }
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      }
-    },
-    "/EntityDefinitions({MetadataId})": {
-      "get": {
-        "tags": [
-          "EntityDefinitions.EntityMetadata"
-        ],
-        "summary": "Get entity from EntityDefinitions by key",
-        "operationId": "Entitydefinitions_GetByKey",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "MetadataId",
-            "description": "key: MetadataId of EntityMetadata",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "query",
-            "name": "$select",
-            "description": "Select properties to be returned",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv"
-          },
-          {
-            "in": "query",
-            "name": "$expand",
-            "description": "Expand related entities",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Retrieved entity",
-            "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.EntityMetadata"
-            }
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "EntityDefinitions.EntityMetadata"
-        ],
-        "summary": "Update entity in EntityDefinitions",
-        "operationId": "Entitydefinitions_Update",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "MetadataId",
-            "description": "key: MetadataId of EntityMetadata",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "New property values",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.EntityMetadata"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "EntityDefinitions.EntityMetadata"
-        ],
-        "summary": "Delete entity from EntityDefinitions",
-        "operationId": "Entitydefinitions_Delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "MetadataId",
-            "description": "key: MetadataId of EntityMetadata",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "If-Match",
-            "description": "ETag",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      }
-    },
     "/sharepointdocumentlocations": {
       "get": {
         "tags": [
@@ -448,36 +208,6 @@
             "schema": {
               "$ref": "#/definitions/Microsoft.Dynamics.CRM.sharepointdocumentlocation"
             }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "sharepointdocumentlocations.sharepointdocumentlocation"
-        ],
-        "summary": "Delete entity from sharepointdocumentlocations",
-        "operationId": "Sharepointdocumentlocations_Delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sharepointdocumentlocationid",
-            "description": "key: sharepointdocumentlocationid of sharepointdocumentlocation",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "If-Match",
-            "description": "ETag",
-            "type": "string"
           }
         ],
         "responses": {
@@ -698,36 +428,6 @@
             "description": "OData Error"
           }
         }
-      },
-      "delete": {
-        "tags": [
-          "sharepointsites.sharepointsite"
-        ],
-        "summary": "Delete entity from sharepointsites",
-        "operationId": "Sharepointsites_Delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sharepointsiteid",
-            "description": "key: sharepointsiteid of sharepointsite",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "If-Match",
-            "description": "ETag",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
       }
     },
     "/ssg_csrsbccourtlevels": {
@@ -928,36 +628,6 @@
             "schema": {
               "$ref": "#/definitions/Microsoft.Dynamics.CRM.ssg_csrsbccourtlevel"
             }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "ssg_csrsbccourtlevels.ssg_csrsbccourtlevel"
-        ],
-        "summary": "Delete entity from ssg_csrsbccourtlevels",
-        "operationId": "Ssgcsrsbccourtlevels_Delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "ssg_csrsbccourtlevelid",
-            "description": "key: ssg_csrsbccourtlevelid of ssg_csrsbccourtlevel",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "If-Match",
-            "description": "ETag",
-            "type": "string"
           }
         ],
         "responses": {
@@ -2378,45 +2048,15 @@
             "description": "OData Error"
           }
         }
-      },
-      "delete": {
-        "tags": [
-          "ssg_ijssbccourtlocations.ssg_ijssbccourtlocation"
-        ],
-        "summary": "Delete entity from ssg_ijssbccourtlocations",
-        "operationId": "Ssgijssbccourtlocations_Delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "ssg_ijssbccourtlocationid",
-            "description": "key: ssg_ijssbccourtlocationid of ssg_ijssbccourtlocation",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "If-Match",
-            "description": "ETag",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
       }
     },
-    "/ssg_notestemplateses": {
+    "/tasks": {
       "get": {
         "tags": [
-          "ssg_noemplateses"
+          "tasks.task"
         ],
-        "summary": "Get entities from ssg_notestemplateses",
-        "operationId": "Ssgnotestemplateses_Get",
+        "summary": "Get entities from tasks",
+        "operationId": "Tasks_Get",
         "produces": [
           "application/json"
         ],
@@ -2481,7 +2121,7 @@
           "200": {
             "description": "Retrieved entities",
             "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.ssg_notestemplatesCollection"
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.taskCollection"
             }
           },
           "default": {
@@ -2491,10 +2131,10 @@
       },
       "post": {
         "tags": [
-          "ssg_notestemplateses.ssg_notestemplates"
+          "tasks.task"
         ],
-        "summary": "Add new entity to ssg_notestemplateses",
-        "operationId": "Ssgnotestemplateses_Create",
+        "summary": "Add new entity to tasks",
+        "operationId": "Tasks_Create",
         "consumes": [
           "application/json"
         ],
@@ -2515,7 +2155,7 @@
             "description": "New entity",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.ssg_notestemplates"
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.task"
             }
           }
         ],
@@ -2523,7 +2163,7 @@
           "201": {
             "description": "Created entity",
             "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.ssg_notestemplates"
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.task"
             }
           },
           "default": {
@@ -2532,21 +2172,21 @@
         }
       }
     },
-    "/ssg_notestemplateses({ssg_notestemplatesid})": {
+    "/tasks({activityid})": {
       "get": {
         "tags": [
-          "ssg_noemplateses"
+          "tasks.task"
         ],
-        "summary": "Get entity from ssg_notestemplateses by key",
-        "operationId": "Ssgnotestemplateses_GetByKey",
+        "summary": "Get entity from tasks by key",
+        "operationId": "Tasks_GetByKey",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
             "in": "path",
-            "name": "ssg_notestemplatesid",
-            "description": "key: ssg_notestemplatesid of ssg_notestemplates",
+            "name": "activityid",
+            "description": "key: activityid of task",
             "required": true,
             "type": "string"
           },
@@ -2575,7 +2215,7 @@
           "200": {
             "description": "Retrieved entity",
             "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.ssg_notestemplates"
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.task"
             }
           },
           "default": {
@@ -2585,18 +2225,18 @@
       },
       "patch": {
         "tags": [
-          "ssg_notestemplateses.ssg_notestemplates"
+          "tasks.task"
         ],
-        "summary": "Update entity in ssg_notestemplateses",
-        "operationId": "Ssgnotestemplateses_Update",
+        "summary": "Update entity in tasks",
+        "operationId": "Tasks_Update",
         "consumes": [
           "application/json"
         ],
         "parameters": [
           {
             "in": "path",
-            "name": "ssg_notestemplatesid",
-            "description": "key: ssg_notestemplatesid of ssg_notestemplates",
+            "name": "activityid",
+            "description": "key: activityid of task",
             "required": true,
             "type": "string"
           },
@@ -2606,7 +2246,7 @@
             "description": "New property values",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Microsoft.Dynamics.CRM.ssg_notestemplates"
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.task"
             }
           }
         ],
@@ -2621,15 +2261,15 @@
       },
       "delete": {
         "tags": [
-          "ssg_notestemplateses.ssg_notestemplates"
+          "tasks.task"
         ],
-        "summary": "Delete entity from ssg_notestemplateses",
-        "operationId": "Ssgnotestemplateses_Delete",
+        "summary": "Delete entity from tasks",
+        "operationId": "Tasks_Delete",
         "parameters": [
           {
             "in": "path",
-            "name": "ssg_notestemplatesid",
-            "description": "key: ssg_notestemplatesid of ssg_notestemplates",
+            "name": "activityid",
+            "description": "key: activityid of task",
             "required": true,
             "type": "string"
           },
@@ -2638,73 +2278,6 @@
             "name": "If-Match",
             "description": "ETag",
             "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "default": {
-            "description": "OData Error"
-          }
-        }
-      }
-    },
-    "/UpdateStateValue": {
-      "post": {
-        "tags": [
-          "updaatevalue"
-        ],
-        "summary": "Invoke actionImport UpdateStateValue",
-        "operationId": "Updatestatevalue_Create",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Prefer",
-            "description": "Required in order for the service to return a JSON representation of the object.",
-            "type": "string",
-            "default": "return=representation"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Action parameters",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "OptionSetName": {
-                  "type": "string"
-                },
-                "AttributeLogicalName": {
-                  "type": "string"
-                },
-                "EntityLogicalName": {
-                  "type": "string"
-                },
-                "Value": {
-                  "format": "int32",
-                  "maximum": 2147483647,
-                  "minimum": -2147483648,
-                  "type": "integer"
-                },
-                "Label": { },
-                "Description": { },
-                "MergeLabels": {
-                  "default": false,
-                  "type": "boolean"
-                },
-                "DefaultStatusCode": {
-                  "format": "int32",
-                  "maximum": 2147483647,
-                  "minimum": -2147483648,
-                  "type": "integer"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -91566,629 +91139,6 @@
         }
       }
     },
-    "Microsoft.Dynamics.CRM.crmmodelbaseentity": {
-      "title": "crmmodelbaseentity",
-      "description": "Microsoft.Dynamics.CRM.crmmodelbaseentity",
-      "type": "object"
-    },
-    "Microsoft.Dynamics.CRM.AttributeMetadata": {
-      "description": "Microsoft.Dynamics.CRM.AttributeMetadata",
-      "type": "object",
-      "properties": {
-        "AttributeOf": {
-          "type": "string"
-        },
-        "AttributeType": {
-          "type": "string"
-        },
-        "AttributeTypeName": {
-          "type": "string"
-        },
-        "ColumnNumber": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "Description": {
-          "type": "string"
-        },
-        "DisplayName": {
-          "type": "string"
-        },
-        "DeprecatedVersion": {
-          "type": "string"
-        },
-        "IntroducedVersion": {
-          "type": "string"
-        },
-        "EntityLogicalName": {
-          "type": "string"
-        },
-        "IsAuditEnabled": {
-          "type": "string"
-        },
-        "IsCustomAttribute": {
-          "type": "boolean"
-        },
-        "IsPrimaryId": {
-          "type": "boolean"
-        },
-        "IsPrimaryName": {
-          "type": "boolean"
-        },
-        "IsValidForCreate": {
-          "type": "boolean"
-        },
-        "IsValidForRead": {
-          "type": "boolean"
-        },
-        "IsValidForUpdate": {
-          "type": "boolean"
-        },
-        "CanBeSecuredForRead": {
-          "type": "boolean"
-        },
-        "CanBeSecuredForCreate": {
-          "type": "boolean"
-        },
-        "CanBeSecuredForUpdate": {
-          "type": "boolean"
-        },
-        "IsSecured": {
-          "type": "boolean"
-        },
-        "IsRetrievable": {
-          "type": "boolean"
-        },
-        "IsFilterable": {
-          "type": "boolean"
-        },
-        "IsSearchable": {
-          "type": "boolean"
-        },
-        "IsManaged": {
-          "type": "boolean"
-        },
-        "IsGlobalFilterEnabled": {
-          "type": "string"
-        },
-        "IsSortableEnabled": {
-          "type": "string"
-        },
-        "LinkedAttributeId": {
-          "type": "string"
-        },
-        "LogicalName": {
-          "type": "string"
-        },
-        "IsCustomizable": {
-          "type": "string"
-        },
-        "IsRenameable": {
-          "type": "string"
-        },
-        "IsValidForAdvancedFind": {
-          "type": "string"
-        },
-        "IsValidForForm": {
-          "type": "boolean"
-        },
-        "IsRequiredForForm": {
-          "type": "boolean"
-        },
-        "IsValidForGrid": {
-          "type": "boolean"
-        },
-        "RequiredLevel": {
-          "type": "string"
-        },
-        "CanModifyAdditionalSettings": {
-          "type": "string"
-        },
-        "SchemaName": {
-          "type": "string"
-        },
-        "ExternalName": {
-          "type": "string"
-        },
-        "IsLogical": {
-          "type": "boolean"
-        },
-        "IsDataSourceSecret": {
-          "type": "boolean"
-        },
-        "InheritsFrom": {
-          "type": "string"
-        },
-        "SourceType": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "AutoNumberFormat": {
-          "type": "string"
-        }
-      }
-    },
-    "Microsoft.Dynamics.CRM.EntityMetadata": {
-      "description": "Microsoft.Dynamics.CRM.EntityMetadata",
-      "type": "object",
-      "properties": {
-        "ActivityTypeMask": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "AutoRouteToOwnerQueue": {
-          "type": "boolean"
-        },
-        "CanTriggerWorkflow": {
-          "type": "boolean"
-        },
-        "Description": {
-          "type": "string"
-        },
-        "DisplayCollectionName": {
-          "type": "string"
-        },
-        "DisplayName": {
-          "type": "string"
-        },
-        "EntityHelpUrlEnabled": {
-          "type": "boolean"
-        },
-        "EntityHelpUrl": {
-          "type": "string"
-        },
-        "IsDocumentManagementEnabled": {
-          "type": "boolean"
-        },
-        "IsOneNoteIntegrationEnabled": {
-          "type": "boolean"
-        },
-        "IsInteractionCentricEnabled": {
-          "type": "boolean"
-        },
-        "IsKnowledgeManagementEnabled": {
-          "type": "boolean"
-        },
-        "IsSLAEnabled": {
-          "type": "boolean"
-        },
-        "IsBPFEntity": {
-          "type": "boolean"
-        },
-        "IsDocumentRecommendationsEnabled": {
-          "type": "boolean"
-        },
-        "DataProviderId": {
-          "type": "string"
-        },
-        "DataSourceId": {
-          "type": "string"
-        },
-        "AutoCreateAccessTeams": {
-          "type": "boolean"
-        },
-        "IsActivity": {
-          "type": "boolean"
-        },
-        "IsActivityParty": {
-          "type": "boolean"
-        },
-        "IsAuditEnabled": {
-          "type": "string"
-        },
-        "IsAvailableOffline": {
-          "type": "boolean"
-        },
-        "IsChildEntity": {
-          "type": "boolean"
-        },
-        "IsAIRUpdated": {
-          "type": "boolean"
-        },
-        "IsValidForQueue": {
-          "type": "string"
-        },
-        "IsConnectionsEnabled": {
-          "type": "string"
-        },
-        "IconLargeName": {
-          "type": "string"
-        },
-        "IconMediumName": {
-          "type": "string"
-        },
-        "IconSmallName": {
-          "type": "string"
-        },
-        "IconVectorName": {
-          "type": "string"
-        },
-        "IsCustomEntity": {
-          "type": "boolean"
-        },
-        "IsBusinessProcessEnabled": {
-          "type": "boolean"
-        },
-        "IsCustomizable": {
-          "type": "string"
-        },
-        "IsRenameable": {
-          "type": "string"
-        },
-        "IsMappable": {
-          "type": "string"
-        },
-        "IsDuplicateDetectionEnabled": {
-          "type": "string"
-        },
-        "CanCreateAttributes": {
-          "type": "string"
-        },
-        "CanCreateForms": {
-          "type": "string"
-        },
-        "CanCreateViews": {
-          "type": "string"
-        },
-        "CanCreateCharts": {
-          "type": "string"
-        },
-        "CanBeRelatedEntityInRelationship": {
-          "type": "string"
-        },
-        "CanBePrimaryEntityInRelationship": {
-          "type": "string"
-        },
-        "CanBeInManyToMany": {
-          "type": "string"
-        },
-        "CanBeInCustomEntityAssociation": {
-          "type": "string"
-        },
-        "CanEnableSyncToExternalSearchIndex": {
-          "type": "string"
-        },
-        "SyncToExternalSearchIndex": {
-          "type": "boolean"
-        },
-        "CanModifyAdditionalSettings": {
-          "type": "string"
-        },
-        "CanChangeHierarchicalRelationship": {
-          "type": "string"
-        },
-        "IsOptimisticConcurrencyEnabled": {
-          "type": "boolean"
-        },
-        "ChangeTrackingEnabled": {
-          "type": "boolean"
-        },
-        "CanChangeTrackingBeEnabled": {
-          "type": "string"
-        },
-        "IsImportable": {
-          "type": "boolean"
-        },
-        "IsIntersect": {
-          "type": "boolean"
-        },
-        "IsMailMergeEnabled": {
-          "type": "string"
-        },
-        "IsManaged": {
-          "type": "boolean"
-        },
-        "IsEnabledForCharts": {
-          "type": "boolean"
-        },
-        "IsEnabledForTrace": {
-          "type": "boolean"
-        },
-        "IsValidForAdvancedFind": {
-          "type": "boolean"
-        },
-        "IsVisibleInMobile": {
-          "type": "string"
-        },
-        "IsVisibleInMobileClient": {
-          "type": "string"
-        },
-        "IsReadOnlyInMobileClient": {
-          "type": "string"
-        },
-        "IsOfflineInMobileClient": {
-          "type": "string"
-        },
-        "DaysSinceRecordLastModified": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "MobileOfflineFilters": {
-          "type": "string"
-        },
-        "IsReadingPaneEnabled": {
-          "type": "boolean"
-        },
-        "IsQuickCreateEnabled": {
-          "type": "boolean"
-        },
-        "LogicalName": {
-          "type": "string"
-        },
-        "ObjectTypeCode": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "OwnershipType": {
-          "type": "string"
-        },
-        "PrimaryNameAttribute": {
-          "type": "string"
-        },
-        "PrimaryImageAttribute": {
-          "type": "string"
-        },
-        "PrimaryIdAttribute": {
-          "type": "string"
-        },
-        "Privileges": {
-          "type": "array",
-          "items": { }
-        },
-        "RecurrenceBaseEntityLogicalName": {
-          "type": "string"
-        },
-        "ReportViewName": {
-          "type": "string"
-        },
-        "SchemaName": {
-          "type": "string"
-        },
-        "IntroducedVersion": {
-          "type": "string"
-        },
-        "IsStateModelAware": {
-          "type": "boolean"
-        },
-        "EnforceStateTransitions": {
-          "type": "boolean"
-        },
-        "ExternalName": {
-          "type": "string"
-        },
-        "EntityColor": {
-          "type": "string"
-        },
-        "LogicalCollectionName": {
-          "type": "string"
-        },
-        "ExternalCollectionName": {
-          "type": "string"
-        },
-        "CollectionSchemaName": {
-          "type": "string"
-        },
-        "EntitySetName": {
-          "type": "string"
-        },
-        "IsEnabledForExternalChannels": {
-          "type": "boolean"
-        },
-        "IsPrivate": {
-          "type": "boolean"
-        },
-        "UsesBusinessDataLabelTable": {
-          "type": "boolean"
-        },
-        "IsLogicalEntity": {
-          "type": "boolean"
-        },
-        "HasNotes": {
-          "type": "boolean"
-        },
-        "HasActivities": {
-          "type": "boolean"
-        },
-        "HasFeedback": {
-          "type": "boolean"
-        },
-        "Attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Microsoft.Dynamics.CRM.AttributeMetadata"
-          }
-        },
-        "ManyToManyRelationships": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Microsoft.Dynamics.CRM.ManyToManyRelationshipMetadata"
-          }
-        },
-        "ManyToOneRelationships": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata"
-          }
-        },
-        "OneToManyRelationships": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata"
-          }
-        },
-        "Keys": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Microsoft.Dynamics.CRM.EntityKeyMetadata"
-          }
-        }
-      }
-    },
-    "Microsoft.Dynamics.CRM.EntityKeyMetadata": {
-      "description": "Microsoft.Dynamics.CRM.EntityKeyMetadata",
-      "type": "object",
-      "properties": {
-        "DisplayName": {
-          "type": "string"
-        },
-        "LogicalName": {
-          "type": "string"
-        },
-        "SchemaName": {
-          "type": "string"
-        },
-        "EntityLogicalName": {
-          "type": "string"
-        },
-        "KeyAttributes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "IsCustomizable": {
-          "type": "string"
-        },
-        "IsManaged": {
-          "type": "boolean"
-        },
-        "IntroducedVersion": {
-          "type": "string"
-        },
-        "EntityKeyIndexStatus": {
-          "type": "string"
-        },
-        "AsyncJob": {
-          "type": "string"
-        }
-      }
-    },
-    "Microsoft.Dynamics.CRM.LookupAttributeMetadata": {
-      "description": "Microsoft.Dynamics.CRM.LookupAttributeMetadata",
-      "type": "object",
-      "properties": {
-        "Targets": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "Format": {
-          "type": "string"
-        }
-      }
-    },
-    "Microsoft.Dynamics.CRM.ManyToManyRelationshipMetadata": {
-      "description": "Microsoft.Dynamics.CRM.ManyToManyRelationshipMetadata",
-      "type": "object",
-      "properties": {
-        "Entity1AssociatedMenuConfiguration": {
-          "type": "string"
-        },
-        "Entity2AssociatedMenuConfiguration": {
-          "type": "string"
-        },
-        "Entity1LogicalName": {
-          "type": "string"
-        },
-        "Entity2LogicalName": {
-          "type": "string"
-        },
-        "IntersectEntityName": {
-          "type": "string"
-        },
-        "Entity1IntersectAttribute": {
-          "type": "string"
-        },
-        "Entity2IntersectAttribute": {
-          "type": "string"
-        },
-        "Entity1NavigationPropertyName": {
-          "type": "string"
-        },
-        "Entity2NavigationPropertyName": {
-          "type": "string"
-        }
-      }
-    },
-    "Microsoft.Dynamics.CRM.MetadataBase": {
-      "description": "Microsoft.Dynamics.CRM.MetadataBase",
-      "type": "object",
-      "properties": {
-        "MetadataId": {
-          "type": "string"
-        },
-        "HasChanged": {
-          "type": "boolean"
-        }
-      }
-    },
-    "Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata": {
-      "description": "Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata",
-      "type": "object",
-      "properties": {
-        "AssociatedMenuConfiguration": {
-          "type": "string"
-        },
-        "CascadeConfiguration": {
-          "type": "string"
-        },
-        "ReferencedAttribute": {
-          "type": "string"
-        },
-        "ReferencedEntity": {
-          "type": "string"
-        },
-        "ReferencingAttribute": {
-          "type": "string"
-        },
-        "ReferencingEntity": {
-          "type": "string"
-        },
-        "IsHierarchical": {
-          "type": "boolean"
-        },
-        "ReferencedEntityNavigationPropertyName": {
-          "type": "string"
-        },
-        "ReferencingEntityNavigationPropertyName": {
-          "type": "string"
-        },
-        "Lookup": {
-          "$ref": "#/definitions/Microsoft.Dynamics.CRM.LookupAttributeMetadata"
-        }
-      }
-    },
-    "Microsoft.Dynamics.CRM.RelationshipMetadataBase": {
-      "description": "Microsoft.Dynamics.CRM.RelationshipMetadataBase",
-      "type": "object",
-      "properties": {
-        "IsCustomRelationship": {
-          "type": "boolean"
-        },
-        "IsCustomizable": {
-          "type": "string"
-        },
-        "IsValidForAdvancedFind": {
-          "type": "boolean"
-        },
-        "SchemaName": {
-          "type": "string"
-        },
-        "SecurityTypes": {
-          "type": "string"
-        },
-        "IsManaged": {
-          "type": "boolean"
-        },
-        "RelationshipType": {
-          "type": "string"
-        },
-        "IntroducedVersion": {
-          "type": "string"
-        }
-      }
-    },
     "Microsoft.Dynamics.CRM.OptionMetadata": {
       "title": "OptionMetadata",
       "description": "Microsoft.Dynamics.CRM.OptionMetadata",
@@ -92328,19 +91278,6 @@
         }
       }
     },
-    "Microsoft.Dynamics.CRM.EntityMetadataCollection": {
-      "title": "Collection of EntityMetadata",
-      "description": "Microsoft.Dynamics.CRM.EntityMetadataCollection",
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Microsoft.Dynamics.CRM.EntityMetadata"
-          }
-        }
-      }
-    },
     "Microsoft.Dynamics.CRM.sharepointdocumentlocationCollection": {
       "title": "Collection of sharepointdocumentlocation",
       "description": "Microsoft.Dynamics.CRM.sharepointdocumentlocationCollection",
@@ -92458,15 +91395,15 @@
         }
       }
     },
-    "Microsoft.Dynamics.CRM.ssg_notestemplatesCollection": {
-      "title": "Collection of ssg_notestemplates",
-      "description": "Microsoft.Dynamics.CRM.ssg_notestemplatesCollection",
+    "Microsoft.Dynamics.CRM.taskCollection": {
+      "title": "Collection of task",
+      "description": "Microsoft.Dynamics.CRM.taskCollection",
       "type": "object",
       "properties": {
         "value": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Microsoft.Dynamics.CRM.ssg_notestemplates"
+            "$ref": "#/definitions/Microsoft.Dynamics.CRM.task"
           }
         }
       }

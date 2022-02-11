@@ -210,6 +210,7 @@ namespace odata2openapi
 
             List<string> defsToKeep = new List<string>();
 
+            // these are the entities we will have CRUD operations on
             HashSet<string> entities = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             entities.Add("ssg_csrsfiles");
             entities.Add("ssg_csrsparties");
@@ -219,9 +220,10 @@ namespace odata2openapi
             entities.Add("ssg_csrsbccourtlevels");
             entities.Add("ssg_ijssbccourtlocations");
 
-            entities.Add("entitydefinitions");
             entities.Add("sharepointsites");
             entities.Add("sharepointdocumentlocations");
+
+            entities.Add("tasks");
 
             // start by getting secrets.
             var builder = new ConfigurationBuilder()
@@ -254,15 +256,7 @@ namespace odata2openapi
                 // configuration
             };
             OpenApiDocument swaggerDocument = model.ConvertToOpenApi(openApiSettings);
-            //FilterSchemas(swaggerDocument);
             FilterPaths(swaggerDocument);
-
-            File.WriteAllText("operations-included.json", JsonConvert.SerializeObject(_operations, Formatting.Indented));
-
-            //foreach (KeyValuePair<string, OpenApiSchema> schema in swaggerDocument.Components.Schemas)
-            //{
-            //    RemoveCommonProperties(schema.Value);
-            //}
 
             if (generatePaths)
             {
@@ -944,95 +938,9 @@ namespace odata2openapi
 
             }
 
-            File.WriteAllText("D:\\csrs\\dynamics-swagger.json", swagger);
+            File.WriteAllText("dynamics-swagger.json", swagger);
 
         }
-
-        private static void FilterSchemas(OpenApiDocument document)
-        {
-            Dictionary<string, OpenApiSchema> schemas = new Dictionary<string, OpenApiSchema>();
-
-            foreach (KeyValuePair<string, OpenApiSchema> schema in document.Components.Schemas)
-            {
-                if (RequiredSchema.Contains(schema.Key))
-                {
-                    schemas.Add(schema.Key, schema.Value);
-                }
-            }
-
-            document.Components.Schemas = schemas;
-        }
-
-
-        //private static void RemoveCommonProperties(OpenApiSchema schema)
-        //{
-        //    RemoveProperties(schema, _ => _.Key != "importsequencenumber");
-        //    RemoveProperties(schema, _ => _.Key != "overriddencreatedon");
-        //    RemoveProperties(schema, _ => _.Key != "_owninguser_value");
-        //    RemoveProperties(schema, _ => _.Key != "_modifiedonbehalfby_value");
-        //    RemoveProperties(schema, _ => _.Key != "createdby");
-        //    RemoveProperties(schema, _ => _.Key != "createdonbehalfby");
-        //    RemoveProperties(schema, _ => _.Key != "createdon");
-        //    RemoveProperties(schema, _ => _.Key != "modifiedby");
-        //    RemoveProperties(schema, _ => _.Key != "modifiedon");
-        //    RemoveProperties(schema, _ => _.Key != "modifiedonbehalfby");
-        //    RemoveProperties(schema, _ => _.Key != "owninguser");
-        //    RemoveProperties(schema, _ => _.Key != "owningteam");
-        //    RemoveProperties(schema, _ => _.Key != "ownerid");
-        //    RemoveProperties(schema, _ => _.Key != "owningbusinessunit");
-        //    RemoveProperties(schema, _ => _.Key != "transactioncurrencyid");
-        //    RemoveProperties(schema, _ => _.Key != "timezoneruleversionnumber");
-        //    RemoveProperties(schema, _ => _.Key != "utcconversiontimezonecode");
-        //    RemoveProperties(schema, _ => _.Key != "versionnumber");
-
-        //    RemoveProperties(schema, _ => _.Key != "_createdby_value");
-        //    RemoveProperties(schema, _ => _.Key != "_modifiedby_value");
-        //    RemoveProperties(schema, _ => _.Key != "_owningbusinessunit_value");
-        //    RemoveProperties(schema, _ => _.Key != "_owningteam_value");
-
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsfile_ssg_csrsrecalculation_FileNumber");
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsfile_ssg_csrsarchivedcourtfile_FileNumber");
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsfile_afk_workflowtasks");
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsfile_ssg_csrsfile_MasterFileRecord");
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ssg_csrsfile_ssg_csrscommunicationmessage_File");
-        //    RemoveProperties(schema, _ => _.Key != "ssg_LatestDuplicateFile");
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsfile_ssg_csrsfile_LatestDuplicateFile");
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsparty_ssg_csrsarchivedpartycontact_PartyName"); // ssg_csrsarchivedpartycontact[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsparty_ssg_csrsrecalculation_Recipient");        // ssg_csrsrecalculation[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsparty_ssg_csrsrecalculation_Payor");            // ssg_csrsrecalculation[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ssg_csrsparty_ssg_csrsportalaudithistory_Party");   // ssg_csrsportalaudithistory[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_csrsparty_ActivityParties");                        // activityparty[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ssg_csrschild_ssg_csrsrecalculation");              // ssg_csrsrecalculation[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ijssbccourtlocation_ssg_ijssservicerequest_BCCourtLocation");           // ssg_ijssservicerequest[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ijssbccourtlocation_ssg_ijssbccourtlocationcontact_BCCourtLocation");   // ssg_ijssbccourtlocationcontact[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ijssbccourtlocation_ssg_csrsarchivedcourtfile_BCCourtLocation");        // ssg_csrsarchivedcourtfile[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ijssbccourtlocation_ssg_csrsbccourtlocationcontact_BCCourtLocation");   // ssg_csrsbccourtlocationcontact[]
-        //    RemoveProperties(schema, _ => _.Key != "ssg_ijssbccourtlocation_ssg_ijsscourtorder_BCCourt");
-            
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_SyncErrors"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_ActivityPointers"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_Appointments"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_Emails"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_Faxes"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_Letters"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_PhoneCalls"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_RecurringAppointmentMasters"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_SocialActivities"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_Annotations"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_ServiceAppointments"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_ServiceAppointments"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_ServiceAppointments"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_ServiceAppointments"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_DuplicateMatchingRecord"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_DuplicateBaseRecord"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_AsyncOperations"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_MailboxTrackingFolders"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_ProcessSession"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_BulkDeleteFailures"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_PrincipalObjectAttributeAccesses"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_CSRSCourtLevelFilter"));
-        //    RemoveProperties(schema, _ => !_.Key.EndsWith("_SharePointDocumentLocations"));
-        //}
 
         public enum CompareType
         {
@@ -1153,6 +1061,28 @@ namespace odata2openapi
             "Add new entity to ssg_csrsfeedbacks",
             "Update entity in ssg_csrsfeedbacks",
             "Delete entity from ssg_csrsfeedbacks",
+            //
+            "Get entities from ssg_csrsbccourtlevels",
+            "Get entity from ssg_csrsbccourtlevels by key",
+            "Add new entity to ssg_csrsbccourtlevels",
+            "Update entity in ssg_csrsbccourtlevels",
+            //"Delete entity from ssg_csrsbccourtlevels",
+            //
+            "Get entities from ssg_ijssbccourtlocations",
+            "Get entity from ssg_ijssbccourtlocations by key",
+            "Add new entity to ssg_ijssbccourtlocations",
+            "Update entity in ssg_ijssbccourtlocations",
+            //"Delete entity from ssg_csrsbccourtlevels",
+             //
+            "Get entities from sharepointsites",
+            "Get entity from sharepointsites by key",
+            "Add new entity to sharepointsites",
+            "Update entity in sharepointsites",
+            //
+            "Get entities from sharepointdocumentlocations",
+            "Get entity from sharepointdocumentlocations by key",
+            "Add new entity to sharepointdocumentlocations",
+            "Update entity in sharepointdocumentlocations",
             //
             "Get entities from tasks",
             "Get entity from tasks by key",
