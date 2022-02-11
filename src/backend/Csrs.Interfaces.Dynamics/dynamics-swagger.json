@@ -10,6 +10,210 @@
     "http"
   ],
   "paths": {
+    "/activitypointers": {
+      "get": {
+        "tags": [
+          "activitypointers.activitypointer"
+        ],
+        "summary": "Get entities from activitypointers",
+        "operationId": "Activitypointers_Get",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$search",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$count",
+            "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "description": "Order items by property values",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          },
+          {
+            "in": "query",
+            "name": "$select",
+            "description": "Select properties to be returned",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "description": "Expand related entities",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entities",
+            "schema": {
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.activitypointerCollection"
+            }
+          },
+          "default": {
+            "description": "OData Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "activitypointers.activitypointer"
+        ],
+        "summary": "Add new entity to activitypointers",
+        "operationId": "Activitypointers_Create",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Prefer",
+            "description": "Required in order for the service to return a JSON representation of the object.",
+            "type": "string",
+            "default": "return=representation"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New entity",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.activitypointer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created entity",
+            "schema": {
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.activitypointer"
+            }
+          },
+          "default": {
+            "description": "OData Error"
+          }
+        }
+      }
+    },
+    "/activitypointers({activityid})": {
+      "get": {
+        "tags": [
+          "activitypointers.activitypointer"
+        ],
+        "summary": "Get entity from activitypointers by key",
+        "operationId": "Activitypointers_GetByKey",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "activityid",
+            "description": "key: activityid of activitypointer",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$select",
+            "description": "Select properties to be returned",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "description": "Expand related entities",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "csv"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entity",
+            "schema": {
+              "$ref": "#/definitions/Microsoft.Dynamics.CRM.activitypointer"
+            }
+          },
+          "default": {
+            "description": "OData Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "activitypointers.activitypointer"
+        ],
+        "summary": "Delete entity from activitypointers",
+        "operationId": "Activitypointers_Delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "activityid",
+            "description": "key: activityid of activitypointer",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "header",
+            "name": "If-Match",
+            "description": "ETag",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "OData Error"
+          }
+        }
+      }
+    },
     "/sharepointdocumentlocations": {
       "get": {
         "tags": [
@@ -91275,6 +91479,19 @@
         },
         "target": {
           "type": "string"
+        }
+      }
+    },
+    "Microsoft.Dynamics.CRM.activitypointerCollection": {
+      "title": "Collection of activitypointer",
+      "description": "Microsoft.Dynamics.CRM.activitypointerCollection",
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Microsoft.Dynamics.CRM.activitypointer"
+          }
         }
       }
     },
