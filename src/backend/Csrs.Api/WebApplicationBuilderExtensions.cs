@@ -85,6 +85,8 @@ public static class WebApplicationBuilderExtensions
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IDocumentService, DocumentService>();
+
     }
 
     private static void ConfigureFileManagerService(WebApplicationBuilder builder, FileManagerConfiguration? configuration, Serilog.ILogger logger)
@@ -105,12 +107,12 @@ public static class WebApplicationBuilderExtensions
         if (secure.HasValue && secure.Value)
         {
             logger.Information("Using secure channel for File Manager service");
-            credentials = ChannelCredentials.SecureSsl;
+            //credentials = ChannelCredentials.SecureSsl;
         }
         else
         {
             logger.Information("Using insecure channel for File Manager service");
-            credentials = ChannelCredentials.Insecure;
+            //credentials = ChannelCredentials.Insecure;
         }
 
         logger.Information("Using file manager service {Address}", address);
@@ -119,7 +121,6 @@ public static class WebApplicationBuilderExtensions
         {
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
-                Credentials = credentials,
                 ServiceConfig = new ServiceConfig { LoadBalancingConfigs = { new RoundRobinConfig() } },
                 ServiceProvider = services
             });
