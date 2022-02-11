@@ -12,27 +12,27 @@ namespace Csrs.Interfaces.Dynamics.Models
     using System.Linq;
 
     /// <summary>
-    /// Collection of EntityMetadata
+    /// Collection of task
     /// </summary>
     /// <remarks>
-    /// Microsoft.Dynamics.CRM.EntityMetadataCollection
+    /// Microsoft.Dynamics.CRM.taskCollection
     /// </remarks>
-    public partial class MicrosoftDynamicsCRMEntityMetadataCollection
+    public partial class MicrosoftDynamicsCRMtaskCollection
     {
         /// <summary>
         /// Initializes a new instance of the
-        /// MicrosoftDynamicsCRMEntityMetadataCollection class.
+        /// MicrosoftDynamicsCRMtaskCollection class.
         /// </summary>
-        public MicrosoftDynamicsCRMEntityMetadataCollection()
+        public MicrosoftDynamicsCRMtaskCollection()
         {
             CustomInit();
         }
 
         /// <summary>
         /// Initializes a new instance of the
-        /// MicrosoftDynamicsCRMEntityMetadataCollection class.
+        /// MicrosoftDynamicsCRMtaskCollection class.
         /// </summary>
-        public MicrosoftDynamicsCRMEntityMetadataCollection(IList<MicrosoftDynamicsCRMEntityMetadata> value = default(IList<MicrosoftDynamicsCRMEntityMetadata>))
+        public MicrosoftDynamicsCRMtaskCollection(IList<MicrosoftDynamicsCRMtask> value = default(IList<MicrosoftDynamicsCRMtask>))
         {
             Value = value;
             CustomInit();
@@ -46,7 +46,7 @@ namespace Csrs.Interfaces.Dynamics.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public IList<MicrosoftDynamicsCRMEntityMetadata> Value { get; set; }
+        public IList<MicrosoftDynamicsCRMtask> Value { get; set; }
 
     }
 }
