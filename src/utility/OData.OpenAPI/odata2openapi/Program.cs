@@ -220,9 +220,9 @@ namespace odata2openapi
             entities.Add("ssg_csrsbccourtlevels");
             entities.Add("ssg_ijssbccourtlocations");
 
+            entities.Add("activitypointers");
             entities.Add("sharepointsites");
             entities.Add("sharepointdocumentlocations");
-
             entities.Add("tasks");
 
             // start by getting secrets.
@@ -340,7 +340,12 @@ namespace odata2openapi
                         bool ok2Delete = true;
                         firstTagLower = firstTag.Name.ToLower();
                         //Console.Out.WriteLine(firstTagLower);
-                        if (entities.Contains(firstTagLower))
+
+                        if (entities.Count == 0)
+                        {
+                            ok2Delete = false; // do not filter based on entity
+                        }
+                        else if (entities.Contains(firstTagLower))
                         {
                             ok2Delete = false;
                             //Console.Out.WriteLine($"NOT ok to delete {firstTagLower}");
@@ -490,7 +495,7 @@ namespace odata2openapi
                                         string resultName;
                                         string itemName;
 
-                                        if (newSchema.Type == "array")
+                                        if (newSchema?.Items?.Reference?.Id != null && newSchema.Type == "array")
                                         {
                                             itemName = newSchema.Items.Reference.Id;
                                             operationDef = itemName;
@@ -1073,7 +1078,13 @@ namespace odata2openapi
             "Add new entity to ssg_ijssbccourtlocations",
             "Update entity in ssg_ijssbccourtlocations",
             //"Delete entity from ssg_csrsbccourtlevels",
-             //
+            
+            "Get entities from activitypointers",
+            "Add new entity to activitypointers",
+            "Get entity from activitypointers by key",
+            //"Update entity in activitypointers",
+            "Delete entity from activitypointers",
+            //
             "Get entities from sharepointsites",
             "Get entity from sharepointsites by key",
             "Add new entity to sharepointsites",

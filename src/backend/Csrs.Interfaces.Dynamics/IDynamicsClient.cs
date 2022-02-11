@@ -63,6 +63,11 @@ namespace Csrs.Interfaces.Dynamics
 
 
         /// <summary>
+        /// Gets the IActivitypointers.
+        /// </summary>
+        IActivitypointers Activitypointers { get; }
+
+        /// <summary>
         /// Gets the ISharepointdocumentlocations.
         /// </summary>
         ISharepointdocumentlocations Sharepointdocumentlocations { get; }
