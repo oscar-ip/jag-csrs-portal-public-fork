@@ -1,11 +1,8 @@
-﻿using Csrs.Interfaces.Dynamics;
-using Csrs.Services.FileManager;
+﻿using Csrs.Services.FileManager;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using static Csrs.Services.FileManager.FileManager;
-using Csrs.Api.Services;
 using Csrs.Api.Features.Documents;
 
 namespace Csrs.Api.Controllers
