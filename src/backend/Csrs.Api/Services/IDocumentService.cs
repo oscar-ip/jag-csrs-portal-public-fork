@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Csrs.Services.FileManager;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Csrs.Api.Services
 {
@@ -9,7 +10,7 @@ namespace Csrs.Api.Services
 
         Task<IActionResult> UploadAttachment(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken);
 
-        Task<IActionResult> GetAttachmentList(string entityId, string entityName, string documentType, CancellationToken cancellationToken);
+        Task<IList<FileSystemItem>> GetAttachmentList(string entityId, string entityName, string documentType, CancellationToken cancellationToken);
 
     }
 }

@@ -52,9 +52,7 @@ namespace Csrs.Api.Features.Documents
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
 
-                IActionResult result = await _documentService.UploadAttachment(request.EntityId, request.EntityName, request.File, request.Type, cancellationToken);
-
-                return await Task.FromResult(new Response(result));
+                return new Response(await _documentService.UploadAttachment(request.EntityId, request.EntityName, request.File, request.Type, cancellationToken));
 
             }
         }

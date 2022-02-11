@@ -43,6 +43,8 @@ namespace Csrs.Api.Services
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null, cancellationToken);
 
+            if (dynamicsFile is null) return new NotFoundResult();
+
             // call the web service
             var downloadRequest = new DownloadFileRequest
             {
@@ -61,9 +63,9 @@ namespace Csrs.Api.Services
             return new NotFoundResult();
         }
 
-        public async Task<IActionResult> GetAttachmentList(string entityId, string entityName, string documentType, CancellationToken cancellationToken)
+        public async Task<IList<FileSystemItem>> GetAttachmentList(string entityId, string entityName, string documentType, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return new BadRequestResult();
+            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return new List<FileSystemItem>();
 
             var hasAccess = true;
 
@@ -73,10 +75,9 @@ namespace Csrs.Api.Services
             //    hasAccess = await CanAccessEntity(entityName, entityId, null);
             //}
 
-            if (!hasAccess) return new NotFoundResult();
+            if (!hasAccess) return new List<FileSystemItem>();
 
-            var fileSystemItemVMList = await GetListFilesInFolder(entityId, entityName, documentType, cancellationToken);
-            return new JsonResult(fileSystemItemVMList);
+            return await GetListFilesInFolder(entityId, entityName, documentType, cancellationToken);
         }
 
         public async Task<IActionResult> UploadAttachment(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
@@ -155,7 +156,7 @@ namespace Csrs.Api.Services
             }
             //}
 
-            return new JsonResult(result);
+            return new JsonResult(uploadResult);
         }
         /// <summary>
         /// Return the list of files in a given folder.
