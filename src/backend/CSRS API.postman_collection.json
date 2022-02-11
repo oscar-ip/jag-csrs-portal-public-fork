@@ -200,12 +200,12 @@
 											"key": "file",
 											"contentType": "application/pdf",
 											"type": "file",
-											"src": []
+											"src": "/C:/Users/177141/OneDrive - NTT DATA Group/Documents/Test-RCC/Bruce-Banner-RCC.pdf"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/document/uploadattachment?fileId=112&type=sdf&entityname=test",
+									"raw": "{{baseUrl}}/api/document/uploadattachment?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&type=sdf&entityname=ssg_csrsfile",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -216,8 +216,8 @@
 									],
 									"query": [
 										{
-											"key": "fileId",
-											"value": "112"
+											"key": "entityId",
+											"value": "f8cc3e5a-5484-ec11-b831-00505683fbf4"
 										},
 										{
 											"key": "type",
@@ -225,7 +225,7 @@
 										},
 										{
 											"key": "entityname",
-											"value": "test"
+											"value": "ssg_csrsfile"
 										}
 									]
 								}
@@ -243,10 +243,12 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseurl}}/api/document/downloadattachment?fileId=123&entityName=123&fileName=123&documentType=123",
+									"raw": "http://localhost:8081/api/document/downloadattachment?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&serverRelativeUrl=/ssg_csrsfile/1118_F8CC3E5A5484EC11B83100505683FBF4/sdf__Bob-Ross-RCC-signed_33.pdf&documentType=sdf",
+									"protocol": "http",
 									"host": [
-										"{{baseurl}}"
+										"localhost"
 									],
+									"port": "8081",
 									"path": [
 										"api",
 										"document",
@@ -254,20 +256,60 @@
 									],
 									"query": [
 										{
-											"key": "fileId",
-											"value": "123"
+											"key": "entityId",
+											"value": "f8cc3e5a-5484-ec11-b831-00505683fbf4"
 										},
 										{
 											"key": "entityName",
-											"value": "123"
+											"value": "ssg_csrsfile"
 										},
 										{
-											"key": "fileName",
-											"value": "123"
+											"key": "serverRelativeUrl",
+											"value": "/ssg_csrsfile/1118_F8CC3E5A5484EC11B83100505683FBF4/sdf__Bob-Ross-RCC-signed_33.pdf"
 										},
 										{
 											"key": "documentType",
-											"value": "123"
+											"value": "sdf"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "document list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/api/document/getattachmentlist?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&documentType=sdf",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"document",
+										"getattachmentlist"
+									],
+									"query": [
+										{
+											"key": "entityId",
+											"value": "f8cc3e5a-5484-ec11-b831-00505683fbf4"
+										},
+										{
+											"key": "entityName",
+											"value": "ssg_csrsfile"
+										},
+										{
+											"key": "documentType",
+											"value": "sdf"
 										}
 									]
 								}

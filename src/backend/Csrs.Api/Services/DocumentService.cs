@@ -82,7 +82,7 @@ namespace Csrs.Api.Services
 
         public async Task<IActionResult> UploadAttachment(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
         {
-            FileSystemItem result = null;
+            string result = "";
 
             if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(type)) return new BadRequestResult();
 
@@ -149,14 +149,17 @@ namespace Csrs.Api.Services
                 // Update modifiedon to current time
                 //UpdateEntityModifiedOnDate(entityName, entityId, true);
                 _logger.LogInformation("Success");
+                result = "Uploaded Successfully";
             }
             else
             {
                 _logger.LogError(uploadResult.ResultStatus.ToString());
+
+                result = uploadResult.ErrorDetail;
             }
             //}
 
-            return new JsonResult(uploadResult);
+            return new JsonResult(result);
         }
         /// <summary>
         /// Return the list of files in a given folder.
