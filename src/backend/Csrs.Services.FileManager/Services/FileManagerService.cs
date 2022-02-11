@@ -18,7 +18,7 @@ using Serilog;
 namespace Csrs.Services.FileManager
 {
     // Default to require authorization
-    [Authorize]
+    //[Authorize]
     public class FileManagerService : FileManager.FileManagerBase
     {
         private readonly IConfiguration _configuration;
