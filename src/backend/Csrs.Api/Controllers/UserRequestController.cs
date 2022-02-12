@@ -16,12 +16,15 @@ namespace Csrs.Api.Controllers
 
         [HttpPost("Create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<string> CreateAsync([Required] UserRequest request2)
+        public async Task<IActionResult> CreateAsync([Required] UserRequest userRequest, CancellationToken cancellationToken)
         {
-            Create.Request request = new();
-            Create.Response response = await _mediator.Send(request);
-
-            return string.Empty;
+            if (userRequest == null || userRequest.FileNo == null || userRequest.RequestType == null || userRequest.RequestMessage == null)
+            {
+                return BadRequest();
+            }
+            Create.Request request = new(userRequest.FileNo, userRequest.RequestType, userRequest.RequestMessage);
+            Create.Response? response = await _mediator.Send(request, cancellationToken);
+            return Ok(response);
         }
     }
 }

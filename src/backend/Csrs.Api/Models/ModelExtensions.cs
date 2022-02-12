@@ -104,8 +104,8 @@ namespace Csrs.Api.Models
                 //SsgStyleofcauseapplicant = "Applicant", ??
                 //SsgStyleofcauserespondent = "Respondent", ??
 
-                SsgBCCourtLevelODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtlevelId),
-                SsgBCCourtLocationODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtLocationId),
+                SsgBCCourtLevelODataBind = dynamicsClient.GetEntityURI("ssg_csrsbccourtlevels", courtlevelId),
+                SsgBCCourtLocationODataBind = dynamicsClient.GetEntityURI("ssg_csrsbccourtlocationcontacts", courtLocationId),
 
             };
             return dynamicsFile;

@@ -41,21 +41,21 @@ namespace Csrs.Api.Services
             if (file.UsersRole == PartyRole.Recipient)
             {
                 csrsFile.SsgPartyenrolled = (int)PartyEnrolled.Recipient;
-                csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", party.SsgCsrspartyid);
+                csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
 
                 if (otherParty is not null)
                 {
-                    csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
+                    csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
                 }
             }
             else if (file.UsersRole == PartyRole.Payor)
             {
                 csrsFile.SsgPartyenrolled = (int)PartyEnrolled.Payor;
-                csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", party.SsgCsrspartyid);
+                csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
 
                 if (otherParty is not null)
                 {
-                    csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
+                    csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
                 }
             }
 

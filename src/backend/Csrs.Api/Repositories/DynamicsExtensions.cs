@@ -94,6 +94,23 @@ namespace Csrs.Interfaces.Dynamics
             return files;
 
         }
+
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileByFileNumber(this IDynamicsClient dynamicsClient, string fileNo, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            string filter = $"ssg_filenumber eq '{fileNo}'";
+            List<string> select = new List<string> { "ssg_csrsfileid", "ssg_filenumber", "_ownerid_value", "_owninguser_value" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            MicrosoftDynamicsCRMssgCsrsfileCollection files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: cancellationToken);
+            if(files.Value.Count > 0)
+            {
+                return files.Value.First();
+            }
+            return null;
+
+        }
         public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
