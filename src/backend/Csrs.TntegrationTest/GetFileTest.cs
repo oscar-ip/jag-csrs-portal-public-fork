@@ -1,7 +1,9 @@
 ﻿using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,6 +12,23 @@ namespace Csrs.TntegrationTest
 {
     public class GetFileTest : DynamicsClientTestBase
     {
+        [DebugOnlyFact]
+        public async Task get_entity_that_does_not_exist_throws_HttpOperationException_with_response_status_code_of_NotFound()
+        {
+            IDynamicsClient dynamicsClient = _serviceProvider.GetRequiredService<IDynamicsClient>();
+
+            var actual = await Assert.ThrowsAsync<Microsoft.Rest.HttpOperationException>(async () =>
+                {
+                    string key = Guid.NewGuid().ToString("d");
+                    List<string> select = new List<string> { "ssg_csrsfileid" };
+                    await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(key, select: select, cancellationToken: CancellationToken.None);
+                });
+
+            Assert.NotNull(actual);
+            Assert.Equal(HttpStatusCode.NotFound, actual.Response.StatusCode);
+        }
+
+
         [DebugOnlyFact]
         public async Task get_last_5_modified_files()
         {

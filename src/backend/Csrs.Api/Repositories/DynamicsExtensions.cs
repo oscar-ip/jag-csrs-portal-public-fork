@@ -1,6 +1,8 @@
 ﻿using Csrs.Api.Models;
 using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Rest;
+using System.Net;
 
 namespace Csrs.Interfaces.Dynamics
 {
@@ -23,6 +25,27 @@ namespace Csrs.Interfaces.Dynamics
             string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
             var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
             return parties;
+        }
+
+        public static async Task<bool> FileExistsAsync(this IDynamicsClient dynamicsClient, string id, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return false;
+            }
+
+            try
+            {
+                List<string> select = new() { "ssg_csrsfileid" };
+                _ = await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(id, select: select, cancellationToken: CancellationToken.None);
+                return true;
+            }
+            catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
         }
 
         public static async Task<string> GetPartyIdByBCeIdAsync(this IDynamicsClient dynamicsClient, string bceid, CancellationToken cancellationToken)
