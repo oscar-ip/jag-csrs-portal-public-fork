@@ -666,9 +666,9 @@
               <span>How did you hear about the Child Support Recalculation Service (CSRS)?</span>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-select formControlName="referals">
-                    <mat-option *ngFor="let referal of referals; index as pi" [value]="referal.id">
-                      {{referal.value}}
+                  <mat-select formControlName="referral">
+                    <mat-option *ngFor="let referral of referrals; index as pi" [value]="referral.id">
+                      {{referral.value}}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -1195,7 +1195,8 @@
               <!-- <button mat-flat-button color="primary" matStepperPrevious>
                 Save my application for later
               </button> -->
-              <button routerLink="/communication" class="submitStep" mat-stroked-button color="basic" matStepperNext>
+              <button routerLink="/communication" class="submitStep" mat-stroked-button color="basic" matStepperNext
+              (click)="saveLater()">
                 Submit Application
               </button>
             </div>

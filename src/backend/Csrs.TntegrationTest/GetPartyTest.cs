@@ -225,7 +225,7 @@ namespace Csrs.TntegrationTest
                 //SsgStagingfilenumber = ssgStagingfilenumber;
                 //SsgIncomeassistance = ssgIncomeassistance;
                 SsgReferral = 867670000,
-                SsgCellphone = "403-7002156",//party.CellPhone,
+                SsgCellphone = "403-8002156",//party.CellPhone,
                 SsgFirstname = "Serrr",//party.FirstName,
                 SsgDateofbirth = new DateTimeOffset(new DateTime(1976,1,25),TimeSpan.Zero),
                 SsgLastname = "Kiiiiii",//party.LastName,
@@ -243,7 +243,7 @@ namespace Csrs.TntegrationTest
                 Statuscode = 1,
                 SsgStreet2 = String.Empty,
                 //SsgStagingid = ssgStagingid,
-                SsgAreapostalcode = "T3L 1J8",//party.PostalCode,
+                SsgAreapostalcode = "T4K 3J8",//party.PostalCode,
                 SsgEmail = "sk@telus.net",//party.Email,
                 //SsgBceidLastUpdate = ssgBceidLastUpdate,
                 SsgPreferredname = "Ssss",//party.PreferredName,
@@ -251,7 +251,7 @@ namespace Csrs.TntegrationTest
                 SsgIdentity = 867670000,
                 //SsgBceidDisplayname = (party.FirstName[0] + party.LastName).ToUpper(),
                 //SsgIdentityotherdetails = ssgIdentityotherdetails,
-                SsgStreet1 = "103 Scenic Public NW"//party.AddressStreet1
+                SsgStreet1 = "103 Scenic Public School NW"//party.AddressStreet1
             };
             dynamicsParty.SsgBceidGuid = userId;
 
@@ -269,7 +269,7 @@ namespace Csrs.TntegrationTest
             {
                 Statecode = 0,
                 SsgReferral = 867670000,
-                SsgCellphone = "500-71111",
+                SsgCellphone = "800-71111",
                 SsgFirstname = "Tan",
                 SsgDateofbirth = DateTimeOffset.Parse("1950-03-17"),
                 SsgLastname = "Kha",

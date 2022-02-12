@@ -15,9 +15,6 @@ namespace Csrs.Api.Services
         private readonly IDynamicsClient _dynamicsClient;
         private readonly IMapper _mapper;
         private readonly ILogger<FileService> _logger;
-        private readonly int   _male = 867670000;
-        private readonly int _female = 867670001;
-
         
         public FileService(
             IMemoryCache cache,

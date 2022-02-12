@@ -10,17 +10,17 @@ namespace Csrs.Interfaces.Dynamics.Models
         [JsonConverter(typeof(DateFormatConverter), "yyyy-MM-dd")]
         public DateTimeOffset? SsgDateoforderorwa { get; set; }
 
-        [JsonProperty(PropertyName = "ssg_dateoforderorwa")]
+        [JsonProperty(PropertyName = "ssg_safetyalert")]
         [JsonConverter(typeof(BooleanConverter))]
-        public bool SafetyAlertRecipient { get; set; }
+        public bool SsgSafetyalert { get; set; }
 
-        [JsonProperty(PropertyName = "ssg_dateoforderorwa")]
+        [JsonProperty(PropertyName = "ssg_safetyalertpayor")]
         [JsonConverter(typeof(BooleanConverter))]
-        public bool SafetyAlertPayor { get; set; }
+        public bool SsgSafetyalertpayor { get; set; }
 
-        [JsonProperty(PropertyName = "ssg_dateoforderorwa")]
+        [JsonProperty(PropertyName = "ssg_fmepfileactive")]
         [JsonConverter(typeof(BooleanConverter))]
-        public bool IsFMEPFileActive { get; set; }
+        public bool SsgFmepfileactive { get; set; }
 
     }
 

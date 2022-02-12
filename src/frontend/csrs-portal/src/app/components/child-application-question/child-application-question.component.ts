@@ -16,8 +16,11 @@ import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { List, Dictionary } from 'ts-generic-collections-linq';
+import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
+import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 
 // -- import data structure
 import {
@@ -52,9 +55,10 @@ export class ChildApplicationQuestionComponent implements OnInit {
   provinces: any = [];
   genders: any = [];
   identities: any = [];
-  referals: any = [];
-  courtLocations: any = [];
+  referrals: any = [];
   preferredContactMethods: any = [];
+  courtLevels: any = [];
+  courtLocations: any = [];
 
   _accountService: AccountService;
   _lookupService: LookupService;
@@ -64,6 +68,16 @@ export class ChildApplicationQuestionComponent implements OnInit {
   isEditable: boolean = false;
   child: Child;
   _reponse: HttpResponse<any>;
+
+  _yes: number = 867670000;
+  _no: number = 867670001;
+  _iDontKnow: number = 867670002;
+
+  _courtOrder: number = 867670000;
+  _writtenAgreement: number = 867670001;
+
+  data: any = null;
+  result: any = [];
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
@@ -83,14 +97,16 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.identities = [{id: '123', value: 'Native'}];
     this.genders =  [{id: '123', value: 'Male'}];
     this.courtLocations =  [{id: '123', value: 'Victoria Court'}];
-    this.referals = [{id: '123', value: 'FMEP'}];
+    this.referrals = [{id: '123', value: 'FMEP'}];
 
-    this.getReferals();
-    this.getCourtLocations();
+    this.getReferrals();
     this.getIdentities();
     this.getProvinces();
     this.getGenders();
     this.getPreferredcontactmethods();
+    this.getCourtLevels();
+    this.getCourtLocations();
+
 
     this.firstFormGroup = this._formBuilder.group({
       firstControl: ['', Validators.required],
@@ -167,7 +183,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       enrollFMEP: [''],
       FMEPinput: [''],
       incomeAssistance: [''],
-      referals: [''],
+      referral: [''],
 
     });
     this.seventhFormGroup = this._formBuilder.group({
@@ -216,9 +232,10 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
 }
 
-openDialog() {
+openDialog(inData) {
   const dialogRef = this.dialog.open(ConfirmDialogComponent,{
-    width: '550px'
+    width: '550px',
+    data: inData
   });
 
   dialogRef.afterClosed().subscribe(result => {
@@ -306,12 +323,32 @@ editPage(stepper, index){
       })
   }
 
-  getReferals() {
+  getCourtLevels() {
+    //this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
+      this._lookupService.apiLookupCourtlevelsGet().subscribe({
+        next: (data) => {
+          this.courtLevels = data;
+          this._logger.info('this.courtLevels',this.courtLevels);
+        },
+        error: (e) => {
+          if (e.error instanceof Error) {
+            this._logger.error(e.error.message);
+          } else {
+              //Backend returns unsuccessful response codes such as 404, 500 etc.
+              this._logger.info('Backend returned ', e);
+            }
+        },
+        complete: () => this._logger.info('courtlevelsGet is completed')
+      })
+  }
+
+
+  getReferrals() {
     //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountReferralsGet().subscribe({
       next: (data) => {
-        this.referals = data;
-        this._logger.info('this.referals',this.referals);
+        this.referrals = data;
+        this._logger.info('this.referals',this.referrals);
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -329,7 +366,7 @@ editPage(stepper, index){
     //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
-        this.referals = data;
+        this.preferredContactMethods = data;
         this._logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
@@ -385,8 +422,39 @@ editPage(stepper, index){
     localStorage.getsetItemItem('formData', '');
   }
 
+
+
+  openModalDialog(): void {
+    const dialogRef = this.dialog.open(ModalDialogComponent, {
+      width: '450px',
+      data: this.data,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.logger.info(`Dialog result: ${result}`);
+    });
+  }
+
+
   transformDate(date) {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
+  }
+
+  findId(value){
+    if (value == 'Yes'){
+      return this._yes;
+    }
+    else
+      if (value == 'No'){
+        return this._no;
+      }
+    return this._iDontKnow;
+  }
+
+  getCourtTyleFile(value){
+    const courtTypeFileId = value == 'Court Order' ?  this._courtOrder : this._writtenAgreement;
+    const inCourtFileType: LookupValue = {id: courtTypeFileId, value: value};
+    return inCourtFileType;
   }
 
   prepareData(){
@@ -402,8 +470,6 @@ editPage(stepper, index){
         lastName: users[i].lastName,
         dateOfBirth: this.transformDate(users[i].birthdate),
         childIsDependent: users[i].childDependency
-        //childIsDependent: users[i].childDependency == 'Yes' ? true :
-        //  users[i].childDependency == 'No'  ? false : null
       };
       childs.push(child)
     }
@@ -430,10 +496,20 @@ editPage(stepper, index){
       const file2Data = this.sixFormGroup.value;
 
       //let LookupValue
-      let inGender: LookupValue = { value: partyData.gender };
-      let inProvince: LookupValue = { value: partyData.province};
-      let inIdentityParty: LookupValue = { value: partyData.identity};
-      let inReferral: LookupValue = { value: file2Data.referals };
+      let listGender = new List<LookupValue>(this.genders);
+      let inGender: LookupValue = listGender.firstOrDefault(x=>x.id == partyData.gender);
+
+      let listProvince = new List<LookupValue>(this.provinces);
+      let inProvince: LookupValue = listProvince.firstOrDefault(x=>x.id == partyData.province);
+
+      let listIdentityParty = new List<LookupValue>(this.identities);
+      let inIdentityParty: LookupValue = listIdentityParty.firstOrDefault(x=>x.id == partyData.identity);
+
+      let listReferral = new List<LookupValue>(this.referrals);
+      let inReferral: LookupValue = listReferral.firstOrDefault(x=>x.id == file2Data.referral);
+
+      let list = new List<LookupValue>(this.preferredContactMethods);
+      let inPreferredContactMethod: LookupValue = list.firstOrDefault(x=>x.value == file2Data.contactMethod);
 
       let inParty: Party = {
           partyId: '00000000-0000-0000-0000-000000000000',
@@ -454,15 +530,16 @@ editPage(stepper, index){
           email: partyData.email,
           optOutElectronicDocuments: null,   // ??? may need to remove?
           identity: inIdentityParty,
-          referral: inReferral
-          //preferredContactMethod = { value = inFile2.gender},
+          referral: inReferral,
+          preferredContactMethod: inPreferredContactMethod,
+          incomeAssistance: this.findId(file2Data.incomeAssistance),
           //referenceNumber = null
       }
 
       // --- populate other party
       const otherPartyData = this.thirdFormGroup.value;
-      let inOtherGender: LookupValue = { id: otherPartyData.gender};
-      let inOtherProvince: LookupValue = { id: otherPartyData.province};
+      let inOtherGender: LookupValue = listGender.firstOrDefault(x=>x.id == otherPartyData.gender);
+      let inOtherProvince: LookupValue = listProvince.firstOrDefault(x=>x.id == otherPartyData.province);
 
       let inOtherParty: Party = {
             partyId: "00000000-0000-0000-0000-000000000000",
@@ -484,24 +561,19 @@ editPage(stepper, index){
             optOutElectronicDocuments: null,
             identity: null,
             referral: null,
-            //preferredContactMethod = null,
-            //referenceNumber = null
+            preferredContactMethod: null,
+            referenceNumber: null
       }
 
       // --- populate file
-      let inCourtFileType: LookupValue = {value: roleData.secondControl};
+      let inCourtFileType: LookupValue = this.getCourtTyleFile(roleData.secondControl);
 
-      //let inBcCourtLocation: CourtLookupValue = {value: file1Data.courtLocation.value};
-      let inBcCourtLocation: any;
-      if (typeof inBcCourtLocation === 'undefined') {
-        inBcCourtLocation = null;
-      }
-      else
-      {
-        inBcCourtLocation = file1Data.courtLocation;
-      }
-      this._logger.info('inBcCourtLocation',inBcCourtLocation);
-      this._logger.info('file1Data.courtLocation.value',file1Data.courtLocation);
+      let listBcCourtLocation = new List<LookupValue>(this.courtLocations);
+      let inBcCourtLocation: LookupValue = listBcCourtLocation.firstOrDefault(x=>x.id == file1Data.courtLocation);
+
+      //let inBcCourtLevel: CourtLookupValue = this.courtLevels[0];
+      let listBcCourtLevel = new List<LookupValue>(this.courtLevels);
+      let inBcCourtLevel: LookupValue = listBcCourtLevel.firstOrDefault(x=>x.value == 'Provincial');
 
       let inFile:any = {
           status: FileStatus.Unknown,
@@ -510,11 +582,10 @@ editPage(stepper, index){
           fileNumber: null,
           partyEnrolled: partyEnrolled,
           courtFileType: inCourtFileType,
-          bcCourtLevel: 'Provincial',
+          bcCourtLevel: inBcCourtLevel,
           bcCourtLocation: inBcCourtLocation,
           dateOfOrderOrWA: this.transformDate(file1Data.orderDate),
           incomeOnOrder: file1Data.payorIncome,
-          //file2Data.incomeAssistance,
           section7Expenses: file1Data.isSpecifiedIncome,
           safetyAlertRecipient: null,
           recipientSafetyConcernDescription: null,
@@ -533,7 +604,6 @@ editPage(stepper, index){
         file: inFile,
       }
 
-      //if (partyRole == PartyRole.Recipient)
       if (partyEnrolled == 'Recipient')
       {
         newFileRequest.file.safetyAlertRecipient = file2Data.childSafety;
@@ -549,15 +619,33 @@ editPage(stepper, index){
 
     //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountCreatePost(newFileRequest).subscribe({
-      next: (newFileRequest) => {
-        this._reponse = newFileRequest;
-        if ( this._reponse.status === HttpStatusCode.Ok) {
-          this._logger.info("_reponse:", this._reponse);
-        }
+      next: (outData:any) => {
+
+        var partyId = outData.partyId;
+        var fileId = outData.fileId;
+        var fileNumber = outData.fileNumber;
+
+        this._logger.info("partyId", partyId);
+        this._logger.info("fileId", fileId);
+        this._logger.info("fileNumber", fileNumber);
+
+        let customOptions: DialogOptions = { data: {fileNumber: fileNumber}};
+        this.openDialog(customOptions);
       },
       error: (e) => {
         if (e.error instanceof Error) {
           this._logger.error(e.error.message);
+
+          this.data = {
+            type: 'error',
+            title: e.error.message,
+            content: '',
+            weight: 'normal',
+            color: 'red'
+          };
+          this.openModalDialog();
+
+
         } else {
             //Backend returns unsuccessful response codes such as 404, 500 etc.
             this._logger.info('Backend returned ', e);

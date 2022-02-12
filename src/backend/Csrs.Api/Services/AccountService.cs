@@ -51,7 +51,14 @@ namespace Csrs.Api.Services
             IList<LookupValue>? values = await GetPicklistOptionSetMetadataAsync("ssg_csrsparty", "ssg_referral", cancellationToken);
             return values;
         }
-        
+        public async Task<IList<LookupValue>> GetCourtFileTypesAsync(CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = await GetPicklistOptionSetMetadataAsync("ssg_csrsfile", "ssg_referral", cancellationToken);
+            return values;
+        }
+
+
+
         public async Task<Party?> GetPartyByBCeIdAsync(string bceidGuid, CancellationToken cancellationToken)
         {
             using var scope = _logger.AddBCeIdGuid(bceidGuid);
