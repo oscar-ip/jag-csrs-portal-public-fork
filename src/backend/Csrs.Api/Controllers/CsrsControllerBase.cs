@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Csrs.Api.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public abstract class CsrsControllerBase<TController> : ControllerBase
     {

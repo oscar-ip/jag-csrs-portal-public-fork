@@ -52,12 +52,17 @@ namespace Csrs.Api.Services
         public async Task SetMessageRead(string messageGuid, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Set party message read request recieved");
-            var communicationMessage = await _dynamicsClient.Ssgcsrscommunicationmessages.GetByKeyAsync(messageGuid,null, null, cancellationToken);
-            if (communicationMessage is null) throw new Exception("Invalid message Guid");
 
-            communicationMessage.SsgCsrsmessageread = true;
+            var select = new List<string>() {"ssg_csrsmessageread"};
 
-            await _dynamicsClient.Ssgcsrscommunicationmessages.UpdateAsync(messageGuid, communicationMessage, cancellationToken);
+            var communicationMessage = await _dynamicsClient.Ssgcsrscommunicationmessages.GetByKeyAsync(messageGuid, select, null, cancellationToken);
+            if (communicationMessage is null) throw new ArgumentNullException(messageGuid, "Invalid message Guid");
+
+            if (communicationMessage.SsgCsrsmessageread == false) {
+                communicationMessage.SsgCsrsmessageread = true;
+
+                await _dynamicsClient.Ssgcsrscommunicationmessages.UpdateAsync(messageGuid, communicationMessage, cancellationToken);
+            }
 
         }
 
