@@ -103,11 +103,15 @@ public partial class DynamicsClient
 
     public string GetEntityURI(string entityType, string id)
     {
-        string result = "";
-        if (id != null)
-        {            
-            result = BaseUri + entityType + "(" + id.Trim() + ")";
+        ArgumentNullException.ThrowIfNull(entityType);
+        ArgumentNullException.ThrowIfNull(id);
+
+        if (!Guid.TryParse(id, out Guid key))
+        {
+            throw new FormatException("Entity id is not a valid guid");
         }
-        return result;
+
+        string uri = BaseUri + entityType + "(" + key.ToString("d") + ")";
+        return uri;
     }
 }

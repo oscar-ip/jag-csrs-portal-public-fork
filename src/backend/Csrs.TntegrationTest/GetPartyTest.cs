@@ -10,19 +10,22 @@ using System;
 using System.Globalization;
 //using Microsoft.OData;
 using PickLists = Csrs.Api.Models.PickupLists;
+using Microsoft.Rest;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace Csrs.TntegrationTest
 {
     public class GetPartyTest : DynamicsClientTestBase
     {
         [DebugOnlyFact]
-        public async Task get_party()
+        public async Task get_top_4_parties_with_bceid_userid()
         {
             IDynamicsClient dynamicsClient = _serviceProvider.GetRequiredService<IDynamicsClient>();
 
             string filter = $"ssg_bceid_userid ne null";
-            //string filter = $"ssg_csrspartyid eq 'fc7702c0-0d89-ec11-b831-00505683fbf4'";
             List<string> expand = new List<string> { "createdby" };
+
             var actual = await dynamicsClient.Ssgcsrsparties.GetAsync(top: 5, filter: filter, expand: expand, cancellationToken: CancellationToken.None);
             Assert.NotNull(actual);
         }
@@ -44,7 +47,9 @@ namespace Csrs.TntegrationTest
             string filter = $"ssg_bceid_guid eq '5beb7384-eb6d-4fd4-8918-c3bb1a5c'";
             List<string> expand = new List<string> { "createdby" };
             var actual = await dynamicsClient.Ssgcsrsparties.GetAsync(top: 5, filter: filter, expand: expand, cancellationToken: CancellationToken.None);
-            //Assert.NotNull(actual);
+
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual.Value);
 
             //actual.Value[0].SsgDateofbirth = new System.DateTimeOffset(new System.DateTime(2022, 02, 04), new System.TimeSpan(0,0,0));
             string ssgCsrspartyid = actual.Value[0].SsgCsrspartyid;
@@ -196,19 +201,19 @@ namespace Csrs.TntegrationTest
                 "ssg_csrsparty_ssg_csrsfile_Payor"
             };*/
 
-            Interfaces.Dynamics.Models.MicrosoftDynamicsCRMssgCsrspartyCollection actual = null;
             try
             {
-                actual = await dynamicsClient.Ssgcsrsparties.GetAsync(filter:filter, expand: expand, cancellationToken: CancellationToken.None);
+                var actual = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, expand: expand, cancellationToken: CancellationToken.None);
+
+                Assert.NotNull(actual);
+                Assert.NotEmpty(actual.Value);
             }
-            catch (Exception ex)
+            catch (HttpOperationException exception) when (exception.Response.StatusCode == HttpStatusCode.BadRequest)
             {
+                var error = JsonConvert.DeserializeObject<Odataerror>(exception.Response.Content);
+                var errorMessage = error.Error.Message; // log this
+                throw;
             }
-
-           
-
-            Assert.NotNull(actual);
-            Assert.NotEmpty(actual.Value);
         }
 
 
