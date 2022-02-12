@@ -39,7 +39,7 @@ namespace Csrs.Interfaces.Dynamics
             try
             {
                 List<string> select = new() { "ssg_csrsfileid" };
-                _ = await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(id, select: select, cancellationToken: CancellationToken.None);
+                _ = await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(id, select: select, cancellationToken: cancellationToken);
                 return true;
             }
             catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
