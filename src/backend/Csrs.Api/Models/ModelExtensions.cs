@@ -57,27 +57,25 @@ namespace Csrs.Api.Models
             return Decimal.Parse(value);
         }
 
-        public static async Task<MicrosoftDynamicsCRMssgCsrsparty> ToDynamicsModelAsync(this Party party, IDynamicsClient dynamicsClient, CancellationToken cancellationToken)
+        public static MicrosoftDynamicsCRMssgCsrsparty ToDynamicsModel(this Party party)
         {
             MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty
             {
-
                 Statecode = 0,
                 Statuscode = 1,
-                //SsgIncomeassistance = ssgIncomeassistance;
-                SsgReferral = await GetLookupValueAsync(dynamicsClient, "ssg_referral", party.Referral?.Value, cancellationToken),
+                SsgReferral = party.Referral?.Id,
                 SsgCellphone = party.CellPhone,
                 SsgFirstname = party.FirstName,
                 SsgDateofbirth = ConvertToDTOffset(party.DateOfBirth),
                 SsgLastname = party.LastName,
                 SsgReferencenumber = party.ReferenceNumber,
-                SsgPartygender = await GetLookupValueAsync(dynamicsClient, "ssg_partygender", party.Gender?.Value, cancellationToken),
-                SsgPreferredcontactmethod = await GetLookupValueAsync(dynamicsClient, "ssg_preferredcontactmethod", party.PreferredContactMethod?.Value, cancellationToken),
+                SsgPartygender = party.Gender?.Id,
+                SsgPreferredcontactmethod = party.PreferredContactMethod?.Id,
                 SsgCity = party.City,
                 SsgWorkphone = party.WorkPhone,
-                SsgProvinceterritory = await GetLookupValueAsync(dynamicsClient, "ssg_provinceterritory", party.Province?.Value, cancellationToken),
+                SsgProvinceterritory = party.Province?.Id,
                 SsgMiddlename = party.MiddleName,
-                SsgGender = await GetLookupValueAsync(dynamicsClient, "ssg_partygender", party.Gender?.Value, cancellationToken),
+                SsgGender = party.Gender?.Id,
                 SsgHomephone = party.HomePhone,
                 SsgStreet2 = party.AddressStreet2,
                 SsgAreapostalcode = party.PostalCode,
@@ -85,9 +83,10 @@ namespace Csrs.Api.Models
                 //SsgBceidLastUpdate = ssgBceidLastUpdate, ????
                 SsgPreferredname = party.PreferredName,
                 //SsgPortalaccess = ssgPortalaccess, ????
-                SsgIdentity = await GetLookupValueAsync(dynamicsClient, "ssg_identity", party.Identity?.Value, cancellationToken),
+                SsgIdentity = party.Identity?.Id,
                 //SsgIdentityotherdetails = ssgIdentityotherdetails, ???
-                SsgStreet1 = party.AddressStreet1
+                SsgStreet1 = party.AddressStreet1,
+                SsgIncomeassistance = party.IncomeAssistance
             };
             return dynamicsParty;
         }
@@ -121,10 +120,8 @@ namespace Csrs.Api.Models
                 value.Equals("No") ? false : null;
         }
 
-        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> ToDynamicsModel(this File file, IDynamicsClient dynamicsClient, CancellationToken cancellationToken)
+        public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this File file)
         {
-            string courtlevelId = await GetCourtLevelValueAsync(dynamicsClient, file.BCCourtLevel, cancellationToken);
-            string courtLocationId = await GetCourtLocationValueAsync(dynamicsClient, file.BCCourtLocation, cancellationToken);
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
@@ -149,11 +146,9 @@ namespace Csrs.Api.Models
                 //SsgRegistrationdate = ConvertToDTOffset(file.), ??
                 //SsgStyleofcauseapplicant = "Applicant", ??
                 //SsgStyleofcauserespondent = "Respondent", ??
-
-                SsgBCCourtLevelODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtlevelId),
-                SsgBCCourtLocationODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtLocationId),
                     
             };
+            
             return  dynamicsFile;
         }
 
@@ -221,79 +216,6 @@ namespace Csrs.Api.Models
             var values = metadata.ToViewModel();
             var value = values.Where(_ => _.Id == id.Value).SingleOrDefault();
             return value;
-        }
-
-        private static async Task<int?> GetLookupValueAsync(IDynamicsClient dynamicsClient, string attributeName, string? label, CancellationToken cancellationToken)
-        {
-            if (label is null)
-            {
-                return null;
-            }
-
-            var metadata = await dynamicsClient.GetPicklistOptionSetMetadataAsync("ssg_csrsparty", attributeName,cancellationToken);
-            var values = metadata.ToViewModel();
-            var value = values.Where(_ => _.Value == label).SingleOrDefault();
-
-            if (value is null)
-            {
-                return null;
-            }
-            {
-                return value.Id;
-            }
-        }
-
-
-        private static async Task<string?> GetCourtLocationValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
-        {
-            if (label is null)
-            {
-                return null;
-            }
-
-            MicrosoftDynamicsCRMssgIjssbccourtlocationCollection locations =  
-                await dynamicsClient.Ssgijssbccourtlocations.GetAsync(cancellationToken: cancellationToken);
-            
-            IList<CourtLookupValue> courtLocations = new List<CourtLookupValue>();
-            foreach (MicrosoftDynamicsCRMssgIjssbccourtlocation location in locations.Value)
-            {
-                CourtLookupValue item = courtLocations.FirstOrDefault(_ => _.Value == location.SsgBccourtlocationname);
-
-                if (item is null)
-                {
-                    courtLocations.Add(new CourtLookupValue
-                    {
-                        Id = location.SsgIjssbccourtlocationid,
-                        Value = location.SsgBccourtlocationname
-                    });
-                }
-            }
-
-            var id = courtLocations.Where(_ => _.Value == label).SingleOrDefault().Id;
-            return id;
-        }
-
-        private static async Task<string?> GetCourtLevelValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
-        {
-            if (label is null)
-            {
-                return null;
-            }
-
-            MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection levels = await dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(top: 2, cancellationToken: cancellationToken);
-
-            List<CourtLookupValue> courtLevels = new List<CourtLookupValue>();
-            foreach (MicrosoftDynamicsCRMssgCsrsbccourtlevel level in levels.Value)
-            {
-                courtLevels.Add(new CourtLookupValue
-                {
-                    Id = level.SsgCsrsbccourtlevelid,
-                    Value = level.SsgCourtlevellabel
-                });
-            }
-
-            var id = courtLevels.SingleOrDefault(_ => _.Value == label)?.Id;
-            return id;
         }
 
         private static IEnumerable<LookupValue> AsViewModel(PicklistOptionSetMetadata metadata)

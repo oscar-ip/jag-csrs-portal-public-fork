@@ -73,7 +73,7 @@ namespace Csrs.Api.Features.Accounts
 
                 var bceidScope = _logger.AddBCeIdGuid(userId);
 
-                var dynamicsParty = await request.Applicant.ToDynamicsModelAsync(_dynamicsClient, cancellationToken);
+                var dynamicsParty = request.Applicant.ToDynamicsModel();
 
                 // find to see if the person has an account already?
                 string partyId = await _dynamicsClient.GetPartyIdByBCeIdAsync(userId, cancellationToken);
@@ -89,7 +89,8 @@ namespace Csrs.Api.Features.Accounts
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Exception in Handle.updating party");
+                        _logger.LogError(ex, "An exception occurred while updating {PartyId}, file creation will be aborted", partyId);
+                        throw; 
                     }
                 }
                 else
@@ -106,7 +107,8 @@ namespace Csrs.Api.Features.Accounts
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Exception in Handle.creating party");
+                        _logger.LogError(ex, "An exception occurred while inserting initial party, file creation will be aborted");
+                        throw;
                     }
 
                     partyId = dynamicsParty.SsgCsrspartyid;
@@ -117,7 +119,7 @@ namespace Csrs.Api.Features.Accounts
                 if (request.File.OtherParty != null)
                 {
                     request.File.OtherParty.PartyId = Guid.Empty.ToString();
-                    otherDynamicsParty = await request.File.OtherParty.ToDynamicsModelAsync(_dynamicsClient, cancellationToken);
+                    otherDynamicsParty = request.File.OtherParty.ToDynamicsModel();
                     _logger.LogInformation("Creating other party");
                     try
                     {
@@ -125,9 +127,9 @@ namespace Csrs.Api.Features.Accounts
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Exception in Handle.creating other party");
+                        _logger.LogError(ex, "An exception occurred while inserting other party, file creation will be aborted");
+                        throw;
                     }
-
                 }
                 else
                 {

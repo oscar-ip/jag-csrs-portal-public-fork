@@ -48,11 +48,14 @@ export class ChildApplicationQuestionComponent implements OnInit {
   seventhFormGroup: FormGroup;
   eFormGroup: FormGroup;
   nineFormGroup: FormGroup;
-  provinceData: any = [];
-  genderData: any = [];
-  identityData: any = [];
-  referalsData: any = [];
-  courtLocationsData: any = [];
+
+  provinces: any = [];
+  genders: any = [];
+  identities: any = [];
+  referals: any = [];
+  courtLocations: any = [];
+  preferredContactMethods: any = [];
+
   _accountService: AccountService;
   _lookupService: LookupService;
   _logger: LoggerService;
@@ -76,17 +79,18 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this._logger = this.logger;
     this._oidc = this.oidc;
 
-    this.provinceData = [{label: 'province', value: 'British Columbia'}];
-    this.identityData = [{label: 'identity', value: 'Native'}];
-    this.genderData =  [{label: 'gender', value: 'Male'}];
-    this.courtLocationsData =  [{label: 'courtLocation', value: 'Victoria Court'}];
-    this.referalsData = [{label: 'referal', value: 'FMEP'}];
+    this.provinces = [{id: '123', value: 'British Columbia'}];
+    this.identities = [{id: '123', value: 'Native'}];
+    this.genders =  [{id: '123', value: 'Male'}];
+    this.courtLocations =  [{id: '123', value: 'Victoria Court'}];
+    this.referals = [{id: '123', value: 'FMEP'}];
 
-    this.getReferalsData();
-    this.getCourtLocationData();
-    this.getIdentityData();
-    this.getProvinceData();
-    this.getGenderyData();
+    this.getReferals();
+    this.getCourtLocations();
+    this.getIdentities();
+    this.getProvinces();
+    this.getGenders();
+    this.getPreferredcontactmethods();
 
     this.firstFormGroup = this._formBuilder.group({
       firstControl: ['', Validators.required],
@@ -226,13 +230,12 @@ editPage(stepper, index){
   this.isEditable = true;
   stepper.selectedIndex = index;
 }
-  getIdentityData() {
-
+  getIdentities() {
     //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
-          this.identityData = data;
-          this._logger.info('this.identityData',this.identityData);
+          this.identities = data;
+          this._logger.info('this.identities',this.identities);
         },
         error: (e) => {
           if (e.error instanceof Error) {
@@ -246,12 +249,12 @@ editPage(stepper, index){
     });
   }
 
-  getProvinceData() {
+  getProvinces() {
     //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
-        this.provinceData = data;
-        this._logger.info('this.provinceData',this.provinceData);
+        this.provinces = data;
+        this._logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -265,12 +268,12 @@ editPage(stepper, index){
     })
   }
 
-  getGenderyData() {
+  getGenders() {
     //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
-        this.genderData = data;
-        this._logger.info('this.genderData',this.genderData);
+        this.genders = data;
+        this._logger.info('this.genders',this.genders);
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -284,12 +287,12 @@ editPage(stepper, index){
     })
   }
 
-  getCourtLocationData() {
+  getCourtLocations() {
     //this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
       this._lookupService.apiLookupCourtlocationsGet().subscribe({
         next: (data) => {
-          this.courtLocationsData = data;
-          this._logger.info('this.courtLocationsData',this.courtLocationsData);
+          this.courtLocations = data;
+          this._logger.info('this.courtLocations',this.courtLocations);
         },
         error: (e) => {
           if (e.error instanceof Error) {
@@ -303,12 +306,12 @@ editPage(stepper, index){
       })
   }
 
-  getReferalsData() {
+  getReferals() {
     //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountReferralsGet().subscribe({
       next: (data) => {
-        this.referalsData = data;
-        this._logger.info('this.referalsData',this.referalsData);
+        this.referals = data;
+        this._logger.info('this.referals',this.referals);
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -321,6 +324,26 @@ editPage(stepper, index){
       complete: () => this._logger.info('apiAccountReferralsGet is completed')
     })
   }
+
+  getPreferredcontactmethods(){
+    //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    this._accountService.apiAccountPreferredcontactmethodsGet().subscribe({
+      next: (data) => {
+        this.referals = data;
+        this._logger.info('this.preferredContactMethods',this.preferredContactMethods);
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this._logger.error(e.error.message);
+        } else {
+            //Backend returns unsuccessful response codes such as 404, 500 etc.
+            this._logger.info('Backend returned ', e);
+          }
+      },
+      complete: () => this._logger.info('apiAccountReferralsGet is completed')
+    })
+  }
+
 
   callAntherchild(){
     const usersArray = this.fourthFormGroup1.controls.users as FormArray;
@@ -438,8 +461,8 @@ editPage(stepper, index){
 
       // --- populate other party
       const otherPartyData = this.thirdFormGroup.value;
-      let inOtherGender: LookupValue = { value: otherPartyData.gender};
-      let inOtherProvince: LookupValue = { value: otherPartyData.province};
+      let inOtherGender: LookupValue = { id: otherPartyData.gender};
+      let inOtherProvince: LookupValue = { id: otherPartyData.province};
 
       let inOtherParty: Party = {
             partyId: "00000000-0000-0000-0000-000000000000",
@@ -478,7 +501,7 @@ editPage(stepper, index){
         inBcCourtLocation = file1Data.courtLocation;
       }
       this._logger.info('inBcCourtLocation',inBcCourtLocation);
-      this._logger.info('file1Data.courtLocation.value',file1Data.courtLocation.value);
+      this._logger.info('file1Data.courtLocation.value',file1Data.courtLocation);
 
       let inFile:any = {
           status: FileStatus.Unknown,
@@ -506,7 +529,6 @@ editPage(stepper, index){
 
       // --- populate
       let newFileRequest: NewFileRequest = {
-        bCeiD: '26336072-cba4-4b6e-871b-5355d27df9b3',
         user: inParty,
         file: inFile,
       }

@@ -377,6 +377,28 @@ namespace Csrs.TntegrationTest
             katChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
             katChild.SsgFileNumberODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", csrsFile.SsgCsrsfileid);
 
+            /* should be confirmed: leave or remove 
+                    if (party.SsgPartygender == _male)
+                    {
+                        csrsChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
+                    }
+                    else if (party.SsgPartygender == _female)
+                    {
+                        csrsChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
+                    }
+
+                    if (otherParty is not null && otherParty.SsgPartygender == _male)
+                    {
+                        csrsChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+                    }
+                    else if (otherParty is not null && otherParty.SsgPartygender == _female)
+                    {
+                        csrsChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+                    }
+                    */
+
+
+
             try
             {
                 katChild = await _dynamicsClient.Ssgcsrschildren.CreateAsync(body: katChild, cancellationToken: CancellationToken.None);

@@ -37,8 +37,8 @@ namespace Csrs.Api.Models
         public string? FileNumber { get; set; }
         public string? PartyEnrolled { get; set; } 
         public LookupValue? CourtFileType { get; set; } 
-        public string? BCCourtLevel { get; set; } // default value is "Provincial";
-        public string? BCCourtLocation { get; set; }
+        public CourtLookupValue? BCCourtLevel { get; set; } // default value is "Provincial";
+        public CourtLookupValue? BCCourtLocation { get; set; }
 
         [SwaggerSchema(Format = "date")]
         public string? DateOfOrderOrWA { get; set; }

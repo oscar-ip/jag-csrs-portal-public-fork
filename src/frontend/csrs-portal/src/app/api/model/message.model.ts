@@ -9,15 +9,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Document } from './document.model';
 
 
 export interface Message { 
-    messageGuid?: string;
-    fileGuid: string;
-    fileNo: string;
+    messageId?: string | null;
+    fileId: string;
     subject: string;
+    content?: string | null;
+    recievingParty?: string | null;
     date?: string | null;
-    attachment?: boolean;
-    isRead?: boolean;
+    attachment?: boolean | null;
+    documents?: Array<Document> | null;
+    status?: number | null;
+    isRead?: boolean | null;
 }
 
