@@ -17,7 +17,15 @@ namespace Csrs.Api.Models
 
     public class FileSummary
     {
+        /// <summary>
+        /// The internal id of the file.
+        /// </summary>
         public string? FileId { get; set; }
+
+        /// <summary>
+        /// The human readable file number.
+        /// </summary>
+        public string? FileNumber { get; set; }
 
         /// <summary>
         /// The file status, Draft or Active.
