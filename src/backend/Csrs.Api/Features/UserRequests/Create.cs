@@ -104,8 +104,9 @@ namespace Csrs.Api.Features.UserRequests
                     //This was verified by dynamics team and does not work correct if you principals
                     //As per Burak/Dynmiacs team we should never touch principals. 
                     ap.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owneridValue);
+                    ap.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);
                 }
-                ap.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);
+               
                 ap.Prioritycode = 1;
                 ap.Statuscode = 2;
                 //ap.Statecode = 0;  defaults in DB
