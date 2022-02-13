@@ -4,6 +4,8 @@ using Csrs.Api.Services;
 using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
 using MediatR;
+using Microsoft.Rest;
+using System.Net;
 using File = Csrs.Api.Models.File;
 
 namespace Csrs.Api.Features.Accounts
@@ -67,7 +69,7 @@ namespace Csrs.Api.Features.Accounts
                 if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot create account");
-                    return new Response(string.Empty, string.Empty, string.Empty);
+                    throw new HttpOperationException("Unauthenticated");
                 }
 
                 var bceidScope = _logger.AddBCeIdGuid(userId);

@@ -2,6 +2,8 @@ using Csrs.Api.Models;
 using Csrs.Api.Services;
 using Csrs.Interfaces.Dynamics;
 using MediatR;
+using Microsoft.Rest;
+using System.Net;
 
 namespace Csrs.Api.Features.Messages
 {
@@ -58,14 +60,16 @@ namespace Csrs.Api.Features.Messages
                 if (userId == string.Empty)
                 {
                     // no bceid value
-                    return Response.Empty;
+                    _logger.LogInformation("No BCeID on authenticated user, cannot fetch messages");
+                    throw new HttpOperationException("Unauthenticated");
                 }
 
                 Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);
 
                 if (accountParty == null)
                 {
-                    return Response.Empty;
+                    _logger.LogInformation("No Party Associated, cannot fetch messages");
+                    throw new HttpOperationException("Unauthenticated");
                 }
 
                 IList<Message> messages = await _messageService.GetPartyMessages(accountParty.PartyId, cancellationToken);

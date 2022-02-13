@@ -4,6 +4,8 @@ using System.Security.Claims;
 using Csrs.Api.Services;
 using Csrs.Interfaces.Dynamics;
 using Csrs.Api.Repositories;
+using Microsoft.Rest;
+using System.Net;
 
 namespace Csrs.Api.Features.Accounts
 {
@@ -62,14 +64,16 @@ namespace Csrs.Api.Features.Accounts
                 if (userId == string.Empty)
                 {
                     // no bceid value
-                    return Response.Empty;
+                    _logger.LogInformation("No BCeID on authenticated user, cannot User Request");
+                    throw new HttpOperationException("Unauthenticated");
                 }
 
                 Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);
 
                 if (accountParty == null)
                 {
-                    return Response.Empty;
+                    _logger.LogInformation("No Party Associated, cannot User Request");
+                    throw new HttpOperationException("No Party Associated");
                 }
 
                 AccountFileSummary summary = new AccountFileSummary();

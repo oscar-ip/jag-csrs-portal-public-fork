@@ -1,5 +1,3 @@
-using Csrs.Api.Models;
-using Csrs.Api.Repositories;
 using Csrs.Api.Services;
 using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
@@ -62,8 +60,8 @@ namespace Csrs.Api.Features.UserRequests
                 //string userId = "44e88bfd-fed0-4a68-97f7-0f701df51315";
                 if (string.IsNullOrEmpty(userId))
                 {
-                    _logger.LogInformation("No BCeID on authenticated user, cannot create account");
-                    return new Response("Unauthenticated");
+                    _logger.LogInformation("No BCeID on authenticated user, cannot User Request");
+                    throw new HttpOperationException("Unauthenticated");
                 }
                 var bceidScope = _logger.AddBCeIdGuid(userId);
                 // find to see if the person has an account already?
@@ -76,7 +74,7 @@ namespace Csrs.Api.Features.UserRequests
                 else
                 {
                     _logger.LogInformation("No associated party, cannot create User Request");
-                    return new Response("No Party Associated");
+                    throw new HttpOperationException("No Party Associated");
                 }
 
                 _logger.LogInformation("Creating User Request");
