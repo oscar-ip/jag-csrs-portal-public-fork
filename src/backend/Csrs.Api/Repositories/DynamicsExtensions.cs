@@ -94,7 +94,8 @@ namespace Csrs.Interfaces.Dynamics
             return files;
 
         }
-
+        //UNUSED CODE
+        //This method should be promptly removed when fileid is available in AccountSummary and provided by frontend.
         public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileByFileNumber(this IDynamicsClient dynamicsClient, string fileNo, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);

@@ -23,12 +23,12 @@ namespace Csrs.Api.Features.UserRequests
         }
         public class Response
         {
-            public Response(string _response)
+            public Response(string responseMessage)
             {
-                this._response = _response;
+                ResponseMessage = responseMessage;
             }
 
-            public string _response { get; init; }
+            public string ResponseMessage { get; init; }
         }
         public class Handler : IRequestHandler<Request, Response>
         {
