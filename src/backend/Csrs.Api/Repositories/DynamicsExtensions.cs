@@ -21,6 +21,8 @@ namespace Csrs.Interfaces.Dynamics
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
+            bceid = GuidGuard(bceid);
+
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
             string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
             var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
@@ -35,6 +37,8 @@ namespace Csrs.Interfaces.Dynamics
             {
                 return false;
             }
+
+            id = GuidGuard(id);
 
             try
             {
@@ -51,6 +55,8 @@ namespace Csrs.Interfaces.Dynamics
         public static async Task<string> GetPartyIdByBCeIdAsync(this IDynamicsClient dynamicsClient, string bceid, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            bceid = GuidGuard(bceid);
 
             List<string> select = new List<string> { "ssg_csrspartyid" };
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
@@ -77,6 +83,8 @@ namespace Csrs.Interfaces.Dynamics
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
+            partyId = GuidGuard(partyId);
+
             var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and statuscode eq {Active}";
             var orderby = new List<string> { "createdon" };
             var select = new List<string> { "ssg_filenumber", "_ssg_recipient_value", "_ssg_payor_value" };
@@ -98,7 +106,15 @@ namespace Csrs.Interfaces.Dynamics
                     role = PartyRole.Payor;
                 }
 
-                results.Add(new FileSummary { FileId = file.SsgCsrsfileid, FileNumber = file.SsgFilenumber, UsersRole = role, Status = FileStatus.Active });
+                var summary = new FileSummary
+                {
+                    FileId = Guid.Parse(file.SsgCsrsfileid),
+                    FileNumber = file.SsgFilenumber,
+                    UsersRole = role,
+                    Status = FileStatus.Active
+                };
+
+                results.Add(summary);
             }
 
             return results;
@@ -107,6 +123,8 @@ namespace Csrs.Interfaces.Dynamics
         public static async Task<MicrosoftDynamicsCRMssgCsrsfileCollection> GetFilesByParty(this IDynamicsClient dynamicsClient, string partyId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            partyId = GuidGuard(partyId);
 
             string filter = $"_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}";
             List<string> select = new List<string> { "ssg_csrsfileid" };
@@ -120,6 +138,8 @@ namespace Csrs.Interfaces.Dynamics
         public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            fileId = GuidGuard(fileId);
 
             string filter = $"_ssg_csrsfile_value eq {fileId}";
             List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", "statuscode", "_ssg_toparty_value" };
@@ -175,6 +195,8 @@ namespace Csrs.Interfaces.Dynamics
             List<string> select = new List<string> { "ssg_csrsfileid" };
             List<string> expand = new List<string> { "ssg_csrsfile_SharePointDocumentLocations" };
 
+            id = GuidGuard(id);
+
             var entity = await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(id, select: select, expand: expand, cancellationToken: cancellationToken);
 
             return entity;
@@ -218,6 +240,39 @@ namespace Csrs.Interfaces.Dynamics
             var values = await dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
 
             return values;
+        }
+
+        /// <summary>
+        /// Validates the incoming entity is a valid <see cref="Guid"/> value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>Returns the <see cref="Guid"/> formated with dashes, xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.</returns>
+        /// <exception cref="InvalidIdException"><paramref name="value"/> is null, empty or not a valid <see cref="Guid"/>.</exception>
+        private static string GuidGuard(string value)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw new InvalidIdException("No id specified", value);
+            }
+
+            if (Guid.TryParse(value, out Guid guid))
+            {
+                return guid.ToString("d");
+            }
+
+            throw new InvalidIdException("Invalid id specified", value);
+        }
+
+        /// <summary>
+        /// Escapes a string value used in a filter expression.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static string Escape(string value)
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            value = value.Replace("'", "''");
+            return value;
         }
     }
 }

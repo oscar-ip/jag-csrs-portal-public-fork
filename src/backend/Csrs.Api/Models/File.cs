@@ -20,7 +20,7 @@ namespace Csrs.Api.Models
         /// <summary>
         /// The internal id of the file.
         /// </summary>
-        public string? FileId { get; set; }
+        public Guid? FileId { get; set; }
 
         /// <summary>
         /// The human readable file number.
