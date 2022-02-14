@@ -2,6 +2,7 @@
 using Csrs.Api.Repositories;
 using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
+using Microsoft.Rest;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Csrs.Api.Services
@@ -56,7 +57,10 @@ namespace Csrs.Api.Services
             var select = new List<string>() {"ssg_csrsmessageread"};
 
             var communicationMessage = await _dynamicsClient.Ssgcsrscommunicationmessages.GetByKeyAsync(messageGuid, select, null, cancellationToken);
-            if (communicationMessage is null) throw new ArgumentNullException(messageGuid, "Invalid message Guid");
+            if (communicationMessage is null) {
+                _logger.LogInformation("No associated message Guid, cannot set message to read");
+                throw new HttpOperationException("Incorrect message Guid");
+            }
 
             if (communicationMessage.SsgCsrsmessageread == false) {
                 communicationMessage.SsgCsrsmessageread = true;
