@@ -33,7 +33,7 @@ public partial interface IDynamicsClient
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> or <see cref="MicrosoftDynamicsCRMssgCsrsfile.SsgCsrsfileid"/> is null.</exception>
     /// <exception cref="FormatException"><see cref="MicrosoftDynamicsCRMssgCsrsfile.SsgCsrsfileid"/> cannot be parsed as a <see cref="System.Guid"/></exception>
     string GetEntityReference(MicrosoftDynamicsCRMssgCsrsfile entity) => GetEntityURI("ssg_csrsfiles", entity?.SsgCsrsfileid!);
-    string GetEntityReference(FileId entity) => GetEntityURI("ssg_csrsfiles", entity.ToString());
+    //string GetEntityReference(FileId entity) => GetEntityURI("ssg_csrsfiles", entity.ToString());
 
     /// <summary>
     /// Gets the entity reference for a SSG CSRS Party
@@ -43,7 +43,7 @@ public partial interface IDynamicsClient
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> or <see cref="MicrosoftDynamicsCRMssgCsrsparty.SsgCsrspartyid"/> is null.</exception>
     /// <exception cref="FormatException"><see cref="MicrosoftDynamicsCRMssgCsrsparty.SsgCsrspartyid"/> cannot be parsed as a <see cref="System.Guid"/></exception>
     string GetEntityReference(MicrosoftDynamicsCRMssgCsrsparty entity) => GetEntityURI("ssg_csrsparties", entity?.SsgCsrspartyid!);
-    string GetEntityReference(PartyId entity) => GetEntityURI("ssg_csrsparties", entity.ToString());
+    //string GetEntityReference(PartyId entity) => GetEntityURI("ssg_csrsparties", entity.ToString());
 
     /// <summary>
     /// Gets the entity reference for a SSG CSRS BC Court Location
