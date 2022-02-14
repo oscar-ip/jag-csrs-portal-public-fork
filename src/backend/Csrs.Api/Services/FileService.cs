@@ -37,23 +37,27 @@ namespace Csrs.Api.Services
 
             if (file.BCCourtLevel is not null && !string.IsNullOrEmpty(file.BCCourtLevel.Id))
             {
-                csrsFile.SsgBCCourtLevelODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", file.BCCourtLevel.Id);
+                //"ssg_csrsfiles"
+                csrsFile.SsgBCCourtLevelODataBind = _dynamicsClient.GetEntityURI("ssg_csrsbccourtlevels", file.BCCourtLevel.Id);
             }
 
             if (file.BCCourtLocation is not null && !string.IsNullOrEmpty(file.BCCourtLocation.Id))
             {
-                csrsFile.SsgBCCourtLocationODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", file.BCCourtLocation.Id);
+                //"ssg_csrsfiles"
+                csrsFile.SsgBCCourtLocationODataBind = _dynamicsClient.GetEntityURI("ssg_ijssbccourtlocations", file.BCCourtLocation.Id);
             }
 
             // map the party and other party to recipient and payor
             if (file.UsersRole == PartyRole.Recipient)
             {
                 csrsFile.SsgPartyenrolled = (int)PartyEnrolled.Recipient;
-                csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", party.SsgCsrspartyid);
+                //"ssg_csrsfiles"
+                csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
 
                 if (otherParty is not null && !string.IsNullOrEmpty(otherParty.SsgCsrspartyid))
                 {
-                    csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
+                    //"ssg_csrsfiles"
+                    csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
                 }
             }
             else if (file.UsersRole == PartyRole.Payor)
