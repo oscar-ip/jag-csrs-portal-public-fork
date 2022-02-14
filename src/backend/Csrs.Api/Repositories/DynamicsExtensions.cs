@@ -199,6 +199,7 @@ namespace Csrs.Interfaces.Dynamics
             }
 
             return files;
+        }
 
         public static async Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(
             this IDynamicsClient dynamicsClient,
