@@ -934,9 +934,9 @@ namespace Csrs.Interfaces
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    result = fileName;
 
-                    return await UpdateListItemFields(listItemData, listTitle, contentType, fileName); ;
+                    return fileName;
+
                 }
                 else
                 {
