@@ -231,13 +231,7 @@ namespace Csrs.Api.Services
 
             if (partyId is null) return false;
 
-            var files = await _dynamicsClient.GetFilesByParty(partyId, cancellationToken);
-
-            if (files is null) return false;
-
-            if (files.Value.Count == 0 || !files.Value.ToList().Exists(file => file.SsgCsrsfileid.Equals(entityId))) return false;
-
-            return true;
+            return await _dynamicsClient.PartyOnFileAsync(partyId, entityId, cancellationToken);
 
         }
 
