@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Csrs.Services.FileManager;
+using System.ComponentModel.DataAnnotations;
 
 namespace Csrs.Api.Models
 {
@@ -14,7 +15,7 @@ namespace Csrs.Api.Models
         public string? RecievingParty { get; set; }
         public DateTimeOffset? Date { get; set; }
         public bool? Attachment { get; set; }
-        public List<Document>? Documents { get; set; }
+        public IList<FileSystemItem>? Documents { get; set; }
         public int? Status { get; set; }
 
         public bool? IsRead { get; set; }
