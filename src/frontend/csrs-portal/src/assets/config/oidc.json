@@ -1,0 +1,11 @@
+{
+    "postLoginRoute": "/welcomeuser",
+    "authority": "https://dev.oidc.gov.bc.ca/auth/realms/onestopauth-basic",
+    "redirectUrl": "https://dev.childsupportrecalc.gov.bc.ca",
+    "postLogoutRedirectUri": "https://dev.childsupportrecalc.gov.bc.ca",
+    "clientId": "jsb-csrs-991",
+    "scope": "openid profile",
+    "responseType": "code",
+    "prompt": "consent"
+}
+

@@ -7,6 +7,12 @@ tmp/
 app/**/*.js
 app/**/*.js.map
 openshift/.jag-csrs.env
+openshift/.dcUpdaterRole.env
+openshift/.dcUpdaterRoleBinding.env
+openshift/.jag-csrs-test.env
+openshift/.image-pull-enabler-config.env
+openshift/.image-pusher-config.env
+openshift/.for-config-map/*
 # dependencies
 node_modules/
 bower_components/

@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'environments/environment';
 
 export const httpLoaderFactory = (httpClient: HttpClient) => {
-  const config$ = httpClient.get<any>(`assets/oidc.json`).pipe(
+  const config$ = httpClient.get<any>(`assets/config/oidc.json`).pipe(
     map((customConfig: any) => {
       return {
         triggerAuthorizationResultEvent: true,

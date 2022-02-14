@@ -1,5 +1,6 @@
 using Csrs.Api.Features.Accounts;
 using Csrs.Api.Models;
+using Csrs.Api.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,12 @@ namespace Csrs.Api.Controllers
 {
     public class AccountController : CsrsControllerBase<AccountController>
     {
-        public AccountController(IMediator mediator, ILogger<AccountController> logger)
+        private readonly IAccountService _accountService;
+
+        public AccountController(IAccountService accountService, IMediator mediator, ILogger<AccountController> logger)
             : base(mediator, logger)
         {
+            _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
         /// <summary>
@@ -25,9 +29,9 @@ namespace Csrs.Api.Controllers
         [ProducesResponseType(typeof(IList<LookupValue>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetGendersAsync(CancellationToken cancellationToken)
-        {
-            Lookups.Response? response = await _mediator.Send(Lookups.Request.Gender, cancellationToken);
-            return Ok(response.Items);
+        {            
+            IList<LookupValue>? values = await _accountService.GetGendersAsync(cancellationToken);
+            return Ok(values);
         }
 
         /// <summary>
@@ -41,8 +45,8 @@ namespace Csrs.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetProvincesAsync(CancellationToken cancellationToken)
         {
-            Lookups.Response? response = await _mediator.Send(Lookups.Request.Province, cancellationToken);
-            return Ok(response.Items);
+            IList<LookupValue>? values = await _accountService.GetProvincesAsync(cancellationToken);
+            return Ok(values);
         }
 
         /// <summary>
@@ -56,8 +60,8 @@ namespace Csrs.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetIdentitesAsync(CancellationToken cancellationToken)
         {
-            Lookups.Response? response = await _mediator.Send(Lookups.Request.Identity, cancellationToken);
-            return Ok(response.Items);
+            IList<LookupValue>? values = await _accountService.GetIdentitiesAsync(cancellationToken);
+            return Ok(values);
         }
 
         /// <summary>
@@ -71,8 +75,8 @@ namespace Csrs.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetReferralsAsync(CancellationToken cancellationToken)
         {
-            Lookups.Response? response = await _mediator.Send(Lookups.Request.Referral, cancellationToken);
-            return Ok(response.Items);
+            IList<LookupValue>? values = await _accountService.GetReferralsAsync(cancellationToken);
+            return Ok(values);
         }
 
         /// <summary>
@@ -86,8 +90,8 @@ namespace Csrs.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> GetPreferredContactMethodsAsync(CancellationToken cancellationToken)
         {
-            Lookups.Response? response = await _mediator.Send(Lookups.Request.PreferredContactMethods, cancellationToken);
-            return Ok(response.Items);
+            IList<LookupValue>? values = await _accountService.GetPreferredContactMethodsAsync(cancellationToken);
+            return Ok(values);
         }
 
         /// <summary>
@@ -130,7 +134,8 @@ namespace Csrs.Api.Controllers
 
             NewAccountAndFile.Request request = new(newFileRequest.User, newFileRequest.File);
             NewAccountAndFile.Response? response = await _mediator.Send(request, cancellationToken);
-            return Ok(response.Id);
+
+            return Ok(response);
         }
 
     }

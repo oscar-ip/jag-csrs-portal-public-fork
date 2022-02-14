@@ -26,7 +26,7 @@
   </div>
   <div class="background_image">
     <div class="container">
-      <section class="summary-section" style="padding-bottom: 20px;">
+      <section>
         <div class="summary-content">
           <div>
             <p class="h1_class">Child Support Recalculation Service</p>
@@ -48,9 +48,37 @@
       </section>
 
       <section>
-        <div class="p-2 round3">
-          <mat-grid-list cols="6" rowHeight="80px" gutterSize="5px">
-            <mat-grid-tile colspan="1" rowspan="1.5" aria-rowindex="0">
+        <div class="round3">
+          <mat-grid-list cols="7" rowHeight="80px">
+            <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="2">
+            <img class="icon-size5" src="/assets/Questionnaire-icon.svg" />
+        </mat-grid-tile>
+        <mat-grid-tile
+        [colspan]="6"
+        [rowspan]="1">
+        <p class="text-left-inside-grid" style="font-size: 28px; font-weight:bolder;">
+          Is the recalculation service right for you?
+          <mat-divider style="margin-top:15px; width: 154%;"></mat-divider>
+        </p>
+    </mat-grid-tile>
+    <mat-grid-tile
+        [colspan]="4"
+        [rowspan]="1"
+        >
+        <p style="color:black" class="text-inside-grid">Complete the questionnaire to obtain important information
+          about eligibility for the service to help you decide whether to apply.</p>
+    </mat-grid-tile>
+    <mat-grid-tile
+        [colspan]="2"
+        [rowspan]="1">
+        <button mat-flat-button type="button" style="margin-right: 20px; margin-bottom: 20px;" class="large" color="accent" routerLink="/questionnaire">
+          Start questionnaire
+        </button>
+    </mat-grid-tile>
+        
+            <!-- <mat-grid-tile colspan="1" rowspan="1.5" aria-rowindex="0">
               <img class="icon-size5" src="/assets/Questionnaire-icon.svg" />
             </mat-grid-tile>
             <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0">
@@ -67,17 +95,17 @@
               <button mat-flat-button type="button" style="margin-right: 20px;" class="large" color="accent" routerLink="/questionnaire">
                 Start questionnaire
               </button>
-            </mat-grid-tile>
+            </mat-grid-tile> -->
           </mat-grid-list>
         </div>
       </section>
 
-    <section style="padding-top: 50px; padding-bottom: 20px;">
-      <div class="p-3 pt-4 round3">
-        <div class="container pt-2">
-          <div class="row">
+    <section class="py-4">
+      <div class="p-3 round3">
+        <div class="container">
+          <div class="row pb-2">
             <div class="col border_bottom">
-              <p class="font_size_24_bolder">
+              <p class="font_size_24_bolder pb-3">
                 New users
               </p>
             </div>
@@ -101,7 +129,7 @@
                             online government
                             services."
                  #tooltip3="matTooltip"
-                 matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
+                  class="toolTipIcon">info</mat-icon>
                 </span> to access this service. You must
                 register for a Basic BCeID before you can log in – it only takes a few minutes.
               </p>
@@ -116,7 +144,7 @@
           </div>
           <!--third-->
           <div class="row">
-            <div class="col pr-2">
+            <div class="col pr-2 py-3">
               <p class="color_black">If you already have a Basic BCeID account log
                 <a
                   class ='account-link'
@@ -135,7 +163,7 @@
                 requested to enrol?</strong>
               <mat-expansion-panel  style="box-shadow: none;" class="p-2" #expPanel hideToggle="true">
                   <mat-expansion-panel-header>
-                    <mat-panel-title>
+                    <mat-panel-title style="text-decoration: underline;">
                       {{expPanel.expanded? '- See less information
                       ' : '+ See more information'}}
                     </mat-panel-title>
@@ -195,17 +223,18 @@ recalculation service once you have obtained your BCeID.
 
     <section style="padding-bottom: 20px">
       <div class="p-2 round4">
-        <mat-grid-list cols="6" rowHeight="55px" gutterSize="5px">
+        <mat-grid-list cols="7" rowHeight="3em">
           <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0">
-            <img class="icon-size5" src="/assets/Support_icon.svg" />
+            <img class="support-image" src="/assets/Support_icon.svg" />
           </mat-grid-tile>
-          <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0">
+          <mat-grid-tile colspan="6" rowspan="1" aria-rowindex="0">
             <p class="text-left-inside-grid font_size_24_bolder">
               Have questions or looking for more support?
             </p>
           </mat-grid-tile>
-          <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="1" class="text-left-inside-grid">
-            <p class="font_size_18_lighter">
+          <mat-grid-tile colspan="6" rowspan="1">
+
+            <p class="text-left-contact font_size_18_lighter">
               Contact the recalculation service toll free at
               <a
                   [attr.href]="bceIdLink"

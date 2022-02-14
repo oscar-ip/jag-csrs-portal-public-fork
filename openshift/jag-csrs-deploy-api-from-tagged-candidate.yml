@@ -1,0 +1,226 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ${APP_NAME}
+  description: Deployment template for the JAG-csrs TEST
+
+labels:
+  app: ${APP_NAME}
+  app.kubernetes.io/name: ${APP_NAME}
+  app.kubernetes.io/part-of: ${APP_NAME}
+
+
+parameters:
+
+- name: APP_NAME
+  description: The application name that each component is part of
+  required: true
+  value: jag-csrs
+
+- name: SPLUNK_CONFIG_NAME
+  description: Source of Splunk config values
+  required: true
+  value: blahblah
+
+- name: FILEMANAGER_CONFIG_NAME
+  description: Source of FILE MANAGER config values
+  required: true
+  value: blahblah
+
+- name: OAUTH_CONFIG_NAME
+  description: Source of Dynamics config values
+  required: true
+  value: blahblah
+- name: ROUTE_PREFIX
+  description: The application name that each component is part of
+  required: true
+  value: jag-csrs-frontend
+
+- name: COMPONENT_NAME
+  description: The component name
+  required: true
+  value: jag-csrs-frontend
+
+- name: JWT_CONFIG_NAME
+  description: The jwt config name
+  required: true
+  value: jwt
+
+- name: API_COMPONENT_NAME
+  description: The API component name
+  required: true
+  value: jag-csrs-api
+
+- name: OC_NAMESPACE
+  description: The OpenShift namespace prefix
+  required: true
+  # Below value must be changed as per gold cluster oc nameplate
+  value: blahblah
+
+- name: OC_ENV
+  description: The OpenShift environment, ie dev, test or prod
+  required: true
+  value: test
+
+- name: IMAGE_TAG
+  description: Tagged code for test or prod
+  required: true
+  value: blahblah
+
+- name: DNS
+  description: The application name that each component is part of
+  required: false
+  # Below value must be changed as per gold cluster certificate/DNS
+  value: apps.silver.devops.gov.bc.ca
+
+- name: BCEID_URL
+  description: BCEID_URL for dev, test or prod
+  required: true
+  value: https://www.development.bceid.ca/
+
+objects:
+
+### JAG-csrs API Deployment Config ###
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${API_COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${API_COMPONENT_NAME}
+    strategy:
+      type: Rolling
+      maxSurge: 50%
+      maxUnavailable: 0
+    template:
+      metadata:
+        labels:
+          name: ${API_COMPONENT_NAME}
+          app.kubernetes.io/instance: ${API_COMPONENT_NAME}
+          app.openshift.io/runtime: dotnet
+      spec:
+        containers:
+          - image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${IMAGE_TAG}
+            name: ${API_COMPONENT_NAME}
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 8081
+            env:
+            - name: JWT_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: ${JWT_CONFIG_NAME}
+                  key: JWT__AUDIENCE
+            - name: JWT_AUTHORITY
+              valueFrom:
+                secretKeyRef:
+                  name: ${JWT_CONFIG_NAME}
+                  key: JWT__AUTHORITY
+            - name: SPLUNK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_URL
+            - name: FILEMANAGER_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: FILEMANAGER_ADDRESS
+            - name: FILEMANAGER_SECURE
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: FILEMANAGER_SECURE
+            - name: SPLUNK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_TOKEN
+            - name: SPLUNK_INDEX
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_INDEX
+            - name: OAUTH_CLIENTID
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__CLIENTID
+            - name: OAUTH_OAUTHURL
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__OAUTHURL
+            - name: OAUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__PASSWORD
+            - name: OAUTH_RESOURCEURL
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__RESOURCEURL
+            - name: OAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__SECRET
+            - name: OAUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: OAUTH__USERNAME
+            - name: APIGATEWAY_BASEPATH
+              valueFrom:
+                secretKeyRef:
+                  name: ${OAUTH_CONFIG_NAME}
+                  key: APIGATEWAY_BASEPATH
+            - name: BCEID_URL
+              value: ${BCEID_URL}
+            resources:
+              limits:
+                cpu: 250m
+                memory: 1000Mi
+              requests:
+                cpu: 250m
+                memory: 512Mi
+            # Took away readiness and liveness probe until those end points are ready
+    # Would trigger deployment from GitHub Actions by using dc patch
+    # Hence taking out the following trigger would make sense
+    #triggers:
+    #  - type: ConfigChange
+    #  - type: ImageChange
+    #    imageChangeParams:
+    #      automatic: true
+    #      containerNames:
+    #        - ${API_COMPONENT_NAME}
+    #      from:
+    #        kind: ImageStreamTag
+    #        namespace: ${OC_NAMESPACE}-tools
+    #        name: ${API_COMPONENT_NAME}:${IMAGE_TAG}
+  status: {}
+
+# https://stackoverflow.com/a/61452441
+### JAG-csrs-backend Service ###
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${API_COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+  spec:
+    ports:
+      - name: http
+        protocol: TCP
+        port: 8081
+        targetPort: 8081
+    selector:
+      name: ${API_COMPONENT_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+

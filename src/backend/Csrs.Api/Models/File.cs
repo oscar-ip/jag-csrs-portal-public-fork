@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Csrs.Api.Models
 {
@@ -15,7 +17,7 @@ namespace Csrs.Api.Models
 
     public class FileSummary
     {
-        public Guid? FileId { get; set; }
+        public string? FileId { get; set; }
 
         /// <summary>
         /// The file status, Draft or Active.
@@ -31,18 +33,29 @@ namespace Csrs.Api.Models
 
     public class File : FileSummary
     {
-        //[Required]
-        //public string? Courtlocation { get; set; }
-        //[Required]
-        //public string? CourtFileNumber { get; set; }
-        //public bool OrderedbytheCourtField { get; set; }
-        //public string? Act { get; set; }
-        //public string? DateofOrder { get; set; }
-        //public string? Referrals { get; set; }
-        //public string? FMEP { get; set; }
-        //public bool SpecialExpenses { get; set; }
-        //public bool SplitParenting { get; set; }
-        //public bool SharedParenting { get; set; }
+        public string FileId { get; set; }
+        public string? FileNumber { get; set; }
+        public string? PartyEnrolled { get; set; } 
+        public LookupValue? CourtFileType { get; set; } 
+        public string? BCCourtLevel { get; set; } // default value is "Provincial";
+        public string? BCCourtLocation { get; set; }
+
+        [SwaggerSchema(Format = "date")]
+        public string? DateOfOrderOrWA { get; set; }
+
+        public string? IncomeOnOrder { get; set; }
+
+        //public int? PayorIncomeAmountOnOrder { get; set; } = 0;
+        //public bool? RecalculationOrderedByCourt { get; set; } = false;
+        public string? Section7Expenses { get; set; }
+        public string? SafetyAlertRecipient { get; set; } = "No";
+        public string? RecipientSafetyConcernDescription { get; set; }
+
+        public string? SafetyAlertPayor { get; set; } = "No";
+        public string? PayorSafetyConcernDescription { get; set; }
+
+        public string? IsFMEPFileActive { get; set; } = "No";
+        public string? FMEPFileNumber { get; set; }
 
         /// <summary>
         /// The other party on the file. The other party could be recipient or payer.

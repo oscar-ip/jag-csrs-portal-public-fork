@@ -30,6 +30,7 @@
     "@bcgov/bc-sans": "^1.0.1",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
+    "@snowplow/browser-tracker": "^3.3.0",
     "angular-auth-oidc-client": "^13.1.0",
     "bootstrap": "^5.1.0",
     "colors": "^1.4.0",

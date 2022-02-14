@@ -18,6 +18,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Message } from '../model/models';
+import { ProblemDetails } from '../model/models';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -154,8 +155,7 @@ export class MessageService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    /*
-    public apiMessageDeleteDelete(messageGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<string>;
+   /* public apiMessageDeleteDelete(messageGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<string>;
     public apiMessageDeleteDelete(messageGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<string>>;
     public apiMessageDeleteDelete(messageGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<string>>;
     public apiMessageDeleteDelete(messageGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
@@ -201,35 +201,24 @@ export class MessageService {
         return this.httpClient.delete<string>(`${this.configuration.basePath}/api/message/delete`,
             null,
             {
-               ''
-                //params: localVarQueryParameters,
-                //responseType: <any>responseType_,
-                //withCredentials: this.configuration.withCredentials,
-                //headers: localVarHeaders,
-                //observe: observe,
-                //reportProgress: reportProgress
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
             }
         );
     }*/
 
     /**
-     * @param partyGuid
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiMessageListGet(partyGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Message>>;
-    public apiMessageListGet(partyGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Message>>>;
-    public apiMessageListGet(partyGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Message>>>;
-    public apiMessageListGet(partyGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
-        if (partyGuid === null || partyGuid === undefined) {
-            throw new Error('Required parameter partyGuid was null or undefined when calling apiMessageListGet.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (partyGuid !== undefined && partyGuid !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>partyGuid, 'partyGuid');
-        }
+    public apiMessageListGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Message>>;
+    public apiMessageListGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Message>>>;
+    public apiMessageListGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Message>>>;
+    public apiMessageListGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -262,7 +251,6 @@ export class MessageService {
 
         return this.httpClient.get<Array<Message>>(`${this.configuration.basePath}/api/message/list`,
             {
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -277,10 +265,10 @@ export class MessageService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiMessageReadGet(messageGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<Array<Message>>;
-    public apiMessageReadGet(messageGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpResponse<Array<Message>>>;
-    public apiMessageReadGet(messageGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<HttpEvent<Array<Message>>>;
-    public apiMessageReadGet(messageGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json'}): Observable<any> {
+    public apiMessageReadGet(messageGuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<any>;
+    public apiMessageReadGet(messageGuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpResponse<any>>;
+    public apiMessageReadGet(messageGuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpEvent<any>>;
+    public apiMessageReadGet(messageGuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined}): Observable<any> {
         if (messageGuid === null || messageGuid === undefined) {
             throw new Error('Required parameter messageGuid was null or undefined when calling apiMessageReadGet.');
         }
@@ -304,9 +292,6 @@ export class MessageService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
-                'text/plain',
-                'application/json',
-                'text/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -320,7 +305,7 @@ export class MessageService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<Array<Message>>(`${this.configuration.basePath}/api/message/read`,
+        return this.httpClient.get<any>(`${this.configuration.basePath}/api/message/read`,
             {
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
