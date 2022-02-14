@@ -34,11 +34,8 @@ namespace Csrs.Api.Services
         {
             // get the file.
             if (string.IsNullOrEmpty(serverRelativeUrl) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return new BadRequestResult();
-            var hasAccess = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
-
-            if (!hasAccess) return new UnauthorizedResult();
-
-            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null, cancellationToken);
+            
+            var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
 
             if (dynamicsFile is null) return new NotFoundResult();
 
@@ -64,11 +61,11 @@ namespace Csrs.Api.Services
         {
             if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return new List<FileSystemItem>();
 
-            var hasAccess = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
+            var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
 
-            if (!hasAccess) return new List<FileSystemItem>();
+            if (dynamicsFile is null) return new List<FileSystemItem>();
 
-            return await GetListFilesInFolder(entityId, entityName, documentType, cancellationToken);
+            return await GetListFilesInFolder(entityId, entityName, documentType, dynamicsFile, cancellationToken);
         }
 
         public async Task<IActionResult> UploadAttachment(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
@@ -77,43 +74,15 @@ namespace Csrs.Api.Services
 
             if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(type)) return new BadRequestResult();
 
-            var hasAccess = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
+            var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
 
-            if (!hasAccess) return new UnauthorizedResult();
+            if (dynamicsFile is null) return new NotFoundResult();
 
             var ms = new MemoryStream();
             file.OpenReadStream().CopyTo(ms);
             var data = ms.ToArray();
 
-            // Check for a bad file type.
-
-            //var mimeTypes = new MimeTypes();
-
-            //var mimeType = mimeTypes.GetMimeType(data);
-
-            // Add additional allowed mime types here
-            //if (mimeType == null || !(mimeType.Name.Equals("image/png") || mimeType.Name.Equals("image/jpeg") ||
-            //                         mimeType.Name.Equals("application/pdf")))
-            //{
-            //    _logger.LogError($"ERROR in uploading file due to invalid mime type {mimeType?.Name}");
-            //    return new NotFoundResult();
-            //}
-            //else
-            //{
-            // Sanitize file name
-            //var illegalInFileName = new Regex(@"[#%*<>?{}~¿""]");
-            //var fileName = illegalInFileName.Replace(file.FileName, "");
-            //illegalInFileName = new Regex(@"[&:/\\|]");
-            //fileName = illegalInFileName.Replace(fileName, "-");
-
             string fileName = FileSystemItemExtensions.CombineNameDocumentType(file.FileName, type);
-
-            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null, cancellationToken);
-
-            if (dynamicsFile is null)
-            {
-                return new BadRequestResult();
-            }
 
             var folderName = dynamicsFile.GetDocumentFolderName();
 
@@ -144,7 +113,6 @@ namespace Csrs.Api.Services
 
                 result = uploadResult.ErrorDetail;
             }
-            //}
 
             return new JsonResult(result);
         }
@@ -155,17 +123,18 @@ namespace Csrs.Api.Services
         /// <param name="entityName"></param>
         /// <param name="documentType"></param>
         /// <returns></returns>
-        private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType, CancellationToken cancellationToken)
+        private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType, MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, CancellationToken cancellationToken)
         {
             var fileSystemItemVMList = new List<FileSystemItem>();
 
             if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return fileSystemItemVMList;
+
             //Three retries? Why only here?
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(entityId, null, null, cancellationToken);
+                    
                     // call the web service
                     var request = new FolderFilesRequest
                     {
@@ -222,16 +191,16 @@ namespace Csrs.Api.Services
         /// <param name="BCeIDUserId">BCeID</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns></returns>
-        private async Task<bool> CanAccessDocument(string entityId, string BCeIDUserId, CancellationToken cancellationToken)
+        private async Task<MicrosoftDynamicsCRMssgCsrsfile> CanAccessDocument(string entityId, string BCeIDUserId, CancellationToken cancellationToken)
         {
 
-            if (string.IsNullOrEmpty(BCeIDUserId)) return false;
+            if (string.IsNullOrEmpty(BCeIDUserId)) return null;
 
             string partyId = await _dynamicsClient.GetPartyIdByBCeIdAsync(BCeIDUserId, cancellationToken);
 
-            if (partyId is null) return false;
+            if (partyId is null) return null;
 
-            return await _dynamicsClient.PartyOnFileAsync(partyId, entityId, cancellationToken);
+            return await _dynamicsClient.GetFileByPartyAndId(partyId, entityId, cancellationToken);
 
         }
 

@@ -48,14 +48,14 @@ namespace Csrs.Interfaces.Dynamics
             }
         }
 
-        public static async Task<bool> PartyOnFileAsync(this IDynamicsClient dynamicsClient, string partyId, string fileId, CancellationToken cancellationToken)
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileByPartyAndId(this IDynamicsClient dynamicsClient, string partyId, string fileId, CancellationToken cancellationToken)
         {
             
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
             if (string.IsNullOrEmpty(partyId) || string.IsNullOrEmpty(fileId))
             {
-                return false;
+                return null;
             }
 
             try
@@ -66,14 +66,14 @@ namespace Csrs.Interfaces.Dynamics
 
                 var files = await dynamicsClient.Ssgcsrsfiles.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
 
-                if (files.Value.Count == 0) return false;
+                if (files.Value.Count == 0) return null;
 
-                return true;
+                return files.Value[0];
 
             }
             catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
             {
-                return false;
+                return null;
             }
         }
 
