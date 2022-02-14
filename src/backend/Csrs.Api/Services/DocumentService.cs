@@ -159,7 +159,6 @@ namespace Csrs.Api.Services
         {
             var fileSystemItemVMList = new List<FileSystemItem>();
 
-
             if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return fileSystemItemVMList;
             //Three retries? Why only here?
             for (int i = 0; i < 3; i++)
