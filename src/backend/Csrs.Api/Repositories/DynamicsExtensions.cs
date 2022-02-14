@@ -219,5 +219,19 @@ namespace Csrs.Interfaces.Dynamics
 
             return values;
         }
+
+        public static async Task<string> GetSharepointDocumentLocationIdByRelatveUrl(this IDynamicsClient dynamicsClient, string relativeUrl, CancellationToken cancellationToken)
+        {
+            var filter = $"relativeurl eq '{relativeUrl}'";
+            var select = new List<string> { "sharepointdocumentlocationid" };
+
+            var locations = await dynamicsClient.Sharepointdocumentlocations.GetAsync(top: 1, null, null, filter: filter, null, null, select: select, null, cancellationToken);
+
+            if (locations is null || locations.Value.Count == 0) return null;
+
+            return locations.Value[0].Sharepointdocumentlocationid;
+
+        }
+
     }
 }
