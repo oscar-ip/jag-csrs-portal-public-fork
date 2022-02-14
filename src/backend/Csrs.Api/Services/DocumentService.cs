@@ -216,7 +216,7 @@ namespace Csrs.Api.Services
                 Name = folderName
             };
 
-            var sharepointdocumentlocationid = await _dynamicsClient.GetSharepointDocumentLocationIdByRelatveUrl(mdcsdl.Relativeurl, cancellationToken);
+            var sharepointdocumentlocationid = await _dynamicsClient.GetSharepointDocumentLocationIdByRelatveUrlAsync(mdcsdl.Relativeurl, cancellationToken);
 
             if (sharepointdocumentlocationid is null)
             {

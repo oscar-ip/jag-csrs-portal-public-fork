@@ -265,5 +265,55 @@ namespace Csrs.Interfaces.Dynamics
             return values;
         }
 
+        public static async Task<string?> GetSharepointDocumentLocationIdByRelatveUrlAsync(this IDynamicsClient dynamicsClient, string relativeUrl, CancellationToken cancellationToken)
+        {
+            var filter = $"relativeurl eq '{relativeUrl}'";
+            var select = new List<string> { "sharepointdocumentlocationid" };
+
+            var locations = await dynamicsClient.Sharepointdocumentlocations.GetAsync(top: 1, null, null, filter: filter, null, null, select: select, null, cancellationToken);
+
+            if (locations.Value.Count == 0)
+            {
+                return null;
+            }
+
+            return locations.Value[0].Sharepointdocumentlocationid;
+        }
+
+
+        /// <summary>
+        /// Validates the incoming entity is a valid <see cref="Guid"/> value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>Returns the <see cref="Guid"/> formated with dashes, xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.</returns>
+        /// <exception cref="InvalidIdException"><paramref name="value"/> is null, empty or not a valid <see cref="Guid"/>.</exception>
+        private static string GuidGuard(string value)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw new InvalidIdException("No id specified", value);
+            }
+
+            if (Guid.TryParse(value, out Guid guid))
+            {
+                return guid.ToString("d");
+            }
+
+            throw new InvalidIdException("Invalid id specified", value);
+        }
+
+        /// <summary>
+        /// Escapes a string value used in a filter expression.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static string Escape(string value)
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            value = value.Replace("'", "''");
+            return value;
+        }
+
+
     }
 }
