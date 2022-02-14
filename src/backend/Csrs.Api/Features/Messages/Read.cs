@@ -47,7 +47,6 @@ namespace Csrs.Api.Features.Messages
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-
                 await _messageService.SetMessageRead(request.MessageId, cancellationToken);
 
                 return new Response();

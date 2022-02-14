@@ -38,8 +38,6 @@ namespace Csrs.Interfaces.Dynamics
                 return false;
             }
 
-            id = GuidGuard(id);
-
             try
             {
                 List<string> select = new() { "ssg_csrsfileid" };
