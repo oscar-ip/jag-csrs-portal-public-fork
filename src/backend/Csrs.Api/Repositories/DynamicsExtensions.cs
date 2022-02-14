@@ -162,11 +162,11 @@ namespace Csrs.Interfaces.Dynamics
         }
         //UNUSED CODE
         //This method should be promptly removed when fileid is available in AccountSummary and provided by frontend.
-        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileByFileNumber(this IDynamicsClient dynamicsClient, string fileNo, CancellationToken cancellationToken)
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileByFileId(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
-            string filter = $"ssg_filenumber eq '{fileNo}'";
+            string filter = $"ssg_csrsfileid eq {fileId}";
             List<string> select = new List<string> { "ssg_csrsfileid", "ssg_filenumber", "_ownerid_value", "_owninguser_value" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 

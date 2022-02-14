@@ -11,12 +11,14 @@ namespace Csrs.Api.Features.UserRequests
     {
         public class Request : IRequest<Response>
         {
-            public Request(string fileNo, string requestType, string requestMessage)
+            public Request(string fileId, string fileNo, string requestType, string requestMessage)
             {
+                FileId = fileId;
                 FileNo = fileNo;
                 RequestType = requestType;
                 RequestMessage = requestMessage;
             }
+            public string FileId { get; init; }
             public string FileNo { get; init; }
             public string RequestType { get; init; }
             public string RequestMessage { get; init; }
@@ -76,21 +78,19 @@ namespace Csrs.Api.Features.UserRequests
                     _logger.LogInformation("No associated party, cannot create User Request");
                     throw new HttpOperationException("No Party Associated");
                 }
-
                 _logger.LogInformation("Creating User Request");
-                MicrosoftDynamicsCRMactivitypointer ap = new MicrosoftDynamicsCRMactivitypointer();
-                //activitytypecode to task.
-                ap.Activitytypecode = "task";
-                ap.Subject = "File " + request.FileNo + " - " + request.RequestType;
-                string desc = "Party: " + party.SsgBceidDisplayname + "/n"+
+                MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
+                task.Activitytypecode = "task";
+                task.Subject = "File " + request.FileNo + " - " + request.RequestType;
+                string desc = "Party: " + party.SsgBceidDisplayname + "\n"+
                               "Message: "+request.RequestMessage;
-                ap.Description =  desc;
-                ap.Isregularactivity = true;
+                task.Description =  desc;
+                task.Isregularactivity = true;
                 //Get the file
                 MicrosoftDynamicsCRMssgCsrsfile originFile;
                 try
                 {
-                    originFile = await _dynamicsClient.GetFileByFileNumber(request.FileNo, cancellationToken);
+                    originFile = await _dynamicsClient.GetFileByFileId(request.FileId, cancellationToken);
                 }
                 catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -103,21 +103,13 @@ namespace Csrs.Api.Features.UserRequests
                     //SystemUser is just a child of Principal
                     //This was verified by dynamics team and does not work correct if you principals
                     //As per Burak/Dynmiacs team we should never touch principals. 
-                    ap.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owneridValue);
-                    ap.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);
+                    task.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owneridValue);
+                    task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);
                 }
-               
-                ap.Prioritycode = 1;
-                ap.Statuscode = 2;
+                task.Prioritycode = 1;
+                task.Statuscode = 2;
                 //ap.Statecode = 0;  defaults in DB
-                //TODO This code executes correctly and does push correct data 
-                //TODO however Activitypointers are NOT allowed to be created from outside Dynamics as per high level rule(s)
-                //TODO This will need to be updated.
-                //TODO Option1 - use ODataClient to send http request with a json body which Dynamics will need endpoint
-                //TODO created which takes data and creates task/ap inside Dynamics.
-                //TODO Option2 - Create new entity in Dynamics called csrs_contactus or similar and have a trigger when new
-                //TODO entitiy is created to create this task/ap inside Dynamics.
-                MicrosoftDynamicsCRMactivitypointer result = await _dynamicsClient.Activitypointers.CreateAsync(ap);
+                MicrosoftDynamicsCRMtask result = await _dynamicsClient.Tasks.CreateAsync(task);
                 _logger.LogDebug("User Request created successfully");
                 return new Response("User Request Created");
             }
