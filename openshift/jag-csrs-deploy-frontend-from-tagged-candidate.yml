@@ -1,0 +1,178 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ${APP_NAME}
+  description: Deployment template for the JAG-csrs Frontend
+
+labels:
+  app: ${APP_NAME}
+  app.kubernetes.io/name: ${COMPONENT_NAME}
+  app.kubernetes.io/part-of: ${APP_NAME}
+
+
+parameters:
+
+- name: APP_NAME
+  description: The application name that each component is part of
+  required: true
+  value: jag-csrs
+
+- name: SPLUNK_CONFIG_NAME
+  description: The application name that each component is part of
+  required: true
+  value: blahblah
+
+- name: ROUTE_PREFIX
+  description: The application name that each component is part of
+  required: true
+  value: jag-csrs-portal-public
+
+- name: COMPONENT_NAME
+  description: The component name
+  required: true
+  value: jag-csrs-frontend
+
+- name: API_COMPONENT_NAME
+  description: The API component name
+  required: true
+  value: jag-csrs-api
+
+- name: OC_NAMESPACE
+  description: The OpenShift namespace prefix
+  required: true
+  # Below value must be changed as per gold cluster oc nameplate
+  value: blahblah
+
+- name: OC_ENV
+  description: The OpenShift environment, ie dev, test or prod
+  required: true
+  value: test
+
+- name: DNS
+  description: The application name that each component is part of
+  required: false
+  value: apps.silver.devops.gov.bc.ca
+
+- name: BCEID_URL
+  description: BCEID_URL for dev, test or prod
+  required: true
+  value: https://www.test.bceid.ca/
+
+- name: IMAGE_TAG
+  description: Tagged code for test or prod
+  required: true
+  value: blahblah
+
+objects:
+
+### JAG-csrs Deployment Config ###
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${COMPONENT_NAME}
+    strategy:
+      type: Rolling
+      maxSurge: 50%
+      maxUnavailable: 0
+    template:
+      metadata:
+        labels:
+          name: ${COMPONENT_NAME}
+          app.kubernetes.io/instance: ${COMPONENT_NAME}
+          app.openshift.io/runtime: angularjs
+      spec:
+        containers:
+          - image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${IMAGE_TAG}
+            name: ${COMPONENT_NAME}
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 8080
+            env:
+            - name: SPLUNK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_URL
+            - name: SPLUNK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_TOKEN
+            - name: SPLUNK_INDEX
+              valueFrom:
+                secretKeyRef:
+                  name: ${SPLUNK_CONFIG_NAME}
+                  key: SPLUNK_INDEX
+            - name: BCEID_URL
+              value: ${BCEID_URL}
+            resources:
+              limits:
+                cpu: 250m
+                memory: 1000Mi
+              requests:
+                cpu: 125m
+                memory: 512Mi
+            # Took away readiness and liveness probe until those end points are ready
+    # Would trigger deployment from GitHub Actions by using dc patch
+    # Hence taking out the following trigger would make sense
+    # triggers:
+    #  - type: ConfigChange
+    #  - type: ImageChange
+    #    imageChangeParams:
+    #      automatic: true
+    #      containerNames:
+    #        - ${COMPONENT_NAME}
+    #      from:
+    #        kind: ImageStreamTag
+    #        namespace: ${OC_NAMESPACE}-tools
+    #        name: ${COMPONENT_NAME}:${IMAGE_TAG}
+  status: {}
+
+
+
+### JAG-csrs Service ###
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+  spec:
+    ports:
+      - name: http
+        protocol: TCP
+        port: 80
+        targetPort: 8080
+    selector:
+      name: ${COMPONENT_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+
+#- apiVersion: route.openshift.io/v1
+#  kind: Route
+#  metadata:
+#    name: ${ROUTE_PREFIX}
+#    namespace: ${OC_NAMESPACE}-${OC_ENV}
+#  annotations:
+#    # if we do not use sticky-session, disable_cookies needs to be true
+#    haproxy.router.openshift.io/disable_cookies: "true"
+#    # balance algorithm
+#    haproxy.router.openshift.io/balance: roundrobin
+#  spec:
+#    host: ${DNS}
+#    to:
+#      kind: Service
+#      name: ${COMPONENT_NAME}
+#    port:
+#      targetPort: http
+#    tls:
+#      termination: edge
+#      insecureEdgeTerminationPolicy: Redirect
+#    wildcardPolicy: None

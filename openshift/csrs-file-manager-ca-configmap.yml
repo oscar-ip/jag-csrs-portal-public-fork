@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: csrs-file-manager-ca
+  annotations:
+    service.beta.openshift.io/inject-cabundle: "true"
+    app.kubernetes.io/part-of: jag-csrs

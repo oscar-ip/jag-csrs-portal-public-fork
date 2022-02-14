@@ -1426,6 +1426,33 @@
     "@angular-devkit/schematics" "12.2.11"
     jsonc-parser "3.0.0"
 
+"@snowplow/browser-tracker-core@3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@snowplow/browser-tracker-core/-/browser-tracker-core-3.3.0.tgz#0dbcad1359a30625c6f6c51e7ae1adcb3b840a99"
+  integrity sha512-BCAL+vuBWKb7FBVbRDlFCMpapzBurG8qeczjYDOX7PrzzkkSCGJ1KclcBHc9VncmbcVGzx6YqwJiiTMoVGuuog==
+  dependencies:
+    "@snowplow/tracker-core" "3.3.0"
+    sha1 "^1.1.1"
+    tslib "^2.3.0"
+    uuid "^3.4.0"
+
+"@snowplow/browser-tracker@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@snowplow/browser-tracker/-/browser-tracker-3.3.0.tgz#e39645f901a5d0e05250899515330aae8521ce06"
+  integrity sha512-bRAJgKBYORPWNGQF7npJZyx7At+exbIHEgBi4B9271RSH9DchuxecSi9hUum82XM/0sfO/arTrdIYn6FDSBocA==
+  dependencies:
+    "@snowplow/browser-tracker-core" "3.3.0"
+    "@snowplow/tracker-core" "3.3.0"
+    tslib "^2.3.0"
+
+"@snowplow/tracker-core@3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@snowplow/tracker-core/-/tracker-core-3.3.0.tgz#387068c905f01293dcbe8ef96c4868f3f36f22e5"
+  integrity sha512-7IVj5MVwJrll9+oyZGTzBo/MNFj/LPGtaQ5GkGK3qakexJgEmSiAsC2pAbGh1TduabW5cBT0+SmeqBA1u8XAnA==
+  dependencies:
+    tslib "^2.3.0"
+    uuid "^3.4.0"
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz"
@@ -2557,6 +2584,11 @@ chardet@^0.7.0:
   resolved "https://registry.npmjs.org/chardet/-/chardet-0.7.0.tgz"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+"charenc@>= 0.0.1":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
+  integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
+
 "chokidar@>=3.0.0 <4.0.0", chokidar@^3.0.0, chokidar@^3.5.1:
   version "3.5.2"
   resolved "https://registry.npmjs.org/chokidar/-/chokidar-3.5.2.tgz"
@@ -3015,6 +3047,11 @@ cross-spawn@^6.0.0:
     semver "^5.5.0"
     shebang-command "^1.2.0"
     which "^1.2.9"
+
+"crypt@>= 0.0.1":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
+  integrity sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=
 
 css-blank-pseudo@^0.1.4:
   version "0.1.4"
@@ -7982,9 +8019,9 @@ reusify@^1.0.4:
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
 rfc4648@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/rfc4648/-/rfc4648-1.5.0.tgz#1ba940ec1649685ec4d88788dc57fb8e18855055"
-  integrity sha512-FA6W9lDNeX8WbMY31io1xWg+TpZCbeDKsBo0ocwACZiWnh9TUAyk9CCuBQuOPmYnwwdEQZmraQ2ZK7yJsxErBg==
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/rfc4648/-/rfc4648-1.5.1.tgz#b0b16756e33d9de8c0c7833e94b28e627ec372a4"
+  integrity sha512-60e/YWs2/D3MV1ErdjhJHcmlgnyLUiG4X/14dgsfm9/zmCWLN16xI6YqJYSCd/OANM7bUNzJqPY5B8/02S9Ibw==
 
 rfdc@^1.1.4:
   version "1.3.0"
@@ -8236,6 +8273,14 @@ setprototypeof@1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.1.1.tgz"
   integrity sha512-JvdAWfbXeIGaZ9cILp38HntZSFSo3mWg6xGcJJsd+d4aRMOqauag1C63dJfDw7OaMYwEbHMOxEZ1lqVRYP2OAw==
+
+sha1@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/sha1/-/sha1-1.1.1.tgz#addaa7a93168f393f19eb2b15091618e2700f848"
+  integrity sha1-rdqnqTFo85PxnrKxUJFhjicA+Eg=
+  dependencies:
+    charenc ">= 0.0.1"
+    crypt ">= 0.0.1"
 
 shallow-clone@^3.0.0:
   version "3.0.1"

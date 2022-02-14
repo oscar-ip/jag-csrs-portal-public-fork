@@ -1,0 +1,730 @@
+{
+	"info": {
+		"_postman_id": "4cefbd2d-ef0d-40ae-ad8b-0cf709020088",
+		"name": "CSRS API",
+		"description": "BC Child Support Recalculation Service API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "account",
+					"item": [
+						{
+							"name": "Gets the current user's file summary.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/account",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Gets the valid gender values for an account.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/account/genders",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"account",
+										"genders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Gets the valid province values for an account.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/account/provinces",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"account",
+										"provinces"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Gets the valid identity values for an account.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/account/identities",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"account",
+										"identities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Gets the valid referral values for an account.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/account/referrals",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"account",
+										"referrals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Gets the preferred contact methods values for an account.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/account/preferredcontactmethods",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"account",
+										"preferredcontactmethods"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creates a new file.",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"BCeiD\": \"\",\n    \"file\": {\n        \"usersRole\": \"Unknown\",\n        \"fileId\": \"tempor occaecat proident cillum Lorem\",\n        \"status\": \"Unknown\",\n        \"bceidguid\": null,\n        \"otherParty\": {\n            \"bceidguid\": null,\n            \"dateOfBirth\": \"1979-02-18\",\n            \"email\": \"sunt in quis n\",\n            \"firstName\": \"test\",\n            \"gender\": {\n                \"id\": 1,\n                \"value\": \"enim exercitation eiusmod sit\"\n            },\n            \"lastName\": \"labore laborum Duis eu\",\n            \"partyId\": \"dolore ullamco\",\n            \"middleName\": \"non velit ea cillum\",\n            \"preferredName\": \"in\",\n            \"addressStreet1\": \"i\",\n            \"addressStreet2\": \"eu\",\n            \"city\": \"ut ut dolor laboris\",\n            \"province\": {\n                \"id\": 1,\n                \"value\": \"ullamco fugiat magna\"\n            },\n            \"postalCode\": \"aliqua ex aliquip pariatur\",\n            \"homePhone\": \"pariatur ullamco ex adipisicing\",\n            \"workPhone\": \"Excepteur Duis\",\n            \"cellPhone\": \"inci\",\n            \"optOutElectronicDocuments\": true,\n            \"identity\": {\n                \"id\": 1,\n                \"value\": \"labore ut ma\"\n            },\n            \"referral\": {\n                \"id\": 1,\n                \"value\": \"ut\"\n            }\n        },\n        \"children\": [\n            {\n                \"childId\": \"ipsum veniam\",\n                \"firstName\": \"dolore exercitation labore officia\",\n                \"middleName\": \"incididunt mollit sed nisi\",\n                \"lastName\": \"in laborum veniam ex\",\n                \"dateOfBirth\": \"1982-05-28\",\n                \"childIsDependent\": true\n            },\n            {\n                \"childId\": \"magna aliquip quis culpa\",\n                \"firstName\": \"culpa aute magna id\",\n                \"middleName\": \"aliqua ad\",\n                \"lastName\": \"Lorem do occaecat\",\n                \"dateOfBirth\": \"2019-08-27\",\n                \"childIsDependent\": true\n            }\n        ]\n    },\n    \"user\": {\n        \"bceidguid\": null,\n        \"dateOfBirth\": \"2014-01-20\",\n        \"email\": \"quis dolore tempor culpa cupidatat\",\n        \"firstName\": \"nisi Duis dolore\",\n        \"gender\": {\n            \"id\": 1,\n            \"value\": \"elit ipsum dolor\"\n        },\n        \"lastName\": \"occaecat sit\",\n        \"partyId\": \"ea\",\n        \"middleName\": \"repr\",\n        \"preferredName\": \"occaecat cillum ut\",\n        \"addressStreet1\": \"esse cillum Duis ipsum\",\n        \"addressStreet2\": \"dolor dolore aliqua\",\n        \"city\": \"in quis amet\",\n        \"province\": {\n            \"id\": 1,\n            \"value\": \"ipsum\"\n        },\n        \"postalCode\": \"ut ea\",\n        \"homePhone\": \"nulla eiusmod\",\n        \"workPhone\": \"magna ea adipisicing laborum\",\n        \"cellPhone\": \"cillum Excepteur\",\n        \"optOutElectronicDocuments\": false,\n        \"identity\": {\n            \"id\": 1,\n            \"value\": \"do in\"\n        },\n        \"referral\": {\n            \"id\": 1,\n            \"value\": \"incididunt esse in\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/account/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"account",
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "document",
+					"item": [
+						{
+							"name": "upload attachment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"contentType": "application/pdf",
+											"type": "file",
+											"src": "/C:/Users/177141/OneDrive - NTT DATA Group/Documents/Test-RCC/Bruce-Banner-RCC.pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/document/uploadattachment?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&type=sdf&entityname=ssg_csrsfile",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"document",
+										"uploadattachment"
+									],
+									"query": [
+										{
+											"key": "entityId",
+											"value": "f8cc3e5a-5484-ec11-b831-00505683fbf4"
+										},
+										{
+											"key": "type",
+											"value": "sdf"
+										},
+										{
+											"key": "entityname",
+											"value": "ssg_csrsfile"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "download attachment",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/api/document/downloadattachment?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&serverRelativeUrl=/ssg_csrsfile/1118_F8CC3E5A5484EC11B83100505683FBF4/sdf__Bob-Ross-RCC-signed_33.pdf&documentType=sdf",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"document",
+										"downloadattachment"
+									],
+									"query": [
+										{
+											"key": "entityId",
+											"value": "f8cc3e5a-5484-ec11-b831-00505683fbf4"
+										},
+										{
+											"key": "entityName",
+											"value": "ssg_csrsfile"
+										},
+										{
+											"key": "serverRelativeUrl",
+											"value": "/ssg_csrsfile/1118_F8CC3E5A5484EC11B83100505683FBF4/sdf__Bob-Ross-RCC-signed_33.pdf"
+										},
+										{
+											"key": "documentType",
+											"value": "sdf"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "document list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/api/document/getattachmentlist?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&documentType=sdf",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"document",
+										"getattachmentlist"
+									],
+									"query": [
+										{
+											"key": "entityId",
+											"value": "f8cc3e5a-5484-ec11-b831-00505683fbf4"
+										},
+										{
+											"key": "entityName",
+											"value": "ssg_csrsfile"
+										},
+										{
+											"key": "documentType",
+											"value": "sdf"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "file",
+					"item": [
+						{
+							"name": "/api/file/listapplications",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/file/listapplications?partyGuid=dolor ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"file",
+										"listapplications"
+									],
+									"query": [
+										{
+											"key": "partyGuid",
+											"value": "dolor ut",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/file/applicationdetail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/file/applicationdetail?fileGuid=dolor ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"file",
+										"applicationdetail"
+									],
+									"query": [
+										{
+											"key": "fileGuid",
+											"value": "dolor ut",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/file/createapplication",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/file/createapplication?partyGuid=dolor ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"file",
+										"createapplication"
+									],
+									"query": [
+										{
+											"key": "partyGuid",
+											"value": "dolor ut",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/file/updateapplication",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/file/updateapplication?fileGuid=dolor ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"file",
+										"updateapplication"
+									],
+									"query": [
+										{
+											"key": "fileGuid",
+											"value": "dolor ut",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "message",
+					"item": [
+						{
+							"name": "/api/message/list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/message/list?partyGuid=dolor ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"message",
+										"list"
+									],
+									"query": [
+										{
+											"key": "partyGuid",
+											"value": "dolor ut",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/message/read",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/message/read?messageGuid=dolor ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"message",
+										"read"
+									],
+									"query": [
+										{
+											"key": "messageGuid",
+											"value": "dolor ut",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/message/create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fileGuid\": \"\",\n    \"fileNo\": \"minim\",\n    \"subject\": \"reprehenderit sint Duis non anim\",\n    \"messageGuid\": \"\",\n    \"date\": \"aute dolor tempor\",\n    \"attachment\": true,\n    \"isRead\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/message/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"message",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/message/delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/message/delete?messageGuid=dolor ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"message",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "messageGuid",
+											"value": "dolor ut",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/api/feedback/create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bCeIDGuid\": \"cupidatat consectetur sunt\",\n    \"messageBody\": \"incididunt sit\",\n    \"subject\": \"exercitation nulla labore\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/feedback/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"feedback",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/userrequest/create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fileNo\": \"est commodo exercitation\",\n    \"requestMessage\": \"commodo cillum\",\n    \"requestType\": \"ea reprehenderit exercitation\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/userrequest/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"userrequest",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get jwt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get jwt\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"jwt\", jsonData.access_token);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "account",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client-secret}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "openid",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								},
+								{
+									"key": "claims",
+									"value": "bceid_userid",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{oAuthUrl}}/protocol/openid-connect/token",
+							"host": [
+								"{{oAuthUrl}}"
+							],
+							"path": [
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/",
+			"type": "string"
+		}
+	]
+}

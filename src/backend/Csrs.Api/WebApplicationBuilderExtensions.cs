@@ -2,16 +2,14 @@ using Csrs.Api;
 using Csrs.Api.Authentication;
 using Csrs.Api.Configuration;
 using Csrs.Api.Models;
-using Csrs.Api.Models.Dynamics;
-using Csrs.Api.Repositories;
 using Csrs.Api.Services;
 using Csrs.Api.ApiGateway;
-using Simple.OData.Client;
 using System.Configuration;
 using Grpc.Net.Client;
 using Grpc.Core;
 using Grpc.Net.Client.Configuration;
 using Serilog;
+using Csrs.Interfaces.Dynamics;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -59,28 +57,19 @@ public static class WebApplicationBuilderExtensions
         // Add ApiGateway Middleware
         services.AddTransient<ApiGatewayHandler>();
 
-        // Register IOAuthApiClient and ODataClientSettings
+        // Register IOAuthApiClient
         services.AddHttpClient<IOAuthApiClient, OAuthApiClient>(client =>
         {
             client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
+            //client.Timeout = TimeSpan.FromSeconds(150); 
         });
 
-        // Register httpClient for OdataClient with OAuthHandler
-        services.AddHttpClient<ODataClientSettings>(client => 
-
+        services.AddHttpClient<IDynamicsClient, DynamicsClient>(client =>
         {
             client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
             client.Timeout = TimeSpan.FromSeconds(30); // data timeout
-        })
-        .AddHttpMessageHandler<OAuthHandler>()
-        .AddHttpMessageHandler<ApiGatewayHandler>();
-
-        logger.Debug("Configuing IOptionSetRepository");
-        services.AddHttpClient<IOptionSetRepository, OptionSetRepository>(client =>
-        {
-            client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
-            client.Timeout = TimeSpan.FromSeconds(110); // options timeout
-
+            //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+            //client.Timeout = TimeSpan.FromSeconds(300); // data timeout
         })
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();
@@ -88,35 +77,16 @@ public static class WebApplicationBuilderExtensions
         logger.Debug("Configuing FileManager Service");
         ConfigureFileManagerService(builder, configuration?.FileManager, logger);
 
-        services.AddTransient<IODataClient>(provider =>
-        {
-            var settings = provider.GetRequiredService<ODataClientSettings>();
-            settings.IgnoreUnmappedProperties = true;
-            return new ODataClient(settings);
-        });
-
         services.AddHttpContextAccessor();
 
         // Add services
         services.AddTransient<ITokenService, TokenService>();
-
+        services.AddTransient<IMessageService, MessageService>();
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IUserService, UserService>();
-        services.AddTransient<IChildService, ChildService>();
+        services.AddTransient<IDocumentService, DocumentService>();
 
-        // Add repositories
-        services.AddTransient<ICourtLevelRepository, CourtLevelRepository>();
-        services.AddTransient<ICourtLocationRepository, CourtLocationRepository>();
-
-        services.AddTransient<ICsrsChildRepository, CsrsChildRepository>();
-        services.AddTransient<ICsrsFeedbackRepository, CsrsFeedbackRepository>();
-        services.AddTransient<ICsrsFileRepository, CsrsFileRepository>();
-        services.AddTransient<ICsrsPartyRepository, CsrsPartyRepository>();
-
-        // mappers
-        services.AddTransient<IInsertOrUpdateFieldMapper<Csrs.Api.Models.File, SSG_CsrsFile>, FileInsertOrUpdateFieldMapper>();
-        services.AddTransient<IInsertOrUpdateFieldMapper<Party, SSG_CsrsParty>, PartyInsertOrUpdateFieldMapper>();
     }
 
     private static void ConfigureFileManagerService(WebApplicationBuilder builder, FileManagerConfiguration? configuration, Serilog.ILogger logger)
@@ -137,12 +107,12 @@ public static class WebApplicationBuilderExtensions
         if (secure.HasValue && secure.Value)
         {
             logger.Information("Using secure channel for File Manager service");
-            credentials = ChannelCredentials.SecureSsl;
+            //credentials = ChannelCredentials.SecureSsl;
         }
         else
         {
             logger.Information("Using insecure channel for File Manager service");
-            credentials = ChannelCredentials.Insecure;
+            //credentials = ChannelCredentials.Insecure;
         }
 
         logger.Information("Using file manager service {Address}", address);
@@ -151,7 +121,6 @@ public static class WebApplicationBuilderExtensions
         {
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
-                Credentials = credentials,
                 ServiceConfig = new ServiceConfig { LoadBalancingConfigs = { new RoundRobinConfig() } },
                 ServiceProvider = services
             });

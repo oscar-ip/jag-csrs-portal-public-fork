@@ -2,6 +2,8 @@
 using Csrs.Api.Controllers;
 using Csrs.Api.Features.Accounts;
 using Csrs.Api.Models;
+using Csrs.Api.Services;
+using Csrs.Interfaces.Dynamics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -26,8 +28,9 @@ namespace Csrs.Test.Controllers
         {
             var logger = GetMockLogger();
             var mediator = GetMockMediator();
+            var accountServiceMock = new Mock<IAccountService>();
 
-            new AccountController(mediator.Object, logger.Object);
+            new AccountController(accountServiceMock.Object, mediator.Object, logger.Object);
         }
 
         //[Fact]
@@ -40,53 +43,13 @@ namespace Csrs.Test.Controllers
         //    Assert.Throws<ArgumentNullException>(() => new AccountController(mediator.Object, null!));
         //}
 
-       [Theory]
-       [MemberData(nameof(LookupsRequestTypes))]
-        public async Task LookupsCallMediatorCorrectly(Lookups.Request expectedRequest, Expression<Func<AccountController, Task<IActionResult>>> action)
-        {
-            var logger = GetMockLogger();
-            var mediator = GetMockMediator(true);
-
-            Fixture fixture = new Fixture();
-
-            var expected = fixture.CreateMany<LookupValue>().ToList();
-
-            mediator
-                .Setup(_ => _.Send(It.Is<Lookups.Request>(request => request == expectedRequest), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new Lookups.Response(expected))
-                .Verifiable("Correct request was not sent.");
-
-            var sut = new AccountController(mediator.Object, logger.Object);
-
-            await action.Compile()(sut);
-        }
-
-        public static IEnumerable<object[]> LookupsRequestTypes
-        {
-            get
-            {
-                Expression<Func<AccountController, Task<IActionResult>>> action;
-
-                action = controller => controller.GetGendersAsync(CancellationToken.None);
-                yield return new object[] { Lookups.Request.Gender, action };
-
-                action = controller => controller.GetProvincesAsync(CancellationToken.None);
-                yield return new object[] { Lookups.Request.Province, action };
-
-                action = controller => controller.GetIdentitesAsync(CancellationToken.None);
-                yield return new object[] { Lookups.Request.Identity, action };
-
-                action = controller => controller.GetReferralsAsync(CancellationToken.None);
-                yield return new object[] { Lookups.Request.Referral, action };
-            }
-        }
-
         [Fact]
         public async Task GetProfileShouldCreateCorrectRequest()
         {
             var logger = GetMockLogger();
             var mediator = GetMockMediator(true);
             var httpContextMock = new Mock<HttpContext>();
+            var accountServiceMock = new Mock<IAccountService>();
 
             Guid id = Guid.NewGuid();
             var user = CreateUser(id);
@@ -98,7 +61,7 @@ namespace Csrs.Test.Controllers
 
             httpContextMock.Setup(_ => _.User).Returns(user);
 
-            var sut = new AccountController(mediator.Object, logger.Object);
+            var sut = new AccountController(accountServiceMock.Object, mediator.Object, logger.Object);
             sut.ControllerContext.HttpContext = httpContextMock.Object;
 
             var actual = await sut.GetAsync(CancellationToken.None);
@@ -112,6 +75,7 @@ namespace Csrs.Test.Controllers
         {
             var logger = GetMockLogger();
             var mediator = GetMockMediator(true);
+            var accountServiceMock = new Mock<IAccountService>();
 
             Fixture fixture = new Fixture();
             var user = CreateUser(Guid.NewGuid());
@@ -121,13 +85,13 @@ namespace Csrs.Test.Controllers
 
             mediator
                 .Setup(_ => _.Send(It.Is<NewAccountAndFile.Request>(_ => _.Applicant == account && _.File == file), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new NewAccountAndFile.Response(Guid.NewGuid()))
+                .ReturnsAsync(new NewAccountAndFile.Response(string.Empty, string.Empty, string.Empty))
                 .Verifiable("Correct request was not sent.");
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(_ => _.User).Returns(user);
 
-            var sut = new AccountController(mediator.Object, logger.Object);
+            var sut = new AccountController(accountServiceMock.Object, mediator.Object, logger.Object);
             sut.ControllerContext.HttpContext = httpContextMock.Object;
 
             var actual = await sut.CreateAsync(new NewFileRequest { User = account, File = file }, CancellationToken.None);

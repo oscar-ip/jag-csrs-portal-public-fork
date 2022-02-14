@@ -1,25 +1,12 @@
 ﻿using Csrs.Api.Models;
+using Csrs.Interfaces.Dynamics.Models;
 using File = Csrs.Api.Models.File;
 
 namespace Csrs.Api.Services
 {
     public interface IFileService
     {
-        Task<IList<FileSummary>> GetPartyFileSummariesAsync(Guid partyId, CancellationToken cancellationToken);
-
-        Task<File> CreateFile(Party party, Party? otherOarty, File file, CancellationToken cancellationToken);
-    }
-
-    public interface IChildService
-    {
-        Task CreateChild();
-    }
-
-    public class ChildService : IChildService
-    {
-        public Task CreateChild()
-        {
-            throw new NotImplementedException();
-        }
+        //Task<Tuple<string, string>> CreateFile(string partyId, string? otherPartyId, File file, CancellationToken cancellationToken);
+        Task<Tuple<string, string>> CreateFile(MicrosoftDynamicsCRMssgCsrsparty party, MicrosoftDynamicsCRMssgCsrsparty otherParty, File file, CancellationToken cancellationToken);
     }
 }

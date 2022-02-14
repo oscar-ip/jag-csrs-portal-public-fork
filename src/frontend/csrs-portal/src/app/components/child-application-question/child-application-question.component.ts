@@ -44,8 +44,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _lookupService: LookupService;
   _logger: LoggerService;
   _oidc: OidcSecurityService;
-  today = new Date(); 
+  today = new Date();
   isEditable: boolean = false;
+  _idToken: string = '';
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
@@ -212,6 +213,7 @@ editPage(stepper, index){
   getIdentityData() {
 
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => this.identityData = data,
 
@@ -229,6 +231,7 @@ editPage(stepper, index){
 
   getProvinceData() {
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountProvincesGet().subscribe({
       next: (data) => this.provinceData = data,
       error: (e) => {
@@ -244,6 +247,7 @@ editPage(stepper, index){
   }
 
   getGenderyData() {
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountGendersGet().subscribe({
       next: (data) => this.genderData = data,
@@ -260,6 +264,7 @@ editPage(stepper, index){
   }
 
   getCourtLocationData() {
+    //this._lookupService.configuration.accessToken =  this._idToken;
     this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
       this._lookupService.apiLookupCourtlocationsGet().subscribe({
         next: (data) => this.courtLocationsData = data,
@@ -276,6 +281,7 @@ editPage(stepper, index){
   }
 
   getReferalsData() {
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountReferralsGet().subscribe({
       next: (data) => this.referalsData = data,
@@ -300,6 +306,7 @@ editPage(stepper, index){
       lastName: [''],
       birthdate: [],
       givenNames: [],
+      childDependency: [],
       middleName: []
     });
 
@@ -323,5 +330,6 @@ editPage(stepper, index){
   save(){
     localStorage.getsetItemItem('formData', '');
   }
+
 
 }

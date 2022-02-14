@@ -13,10 +13,6 @@ import { Party } from './party.model';
 
 
 export interface NewFileRequest { 
-    /**
-     * This is a TEMPORARY field until login is implemented. The BCeiD Guid should come from the auth token
-     */
-    bCeiD: string;
     user: Party;
     file: any;
 }

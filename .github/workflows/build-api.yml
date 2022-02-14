@@ -1,4 +1,4 @@
-name: CSRS API
+name: CSRS API Build and Deployment
 
 on:
   push:

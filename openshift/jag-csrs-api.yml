@@ -65,7 +65,6 @@ parameters:
 - name: DNS
   description: The application name that each component is part of
   required: false
-  # Below value must be changed as per gold cluster certificate/DNS
   value: apps.silver.devops.gov.bc.ca
 
 - name: BCEID_URL
@@ -99,10 +98,11 @@ objects:
           app.openshift.io/runtime: dotnet
       spec:
         containers:
-          # due to permission issue not using tools space; dev is pulling from dev
+          # due to permission issue we were not using tools space; dev is pulling from dev
+          # Now the permission issue is no longer there and should be pulling from tools
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_ENV}/${APP_NAME}:${OC_ENV}
-            name: ${API_COMPONENT_NAME} 
+            name: ${API_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
               - containerPort: 8081
@@ -131,7 +131,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${FILEMANAGER_CONFIG_NAME}
-                  key: FILEMANAGER_SECURE               
+                  key: FILEMANAGER_SECURE
             - name: SPLUNK_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -179,9 +179,10 @@ objects:
                   key: APIGATEWAY_BASEPATH
             - name: BCEID_URL
               value: ${BCEID_URL}
+            # Yet to deal with proper resource allocation
             resources:
               limits:
-                cpu: 250m
+                cpu: 500m
                 memory: 1000Mi
               requests:
                 cpu: 250m

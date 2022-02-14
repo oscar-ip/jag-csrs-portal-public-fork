@@ -1,12 +1,10 @@
-﻿using Csrs.Api.Models;
+using Csrs.Api.Models;
 
 namespace Csrs.Api.Services
 {
     public interface IAccountService
     {
-        Task<Party?> GetPartyByBCeIdAsync(Guid bceidGuid, CancellationToken cancellationToken);
-
-        Task<Party?> GetPartyAsync(Guid id, CancellationToken cancellationToken);
+        Task<Party?> GetPartyByBCeIdAsync(string bceidGuid, CancellationToken cancellationToken);
 
         Task<IList<LookupValue>> GetGendersAsync(CancellationToken cancellationToken);
 
@@ -19,5 +17,6 @@ namespace Csrs.Api.Services
         Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);
 
         Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken);
+        
     }
 }

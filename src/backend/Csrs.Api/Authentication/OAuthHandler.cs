@@ -2,6 +2,9 @@
 
 namespace Csrs.Api.Authentication
 {
+    /// <summary>
+    /// Delegating handler that gets access token and adds the Authorization header to the request.
+    /// </summary>
     public class OAuthHandler : DelegatingHandler
     {
         private readonly ITokenService _tokenService;

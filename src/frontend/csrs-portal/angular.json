@@ -28,13 +28,15 @@
             },
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/snowplow.js",
               "src/favicon.ico",
               "src/assets",
               "src/assets/i18n"
             ],
             "styles": [
               "./node_modules/bootstrap/scss/bootstrap.scss",
-              "src/scss/app.scss"
+              "src/scss/app.scss",
+              "src/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

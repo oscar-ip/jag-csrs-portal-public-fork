@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Csrs.Api.Models.Dynamics;
-using Csrs.Api.Models;
-using Csrs.Api.Repositories;
 using MediatR;
+using Csrs.Api.Models;
 using Csrs.Api.Services;
 
 namespace Csrs.Api.Features.Accounts

@@ -34,30 +34,30 @@ namespace Csrs.Services.FileManager
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddDefaultTokenProviders();
 
-            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
-                // Configure JWT authentication
-                services.AddAuthentication(o =>
-                {
-                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer(o =>
-                {
-                    o.SaveToken = true;
-                    o.RequireHttpsMetadata = false;
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        RequireExpirationTime = false,
-                        ValidIssuer = Configuration["JWT_VALID_ISSUER"],
-                        ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
-                    };
-                });
+            //if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            //    // Configure JWT authentication
+            //    services.AddAuthentication(o =>
+            //    {
+            //        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    }).AddJwtBearer(o =>
+            //    {
+            //        o.SaveToken = true;
+            //        o.RequireHttpsMetadata = false;
+            //        o.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            RequireExpirationTime = false,
+            //            ValidIssuer = Configuration["JWT_VALID_ISSUER"],
+            //            ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
+            //            IssuerSigningKey =
+            //                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+            //        };
+            //    });
 
-            services.AddAuthorization();
+            //services.AddAuthorization();
 
             services.AddGrpc(options =>
             {
@@ -78,8 +78,8 @@ namespace Csrs.Services.FileManager
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseHealthChecks("/hc/ready", new HealthCheckOptions
             {
