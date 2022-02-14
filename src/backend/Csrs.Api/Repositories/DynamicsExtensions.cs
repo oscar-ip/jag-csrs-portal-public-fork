@@ -175,23 +175,16 @@ namespace Csrs.Interfaces.Dynamics
                 return null;
             }
 
-            try
-            {
 
-                var filter = $"(_ssg_toparty_value eq {partyId} or _ssg_fromparty_value eq {partyId}) and ssg_csrscommunicationmessageid eq {messageId}";
-                var select = new List<string> { "ssg_csrscommunicationmessageid" , "ssg_csrsmessagesubject" };
+            var filter = $"(_ssg_toparty_value eq {partyId} or _ssg_fromparty_value eq {partyId}) and ssg_csrscommunicationmessageid eq {messageId}";
+            var select = new List<string> { "ssg_csrscommunicationmessageid" , "ssg_csrsmessagesubject" };
 
-                var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
+            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
 
-                if (messages.Value.Count == 0) return null;
+            if (messages.Value.Count == 0) return null;
 
-                return messages.Value[0];
+            return messages.Value[0];
 
-            }
-            catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
-            {
-                return null;
-            }
         }
         public static async Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(
             this IDynamicsClient dynamicsClient,

@@ -146,6 +146,8 @@ namespace Csrs.Api.Services
         /// <param name="entityId"></param>
         /// <param name="entityName"></param>
         /// <param name="documentType"></param>
+        /// <param name="folderName"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType, string folderName, CancellationToken cancellationToken)
         {
