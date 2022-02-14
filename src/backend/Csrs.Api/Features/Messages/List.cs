@@ -68,7 +68,7 @@ namespace Csrs.Api.Features.Messages
                     return Response.Empty;
                 }
 
-                IList<Message> messages = await _messageService.GetPartyMessages(accountParty.PartyId);
+                IList<Message> messages = await _messageService.GetPartyMessages(accountParty.PartyId, cancellationToken);
 
                 return new Response(messages);
             }

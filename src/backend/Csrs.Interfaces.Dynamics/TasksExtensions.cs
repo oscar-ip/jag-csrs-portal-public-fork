@@ -13,12 +13,12 @@ namespace Csrs.Interfaces.Dynamics
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Extension methods for Ssgnotestemplateses.
+    /// Extension methods for Tasks.
     /// </summary>
-    public static partial class SsgnotestemplatesesExtensions
+    public static partial class TasksExtensions
     {
             /// <summary>
-            /// Get entities from ssg_notestemplateses
+            /// Get entities from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -42,13 +42,13 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='expand'>
             /// Expand related entities
             /// </param>
-            public static MicrosoftDynamicsCRMssgNotestemplatesCollection Get(this ISsgnotestemplateses operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
+            public static MicrosoftDynamicsCRMtaskCollection Get(this ITasks operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
             {
                 return operations.GetAsync(top, skip, search, filter, count, orderby, select, expand).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Get entities from ssg_notestemplateses
+            /// Get entities from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -75,7 +75,7 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<MicrosoftDynamicsCRMssgNotestemplatesCollection> GetAsync(this ISsgnotestemplateses operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<MicrosoftDynamicsCRMtaskCollection> GetAsync(this ITasks operations, int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetWithHttpMessagesAsync(top, skip, search, filter, count, orderby, select, expand, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -84,7 +84,7 @@ namespace Csrs.Interfaces.Dynamics
             }
 
             /// <summary>
-            /// Add new entity to ssg_notestemplateses
+            /// Add new entity to tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -96,13 +96,13 @@ namespace Csrs.Interfaces.Dynamics
             /// Required in order for the service to return a JSON representation of the
             /// object.
             /// </param>
-            public static MicrosoftDynamicsCRMssgNotestemplates Create(this ISsgnotestemplateses operations, MicrosoftDynamicsCRMssgNotestemplates body, string prefer = "return=representation")
+            public static MicrosoftDynamicsCRMtask Create(this ITasks operations, MicrosoftDynamicsCRMtask body, string prefer = "return=representation")
             {
                 return operations.CreateAsync(body, prefer).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Add new entity to ssg_notestemplateses
+            /// Add new entity to tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
@@ -117,7 +117,7 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<MicrosoftDynamicsCRMssgNotestemplates> CreateAsync(this ISsgnotestemplateses operations, MicrosoftDynamicsCRMssgNotestemplates body, string prefer = "return=representation", CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<MicrosoftDynamicsCRMtask> CreateAsync(this ITasks operations, MicrosoftDynamicsCRMtask body, string prefer = "return=representation", CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateWithHttpMessagesAsync(body, prefer, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -126,13 +126,13 @@ namespace Csrs.Interfaces.Dynamics
             }
 
             /// <summary>
-            /// Get entity from ssg_notestemplateses by key
+            /// Get entity from tasks by key
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ssgNotestemplatesid'>
-            /// key: ssg_notestemplatesid of ssg_notestemplates
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='select'>
             /// Select properties to be returned
@@ -140,19 +140,19 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='expand'>
             /// Expand related entities
             /// </param>
-            public static MicrosoftDynamicsCRMssgNotestemplates GetByKey(this ISsgnotestemplateses operations, string ssgNotestemplatesid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
+            public static MicrosoftDynamicsCRMtask GetByKey(this ITasks operations, string activityid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>))
             {
-                return operations.GetByKeyAsync(ssgNotestemplatesid, select, expand).GetAwaiter().GetResult();
+                return operations.GetByKeyAsync(activityid, select, expand).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Get entity from ssg_notestemplateses by key
+            /// Get entity from tasks by key
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ssgNotestemplatesid'>
-            /// key: ssg_notestemplatesid of ssg_notestemplates
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='select'>
             /// Select properties to be returned
@@ -163,39 +163,39 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<MicrosoftDynamicsCRMssgNotestemplates> GetByKeyAsync(this ISsgnotestemplateses operations, string ssgNotestemplatesid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<MicrosoftDynamicsCRMtask> GetByKeyAsync(this ITasks operations, string activityid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetByKeyWithHttpMessagesAsync(ssgNotestemplatesid, select, expand, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetByKeyWithHttpMessagesAsync(activityid, select, expand, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// Update entity in ssg_notestemplateses
+            /// Update entity in tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ssgNotestemplatesid'>
-            /// key: ssg_notestemplatesid of ssg_notestemplates
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='body'>
             /// New property values
             /// </param>
-            public static void Update(this ISsgnotestemplateses operations, string ssgNotestemplatesid, MicrosoftDynamicsCRMssgNotestemplates body)
+            public static void Update(this ITasks operations, string activityid, MicrosoftDynamicsCRMtask body)
             {
-                operations.UpdateAsync(ssgNotestemplatesid, body).GetAwaiter().GetResult();
+                operations.UpdateAsync(activityid, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Update entity in ssg_notestemplateses
+            /// Update entity in tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ssgNotestemplatesid'>
-            /// key: ssg_notestemplatesid of ssg_notestemplates
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='body'>
             /// New property values
@@ -203,36 +203,36 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task UpdateAsync(this ISsgnotestemplateses operations, string ssgNotestemplatesid, MicrosoftDynamicsCRMssgNotestemplates body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task UpdateAsync(this ITasks operations, string activityid, MicrosoftDynamicsCRMtask body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.UpdateWithHttpMessagesAsync(ssgNotestemplatesid, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.UpdateWithHttpMessagesAsync(activityid, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
-            /// Delete entity from ssg_notestemplateses
+            /// Delete entity from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ssgNotestemplatesid'>
-            /// key: ssg_notestemplatesid of ssg_notestemplates
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='ifMatch'>
             /// ETag
             /// </param>
-            public static void Delete(this ISsgnotestemplateses operations, string ssgNotestemplatesid, string ifMatch = default(string))
+            public static void Delete(this ITasks operations, string activityid, string ifMatch = default(string))
             {
-                operations.DeleteAsync(ssgNotestemplatesid, ifMatch).GetAwaiter().GetResult();
+                operations.DeleteAsync(activityid, ifMatch).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Delete entity from ssg_notestemplateses
+            /// Delete entity from tasks
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='ssgNotestemplatesid'>
-            /// key: ssg_notestemplatesid of ssg_notestemplates
+            /// <param name='activityid'>
+            /// key: activityid of task
             /// </param>
             /// <param name='ifMatch'>
             /// ETag
@@ -240,9 +240,9 @@ namespace Csrs.Interfaces.Dynamics
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteAsync(this ISsgnotestemplateses operations, string ssgNotestemplatesid, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteAsync(this ITasks operations, string activityid, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteWithHttpMessagesAsync(ssgNotestemplatesid, ifMatch, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteWithHttpMessagesAsync(activityid, ifMatch, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
     }

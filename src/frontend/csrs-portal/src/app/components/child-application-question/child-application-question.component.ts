@@ -249,6 +249,7 @@ editPage(stepper, index){
 }
   getIdentities() {
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
@@ -268,6 +269,7 @@ editPage(stepper, index){
 
   getProvinces() {
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;

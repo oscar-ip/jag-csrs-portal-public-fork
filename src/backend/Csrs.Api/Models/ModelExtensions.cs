@@ -9,9 +9,12 @@ namespace Csrs.Api.Models
 {
     public static class ModelExtensions
     {
-
         public static async Task<Party> ToViewModelAsync(this MicrosoftDynamicsCRMssgCsrsparty dynamicsParty, IDynamicsClient dynamicsClient, IMemoryCache cache, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(dynamicsParty);
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+            ArgumentNullException.ThrowIfNull(cache);
+
             Party party = new Party
             {
                 PartyId = dynamicsParty.SsgCsrspartyid,
@@ -39,24 +42,6 @@ namespace Csrs.Api.Models
             return party;
         }
     
-        private static DateTimeOffset? ConvertToDTOffset(string? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-            return DateTimeOffset.Parse(value);
-        }
-
-        private static Decimal? ConvertToDecimal(string? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-            return Decimal.Parse(value);
-        }
-
         public static MicrosoftDynamicsCRMssgCsrsparty ToDynamicsModel(this Party party)
         {
             MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty
@@ -66,7 +51,7 @@ namespace Csrs.Api.Models
                 SsgReferral = party.Referral?.Id,
                 SsgCellphone = party.CellPhone,
                 SsgFirstname = party.FirstName,
-                SsgDateofbirth = ConvertToDTOffset(party.DateOfBirth),
+                SsgDateofbirth = ToDateTimeOffset(party.DateOfBirth),
                 SsgLastname = party.LastName,
                 SsgReferencenumber = party.ReferenceNumber,
                 SsgPartygender = party.Gender?.Id,
@@ -90,6 +75,7 @@ namespace Csrs.Api.Models
             };
             return dynamicsParty;
         }
+
 
         public static async Task<File> ToViewModelAsync(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, IDynamicsClient dynamicsClient, IMemoryCache cache, CancellationToken cancellationToken)
         {
@@ -126,17 +112,17 @@ namespace Csrs.Api.Models
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
                 SsgCourtfiletype = file.CourtFileType?.Id,
-                SsgFmepfileactive = ConvertToBool(file.IsFMEPFileActive),
+                SsgFmepfileactive = ToBoolean(file.IsFMEPFileActive),
                 SsgFmepfilenumber = file.FMEPFileNumber,
 
-                SsgSafetyalert = ConvertToBool(file.SafetyAlertRecipient),
+                SsgSafetyalert = ToBoolean(file.SafetyAlertRecipient),
                 SsgSafetyconcerndescription = file.RecipientSafetyConcernDescription,
-                SsgSafetyalertpayor = ConvertToBool(file.SafetyAlertPayor),
+                SsgSafetyalertpayor = ToBoolean(file.SafetyAlertPayor),
                 SsgPayorssafetyconcerndescription = file.PayorSafetyConcernDescription,
 
                 SsgSection7expenses = GetSection7Expenses(file.Section7Expenses),
-                SsgDateoforderorwa = ConvertToDTOffset(file.DateOfOrderOrWA),
-                SsgIncomeonorder = ConvertToDecimal(file.IncomeOnOrder),
+                SsgDateoforderorwa = ToDateTimeOffset(file.DateOfOrderOrWA),
+                SsgIncomeonorder = ToDecimal(file.IncomeOnOrder),
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
 
                 SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
@@ -174,16 +160,6 @@ namespace Csrs.Api.Models
             return null;
         }
 
-        private static int? GetChildIsDependent(string? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-            return value.Equals("Yes") ? (int)ChildIsDependent.Yes :
-                   value.Equals("No") ? (int)ChildIsDependent.No :
-                                         (int)ChildIsDependent.IDontKnow;
-        }
         public static MicrosoftDynamicsCRMssgCsrschild ToDynamicsModel(this Child child)
         {
             MicrosoftDynamicsCRMssgCsrschild dynamicsChild = new MicrosoftDynamicsCRMssgCsrschild
@@ -191,7 +167,7 @@ namespace Csrs.Api.Models
                 SsgFirstname = child.FirstName,
                 SsgMiddlename = child.MiddleName,
                 SsgLastname = child.LastName,
-                SsgDateofbirth = ConvertToDTOffset(child.DateOfBirth),
+                SsgDateofbirth = ToDateTimeOffset(child.DateOfBirth),
                 SsgChildisadependent = GetChildIsDependent(child.ChildIsDependent)
             };
 
@@ -204,7 +180,7 @@ namespace Csrs.Api.Models
             return viewModel;
         }
 
-        public static Message ToMessage(MicrosoftDynamicsCRMssgCsrscommunicationmessage inMessage, List<Document> documents)
+        public static Message ToViewModel(MicrosoftDynamicsCRMssgCsrscommunicationmessage inMessage, List<Document> documents)
         {
             Message message = new Message();
 
@@ -222,6 +198,67 @@ namespace Csrs.Api.Models
             return message;
         }
 
+        private static DateTimeOffset? ToDateTimeOffset(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (DateTimeOffset.TryParse(value, out DateTimeOffset result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+
+        private static Decimal? ToDecimal(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (Decimal.TryParse(value, out Decimal result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+        
+
+        private static bool? ToBoolean(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            return value switch
+            {
+                "Yes" => true,
+                "No" => false,
+                _ => null
+            };
+        }
+
+        private static int? GetChildIsDependent(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            return value switch
+            {
+                "Yes" => (int)ChildIsDependent.Yes,
+                "No" => (int)ChildIsDependent.No,
+                _ => (int)ChildIsDependent.IDontKnow
+            };
+        }
+
         private static async Task<LookupValue?> GetLookupValueAsync(IDynamicsClient dynamicsClient, string attributeName, IMemoryCache cache, int? id, CancellationToken cancellationToken)
         {
             if (id is null)
@@ -233,6 +270,47 @@ namespace Csrs.Api.Models
             var values = metadata.ToViewModel();
             var value = values.Where(_ => _.Id == id.Value).SingleOrDefault();
             return value;
+        }
+
+
+        private static async Task<string?> GetCourtLocationValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
+        {
+            if (label is null)
+            {
+                return null;
+            }
+
+            // TODO: this needs caching!!!
+            var values =  await dynamicsClient.GetCourtLocationsAsync(cancellationToken);
+
+            if (values is null || values.Value is null)
+            {
+                return null;
+            }
+
+            var valuesbyName = values.Value.ToLookup(_ => _.SsgBccourtlocationname, StringComparer.OrdinalIgnoreCase);
+
+            return valuesbyName[label].FirstOrDefault()?.SsgIjssbccourtlocationid;
+        }
+
+        private static async Task<string?> GetCourtLevelValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
+        {
+            if (label is null)
+            {
+                return null;
+            }
+
+            // TODO: this needs caching!!!
+            var values = await dynamicsClient.GetCourtLevelsAsync(cancellationToken);
+
+            if (values is null || values.Value is null)
+            {
+                return null;
+            }
+
+            var valuesbyName = values.Value.ToLookup(_ => _.SsgCourtlevellabel, StringComparer.OrdinalIgnoreCase);
+
+            return valuesbyName[label].FirstOrDefault()?.SsgCsrsbccourtlevelid;
         }
 
         private static IEnumerable<LookupValue> AsViewModel(PicklistOptionSetMetadata metadata)

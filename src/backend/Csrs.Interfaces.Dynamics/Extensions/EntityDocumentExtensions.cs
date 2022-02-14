@@ -32,7 +32,7 @@ namespace Csrs.Interfaces.Dynamics.Extensions
             return null;
         }
 
-        private static string CleanGuidForSharePoint(string guidString)
+        public static string CleanGuidForSharePoint(string guidString)
         {
             string result = null;
             if (guidString != null)

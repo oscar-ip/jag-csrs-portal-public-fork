@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { AppConfigService } from 'app/services/app-config.service';
 import { SnowplowService } from '@core/services/snowplow.service';
+import { environment } from './../../../environments/environment';
 
 @Component({
   selector: 'app-landing',
@@ -54,7 +55,7 @@ export class LandingComponent implements OnInit {
   public async ngOnInit() {
 
       this.cscLink = this._config.cscLink;
-      this.bceIdRegisterLink = this._config.bceIdRegisterLink;
+      this.bceIdRegisterLink = environment.production ? 'https://www.bceid.ca/os/?7731' : 'https://www.development.bceid.ca/os/?2281';
 
       this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 

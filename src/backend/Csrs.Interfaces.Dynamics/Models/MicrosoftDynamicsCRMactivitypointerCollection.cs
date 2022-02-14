@@ -12,27 +12,27 @@ namespace Csrs.Interfaces.Dynamics.Models
     using System.Linq;
 
     /// <summary>
-    /// Collection of ssg_notestemplates
+    /// Collection of activitypointer
     /// </summary>
     /// <remarks>
-    /// Microsoft.Dynamics.CRM.ssg_notestemplatesCollection
+    /// Microsoft.Dynamics.CRM.activitypointerCollection
     /// </remarks>
-    public partial class MicrosoftDynamicsCRMssgNotestemplatesCollection
+    public partial class MicrosoftDynamicsCRMactivitypointerCollection
     {
         /// <summary>
         /// Initializes a new instance of the
-        /// MicrosoftDynamicsCRMssgNotestemplatesCollection class.
+        /// MicrosoftDynamicsCRMactivitypointerCollection class.
         /// </summary>
-        public MicrosoftDynamicsCRMssgNotestemplatesCollection()
+        public MicrosoftDynamicsCRMactivitypointerCollection()
         {
             CustomInit();
         }
 
         /// <summary>
         /// Initializes a new instance of the
-        /// MicrosoftDynamicsCRMssgNotestemplatesCollection class.
+        /// MicrosoftDynamicsCRMactivitypointerCollection class.
         /// </summary>
-        public MicrosoftDynamicsCRMssgNotestemplatesCollection(IList<MicrosoftDynamicsCRMssgNotestemplates> value = default(IList<MicrosoftDynamicsCRMssgNotestemplates>))
+        public MicrosoftDynamicsCRMactivitypointerCollection(IList<MicrosoftDynamicsCRMactivitypointer> value = default(IList<MicrosoftDynamicsCRMactivitypointer>))
         {
             Value = value;
             CustomInit();
@@ -46,7 +46,7 @@ namespace Csrs.Interfaces.Dynamics.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public IList<MicrosoftDynamicsCRMssgNotestemplates> Value { get; set; }
+        public IList<MicrosoftDynamicsCRMactivitypointer> Value { get; set; }
 
     }
 }

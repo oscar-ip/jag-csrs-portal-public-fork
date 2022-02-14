@@ -18,7 +18,6 @@ using Serilog;
 namespace Csrs.Services.FileManager
 {
     // Default to require authorization
-    [Authorize]
     public class FileManagerService : FileManager.FileManagerBase
     {
         private readonly IConfiguration _configuration;
@@ -29,7 +28,7 @@ namespace Csrs.Services.FileManager
             _configuration = configuration;
             _logger = logger;
         }
-
+        [AllowAnonymous]
         public override Task<CreateFolderReply> CreateFolder(CreateFolderRequest request, ServerCallContext context)
         {
             var result = new CreateFolderReply();
@@ -86,7 +85,7 @@ namespace Csrs.Services.FileManager
 
             return Task.FromResult(result);
         }
-
+        [AllowAnonymous]
         public override Task<FileExistsReply> FileExists(FileExistsRequest request, ServerCallContext context)
         {
             var result = new FileExistsReply();
@@ -135,6 +134,9 @@ namespace Csrs.Services.FileManager
                 case "account":
                     listTitle = SharePointFileManager.DefaultDocumentListTitle;
                     break;
+                case "ssg_csrsfile":
+                    listTitle = "CSRS File";
+                    break;
                 case "application":
                     listTitle = SharePointFileManager.ApplicationDocumentListTitle;
                     break;
@@ -169,6 +171,9 @@ namespace Csrs.Services.FileManager
                 case "account":
                     listTitle = SharePointFileManager.DefaultDocumentUrlTitle;
                     break;
+                case "ssg_csrsfile":
+                    listTitle = "ssg_csrsfile";
+                    break;
                 case "application":
                     listTitle = "adoxio_application";
                     break;
@@ -194,15 +199,16 @@ namespace Csrs.Services.FileManager
 
             return listTitle;
         }
-
+        [AllowAnonymous]
         private void CreateDocumentLibraryIfMissing(string listTitle, string documentTemplateUrl = null)
         {
             var _sharePointFileManager = new SharePointFileManager(_configuration);
+
             var exists = _sharePointFileManager.DocumentLibraryExists(listTitle).GetAwaiter().GetResult();
             if (!exists)
                 _sharePointFileManager.CreateDocumentLibrary(listTitle, documentTemplateUrl).GetAwaiter().GetResult();
         }
-
+        [AllowAnonymous]
         public override Task<DeleteFileReply> DeleteFile(DeleteFileRequest request, ServerCallContext context)
         {
             var result = new DeleteFileReply();
@@ -235,7 +241,7 @@ namespace Csrs.Services.FileManager
 
             return Task.FromResult(result);
         }
-
+        [AllowAnonymous]
         public override Task<DownloadFileReply> DownloadFile(DownloadFileRequest request, ServerCallContext context)
         {
             var result = new DownloadFileReply();
@@ -272,7 +278,7 @@ namespace Csrs.Services.FileManager
 
             return Task.FromResult(result);
         }
-
+        [AllowAnonymous]
         public override Task<UploadFileReply> UploadFile(UploadFileRequest request, ServerCallContext context)
         {
             var result = new UploadFileReply();
@@ -309,7 +315,7 @@ namespace Csrs.Services.FileManager
 
             return Task.FromResult(result);
         }
-
+        [AllowAnonymous]
         public override Task<FolderFilesReply> FolderFiles(FolderFilesRequest request, ServerCallContext context)
         {
             var result = new FolderFilesReply();

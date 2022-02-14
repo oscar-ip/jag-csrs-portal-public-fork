@@ -14,12 +14,12 @@ namespace Csrs.Interfaces.Dynamics
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Entitydefinitions operations.
+    /// Tasks operations.
     /// </summary>
-    public partial interface IEntitydefinitions
+    public partial interface ITasks
     {
         /// <summary>
-        /// Get entities from EntityDefinitions
+        /// Get entities from tasks
         /// </summary>
         /// <param name='top'>
         /// </param>
@@ -52,9 +52,9 @@ namespace Csrs.Interfaces.Dynamics
         /// <exception cref="Microsoft.Rest.SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
-        Task<HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadataCollection>> GetWithHttpMessagesAsync(int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<MicrosoftDynamicsCRMtaskCollection>> GetWithHttpMessagesAsync(int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Add new entity to EntityDefinitions
+        /// Add new entity to tasks
         /// </summary>
         /// <param name='body'>
         /// New entity
@@ -78,12 +78,12 @@ namespace Csrs.Interfaces.Dynamics
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadata>> CreateWithHttpMessagesAsync(MicrosoftDynamicsCRMEntityMetadata body, string prefer = "return=representation", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<MicrosoftDynamicsCRMtask>> CreateWithHttpMessagesAsync(MicrosoftDynamicsCRMtask body, string prefer = "return=representation", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Get entity from EntityDefinitions by key
+        /// Get entity from tasks by key
         /// </summary>
-        /// <param name='metadataId'>
-        /// key: MetadataId of EntityMetadata
+        /// <param name='activityid'>
+        /// key: activityid of task
         /// </param>
         /// <param name='select'>
         /// Select properties to be returned
@@ -106,12 +106,12 @@ namespace Csrs.Interfaces.Dynamics
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<MicrosoftDynamicsCRMEntityMetadata>> GetByKeyWithHttpMessagesAsync(string metadataId, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<MicrosoftDynamicsCRMtask>> GetByKeyWithHttpMessagesAsync(string activityid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Update entity in EntityDefinitions
+        /// Update entity in tasks
         /// </summary>
-        /// <param name='metadataId'>
-        /// key: MetadataId of EntityMetadata
+        /// <param name='activityid'>
+        /// key: activityid of task
         /// </param>
         /// <param name='body'>
         /// New property values
@@ -128,12 +128,12 @@ namespace Csrs.Interfaces.Dynamics
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(string metadataId, MicrosoftDynamicsCRMEntityMetadata body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(string activityid, MicrosoftDynamicsCRMtask body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <summary>
-        /// Delete entity from EntityDefinitions
+        /// Delete entity from tasks
         /// </summary>
-        /// <param name='metadataId'>
-        /// key: MetadataId of EntityMetadata
+        /// <param name='activityid'>
+        /// key: activityid of task
         /// </param>
         /// <param name='ifMatch'>
         /// ETag
@@ -150,6 +150,6 @@ namespace Csrs.Interfaces.Dynamics
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(string metadataId, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(string activityid, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
