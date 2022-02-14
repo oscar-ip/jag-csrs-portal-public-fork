@@ -50,6 +50,35 @@ namespace Csrs.Interfaces.Dynamics
             }
         }
 
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileByPartyAndId(this IDynamicsClient dynamicsClient, string partyId, string fileId, CancellationToken cancellationToken)
+        {
+            
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            if (string.IsNullOrEmpty(partyId) || string.IsNullOrEmpty(fileId))
+            {
+                return null;
+            }
+
+            try
+            {
+                
+                var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and ssg_csrsfileid eq {fileId}";
+                var select = new List<string> { "ssg_csrsfileid" };
+
+                var files = await dynamicsClient.Ssgcsrsfiles.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
+
+                if (files.Value.Count == 0) return null;
+
+                return files.Value[0];
+
+            }
+            catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+
         public static async Task<string> GetPartyIdByBCeIdAsync(this IDynamicsClient dynamicsClient, string bceid, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
@@ -128,10 +157,8 @@ namespace Csrs.Interfaces.Dynamics
             List<string> select = new List<string> { "ssg_csrsfileid" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
-            MicrosoftDynamicsCRMssgCsrsfileCollection files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: cancellationToken);
-
+            var files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: cancellationToken);
             return files;
-
         }
         public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
         {
@@ -144,9 +171,7 @@ namespace Csrs.Interfaces.Dynamics
             List<string> orderby = new List<string> { "modifiedon desc" };
 
             var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
-
             return messages;
-
         }
 
         public static async Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(
@@ -240,37 +265,5 @@ namespace Csrs.Interfaces.Dynamics
             return values;
         }
 
-        /// <summary>
-        /// Validates the incoming entity is a valid <see cref="Guid"/> value.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns>Returns the <see cref="Guid"/> formated with dashes, xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.</returns>
-        /// <exception cref="InvalidIdException"><paramref name="value"/> is null, empty or not a valid <see cref="Guid"/>.</exception>
-        private static string GuidGuard(string value)
-        {
-            if (String.IsNullOrEmpty(value))
-            {
-                throw new InvalidIdException("No id specified", value);
-            }
-
-            if (Guid.TryParse(value, out Guid guid))
-            {
-                return guid.ToString("d");
-            }
-
-            throw new InvalidIdException("Invalid id specified", value);
-        }
-
-        /// <summary>
-        /// Escapes a string value used in a filter expression.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private static string Escape(string value)
-        {
-            ArgumentNullException.ThrowIfNull(value);
-            value = value.Replace("'", "''");
-            return value;
-        }
     }
 }
