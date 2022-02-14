@@ -100,7 +100,6 @@ namespace Csrs.Api.Controllers
         /// <response code="200">The user and their files were found.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="404">The user was not found</response>
-        [AllowAnonymous] // DO NOT FORGET TO REMOVE THIS LINE (ATTRIBUTE)
         [HttpGet]
         [ProducesResponseType(typeof(AccountFileSummary), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
