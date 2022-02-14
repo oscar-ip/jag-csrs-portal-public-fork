@@ -1,0 +1,8 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: jag-csrs-api
+  namespace: f0b5b6-tools
+spec:
+  lookupPolicy:
+    local: false

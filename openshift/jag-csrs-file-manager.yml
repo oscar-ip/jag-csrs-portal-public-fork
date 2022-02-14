@@ -91,7 +91,7 @@ objects:
             imagePullPolicy: Always
             ports:
               - containerPort: 8080
-            env:    
+            env:
             - name: SPLUNK_URL
               valueFrom:
                 secretKeyRef:
@@ -106,7 +106,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${FILEMANAGER_CONFIG_NAME}
-                  key: FILEMANAGER_SECURE               
+                  key: FILEMANAGER_SECURE
             - name: SPLUNK_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -136,8 +136,8 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${FILEMANAGER_CONFIG_NAME}
-                  key: SHAREPOINT_RELYING_PARTY_IDENTIFIER                 
-            # Would need adjustments ; SharePoint API GW EndPoint    
+                  key: SHAREPOINT_RELYING_PARTY_IDENTIFIER
+            # Would need adjustments ; SharePoint API GW EndPoint
             - name: SHAREPOINT_ODATA_URI
               valueFrom:
                 secretKeyRef:
@@ -147,10 +147,11 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${FILEMANAGER_CONFIG_NAME}
-                  key: SHAREPOINT_NATIVE_BASE_URI                  
+                  key: SHAREPOINT_NATIVE_BASE_URI
+            # Yet to deal with proper resource allocation
             resources:
               limits:
-                cpu: 250m
+                cpu: 500m
                 memory: 1000Mi
               requests:
                 cpu: 250m
@@ -176,11 +177,6 @@ objects:
   metadata:
     name: ${FILEMANAGER_COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
-  annotations:
-    description: File Manager Service to Enable Communication with SharePoint
-    service.alpha.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1598301121
-    service.beta.openshift.io/serving-cert-secret-name: file-manager-cert
-    service.beta.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1598301121
   labels:
     app: file-manager
     app.kubernetes.io/component: backend
