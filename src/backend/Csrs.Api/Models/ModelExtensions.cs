@@ -152,6 +152,23 @@ namespace Csrs.Api.Models
             return  dynamicsFile;
         }
 
+        public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this CSRSAccountFile file)
+        {
+            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
+            {
+                SsgCsrsfileid = file.FileId,
+                SsgFmepfileactive = ConvertToBool(file.IsFMEPFileActive),
+                SsgFmepfilenumber = file.FMEPFileNumber,
+                SsgSafetyalert = ConvertToBool(file.SafetyAlertRecipient),
+                SsgSafetyconcerndescription = file.RecipientSafetyConcernDescription,
+                SsgSafetyalertpayor = ConvertToBool(file.SafetyAlertPayor),
+                SsgPayorssafetyconcerndescription = file.PayorSafetyConcernDescription,
+            };
+
+            return dynamicsFile;
+        }
+
+
         public static async Task<Child> ToViewModelAsync(MicrosoftDynamicsCRMssgCsrschild dynamicsChild, IDynamicsClient dynamicsClient, IMemoryCache cache, CancellationToken cancellationToken)
         {
             return null;

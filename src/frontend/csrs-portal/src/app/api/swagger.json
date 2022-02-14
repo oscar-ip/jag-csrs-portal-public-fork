@@ -464,6 +464,169 @@
         }
       }
     },
+    "/api/account/checkcsrsaccount": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Check existence of CSRS account.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CSRSAccount"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CSRSAccount"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CSRSAccount"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The csrs account was found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CSRSPartyFileIds"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CSRSPartyFileIds"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CSRSPartyFileIds"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The csrs account was not found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized. Ensure correct authentication header is present.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/account/updatecsrsaccount": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Update CSRS account.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CSRSAccountRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CSRSAccountRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CSRSAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The CSRS account was created."
+          },
+          "400": {
+            "description": "The request was not well formed.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authorized. Ensure correct authentication header is present.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/document/uploadattachment": {
       "post": {
         "tags": [
@@ -1195,6 +1358,98 @@
         },
         "additionalProperties": false
       },
+      "CSRSAccount": {
+        "required": [
+          "fileNumber",
+          "referenceNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "fileNumber": {
+            "type": "string",
+            "description": "The input FileNumber parameter to search CSRS account."
+          },
+          "referenceNumber": {
+            "type": "string",
+            "description": "The input Password parameter to search CSRS account."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CSRSAccountFile": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "partyEnrolled": {
+            "type": "string",
+            "nullable": true
+          },
+          "safetyAlertRecipient": {
+            "type": "string",
+            "nullable": true
+          },
+          "recipientSafetyConcernDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "safetyAlertPayor": {
+            "type": "string",
+            "nullable": true
+          },
+          "payorSafetyConcernDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFMEPFileActive": {
+            "type": "string",
+            "nullable": true
+          },
+          "fmepFileNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CSRSAccountRequest": {
+        "required": [
+          "csrsAccountFile",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/Party"
+          },
+          "csrsAccountFile": {
+            "$ref": "#/components/schemas/CSRSAccountFile"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CSRSPartyFileIds": {
+        "type": "object",
+        "properties": {
+          "partyId": {
+            "type": "string",
+            "description": "The output Party Id of CSRS account.",
+            "nullable": true
+          },
+          "fileId": {
+            "type": "string",
+            "description": "The output File Id of CSRS account.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Document": {
         "required": [
           "body",
@@ -1636,19 +1891,6 @@
         },
         "additionalProperties": false
       }
-    },
-    "securitySchemes": {
-      "Bearer": {
-        "type": "apiKey",
-        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        "name": "Authorization",
-        "in": "header"
-      }
     }
-  },
-  "security": [
-    {
-      "Bearer": [ ]
-    }
-  ]
+  }
 }

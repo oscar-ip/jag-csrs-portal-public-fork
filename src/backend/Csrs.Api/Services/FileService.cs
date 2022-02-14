@@ -6,6 +6,7 @@ using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 using File = Csrs.Api.Models.File;
 using PickLists = Csrs.Api.Models.PickupLists;
+using CSRSAccountFile = Csrs.Api.Models.CSRSAccountFile;
 
 namespace Csrs.Api.Services
 {
@@ -100,5 +101,26 @@ namespace Csrs.Api.Services
 
             return Tuple.Create(csrsFile.SsgCsrsfileid, csrsFile.SsgFilenumber);
         }
+
+        public async Task<string> UpdateCSRSAccountFile(CSRSAccountFile file, CancellationToken cancellationToken)
+        {
+
+            MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel();
+            var fileId = file.FileId;
+            // map the party and other party to recipient and payor
+            try
+            {
+                await _dynamicsClient.Ssgcsrsfiles.UpdateAsync(fileId, csrsFile, cancellationToken: cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An exception occurred while updating CSRS account file {FileId}, file update will be aborted", fileId);
+                throw;
+            }
+
+            return fileId;
+        }
+
+
     }
 }
