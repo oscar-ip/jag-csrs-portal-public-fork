@@ -1,4 +1,4 @@
-﻿using Csrs.Api.Models;
+using Csrs.Api.Models;
 using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Rest;
