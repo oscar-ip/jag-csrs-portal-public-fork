@@ -2,14 +2,14 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   name: ${APP_NAME}
-  description: Deployment template for the JAG-csrs
-  
+  description: Deployment template for the JAG-csrs TEST
+
 labels:
   app: ${APP_NAME}
   app.kubernetes.io/name: ${APP_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 
-  
+
 parameters:
 
 - name: APP_NAME
@@ -50,28 +50,34 @@ parameters:
   description: The API component name
   required: true
   value: jag-csrs-api
-  
+
 - name: OC_NAMESPACE
   description: The OpenShift namespace prefix
   required: true
   # Below value must be changed as per gold cluster oc nameplate
   value: blahblah
-  
+
 - name: OC_ENV
   description: The OpenShift environment, ie dev, test or prod
   required: true
-  value: dev
+  value: test
+
+- name: IMAGE_TAG
+  description: Tagged code for test or prod
+  required: true
+  value: blahblah
 
 - name: DNS
   description: The application name that each component is part of
   required: false
+  # Below value must be changed as per gold cluster certificate/DNS
   value: apps.silver.devops.gov.bc.ca
 
 - name: BCEID_URL
   description: BCEID_URL for dev, test or prod
   required: true
   value: https://www.development.bceid.ca/
-  
+
 objects:
 
 ### JAG-csrs API Deployment Config ###
@@ -80,7 +86,7 @@ objects:
   metadata:
     name: ${API_COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
-      
+
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -98,10 +104,8 @@ objects:
           app.openshift.io/runtime: dotnet
       spec:
         containers:
-          # due to permission issue we were not using tools space; dev is pulling from dev
-          # Now the permission issue is no longer there and should be pulling from tools
           - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_ENV}/${APP_NAME}:${OC_ENV}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${IMAGE_TAG}
             name: ${API_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
@@ -179,26 +183,27 @@ objects:
                   key: APIGATEWAY_BASEPATH
             - name: BCEID_URL
               value: ${BCEID_URL}
-            # Yet to deal with proper resource allocation
             resources:
               limits:
-                cpu: 500m
+                cpu: 250m
                 memory: 1000Mi
               requests:
                 cpu: 250m
                 memory: 512Mi
             # Took away readiness and liveness probe until those end points are ready
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${API_COMPONENT_NAME}
-          from:
-            kind: ImageStreamTag
-            namespace: ${OC_NAMESPACE}-${OC_ENV} #do not have permission to leverage tools
-            name: ${API_COMPONENT_NAME}:${OC_ENV}
+    # Would trigger deployment from GitHub Actions by using dc patch
+    # Hence taking out the following trigger would make sense
+    #triggers:
+    #  - type: ConfigChange
+    #  - type: ImageChange
+    #    imageChangeParams:
+    #      automatic: true
+    #      containerNames:
+    #        - ${API_COMPONENT_NAME}
+    #      from:
+    #        kind: ImageStreamTag
+    #        namespace: ${OC_NAMESPACE}-tools
+    #        name: ${API_COMPONENT_NAME}:${IMAGE_TAG}
   status: {}
 
 # https://stackoverflow.com/a/61452441

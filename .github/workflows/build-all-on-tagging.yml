@@ -1,0 +1,149 @@
+# This is the workflow that creates a new image for CSRS front end
+# Credit goes to Suganth /his CDDS and SCSS templates
+
+name:  Build Images for all three components and Push to Openshift Registry for non DEV Deployment
+
+# Controls when the workflow will run
+on:
+  # Trigger the this workflow on tagging
+  # https://github.community/t/how-to-run-github-actions-workflow-only-for-new-tags/16075/23
+  push:
+    tags:
+      - '*'
+  
+  # Allows you to run this workflow manually from the Actions tab
+  # Yet to add extra input variable to supply desired tag number
+  workflow_dispatch:
+    inputs:
+        app:
+            description: 'App Name (jag-csrs)'    
+            required: true
+            default: jag-csrs
+        env:
+            #change this to suit your need/environment that you are targetting
+            #note to self : restrict who can execute this workflow
+            description: 'Image Target Env'
+            required: true
+            default: 'test'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build-push-image:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    #https://stackoverflow.com/a/70868036
+    environment: ${{ github.event.inputs.env }}
+    env:
+      app: ${{github.event.inputs.app}}
+      env: ${{github.event.inputs.env}}
+      app_from_gh_secret: ${{ secrets.APP_NAME_BASE}}
+
+      # by default on tagging code we are building and deploying tagged build to test environment
+      # If we want to do that to dev or prod then that has to be via manual trigger of Github
+      # workflow (as of now).
+      env_from_gh_secret: ${{secrets.OPENSHIFT_ENV_TAG}}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      
+      # Get Git latest short Sha# from the release branch used. This Sha# will be used in image tagging as well as DC Pod labelling.
+      - name: Get git tag
+        id: tag
+        run: |
+          tag=$(echo $(git tag --points-at HEAD))
+          echo "gittag=$tag" >> $GITHUB_ENV
+      
+      - name: env variables
+
+        run: |
+
+          if [[ -z "$app" ]]; then
+            echo "app=$app_from_gh_secret" >> $GITHUB_ENV
+          fi
+
+          if [[ -z "$env" ]]; then
+            echo "env=$env_from_gh_secret" >> $GITHUB_ENV
+          fi  
+          
+      - name: print env variables
+
+        run: |
+
+          echo "Release Application: ${{ env.app }}"
+          echo "Release Git tag: ${{env.gittag}}"
+          echo "Release Git env: ${{env.env}}"
+          
+       #Login to OpenShift Container Repository
+      - name: Login to OpenShift Container Repository
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
+          password: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
+
+
+      #Build and push image to OpenShift Image stream
+      - name: Build & Push frontend Image to Openshift Image Stream
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          CONTEXT: ./src/frontend/csrs-portal
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-frontend:${{env.gittag}}
+        run: |
+          docker build \
+            --tag ${IMAGE} \
+            ${CONTEXT}
+            docker push ${IMAGE}
+      - name: Build & Push API Image to Openshift Image Stream
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          CONTEXT: ./src/backend
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-api:${{env.gittag}}
+        run: |
+          docker build \
+            --tag ${IMAGE} \
+            ${CONTEXT}
+            docker push ${IMAGE}
+      - name: Build & Push File Manager Image to Openshift Image Stream
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          CONTEXT: ./src/backend/
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}
+        run: |
+          docker build -f ./src/backend/Csrs.Services.FileManager/Dockerfile.rhel8 \
+            --tag ${IMAGE} \
+            ${CONTEXT}
+          docker push ${IMAGE}
+
+      # Login to Openshift using OC SA and Token of respective env.
+      - name: Authenticate OC Env Specific SA
+        uses: redhat-actions/oc-login@v1
+        env:
+          #filling out all these values with  github environment specific values if defined in the scope
+          # of environment
+          #If not defined then the values are being looked up in the repository context
+          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
+          OPENSHIFT_USER: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
+          #OPENSHIFT_USER: ${{secrets.OPENSHIFT_DEFAULT_SA_USERNAME}}
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}}
+          #openshift_token: ${{secrets.OPENSHIFT_DEFAULT_SA_TOKEN}}
+          namespace: ${OPENSHIFT_NAMESPACE}
+      
+      # This change will trigger a deployment 
+      - name: Labelling DC and image tag to release version
+        env:
+          appName: ${{ env.app }}
+          openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
+        run: |
+          oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-file-manager", "image":"${{env.app}}-file-manager:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
+          oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-api", "image":"${{env.app}}-api:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
+          oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-frontend", "image":"${{env.app}}-frontend:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'

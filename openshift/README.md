@@ -14,4 +14,9 @@
  For API
    ``oc process -f jag-csrs-api.yml --param-file=jag-csrs.env --ignore-unknown-parameters=true| oc apply -f -``
 
+  For enabling image pulling from tools space to test space
+  (Please make sure that in the image-pull-enabler-config.env file OC_ENV is referring to test )
+
+  ``oc process -f image-pull-enabler.yml --param-file=image-pull-enabler-config.env -n projectlicenseplate-test --ignore-unknown-parameters=true| oc apply -f - `` 
+
    Credit for the base template files go to jag-CDDS repo contributors/Suganth
