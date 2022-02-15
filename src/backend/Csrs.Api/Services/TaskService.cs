@@ -24,10 +24,17 @@ namespace Csrs.Api.Services
 
             try
             {
-                List<string> expand = new List<string> { "owninguser" };
+                List<string> expand = new List<string> { "owninguser", "owningteam" };
                 MicrosoftDynamicsCRMssgCsrsfile file = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, null, expand: expand, cancellationToken);
                 task.RegardingobjectidSsgCsrsfile = file;
-                task.Owninguser = file.Owninguser;
+                if (file.Owninguser is null)
+                {
+                    task.Owninguser = file.Owninguser;
+                } 
+                else if (file.Owningteam is null)
+                {
+                    task.Owningteam = file.Owningteam;
+                }
             }
             catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
             {
