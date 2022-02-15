@@ -18,17 +18,20 @@ namespace Csrs.Api.Services
         private readonly ILogger<MessageService> _logger;
         private readonly FileManagerClient _fileManagerClient;
         private readonly IUserService _userService;
+        private readonly ITaskService _taskService;
 
         public DocumentService(
             IDynamicsClient dynamicsClient,
             ILogger<MessageService> logger,
             FileManagerClient fileManagerClient,
-            IUserService userService)
+            IUserService userService, 
+            ITaskService taskService)
         {
             _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _fileManagerClient = fileManagerClient ?? throw new ArgumentNullException(nameof(fileManagerClient));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
         }
         public async Task<IActionResult> DownloadAttachment(string entityId, string entityName, string serverRelativeUrl, string documentType, CancellationToken cancellationToken)
         {
@@ -106,6 +109,7 @@ namespace Csrs.Api.Services
                 //UpdateEntityModifiedOnDate(entityName, entityId, true);
                 _logger.LogInformation("Success");
                 result = "Uploaded Successfully";
+                await createTask(entityId, fileName, folderName, entityName, cancellationToken);
             }
             else
             {
@@ -242,6 +246,19 @@ namespace Csrs.Api.Services
                     }
                 }
             }
+        }
+
+        private async Task createTask(string fileId, string fileName, string folderName, string entityName, CancellationToken cancellationToken)
+        {
+            string subject = $"File: {fileName} Uploaded";
+            string body = $"For {fileId} \n Uploaded to: {entityName}\\{folderName}\\{fileName} ";
+
+            MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
+            task.Subject = subject;
+            task.Description = body;
+
+            await _taskService.CreateTask(fileId, task, cancellationToken);
+
         }
 
     }
