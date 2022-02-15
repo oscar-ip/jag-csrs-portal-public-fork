@@ -4,6 +4,8 @@ using System.Security.Claims;
 using Csrs.Api.Services;
 using Csrs.Interfaces.Dynamics;
 using Csrs.Api.Repositories;
+using Microsoft.Rest;
+using System.Net;
 
 namespace Csrs.Api.Features.Accounts
 {
@@ -62,6 +64,7 @@ namespace Csrs.Api.Features.Accounts
                 if (userId == string.Empty)
                 {
                     // no bceid value
+                    _logger.LogInformation("No BCeID on authenticated user, cannot User Request");
                     return Response.Empty;
                 }
 
@@ -69,6 +72,7 @@ namespace Csrs.Api.Features.Accounts
 
                 if (accountParty == null)
                 {
+                    _logger.LogInformation("No Party Associated, cannot User Request");
                     return Response.Empty;
                 }
 

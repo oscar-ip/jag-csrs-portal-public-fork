@@ -160,6 +160,17 @@ namespace Csrs.Interfaces.Dynamics
             var files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: cancellationToken);
             return files;
         }
+
+        //This method should be promptly removed when fileid is available in AccountSummary and provided by frontend.
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> GetFileByFileId(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            string filter = $"ssg_csrsfileid eq {fileId}";
+            List<string> select = new List<string> { "ssg_csrsfileid", "ssg_filenumber", "_ownerid_value", "_owninguser_value", "_owningteam_value" };
+           
+            return await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, select: select, expand: null, cancellationToken: cancellationToken);
+        }
         public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);

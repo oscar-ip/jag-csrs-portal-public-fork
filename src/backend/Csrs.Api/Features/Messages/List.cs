@@ -2,6 +2,8 @@ using Csrs.Api.Models;
 using Csrs.Api.Services;
 using Csrs.Interfaces.Dynamics;
 using MediatR;
+using Microsoft.Rest;
+using System.Net;
 
 namespace Csrs.Api.Features.Messages
 {
@@ -58,6 +60,7 @@ namespace Csrs.Api.Features.Messages
                 if (userId == string.Empty)
                 {
                     // no bceid value
+                    _logger.LogInformation("No BCeID on authenticated user, cannot fetch messages");
                     return Response.Empty;
                 }
 
@@ -65,6 +68,7 @@ namespace Csrs.Api.Features.Messages
 
                 if (accountParty == null)
                 {
+                    _logger.LogInformation("No Party Associated, cannot fetch messages");
                     return Response.Empty;
                 }
 

@@ -30,6 +30,7 @@ namespace Csrs.TntegrationTest
             Assert.NotNull(actual);
         }
 
+
         [DebugOnlyFact]
         public async Task get_party_by_bceid()
         {
@@ -330,12 +331,12 @@ namespace Csrs.TntegrationTest
             csrsFile.SsgRecalculationorderedbythecourt = true;
 
             csrsFile.SsgBCCourtLevel = new MicrosoftDynamicsCRMssgCsrsbccourtlevel { SsgCourtlevellabel = "Provincial" };
-            csrsFile.SsgBCCourtLocationODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", "99e9c19d-0af5-e911-b811-00505683fbf4");
+            csrsFile.SsgBCCourtLocationODataBind = _dynamicsClient.GetEntityURI("ssg_csrsbccourtlocationcontacts", "99e9c19d-0af5-e911-b811-00505683fbf4");
 
             csrsFile.SsgPartyenrolled = PickLists.GetPartyEnrolled("Recipient");
             csrsFile.SsgCourtfilenumber = "123-ABC";
-            csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", dynamicsParty.SsgCsrspartyid);
-            csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
+            csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", dynamicsParty.SsgCsrspartyid);
+            csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
 
             try
             {

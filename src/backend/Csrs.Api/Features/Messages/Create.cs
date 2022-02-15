@@ -1,5 +1,6 @@
 using MediatR;
-
+//UNUSED CODE/CLASS
+//Messages are only created by staff in Dynamics
 namespace Csrs.Api.Features.Messages
 {
     public static class Create
