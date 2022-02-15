@@ -1,4 +1,4 @@
-﻿using Csrs.Api.Models;
+using Csrs.Api.Models;
 using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Rest;
@@ -172,6 +172,42 @@ namespace Csrs.Interfaces.Dynamics
 
             var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
             return messages;
+        }
+
+        /// <summary>
+        /// Returns parties with matching ssg_bceid_userid for input csrs account.
+        /// </summary>
+        /// <param name="dynamicsClient"></param>
+        /// <param name="bceid"></param>
+        /// <param name="referenceNumber"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>parties</returns>
+        public static async Task<MicrosoftDynamicsCRMssgCsrspartyCollection> GetPartyByBCeIdAndRefenceNumberAsync(this IDynamicsClient dynamicsClient, string bceid, string referenceNumber, CancellationToken cancellationToken)
+        {
+            List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
+            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active} and ssg_referencenumber eq '{referenceNumber}'";
+            var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
+            return parties;
+        }
+
+        public static async Task<MicrosoftDynamicsCRMssgCsrsfileCollection> GetFileByPartyIdAndFileNumber(this IDynamicsClient dynamicsClient, string partyId, string fileNumber, CancellationToken cancellationToken)
+        {
+
+            string filter = $"(_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}) and ssg_filenumber eq '{fileNumber}'";
+            List<string> select = new List<string> { "ssg_csrsfileid" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            MicrosoftDynamicsCRMssgCsrsfileCollection files;
+            try
+            {
+                files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return files;
         }
 
         public static async Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(

@@ -34,5 +34,6 @@ export interface Party {
     referral?: LookupValue;
     preferredContactMethod?: LookupValue;
     referenceNumber?: string | null;
+    incomeAssistance?: number | null;
 }
 

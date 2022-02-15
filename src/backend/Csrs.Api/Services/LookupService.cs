@@ -24,62 +24,83 @@ namespace Csrs.Api.Services
 
         public async Task<IList<CourtLookupValue>> GetCourtLocationsAsync(CancellationToken cancellationToken)
         {
-            MicrosoftDynamicsCRMssgIjssbccourtlocationCollection locations =
-                new MicrosoftDynamicsCRMssgIjssbccourtlocationCollection();
+            string filter = $"contains(ssg_bccourtlocationname,'Provincial')";
+            List<string> select = new List<string> { "ssg_ijssbccourtlocationid", "ssg_bccourtlocationname" };
 
-            try
+            string cacheKey = "CourtLocations";
+
+            if (!_cache.TryGetValue(cacheKey, out MicrosoftDynamicsCRMssgIjssbccourtlocationCollection locations))
             {
-                locations = await _dynamicsClient.Ssgijssbccourtlocations.GetAsync(cancellationToken: cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception is AccountService.GetCourtLocationsAsync");
-                throw ex;
-            }
-
-            List<CourtLookupValue> courtLocations = new List<CourtLookupValue>();
-
-            foreach (MicrosoftDynamicsCRMssgIjssbccourtlocation location in locations.Value)
-            {
-                CourtLookupValue item =
-                    courtLocations.Where(x => x.Value == location.SsgBccourtlocationname).FirstOrDefault();
-
-                if (item is null)
+                try
                 {
-                    courtLocations.Add(new CourtLookupValue
+                    locations = await _dynamicsClient.Ssgijssbccourtlocations.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Trace, ex, "An exception occurred while retrieving Court Locations");
+                }
+
+                if (locations is not null && locations.Value is not null && locations.Value.Count != 0)
+                {
+                    _cache.Set(cacheKey, locations, TimeSpan.FromHours(1));
+                }
+            }
+
+            IList<CourtLookupValue> courtLocatons = new List<CourtLookupValue>();
+
+            if (locations is not null && locations.Value is not null && locations.Value.Count != 0)
+            {
+                foreach (MicrosoftDynamicsCRMssgIjssbccourtlocation location in locations.Value)
+                {
+                    courtLocatons.Add(new CourtLookupValue
                     {
                         Id = location.SsgIjssbccourtlocationid,
                         Value = location.SsgBccourtlocationname
                     });
                 }
             }
-            return courtLocations;
+
+            return courtLocatons;
         }
         public async Task<IList<CourtLookupValue>> GetCourtLevelsAsync(CancellationToken cancellationToken)
         {
-            MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection levels =
-                new MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection();
 
-            try
-            {
-                levels = await _dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(top: 2, cancellationToken: cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception is AccountService.GetCourtLevelsAsync");
-                throw ex;
-            }
+            string filter = "contains(ssg_courtlevellabel,'Provincial')";
+            List<string> select = new List<string> { "ssg_csrsbccourtlevelid", "ssg_courtlevellabel" };
 
-            List<CourtLookupValue> courtLevels = new List<CourtLookupValue>();
+            string cacheKey = "CourtLevels";
 
-            foreach (MicrosoftDynamicsCRMssgCsrsbccourtlevel level in levels.Value)
+            if (!_cache.TryGetValue(cacheKey, out MicrosoftDynamicsCRMssgCsrsbccourtlevelCollection levels))
             {
-                courtLevels.Add(new CourtLookupValue
+                try
                 {
-                    Id = level.SsgCsrsbccourtlevelid,
-                    Value = level.SsgCourtlevellabel
-                });
+                    levels = await _dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(top: 1, filter: filter, select: select, cancellationToken: cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Trace, ex, "An exception occurred while retrieving Court Levels");
+                }
+
+                if (levels is not null && levels.Value is not null && levels.Value.Count != 0)
+                {
+                    _cache.Set(cacheKey, levels, TimeSpan.FromHours(1));
+                }
             }
+
+            IList<CourtLookupValue> courtLevels = new List<CourtLookupValue>();
+
+            if (levels is not null && levels.Value is not null && levels.Value.Count != 0)
+            {
+                foreach (MicrosoftDynamicsCRMssgCsrsbccourtlevel level in levels.Value)
+                {
+                    courtLevels.Add(new CourtLookupValue
+                    {
+                        Id = level.SsgCsrsbccourtlevelid,
+                        Value = level.SsgCourtlevellabel
+                    });
+                }
+            }
+
             return courtLevels;
         }
     }

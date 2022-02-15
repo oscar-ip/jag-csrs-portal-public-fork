@@ -18,10 +18,11 @@ import {
   TranslateLoader,
   TranslateService,
 } from '@ngx-translate/core';
+
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LandingComponent } from './components/landing/landing.component';
 import { MatStepperModule } from '@angular/material/stepper';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { AppConfigService, AppConfig } from './services/app-config.service';
 
 import { WindowRefService } from '@core/services/window-ref.service';
@@ -94,6 +95,7 @@ import { FormsModule } from '@angular/forms';
   exports: [NgBusyModule, NgxMaterialModule, TranslateModule],
   providers: [
     CurrencyPipe,
+    DatePipe,
     AppConfigService,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     {
