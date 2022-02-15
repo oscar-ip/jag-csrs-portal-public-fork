@@ -24,27 +24,38 @@ namespace Csrs.Api.Services
 
             try
             {
-                List<string> expand = new List<string> { "owninguser", "owningteam" };
-                MicrosoftDynamicsCRMssgCsrsfile file = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, null, expand: expand, cancellationToken);
-                task.RegardingobjectidSsgCsrsfile = file;
-                if (file.Owninguser is not null)
+
+                MicrosoftDynamicsCRMssgCsrsfile file = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, null, null, cancellationToken);
+
+                if (file._owninguserValue is not null)
                 {
-                    task.OwninguserTask = file.Owninguser;
-                } 
-                else if (file.Owningteam is not null)
-                {
-                    task.OwningteamTask = file.Owningteam;
+                    task.OwninguserTaskODataBind = _dynamicsClient.GetEntityURI("systemusers", file._owninguserValue);
                 }
+                else if (file._owningteamValue is not null)
+                {
+                    task.OwningteamTaskODataBind = _dynamicsClient.GetEntityURI("teams", file._owningteamValue);
+                }
+
+                task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", file.SsgCsrsfileid);
+
             }
             catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
             {
+                
                 _logger.LogError("Provided fileId not found");
                 throw;
+
             }
 
+            task.Prioritycode = 1;
+            task.Statuscode = 2;
+            task.Isregularactivity = true;
+            task.Activitytypecode = "task";
+            //Set due date. If there is an issue set the timestamp to now?
+            task.Scheduledend = DateTimeOffset.UtcNow;
 
             await _dynamicsClient.Tasks.CreateAsync(task);
-
+           
             return "Success";
         }
     }
