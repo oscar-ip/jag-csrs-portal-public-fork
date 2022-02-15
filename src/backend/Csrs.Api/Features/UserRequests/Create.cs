@@ -59,7 +59,6 @@ namespace Csrs.Api.Features.UserRequests
                 _logger.LogDebug("Checking current user for BCeID Guid");
 
                 string userId = _userService.GetBCeIDUserId();
-                //string userId = "44e88bfd-fed0-4a68-97f7-0f701df51315";
                 if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot User Request");
@@ -81,6 +80,7 @@ namespace Csrs.Api.Features.UserRequests
                 _logger.LogInformation("Creating User Request");
                 MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
                 task.Activitytypecode = "task";
+                task.ownin
                 task.Subject = "File " + request.FileNo + " - " + request.RequestType;
                 string desc = "Party: " + party.SsgBceidDisplayname + "\n"+
                               "Message: "+request.RequestMessage;
