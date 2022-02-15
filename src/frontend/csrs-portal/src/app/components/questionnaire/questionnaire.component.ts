@@ -39,7 +39,7 @@ export class QuestionnaireComponent implements OnInit {
             {
               data: ' <span class="text-dark">To apply for the recalculation service, you must have an order or written agreement for child support from the Provincial Court of British Columbia. You\'ll need a copy of it before you start your application.</span>',
             },
-             {data: ' <span class="text-dark">If you have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\'><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. </span>'},
+             {data: ' <span class="text-dark">If you have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\' target="_blank"><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. </span>'},
             {
               data: ' <span class="text-dark">You’ll need to have a copy of it before you start your application.</span>',
             },
@@ -76,21 +76,21 @@ export class QuestionnaireComponent implements OnInit {
                 ul: [
                   {
                     liData:
-                      '<a style="color:#009cde !important; text-decoration: underline" href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice">British Columbia Family Justice</a>',
+                      '<a style="color:#009cde !important; text-decoration: underline" href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice" target="_blank">British Columbia Family Justice</a>',
                   },
                   {
                     liData:
-                      '<a style="color:#009cde !important; text-decoration: underline" href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/family-justice-centres">Family Justice Centres</a>',
+                      '<a style="color:#009cde !important; text-decoration: underline" href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/family-justice-centres" target="_blank">Family Justice Centres</a>',
                   },
                   {
                     liData:
-                      '<a style="color:#009cde !important; text-decoration: underline" href="https://family.legalaid.bc.ca/">Legal Aid BC - Family Law</a>',
+                      '<a style="color:#009cde !important; text-decoration: underline" href="https://family.legalaid.bc.ca/" target="_blank">Legal Aid BC - Family Law</a>',
                   },
                 ],
               },
             },
             {
-              data: '<span class="text-dark">If you already have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\'><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. ',
+              data: '<span class="text-dark">If you already have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\' target="_blank"><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. ',
             },
             {
               data: '<span class="text-dark">The Child Support Recalculation Service does <strong>not</strong> recalculate:',
@@ -137,15 +137,15 @@ export class QuestionnaireComponent implements OnInit {
                 ul: [
                   {
                     liData:
-                      '<a href="https://www.isoforms.bc.ca/">British Columbia’s Interjurisdictional Support Orders Forms</a>',
+                      '<a href="https://www.isoforms.bc.ca/" target="_blank" style="color:#009cde !important; text-decoration: underline">British Columbia Interjurisdictional Support Orders Forms</a>',
                   },
                   {
                     liData:
-                      '<a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/inter-jurisdictional-support-orders">British Columbia’s Inter-Jurisdictional Support Orders</a>',
+                      '<a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/inter-jurisdictional-support-orders" target="_blank" style="color:#009cde !important; text-decoration: underline">British Columbia’s Inter-Jurisdictional Support Orders</a>',
                   },
                   {
                     liData:
-                      '<a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice">British Columbia Family Justice</a>',
+                      '<a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice" target="_blank" style="color:#009cde !important; text-decoration: underline">British Columbia Family Justice</a>',
                   },
                 ],
               },
@@ -172,7 +172,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
+              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines" target="_blank" style="color:#009cde !important; text-decoration: underline">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
             },
             {
               data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent income tax information and the Child Support Guidelines.',
@@ -192,7 +192,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
+              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines" target="_blank" style="color:#009cde !important; text-decoration: underline">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
             },
             {
               data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent ncome tax information and the Child Support Guidelines.',
@@ -212,7 +212,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'I don’t know',
           clickedContent: [
             {
-              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>.As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
+              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines" target="_blank" style="color:#009cde !important; text-decoration: underline">the Child Support Guidelines</a>.As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
             },
             {
               data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent ncome tax information and the Child Support Guidelines.',
@@ -454,7 +454,7 @@ export class QuestionnaireComponent implements OnInit {
       content: [
         {
           label:
-            'For example, a party is applying to reduce or cancel child support, or someone is applying to change the parenting arrangements where a child will spend a different amount of time with each parent. ',
+            'For example, a party is applying to reduce or cancel child support, or someone is applying to change the parenting arrangements where a child will spend a different amount of time with each parent.',
         },
       ],
       buttons: [
@@ -537,6 +537,7 @@ export class QuestionnaireComponent implements OnInit {
     question.isYes = buttonItem.label === 'No' ? false : true;
   }
   setUIconColor(index, question) {
+    question.submit = true;
     const style = 'style';
     setTimeout(() => {
       const node: Node = document.querySelector(

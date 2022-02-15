@@ -2,23 +2,24 @@
 
 namespace Csrs.Api.Models
 {
+
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    public class LookupValue
+    public class CourtLookupValue
     {
-        public LookupValue(int value, string text)
+        public CourtLookupValue(string guidId, string text)
         {
-            Id = value;
+            Id = guidId;
             Value = text;
         }
 
-        public LookupValue()
+        public CourtLookupValue()
         {
         }
 
         /// <summary>
         /// The unique id of the value.
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The human readable value.
@@ -28,4 +29,5 @@ namespace Csrs.Api.Models
         private string DebuggerDisplay => $"{Value} ({Id})";
     }
 }
+
 

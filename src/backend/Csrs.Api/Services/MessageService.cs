@@ -4,6 +4,7 @@ using Csrs.Interfaces.Dynamics;
 using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Rest;
 using Microsoft.Extensions.Caching.Memory;
+using Csrs.Services.FileManager;
 
 namespace Csrs.Api.Services
 {
@@ -11,14 +12,17 @@ namespace Csrs.Api.Services
     {
 
         private readonly IDynamicsClient _dynamicsClient;
+        private readonly IDocumentService _documentService;
         private readonly ILogger<MessageService> _logger;
 
         public MessageService(
             IDynamicsClient dynamicsClient,
+            IDocumentService documentService,
             ILogger<MessageService> logger)
         {
             _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
         }
         public async Task<IList<Message>> GetPartyMessages(string partyId, CancellationToken cancellationToken)
         {
@@ -35,13 +39,16 @@ namespace Csrs.Api.Services
 
                 foreach (var message in dynamicsMessages.Value)
                 {
-                    //TODO get attachment meta from fileManager
+                    IList<FileSystemItem> attachments = new List<FileSystemItem>();
+
                     if (message.SsgCsrsmessageattachment is not null && message.SsgCsrsmessageattachment.Value)
                     {
                         //Get documents from fileManager
+                        attachments = await _documentService.GetAttachmentList(message.SsgCsrscommunicationmessageid, "ssg_csrscommunicationmessage", "", cancellationToken);
+
                     }
                     //Temporary add empty array of documents
-                    messages.Add(ModelExtensions.ToViewModel(message, new List<Document>()));
+                    messages.Add(ModelExtensions.ToViewModel(message, attachments));
                 }
 
             }

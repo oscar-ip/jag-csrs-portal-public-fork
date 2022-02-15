@@ -6,6 +6,7 @@ using Csrs.Interfaces.Dynamics.Models;
 using Microsoft.Extensions.Caching.Memory;
 using File = Csrs.Api.Models.File;
 using PickLists = Csrs.Api.Models.PickupLists;
+using CSRSAccountFile = Csrs.Api.Models.CSRSAccountFile;
 
 namespace Csrs.Api.Services
 {
@@ -15,9 +16,6 @@ namespace Csrs.Api.Services
         private readonly IDynamicsClient _dynamicsClient;
         private readonly IMapper _mapper;
         private readonly ILogger<FileService> _logger;
-        private readonly int   _male = 867670000;
-        private readonly int _female = 867670001;
-
         
         public FileService(
             IMemoryCache cache,
@@ -35,27 +33,41 @@ namespace Csrs.Api.Services
             MicrosoftDynamicsCRMssgCsrsparty otherParty, File file, CancellationToken cancellationToken)
         {
 
-            MicrosoftDynamicsCRMssgCsrsfile csrsFile = await file.ToDynamicsModel(_dynamicsClient, cancellationToken);
+            MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel();
+
+            if (file.BCCourtLevel is not null && !string.IsNullOrEmpty(file.BCCourtLevel.Id))
+            {
+                //"ssg_csrsfiles"
+                csrsFile.SsgBCCourtLevelODataBind = _dynamicsClient.GetEntityURI("ssg_csrsbccourtlevels", file.BCCourtLevel.Id);
+            }
+
+            if (file.BCCourtLocation is not null && !string.IsNullOrEmpty(file.BCCourtLocation.Id))
+            {
+                //"ssg_csrsfiles"
+                csrsFile.SsgBCCourtLocationODataBind = _dynamicsClient.GetEntityURI("ssg_ijssbccourtlocations", file.BCCourtLocation.Id);
+            }
 
             // map the party and other party to recipient and payor
             if (file.UsersRole == PartyRole.Recipient)
             {
                 csrsFile.SsgPartyenrolled = (int)PartyEnrolled.Recipient;
+                //"ssg_csrsfiles"
                 csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
 
-                if (otherParty is not null)
+                if (otherParty is not null && !string.IsNullOrEmpty(otherParty.SsgCsrspartyid))
                 {
+                    //"ssg_csrsfiles"
                     csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
                 }
             }
             else if (file.UsersRole == PartyRole.Payor)
             {
                 csrsFile.SsgPartyenrolled = (int)PartyEnrolled.Payor;
-                csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
+                csrsFile.SsgPayorODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", party.SsgCsrspartyid);
 
-                if (otherParty is not null)
+                if (otherParty is not null && !string.IsNullOrEmpty(otherParty.SsgCsrspartyid))
                 {
-                    csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+                    csrsFile.SsgRecipientODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", otherParty.SsgCsrspartyid);
                 }
             }
 
@@ -65,7 +77,8 @@ namespace Csrs.Api.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception in FileService.CreateFile");
+                _logger.LogError(ex, "An exception occurred while inserting file, file creation will be aborted");
+                throw;
             }
 
             if (file.Children is not null)
@@ -73,25 +86,11 @@ namespace Csrs.Api.Services
                 foreach (var child in file.Children)
                 {
                     var csrsChild = child.ToDynamicsModel();
-                    if (party.SsgPartygender == _male)
-                    {
-                        csrsChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
-                    }
-                    else if (party.SsgPartygender == _female)
-                    {
-                        csrsChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", party.SsgCsrspartyid);
-                    }
 
-                    if (otherParty is not null && otherParty.SsgPartygender == _male)
+                    if (csrsFile is not null && !string.IsNullOrEmpty(csrsFile.SsgCsrsfileid))
                     {
-                        csrsChild.SsgChildsFatherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
+                        csrsChild.SsgFileNumberODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", csrsFile.SsgCsrsfileid);
                     }
-                    else if (otherParty is not null && otherParty.SsgPartygender == _female)
-                    {
-                        csrsChild.SsgChildsMotherODataBind = _dynamicsClient.GetEntityURI("ssg_csrsparties", otherParty.SsgCsrspartyid);
-                    }
-
-                    csrsChild.SsgFileNumberODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", csrsFile.SsgCsrsfileid);
 
                     try
                     {
@@ -99,12 +98,33 @@ namespace Csrs.Api.Services
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Exception in FileService.CreateChildren");
+                        _logger.LogError(ex, "An exception occurred while inserting child in file {FileId}", csrsFile.SsgCsrsfileid);
                     }
                 }
             }
 
             return Tuple.Create(csrsFile.SsgCsrsfileid, csrsFile.SsgFilenumber);
         }
+
+        public async Task<string> UpdateCSRSAccountFile(CSRSAccountFile file, CancellationToken cancellationToken)
+        {
+
+            MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel();
+            var fileId = file.FileId;
+            // map the party and other party to recipient and payor
+            try
+            {
+                await _dynamicsClient.Ssgcsrsfiles.UpdateAsync(fileId, csrsFile, cancellationToken: cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An exception occurred while updating CSRS account file {FileId}, file update will be aborted", fileId);
+                throw;
+            }
+
+            return fileId;
+        }
+
+
     }
 }

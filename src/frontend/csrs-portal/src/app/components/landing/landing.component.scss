@@ -125,11 +125,6 @@ div.container {
   }
 }
 
-img {
-  width: 100%;
-  height: 100%;
-}
-
 
 .round1 {
   border: 2px solid grey;
@@ -501,7 +496,6 @@ mat-grid-tile.bottom_line {
 .mat-icon {
   cursor: pointer;
   font-size: 1.5em;
-  user-select: none;
 }
 
 .information {

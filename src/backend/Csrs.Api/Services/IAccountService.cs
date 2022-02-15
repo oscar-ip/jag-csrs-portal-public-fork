@@ -17,6 +17,7 @@ namespace Csrs.Api.Services
         Task<IList<LookupValue>> GetReferralsAsync(CancellationToken cancellationToken);
 
         Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken);
-        
+
+        Task<CSRSPartyFileIds> GetPartyFileIdsByBCeIdAndCSRSAccountAsync(string bceidGuid, CSRSAccount account, CancellationToken cancellationToken);
     }
 }

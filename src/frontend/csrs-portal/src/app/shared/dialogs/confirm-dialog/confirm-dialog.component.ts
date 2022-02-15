@@ -20,6 +20,7 @@ export class ConfirmDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
+    //@Inject(MAT_DIALOG_DATA) public data: any,
     @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions
   ) {
     this.options =

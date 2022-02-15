@@ -41,6 +41,7 @@
     "ngx-mask": "^12.0.0",
     "ngx-progressbar": "^6.1.1",
     "rxjs": "~7.3.0",
+    "ts-generic-collections-linq": "^1.0.7",
     "tslib": "^2.3.0",
     "yargs": "^17.1.0",
     "yarn": "^1.22.11",

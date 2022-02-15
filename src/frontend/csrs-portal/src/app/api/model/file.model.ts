@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CourtLookupValue } from './courtLookupValue.model';
 import { PartyRole } from './partyRole.model';
 import { FileStatus } from './fileStatus.model';
 import { Party } from './party.model';
@@ -23,8 +24,8 @@ export interface ModelFile {
     fileNumber?: string | null;
     partyEnrolled?: string | null;
     courtFileType?: LookupValue;
-    bcCourtLevel?: string | null;
-    bcCourtLocation?: string | null;
+    bcCourtLevel?: CourtLookupValue;
+    bcCourtLocation?: CourtLookupValue;
     dateOfOrderOrWA?: string | null;
     incomeOnOrder?: string | null;
     section7Expenses?: string | null;
@@ -34,6 +35,7 @@ export interface ModelFile {
     payorSafetyConcernDescription?: string | null;
     isFMEPFileActive?: string | null;
     fmepFileNumber?: string | null;
+    recalculationOrderByCourt?: string | null;
     otherParty?: Party;
     /**
      * The children on this file.

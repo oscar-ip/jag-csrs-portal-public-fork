@@ -138,5 +138,51 @@ namespace Csrs.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Check existence of CSRS account.
+        /// </summary>
+        /// <response code="200">The csrs account was found.</response>
+        /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
+        /// <response code="404">The csrs account was not found</response>
+        [HttpPost("CheckCSRSAccount")]
+        [ProducesResponseType(typeof(CSRSPartyFileIds), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> CheckCSRSAccountAsync([Required] CSRSAccount csrsAccountRequest, CancellationToken cancellationToken)
+        {
+            if (csrsAccountRequest == null || csrsAccountRequest.FileNumber == null || csrsAccountRequest.ReferenceNumber == null)
+            {
+                return BadRequest();
+            }
+
+            CheckCSRSAccount.Request request = new(csrsAccountRequest);
+            CheckCSRSAccount.Response? response = await _mediator.Send(request, cancellationToken);
+
+            return response != CheckCSRSAccount.Response.Empty ? Ok(response.CSRSPartyFileIds) : NotFound();
+        }
+
+        /// <summary>
+        /// Update CSRS account.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">The CSRS account was created.</response>
+        /// <response code="400">The request was not well formed.</response>
+        /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
+        [HttpPost("UpdateCSRSaccount")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> UpdateCSRSaccountAsync([Required] CSRSAccountRequest csrsAccountRequest, CancellationToken cancellationToken)
+        {
+            if (csrsAccountRequest == null || csrsAccountRequest.User == null || csrsAccountRequest.CSRSAccountFile == null)
+            {
+                return BadRequest();
+            }
+
+            UpdateCSRSAccount.Request request = new(csrsAccountRequest.User, csrsAccountRequest.CSRSAccountFile);
+            UpdateCSRSAccount.Response? response = await _mediator.Send(request, cancellationToken);
+
+            return Ok(response);
+        }
     }
 }

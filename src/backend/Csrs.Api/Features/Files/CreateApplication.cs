@@ -9,6 +9,9 @@ namespace Csrs.Api.Features.Files
         }
         public class Response
         {
+            public Guid PartyId { get; set; }
+            public Guid FileId { get; set; }
+
         }
         public class Handler : IRequestHandler<Request, Response>
         {

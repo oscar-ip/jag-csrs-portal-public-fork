@@ -45,8 +45,8 @@ namespace Csrs.Api.Models
         public string? FileNumber { get; set; }
         public string? PartyEnrolled { get; set; } 
         public LookupValue? CourtFileType { get; set; } 
-        public string? BCCourtLevel { get; set; } // default value is "Provincial";
-        public string? BCCourtLocation { get; set; }
+        public CourtLookupValue? BCCourtLevel { get; set; } // default value is "Provincial";
+        public CourtLookupValue? BCCourtLocation { get; set; }
 
         [SwaggerSchema(Format = "date")]
         public string? DateOfOrderOrWA { get; set; }
@@ -64,6 +64,8 @@ namespace Csrs.Api.Models
 
         public string? IsFMEPFileActive { get; set; } = "No";
         public string? FMEPFileNumber { get; set; }
+
+        public string? RecalculationOrderByCourt { get; set; } = "No";
 
         /// <summary>
         /// The other party on the file. The other party could be recipient or payer.

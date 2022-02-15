@@ -14,6 +14,10 @@ encoder.ts
 git_push.sh
 index.ts
 model/accountFileSummary.model.ts
+model/cSRSAccount.model.ts
+model/cSRSAccountFile.model.ts
+model/cSRSAccountRequest.model.ts
+model/cSRSPartyFileIds.model.ts
 model/child.model.ts
 model/courtLookupValue.model.ts
 model/document.model.ts
