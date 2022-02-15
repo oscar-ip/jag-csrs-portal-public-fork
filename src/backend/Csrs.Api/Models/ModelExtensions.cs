@@ -171,21 +171,7 @@ namespace Csrs.Api.Models
 
             return dynamicsFile;
         }
-
-        private static int? GetChildIsDependent(string? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return value switch
-            {
-                "Yes" => (int)ChildIsDependent.Yes,
-                "No" => (int)ChildIsDependent.No,
-                _ => (int)ChildIsDependent.IDontKnow,
-            };
-        }
+        
         public static MicrosoftDynamicsCRMssgCsrschild ToDynamicsModel(this Child child)
         {
             MicrosoftDynamicsCRMssgCsrschild dynamicsChild = new MicrosoftDynamicsCRMssgCsrschild

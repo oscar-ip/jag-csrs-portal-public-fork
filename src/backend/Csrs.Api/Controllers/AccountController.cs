@@ -155,7 +155,7 @@ namespace Csrs.Api.Controllers
                 return BadRequest();
             }
 
-            CheckCSRSAccount.Request request = new(User, csrsAccountRequest);
+            CheckCSRSAccount.Request request = new(csrsAccountRequest);
             CheckCSRSAccount.Response? response = await _mediator.Send(request, cancellationToken);
 
             return response != CheckCSRSAccount.Response.Empty ? Ok(response.CSRSPartyFileIds) : NotFound();
