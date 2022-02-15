@@ -100,7 +100,6 @@ namespace Csrs.Api.Controllers
         /// <response code="200">The user and their files were found.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="404">The user was not found</response>
-        [AllowAnonymous] // DO NOT FORGET TO REMOVE THIS LINE (ATTRIBUTE)
         [HttpGet]
         [ProducesResponseType(typeof(AccountFileSummary), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -121,7 +120,6 @@ namespace Csrs.Api.Controllers
         /// <response code="400">The request was not well formed.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="409">There is already a draft file associated with the current user/account.</response>
-        [AllowAnonymous] // DO NOT FORGET TO REMOVE THIS LINE (ATTRIBUTE)
         [HttpPost("Create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
@@ -146,7 +144,6 @@ namespace Csrs.Api.Controllers
         /// <response code="200">The csrs account was found.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
         /// <response code="404">The csrs account was not found</response>
-        [AllowAnonymous] // DO NOT FORGET TO REMOVE THIS LINE (ATTRIBUTE)
         [HttpPost("CheckCSRSAccount")]
         [ProducesResponseType(typeof(CSRSPartyFileIds), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -171,7 +168,6 @@ namespace Csrs.Api.Controllers
         /// <response code="200">The CSRS account was created.</response>
         /// <response code="400">The request was not well formed.</response>
         /// <response code="401">The request is not authorized. Ensure correct authentication header is present.</response>
-        [AllowAnonymous] // DO NOT FORGET TO REMOVE THIS LINE (ATTRIBUTE)
         [HttpPost("UpdateCSRSaccount")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]

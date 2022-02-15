@@ -63,8 +63,7 @@ namespace Csrs.Api.Features.Accounts
             {
                 _logger.LogDebug("Checking current user for BCeID Guid");
 
-                //string userId = _userService.GetBCeIDUserId();
-                string userId = "26336072-cba4-4b6e-871b-5355d27df9b3";
+                string userId = _userService.GetBCeIDUserId();
                 if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot create account");
