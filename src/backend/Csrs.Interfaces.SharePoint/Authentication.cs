@@ -115,9 +115,9 @@ namespace Csrs.Interfaces
 
             var sharepointSite = new
             {
-                Wctx = samlServer + "_layouts/Authenticate.aspx?Source=%2F",
-                Wtrealm = samlServer,
-                Wreply = $"{samlServer}_trust/"
+                Wctx = samlServerRoot.ToString() + "_layouts/Authenticate.aspx?Source=%2F",
+                Wtrealm = samlServerRoot.ToString(),
+                Wreply = $"{samlServerRoot}_trust/"
             };
 
             // create the body of the POST

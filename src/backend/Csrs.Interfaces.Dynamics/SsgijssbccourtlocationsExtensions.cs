@@ -208,42 +208,5 @@ namespace Csrs.Interfaces.Dynamics
                 (await operations.UpdateWithHttpMessagesAsync(ssgIjssbccourtlocationid, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Delete entity from ssg_ijssbccourtlocations
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ssgIjssbccourtlocationid'>
-            /// key: ssg_ijssbccourtlocationid of ssg_ijssbccourtlocation
-            /// </param>
-            /// <param name='ifMatch'>
-            /// ETag
-            /// </param>
-            public static void Delete(this ISsgijssbccourtlocations operations, string ssgIjssbccourtlocationid, string ifMatch = default(string))
-            {
-                operations.DeleteAsync(ssgIjssbccourtlocationid, ifMatch).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Delete entity from ssg_ijssbccourtlocations
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='ssgIjssbccourtlocationid'>
-            /// key: ssg_ijssbccourtlocationid of ssg_ijssbccourtlocation
-            /// </param>
-            /// <param name='ifMatch'>
-            /// ETag
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteAsync(this ISsgijssbccourtlocations operations, string ssgIjssbccourtlocationid, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteWithHttpMessagesAsync(ssgIjssbccourtlocationid, ifMatch, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
     }
 }

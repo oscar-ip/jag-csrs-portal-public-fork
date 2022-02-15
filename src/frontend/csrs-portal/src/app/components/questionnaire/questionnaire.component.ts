@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
-import { SnowplowService } from '@core/services/snowplow.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -19,10 +18,10 @@ export class QuestionnaireComponent implements OnInit {
   public _logger: LoggerService;
   public _oidc: OidcSecurityService;
   public _router: Router;
-
+  public   isEditable = true;
   public welcomeUser: string;
   public _config: AppConfigService;
-  public _snowplow: SnowplowService;
+
 
   data: any = [
     {
@@ -40,7 +39,7 @@ export class QuestionnaireComponent implements OnInit {
             {
               data: ' <span class="text-dark">To apply for the recalculation service, you must have an order or written agreement for child support from the Provincial Court of British Columbia. You\'ll need a copy of it before you start your application.</span>',
             },
-             {data: ' <span class="text-dark">If you have an order or written agreement but do not have a copy, ask the <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\'>court</a> for one. </span>'},
+             {data: ' <span class="text-dark">If you have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\'><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. </span>'},
             {
               data: ' <span class="text-dark">You’ll need to have a copy of it before you start your application.</span>',
             },
@@ -77,24 +76,30 @@ export class QuestionnaireComponent implements OnInit {
                 ul: [
                   {
                     liData:
-                      '<a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice">British Columbia Family Justice</a>',
+                      '<a style="color:#009cde !important; text-decoration: underline" href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice">British Columbia Family Justice</a>',
                   },
                   {
                     liData:
-                      '<a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/family-justice-centres">Family Justice Centres</a>',
+                      '<a style="color:#009cde !important; text-decoration: underline" href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/family-justice-centres">Family Justice Centres</a>',
                   },
                   {
                     liData:
-                      '<a href="https://family.legalaid.bc.ca/">Legal Aid BC - Family Law</a>',
+                      '<a style="color:#009cde !important; text-decoration: underline" href="https://family.legalaid.bc.ca/">Legal Aid BC - Family Law</a>',
                   },
                 ],
               },
             },
             {
-              data: '<span class="text-dark">If you already have an order or written agreement but do not have a copy, ask the court for one.',
+              data: '<span class="text-dark">If you already have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\'><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. ',
             },
             {
               data: '<span class="text-dark">The Child Support Recalculation Service does <strong>not</strong> recalculate:',
+            },
+            {
+              data: '<li><span class="text-dark">orders and written agreements for spousal support; and</span></li>',
+            },
+            {
+              data: '<li><span class="text-dark">orders and written agreements for child support from the Supreme Court of British Columbia.</span></li>',
             },
           ],
         },
@@ -119,7 +124,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">To use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C residents. You’re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.',
+              data: '<span class="text-dark">To use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C. residents. You’re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.',
             },
             {
               data: '<span class="text-dark">If you or the other parent or guardian live in another province or territory, this service is not available to you.',
@@ -167,10 +172,10 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>.As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
+              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
             },
             {
-              data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent ncome tax information and the Child Support Guidelines.',
+              data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent income tax information and the Child Support Guidelines.',
             },
             {
               data: '<span class="text-dark">Each year, the recalculation service will ask the paying parent to provide their income tax information for the most recent tax year.',
@@ -187,7 +192,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>.As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
+              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
             },
             {
               data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent ncome tax information and the Child Support Guidelines.',
@@ -492,8 +497,7 @@ export class QuestionnaireComponent implements OnInit {
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
-              @Inject(AppConfigService) private appConfigService,
-              @Inject(SnowplowService) private snowplow) {
+              @Inject(AppConfigService) private appConfigService) {
 
           this._config = appConfigService;
           this._logger = logger;
@@ -510,9 +514,6 @@ export class QuestionnaireComponent implements OnInit {
           } else {
             this._logger.log('info', 'Questionnaire: not authenticated');
           }
-
-          this._snowplow = this.snowplow;
-
   }
 
   stringToHTML(i, yi, ci, str, idLabel) {
@@ -525,7 +526,7 @@ export class QuestionnaireComponent implements OnInit {
       document.querySelector(id).childElementCount === 0
     ) {
       document.querySelector(id).appendChild(doc.body);
-
+      
     }
     document.querySelector(id).setAttribute('color', 'color:#2E8540 !important');
 
@@ -549,6 +550,31 @@ export class QuestionnaireComponent implements OnInit {
     });
   }
 
+  setColor(question,buttonItem,i){
+     let myGreen = false
+     let myRed = false
+    if(question.clicked == buttonItem.label && (question.clicked == 'Yes')){
+    
+      if([4,5,8].includes(i+1)){
+        myRed = true
+      } else {
+        myGreen = true
+      }
+    }
+    if(question.clicked == buttonItem.label && (question.clicked == 'No')){
+     
+      if([3,4,5,6,7,8].includes(i+1)){
+        myGreen = true
+      } else {
+        myRed = true
+      }
+    }
+    if(question.clicked == buttonItem.label && (question.clicked == 'I don’t know')){
+      myGreen = true
+    }
+
+    return { 'myGreen' : myGreen, 'myRed' : myRed  }
+  }
   public async ngOnInit() {
 
     this.bceIdRegisterLink = this._config.bceIdRegisterLink;
@@ -582,10 +608,6 @@ export class QuestionnaireComponent implements OnInit {
     link.download = "Application.pdf";
     link.href = "assets/Application.pdf";
     link.click();
-  }
-
-  public ngAfterViewInit(): void {
-    this.snowplow.refreshLinkClickTracking();
   }
 
 }

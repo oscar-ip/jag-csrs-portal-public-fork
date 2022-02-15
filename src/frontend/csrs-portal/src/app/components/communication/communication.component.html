@@ -1,7 +1,7 @@
 <div class="container">
   <section>
     <div>
-      <h1 class="mb-5">Welcome, Sergey</h1>
+      <h1 class="mb-5">Welcome, User</h1>
       <hr style="opacity: 1; color: #fcba19" />
     </div>
   </section>
@@ -244,7 +244,100 @@
           <ng-template mat-tab-label>
             <h1 class="mb-1 tabHeader">Contact Us</h1>
           </ng-template>
-          <p>Contact Us</p>
+          <form [formGroup]="contactFormGroup" class="round1 form-control" style="padding-bottom: 20px">
+            <div class="mb-3">
+              <div class="container">
+                <div class="row">
+                  <div class="col-1">
+                    <label style="font-weight: bold;">File #:</label>
+                  </div>
+                  <div class="col">
+                    <mat-form-field>
+                      <mat-label>Select File</mat-label>
+                      <mat-select formControlName="contactFile">
+                        <mat-option *ngFor="let file of files" [value]="file.fileId">
+                          {{file.fileId}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="contactFile.hasError('required')">
+                        File is required.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-2">
+                    <label style="font-weight: bold;">Date:</label>
+                    {{contactDate}}
+                  </div>
+                  <div class="col">
+
+                  </div>
+                </div>
+                <div class="row">
+                  <hr size="4" width="90%">
+                </div>
+                  <div class="row">
+                    <div class="col-1 w-100">
+                      <label style="font-weight: bold;">Subject:</label>
+                      <mat-form-field class="w-100">
+                        <mat-label>Choose the subject you are inquiring about</mat-label>
+                        <mat-select formControlName="contactSubject">
+                          <mat-option *ngFor="let subject of contactSubjects" [value]="subject.id">
+                            {{subject.name}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="contactSubject.hasError('required')">
+                          Subject is required.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="md-textarea">
+                      <label style="font-weight: bold;">Message:</label>
+                      <mat-form-field class="w-100">
+                        <textarea matInput
+                                  placeholder="Type your message here ... 500 character max"
+                                  [formControl]="contactMessage"
+                                  rows="4">
+                        </textarea>
+                        <mat-error *ngIf="contactMessage.hasError('required')">
+                          Message is required.
+                        </mat-error>
+                        <mat-error *ngIf="contactMessage.hasError('maxlength')">
+                          Max length is 500.
+                        </mat-error>
+                      </mat-form-field>
+
+                    </div>
+                  </div>
+                  <div class="row">
+                  </div>
+                  <div class="row">
+                    <div class="col-1">
+                      <button mat-flat-button
+                              type="button"
+                              class="BC-Gov-SecondaryButton"
+                              style="width: 250px;"
+                              (click)="clearContactForm()">
+                        Cancel
+                      </button>
+                    </div>
+                    <div class="col">
+
+                    </div>
+                    <div class="col-8" style="text-align: right;">
+                      <button mat-flat-button
+                              type="button"
+                              class="BC-Gov-PrimaryButton"
+                              style="width: 250px; float:right;"
+                              (click)="sendContact()">
+                        Send
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           </form>
         </mat-tab>
       </mat-tab-group>
     </div>

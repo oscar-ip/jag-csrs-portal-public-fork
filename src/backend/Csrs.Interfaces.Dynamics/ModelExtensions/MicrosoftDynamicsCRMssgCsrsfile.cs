@@ -22,6 +22,9 @@ namespace Csrs.Interfaces.Dynamics.Models
         [JsonConverter(typeof(BooleanConverter))]
         public bool SsgFmepfileactive { get; set; }
 
+        [JsonProperty(PropertyName = "ssg_registrationdate")]
+        [JsonConverter(typeof(DateFormatConverter), "yyyy-MM-dd")]
+        public System.DateTimeOffset? SsgRegistrationdate { get; set; }
     }
 
     [MetadataType(typeof(MicrosoftDynamicsCRMssgCsrsfileMetadata))]

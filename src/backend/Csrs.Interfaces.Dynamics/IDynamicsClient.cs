@@ -63,9 +63,9 @@ namespace Csrs.Interfaces.Dynamics
 
 
         /// <summary>
-        /// Gets the IEntitydefinitions.
+        /// Gets the IActivitypointers.
         /// </summary>
-        IEntitydefinitions Entitydefinitions { get; }
+        IActivitypointers Activitypointers { get; }
 
         /// <summary>
         /// Gets the ISharepointdocumentlocations.
@@ -113,14 +113,9 @@ namespace Csrs.Interfaces.Dynamics
         ISsgijssbccourtlocations Ssgijssbccourtlocations { get; }
 
         /// <summary>
-        /// Gets the ISsgnotestemplateses.
+        /// Gets the ITasks.
         /// </summary>
-        ISsgnotestemplateses Ssgnotestemplateses { get; }
-
-        /// <summary>
-        /// Gets the IUpdatestatevalue.
-        /// </summary>
-        IUpdatestatevalue Updatestatevalue { get; }
+        ITasks Tasks { get; }
 
     }
 }

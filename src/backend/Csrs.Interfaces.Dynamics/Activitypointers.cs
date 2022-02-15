@@ -19,12 +19,12 @@ namespace Csrs.Interfaces.Dynamics
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Ssgnotestemplateses operations.
+    /// Activitypointers operations.
     /// </summary>
-    public partial class Ssgnotestemplateses : IServiceOperations<DynamicsClient>, ISsgnotestemplateses
+    public partial class Activitypointers : IServiceOperations<DynamicsClient>, IActivitypointers
     {
         /// <summary>
-        /// Initializes a new instance of the Ssgnotestemplateses class.
+        /// Initializes a new instance of the Activitypointers class.
         /// </summary>
         /// <param name='client'>
         /// Reference to the service client.
@@ -32,7 +32,7 @@ namespace Csrs.Interfaces.Dynamics
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public Ssgnotestemplateses(DynamicsClient client)
+        public Activitypointers(DynamicsClient client)
         {
             if (client == null)
             {
@@ -47,7 +47,7 @@ namespace Csrs.Interfaces.Dynamics
         public DynamicsClient Client { get; private set; }
 
         /// <summary>
-        /// Get entities from ssg_notestemplateses
+        /// Get entities from activitypointers
         /// </summary>
         /// <param name='top'>
         /// </param>
@@ -83,7 +83,7 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMssgNotestemplatesCollection>> GetWithHttpMessagesAsync(int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMactivitypointerCollection>> GetWithHttpMessagesAsync(int? top = default(int?), int? skip = default(int?), string search = default(string), string filter = default(string), bool? count = default(bool?), IList<string> orderby = default(IList<string>), IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -105,7 +105,7 @@ namespace Csrs.Interfaces.Dynamics
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "ssg_notestemplateses").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "activitypointers").ToString();
             List<string> _queryParameters = new List<string>();
             if (top != null)
             {
@@ -208,7 +208,7 @@ namespace Csrs.Interfaces.Dynamics
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMssgNotestemplatesCollection>();
+            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMactivitypointerCollection>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -217,7 +217,7 @@ namespace Csrs.Interfaces.Dynamics
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMssgNotestemplatesCollection>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMactivitypointerCollection>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -237,7 +237,7 @@ namespace Csrs.Interfaces.Dynamics
         }
 
         /// <summary>
-        /// Add new entity to ssg_notestemplateses
+        /// Add new entity to activitypointers
         /// </summary>
         /// <param name='body'>
         /// New entity
@@ -267,7 +267,7 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMssgNotestemplates>> CreateWithHttpMessagesAsync(MicrosoftDynamicsCRMssgNotestemplates body, string prefer = "return=representation", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMactivitypointer>> CreateWithHttpMessagesAsync(MicrosoftDynamicsCRMactivitypointer body, string prefer = "return=representation", Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (body == null)
             {
@@ -287,7 +287,7 @@ namespace Csrs.Interfaces.Dynamics
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "ssg_notestemplateses").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "activitypointers").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -367,7 +367,7 @@ namespace Csrs.Interfaces.Dynamics
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMssgNotestemplates>();
+            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMactivitypointer>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -376,7 +376,7 @@ namespace Csrs.Interfaces.Dynamics
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMssgNotestemplates>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMactivitypointer>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -396,10 +396,10 @@ namespace Csrs.Interfaces.Dynamics
         }
 
         /// <summary>
-        /// Get entity from ssg_notestemplateses by key
+        /// Get entity from activitypointers by key
         /// </summary>
-        /// <param name='ssgNotestemplatesid'>
-        /// key: ssg_notestemplatesid of ssg_notestemplates
+        /// <param name='activityid'>
+        /// key: activityid of activitypointer
         /// </param>
         /// <param name='select'>
         /// Select properties to be returned
@@ -428,11 +428,11 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMssgNotestemplates>> GetByKeyWithHttpMessagesAsync(string ssgNotestemplatesid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<MicrosoftDynamicsCRMactivitypointer>> GetByKeyWithHttpMessagesAsync(string activityid, IList<string> select = default(IList<string>), IList<string> expand = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ssgNotestemplatesid == null)
+            if (activityid == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ssgNotestemplatesid");
+                throw new ValidationException(ValidationRules.CannotBeNull, "activityid");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -441,7 +441,7 @@ namespace Csrs.Interfaces.Dynamics
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("ssgNotestemplatesid", ssgNotestemplatesid);
+                tracingParameters.Add("activityid", activityid);
                 tracingParameters.Add("select", select);
                 tracingParameters.Add("expand", expand);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -449,8 +449,8 @@ namespace Csrs.Interfaces.Dynamics
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "ssg_notestemplateses({ssg_notestemplatesid})").ToString();
-            _url = _url.Replace("{ssg_notestemplatesid}", System.Uri.EscapeDataString(ssgNotestemplatesid));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "activitypointers({activityid})").ToString();
+            _url = _url.Replace("{activityid}", System.Uri.EscapeDataString(activityid));
             List<string> _queryParameters = new List<string>();
             if (select != null)
             {
@@ -529,7 +529,7 @@ namespace Csrs.Interfaces.Dynamics
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMssgNotestemplates>();
+            var _result = new HttpOperationResponse<MicrosoftDynamicsCRMactivitypointer>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -538,7 +538,7 @@ namespace Csrs.Interfaces.Dynamics
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMssgNotestemplates>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<MicrosoftDynamicsCRMactivitypointer>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -558,144 +558,10 @@ namespace Csrs.Interfaces.Dynamics
         }
 
         /// <summary>
-        /// Update entity in ssg_notestemplateses
+        /// Delete entity from activitypointers
         /// </summary>
-        /// <param name='ssgNotestemplatesid'>
-        /// key: ssg_notestemplatesid of ssg_notestemplates
-        /// </param>
-        /// <param name='body'>
-        /// New property values
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> UpdateWithHttpMessagesAsync(string ssgNotestemplatesid, MicrosoftDynamicsCRMssgNotestemplates body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (ssgNotestemplatesid == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ssgNotestemplatesid");
-            }
-            if (body == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "body");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("ssgNotestemplatesid", ssgNotestemplatesid);
-                tracingParameters.Add("body", body);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "Update", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "ssg_notestemplateses({ssg_notestemplatesid})").ToString();
-            _url = _url.Replace("{ssg_notestemplatesid}", System.Uri.EscapeDataString(ssgNotestemplatesid));
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("PATCH");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            if(body != null)
-            {
-                _requestContent = Microsoft.Rest.Serialization.SafeJsonConvert.SerializeObject(body, Client.SerializationSettings);
-                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            }
-            // Set Credentials
-            if (Client.Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Client.Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await Client.HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 204)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Delete entity from ssg_notestemplateses
-        /// </summary>
-        /// <param name='ssgNotestemplatesid'>
-        /// key: ssg_notestemplatesid of ssg_notestemplates
+        /// <param name='activityid'>
+        /// key: activityid of activitypointer
         /// </param>
         /// <param name='ifMatch'>
         /// ETag
@@ -718,11 +584,11 @@ namespace Csrs.Interfaces.Dynamics
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(string ssgNotestemplatesid, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(string activityid, string ifMatch = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (ssgNotestemplatesid == null)
+            if (activityid == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "ssgNotestemplatesid");
+                throw new ValidationException(ValidationRules.CannotBeNull, "activityid");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -731,15 +597,15 @@ namespace Csrs.Interfaces.Dynamics
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("ssgNotestemplatesid", ssgNotestemplatesid);
+                tracingParameters.Add("activityid", activityid);
                 tracingParameters.Add("ifMatch", ifMatch);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "Delete", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "ssg_notestemplateses({ssg_notestemplatesid})").ToString();
-            _url = _url.Replace("{ssg_notestemplatesid}", System.Uri.EscapeDataString(ssgNotestemplatesid));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "activitypointers({activityid})").ToString();
+            _url = _url.Replace("{activityid}", System.Uri.EscapeDataString(activityid));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;

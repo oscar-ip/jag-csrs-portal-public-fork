@@ -208,42 +208,5 @@ namespace Csrs.Interfaces.Dynamics
                 (await operations.UpdateWithHttpMessagesAsync(sharepointdocumentlocationid, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <summary>
-            /// Delete entity from sharepointdocumentlocations
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sharepointdocumentlocationid'>
-            /// key: sharepointdocumentlocationid of sharepointdocumentlocation
-            /// </param>
-            /// <param name='ifMatch'>
-            /// ETag
-            /// </param>
-            public static void Delete(this ISharepointdocumentlocations operations, string sharepointdocumentlocationid, string ifMatch = default(string))
-            {
-                operations.DeleteAsync(sharepointdocumentlocationid, ifMatch).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Delete entity from sharepointdocumentlocations
-            /// </summary>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='sharepointdocumentlocationid'>
-            /// key: sharepointdocumentlocationid of sharepointdocumentlocation
-            /// </param>
-            /// <param name='ifMatch'>
-            /// ETag
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task DeleteAsync(this ISharepointdocumentlocations operations, string sharepointdocumentlocationid, string ifMatch = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.DeleteWithHttpMessagesAsync(sharepointdocumentlocationid, ifMatch, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
     }
 }

@@ -29,7 +29,7 @@
           <h1 class="mb-3" style="font-size: 28px;">Child Support Recalculation Service</h1>
           <mat-divider class="mb-4"></mat-divider>
           <h2 class="mb-1" style="font-size: 24px;"><strong>Questionnaire</strong></h2>
-          <p  class="mb-1 text-dark" style="font-size: 18px;">Answer the following questions to learn about CSRS and your child support.</p>
+          <p  class="mb-1 text-dark" style="font-size: 18px;">Answer the following questions to learn about the Child Support Recalculation Service and your child support</p>
           <hr class="mb-4" style="opacity: 1">
          </div>
     </section>
@@ -39,27 +39,27 @@
              <ng-template matStepperIcon="edit" let-index="index">
                 <mat-icon>{{data[index].clicked == 'Yes' ? 'done' : data[index].clicked == 'No' ? 'clear':'edit'}}</mat-icon>
              </ng-template>
-             <mat-step class="notSelected" *ngFor="let question of data; index as i;" >
+             <mat-step class="notSelected" *ngFor="let question of data; index as i;" [editable]="isEditable">
                 <ng-template matStepLabel="" >
                    <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
                       <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
                    <span style="font-size: 20px;">{{question.label}}</span>
                 </ng-template>
-                <ng-template matStepContent="">
+                <ng-template class="question-content" matStepContent="">
                    <div *ngFor="let contentItem of question.content; index as coi;">
                      <strong>{{contentItem.label}}</strong>
                       <ol type="a" *ngIf="contentItem.data">
                         <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
-                         <div style="display: flex;flex-direction: row;"><span class="list-item" id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon> </div>
+                         <div style="display: flex;flex-direction: row;"><span class="list-item" id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" class="toolTipIcon">{{'info'}}</mat-icon></div>
                         </li>
                       </ol>
                    </div>
                    <div class="button-row mt-2 ">
                      <mat-divider class="mb-4"></mat-divider>
-                      <button class="toggle-button" *ngFor="let buttonItem of question.buttons; index as bi" mat-stroked-button color="basic" (click)="setLabel(question,buttonItem,i)" [ngClass]="{ 'myGreen' :question.clicked == buttonItem.label && question.clicked == 'Yes', 'myRed' :question.clicked == buttonItem.label && question.clicked == 'No'  }">
+                      <button class="toggle-button" *ngFor="let buttonItem of question.buttons; index as bi" mat-stroked-button color="basic" (click)="setLabel(question,buttonItem,i)" [ngClass]="setColor(question,buttonItem,i)">
                       {{buttonItem.label}}
                       <div class="mb-5" *ngIf="question.clicked == buttonItem.label && buttonItem.clickedContent.length!=0">
-                       <img class="icon-size6  m-2" src="/assets/Down-chevron-icon.svg">
+                       <img src="/assets/Down-chevron-icon.svg">
                       </div>
                       </button>
                       <br>
