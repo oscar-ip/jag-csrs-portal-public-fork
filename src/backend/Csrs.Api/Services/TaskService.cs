@@ -19,8 +19,12 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<string> CreateTask(string fileId, MicrosoftDynamicsCRMtask task, CancellationToken cancellationToken)
+        public async Task<string> CreateTask(string fileId, string subject, string description, CancellationToken cancellationToken)
         {
+
+            MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
+            task.Subject = subject;
+            task.Description = description;
 
             try
             {

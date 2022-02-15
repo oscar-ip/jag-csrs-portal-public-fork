@@ -288,13 +288,13 @@ namespace Csrs.Api.Services
         private async Task createTask(string fileId, string fileName, string folderName, string entityName, CancellationToken cancellationToken)
         {
             string subject = $"File: {fileName} Uploaded";
-            string body = $"For {fileId} \n Uploaded to: {entityName}\\{folderName}\\{fileName} ";
+            string description = $"For {fileId} \n Uploaded to: {entityName}\\{folderName}\\{fileName} ";
 
             MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
             task.Subject = subject;
-            task.Description = body;
+            task.Description = description;
 
-            await _taskService.CreateTask(fileId, task, cancellationToken);
+            await _taskService.CreateTask(fileId, subject, description, cancellationToken);
 
         }
 
