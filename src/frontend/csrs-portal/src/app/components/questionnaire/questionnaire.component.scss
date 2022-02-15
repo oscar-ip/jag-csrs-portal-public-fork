@@ -227,7 +227,7 @@ mat-divider {
 //  .mat-step-icon-content, .mat-step-icon .mat-icon{
 //   style="transform: translate(-55%, -90%);}
 .alert-content {
-  border: 1px solid darkblue;;
+  background-color: #f6f4f5;
   border-left: 4px solid darkblue;
   height:175px;
   padding: 30px;
@@ -235,13 +235,13 @@ mat-divider {
   margin-left: 0px;
   }
   .alert-text{
-      border: 1px solid gray;;
+      background-color: 1px solid gray;;
       border-left: 4px solid darkblue;
       height: 60px;
       margin-left: 10px;
   }
   .alert-text2{
-    border: 1px solid gray;;
+    background-color: #f6f4f5;
     border-left: 4px solid darkblue;
     height: 75px;
     margin-left: -15px;
@@ -261,6 +261,6 @@ mat-divider {
   height: 31px !important;
   width: 16px;
 }
-::ng-deep .mat-vertical-stepper-header {
-  pointer-events: none !important;
-}
+// ::ng-deep .mat-vertical-stepper-header {
+//   pointer-events: none !important;
+// }
