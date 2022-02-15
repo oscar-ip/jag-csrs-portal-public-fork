@@ -102,22 +102,40 @@ namespace Csrs.Api.Models
             {
                 return null;
             }
-            return value.Equals("Yes") ? (int)Section7Expenses.Yes :
-                   value.Equals("No") ? (int)Section7Expenses.No :
-                                         (int)Section7Expenses.IDontKnow;
+            return value switch
+            {
+                "Yes" => (int)Section7Expenses.Yes,
+                "No" => (int)Section7Expenses.No,
+                _ => (int)Section7Expenses.IDontKnow,
+            };
         }
 
         private static int? GetPartyEnrolled(string? value)
         {
-            if (value is null) return null;
-            return value.Equals("Recipient") ? (int)PartyEnrolled.Recipient : (int)PartyEnrolled.Payor;
+            if (value is null)
+            {
+                return null;
+            }
+            return value switch
+            {
+                "Recipient" => (int)PartyEnrolled.Recipient,
+                "Payor" => (int)PartyEnrolled.Payor,
+                _ => null,
+            };
         }
 
         private static bool? ConvertToBool(string? value)
         {
-            if (value is null) return null;
-            return value.Equals("Yes") ? true :
-                value.Equals("No") ? false : null;
+            if (value is null)
+            {
+                return null;
+            }
+            return value switch
+            {
+                "Yes" => true,
+                "No"  => false,
+                _     => null,
+            };
         }
 
         public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this File file)
@@ -168,21 +186,19 @@ namespace Csrs.Api.Models
             return dynamicsFile;
         }
 
-
-        public static async Task<Child> ToViewModelAsync(MicrosoftDynamicsCRMssgCsrschild dynamicsChild, IDynamicsClient dynamicsClient, IMemoryCache cache, CancellationToken cancellationToken)
-        {
-            return null;
-        }
-
         private static int? GetChildIsDependent(string? value)
         {
             if (value is null)
             {
                 return null;
             }
-            return value.Equals("Yes") ? (int)ChildIsDependent.Yes :
-                   value.Equals("No") ? (int)ChildIsDependent.No :
-                                         (int)ChildIsDependent.IDontKnow;
+
+            return value switch
+            {
+                "Yes" => (int)ChildIsDependent.Yes,
+                "No" => (int)ChildIsDependent.No,
+                _ => (int)ChildIsDependent.IDontKnow,
+            };
         }
         public static MicrosoftDynamicsCRMssgCsrschild ToDynamicsModel(this Child child)
         {

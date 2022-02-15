@@ -12,15 +12,12 @@ namespace Csrs.Api.Features.Accounts
     {
         public class Request : IRequest<Response>
         {
-            public Request(ClaimsPrincipal user, CSRSAccount csrsaccount)
+            public Request(CSRSAccount csrsaccount)
             {
-                User = user ?? throw new ArgumentNullException(nameof(user));
                 CsrsAccount = csrsaccount ?? throw new ArgumentNullException(nameof(csrsaccount));
             }
 
-            public ClaimsPrincipal User { get; init; }
             public CSRSAccount CsrsAccount { get; init; }
-
         }
 
         public class Response
