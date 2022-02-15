@@ -27,13 +27,13 @@ namespace Csrs.Api.Services
                 List<string> expand = new List<string> { "owninguser", "owningteam" };
                 MicrosoftDynamicsCRMssgCsrsfile file = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, null, expand: expand, cancellationToken);
                 task.RegardingobjectidSsgCsrsfile = file;
-                if (file.Owninguser is null)
+                if (file.Owninguser is not null)
                 {
-                    task.Owninguser = file.Owninguser;
+                    task.OwninguserTask = file.Owninguser;
                 } 
-                else if (file.Owningteam is null)
+                else if (file.Owningteam is not null)
                 {
-                    task.Owningteam = file.Owningteam;
+                    task.OwningteamTask = file.Owningteam;
                 }
             }
             catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
@@ -41,6 +41,7 @@ namespace Csrs.Api.Services
                 _logger.LogError("Provided fileId not found");
                 throw;
             }
+
 
             await _dynamicsClient.Tasks.CreateAsync(task);
 
