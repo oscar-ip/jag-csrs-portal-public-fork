@@ -42,5 +42,8 @@ namespace Csrs.Interfaces.Dynamics.Models
         [JsonProperty(PropertyName = "ssg_Payor@odata.bind")]
         public string SsgPayorODataBind { get; set; }
 
+        [JsonProperty(PropertyName = "ownerid@odata.bind")]
+        public string OwnerIdODataBind { get; set; }
+
     }
 }

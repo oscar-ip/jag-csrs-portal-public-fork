@@ -1,5 +1,7 @@
 using MediatR;
 
+//UNUSED CODE/CLASS
+//Files list obtained from AccountSummary
 namespace Csrs.Api.Features.Files
 {
     public static class ListApplications

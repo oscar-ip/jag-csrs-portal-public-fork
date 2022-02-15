@@ -50,13 +50,17 @@ namespace Csrs.Api.Controllers
         /// <param name="documentType"></param>
         /// <returns></returns>
         [HttpGet("GetAttachmentList")]
-        public async Task<IList<FileSystemItem>> GetAttachmentList([Required] string entityId, [Required] string entityName, [Required] string documentType)
+        [ProducesResponseType((int)HttpStatusCode.OK),
+         ProducesResponseType((int)HttpStatusCode.Unauthorized),
+         ProducesResponseType((int)HttpStatusCode.NotFound),
+         ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetAttachmentList([Required] string entityId, [Required] string entityName, [Required] string documentType)
         {
 
             ListDocuments.Request request = new ListDocuments.Request(entityId, entityName, documentType);
             ListDocuments.Response response = await _mediator.Send(request);
 
-            return response.Attachments;
+            return response.Attachments.Count > 0 ? Ok(response.Attachments) : NotFound();
         }
 
     }

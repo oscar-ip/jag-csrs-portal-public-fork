@@ -1,0 +1,14 @@
+<svg id="post_add_black_24dp" xmlns="http://www.w3.org/2000/svg" width="97" height="97" viewBox="0 0 97 97">
+  <g id="Group_18" data-name="Group 18">
+    <rect id="Rectangle_857" data-name="Rectangle 857" width="97" height="97" fill="none"/>
+  </g>
+  <g id="Group_20" data-name="Group 20" transform="translate(12.063 8.042)">
+    <g id="Group_19" data-name="Group 19">
+      <path id="Path_100" data-name="Path 100" d="M59.292,62.176H11.042V13.042H39.188V5H11.042A8.065,8.065,0,0,0,3,13.042v48.25a8.065,8.065,0,0,0,8.042,8.042h48.25a8.065,8.065,0,0,0,8.042-8.042V33.146H59.292Z" transform="translate(-3 7.062)" fill="#036"/>
+      <path id="Path_101" data-name="Path 101" d="M34.1,2H26.063V14.063H14c.04.04,0,8.042,0,8.042H26.063V34.126c.04.04,8.042,0,8.042,0V22.1H46.167V14.063H34.1Z" transform="translate(30.229 -2)" fill="#036"/>
+      <rect id="Rectangle_858" data-name="Rectangle 858" width="32" height="8" transform="translate(15.938 27.958)" fill="#036"/>
+      <path id="Path_102" data-name="Path 102" d="M7,12v8.042H39.167V12H7Z" transform="translate(9.083 28.208)" fill="#036"/>
+      <rect id="Rectangle_859" data-name="Rectangle 859" width="32" height="8" transform="translate(15.938 51.958)" fill="#036"/>
+    </g>
+  </g>
+</svg>

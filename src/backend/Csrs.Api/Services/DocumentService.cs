@@ -64,11 +64,35 @@ namespace Csrs.Api.Services
         {
             if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return new List<FileSystemItem>();
 
-            var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
+            string folderName;
 
-            if (dynamicsFile is null) return new List<FileSystemItem>();
+            switch (entityName.ToLower())
+            {
+                case "ssg_csrsfile":
 
-            return await GetListFilesInFolder(entityId, entityName, documentType, dynamicsFile, cancellationToken);
+                    var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
+
+                    if (dynamicsFile is null) return new List<FileSystemItem>();
+
+                    folderName = dynamicsFile.GetDocumentFolderName();
+
+                    break;
+
+                case "ssg_csrscommunicationmessage":
+
+                    var message = await CanAccessMessageDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
+                    
+                    if (message is null) return new List<FileSystemItem>();
+
+                    folderName = message.GetDocumentFolderName();
+                    
+                    break;
+
+                default: return new List<FileSystemItem>();
+            }
+
+            return await GetListFilesInFolder(entityId, entityName, documentType, folderName, cancellationToken);
+
         }
 
         public async Task<IActionResult> UploadAttachment(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
@@ -126,8 +150,10 @@ namespace Csrs.Api.Services
         /// <param name="entityId"></param>
         /// <param name="entityName"></param>
         /// <param name="documentType"></param>
+        /// <param name="folderName"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType, MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, CancellationToken cancellationToken)
+        private async Task<List<FileSystemItem>> GetListFilesInFolder(string entityId, string entityName, string documentType, string folderName, CancellationToken cancellationToken)
         {
             var fileSystemItemVMList = new List<FileSystemItem>();
 
@@ -145,7 +171,7 @@ namespace Csrs.Api.Services
                         DocumentType = documentType,
                         EntityId = entityId,
                         EntityName = entityName,
-                        FolderName = dynamicsFile.GetDocumentFolderName()
+                        FolderName = folderName
                     };
 
                     var result = _fileManagerClient.FolderFiles(request);
@@ -206,6 +232,17 @@ namespace Csrs.Api.Services
 
             return await _dynamicsClient.GetFileByPartyAndId(partyId, entityId, cancellationToken);
 
+        }
+
+        private async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessage> CanAccessMessageDocument(string entityId, string BCeIDUserId, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(BCeIDUserId)) return null;
+
+            string partyId = await _dynamicsClient.GetPartyIdByBCeIdAsync(BCeIDUserId, cancellationToken);
+
+            if (partyId is null) return null;
+
+            return await _dynamicsClient.GetCommunicationMessagesByPartyAndIdAsync(partyId, entityId, cancellationToken);
         }
 
         private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName, CancellationToken cancellationToken)

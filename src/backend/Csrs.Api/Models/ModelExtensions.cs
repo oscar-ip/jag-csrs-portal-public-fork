@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Globalization;
 using System.ComponentModel;
 using System.Linq;
+using Csrs.Services.FileManager;
 
 namespace Csrs.Api.Models
 {
@@ -192,7 +193,7 @@ namespace Csrs.Api.Models
             return viewModel;
         }
 
-        public static Message ToViewModel(MicrosoftDynamicsCRMssgCsrscommunicationmessage inMessage, List<Document> documents)
+        public static Message ToViewModel(MicrosoftDynamicsCRMssgCsrscommunicationmessage inMessage, IList<FileSystemItem> documents)
         {
             Message message = new Message();
 

@@ -23,13 +23,10 @@ namespace Csrs.Interfaces.Dynamics.Extensions
         {
             ArgumentNullException.ThrowIfNull(entity);
 
-            // TODO
+            string idCleaned = CleanGuidForSharePoint(entity.SsgCsrscommunicationmessageid);
+            string folderName = $"{entity.SsgCsrsmessagesubject}_{idCleaned}";
+            return folderName;
 
-            //string idCleaned = CleanGuidForSharePoint(entity.SsgCsrscommunicationmessageid);
-            //string folderName = $"{entity.SsgFilenumber}_{idCleaned}";
-            //return folderName;
-
-            return null;
         }
 
         public static string CleanGuidForSharePoint(string guidString)

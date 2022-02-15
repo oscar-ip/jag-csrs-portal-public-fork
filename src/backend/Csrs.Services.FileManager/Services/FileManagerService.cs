@@ -131,8 +131,8 @@ namespace Csrs.Services.FileManager
             string listTitle;
             switch (entityName.ToLower())
             {
-                case "account":
-                    listTitle = SharePointFileManager.DefaultDocumentListTitle;
+                case "ssg_csrscommunicationmessage":
+                    listTitle = "CSRS Communication Message";
                     break;
                 case "ssg_csrsfile":
                     listTitle = "CSRS File";
@@ -168,8 +168,8 @@ namespace Csrs.Services.FileManager
             var listTitle = "";
             switch (entityName.ToLower())
             {
-                case "account":
-                    listTitle = SharePointFileManager.DefaultDocumentUrlTitle;
+                case "ssg_csrscommunicationmessage":
+                    listTitle = "ssg_csrscommunicationmessage";
                     break;
                 case "ssg_csrsfile":
                     listTitle = "ssg_csrsfile";
