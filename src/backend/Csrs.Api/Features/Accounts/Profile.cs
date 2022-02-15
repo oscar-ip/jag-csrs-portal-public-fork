@@ -65,7 +65,7 @@ namespace Csrs.Api.Features.Accounts
                 {
                     // no bceid value
                     _logger.LogInformation("No BCeID on authenticated user, cannot User Request");
-                    throw new HttpOperationException("Unauthenticated");
+                    return Response.Empty;
                 }
 
                 Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);

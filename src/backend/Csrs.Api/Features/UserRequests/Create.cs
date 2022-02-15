@@ -62,7 +62,7 @@ namespace Csrs.Api.Features.UserRequests
                 if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot User Request");
-                    throw new HttpOperationException("Unauthenticated");
+                    return new Response("Unauthenticated");
                 }
                 var bceidScope = _logger.AddBCeIdGuid(userId);
                 // find to see if the person has an account already?
@@ -75,7 +75,7 @@ namespace Csrs.Api.Features.UserRequests
                 else
                 {
                     _logger.LogInformation("No associated party, cannot create User Request");
-                    throw new HttpOperationException("No Party Associated");
+                    return new Response("No Party Associated");
                 }
                 _logger.LogInformation("Creating User Request");
                 MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();

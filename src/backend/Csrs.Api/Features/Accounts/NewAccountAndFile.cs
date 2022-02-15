@@ -69,7 +69,7 @@ namespace Csrs.Api.Features.Accounts
                 if (string.IsNullOrEmpty(userId))
                 {
                     _logger.LogInformation("No BCeID on authenticated user, cannot create account");
-                    throw new HttpOperationException("Unauthenticated");
+                    return new Response(String.Empty, String.Empty, String.Empty);
                 }
 
                 var bceidScope = _logger.AddBCeIdGuid(userId);
