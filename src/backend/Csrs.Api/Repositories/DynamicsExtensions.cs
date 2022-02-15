@@ -210,16 +210,13 @@ namespace Csrs.Interfaces.Dynamics
             return files;
         }
 
-        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessage> GetCommunicationMessagesPartyAndId(this IDynamicsClient dynamicsClient, string partyId, string messageId, CancellationToken cancellationToken)
+        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessage> GetCommunicationMessagesByPartyAndIdAsync(this IDynamicsClient dynamicsClient, string partyId, string messageId, CancellationToken cancellationToken)
         {
 
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
-            if (string.IsNullOrEmpty(partyId) || string.IsNullOrEmpty(messageId))
-            {
-                return null;
-            }
-
+            partyId = GuidGuard(partyId);
+            messageId = GuidGuard(messageId);
 
             var filter = $"(_ssg_toparty_value eq {partyId} or _ssg_fromparty_value eq {partyId}) and ssg_csrscommunicationmessageid eq {messageId}";
             var select = new List<string> { "ssg_csrscommunicationmessageid" , "ssg_csrsmessagesubject" };
@@ -324,6 +321,9 @@ namespace Csrs.Interfaces.Dynamics
 
         public static async Task<string?> GetSharepointDocumentLocationIdByRelatveUrlAsync(this IDynamicsClient dynamicsClient, string relativeUrl, CancellationToken cancellationToken)
         {
+
+            relativeUrl = Escape(relativeUrl);
+            
             var filter = $"relativeurl eq '{relativeUrl}'";
             var select = new List<string> { "sharepointdocumentlocationid" };
 

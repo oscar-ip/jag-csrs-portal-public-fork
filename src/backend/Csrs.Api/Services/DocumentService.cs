@@ -238,7 +238,7 @@ namespace Csrs.Api.Services
 
             if (partyId is null) return null;
 
-            return await _dynamicsClient.GetCommunicationMessagesPartyAndId(partyId, entityId, cancellationToken);
+            return await _dynamicsClient.GetCommunicationMessagesByPartyAndIdAsync(partyId, entityId, cancellationToken);
         }
 
         private async Task CreateAccountDocumentLocation(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, string folderName, CancellationToken cancellationToken)
