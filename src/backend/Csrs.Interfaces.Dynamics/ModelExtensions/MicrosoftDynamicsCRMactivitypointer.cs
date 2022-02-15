@@ -8,7 +8,7 @@ namespace Csrs.Interfaces.Dynamics.Models
     {
     }
 
-    [MetadataType(typeof(MicrosoftDynamicsCRMactivitypointerMetadata))]
+    
     public partial class MicrosoftDynamicsCRMactivitypointer
     {
 

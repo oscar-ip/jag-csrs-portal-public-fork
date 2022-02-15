@@ -73,7 +73,7 @@ namespace Csrs.Api.Features.Accounts
                 if (accountParty == null)
                 {
                     _logger.LogInformation("No Party Associated, cannot User Request");
-                    throw new HttpOperationException("No Party Associated");
+                    return Response.Empty;
                 }
 
                 AccountFileSummary summary = new AccountFileSummary();

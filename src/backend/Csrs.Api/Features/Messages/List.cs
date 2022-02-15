@@ -61,7 +61,7 @@ namespace Csrs.Api.Features.Messages
                 {
                     // no bceid value
                     _logger.LogInformation("No BCeID on authenticated user, cannot fetch messages");
-                    throw new HttpOperationException("Unauthenticated");
+                    return Response.Empty;
                 }
 
                 Party? accountParty = await _accountService.GetPartyByBCeIdAsync(userId, cancellationToken);
@@ -69,7 +69,7 @@ namespace Csrs.Api.Features.Messages
                 if (accountParty == null)
                 {
                     _logger.LogInformation("No Party Associated, cannot fetch messages");
-                    throw new HttpOperationException("Unauthenticated");
+                    return Response.Empty;
                 }
 
                 IList<Message> messages = await _messageService.GetPartyMessages(accountParty.PartyId, cancellationToken);

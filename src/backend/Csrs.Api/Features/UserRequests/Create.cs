@@ -80,7 +80,6 @@ namespace Csrs.Api.Features.UserRequests
                 _logger.LogInformation("Creating User Request");
                 MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
                 task.Activitytypecode = "task";
-                task.ownin
                 task.Subject = "File " + request.FileNo + " - " + request.RequestType;
                 string desc = "Party: " + party.SsgBceidDisplayname + "\n"+
                               "Message: "+request.RequestMessage;
@@ -99,11 +98,20 @@ namespace Csrs.Api.Features.UserRequests
                 }
                 if (originFile != null)
                 {
-                    //This OWNERID relationship IS DIFFERENT AND DOES USE select systemusers by ownerid
-                    //SystemUser is just a child of Principal
-                    //This was verified by dynamics team and does not work correct if you principals
-                    //As per Burak/Dynmiacs team we should never touch principals. 
-                    task.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owneridValue);
+                    if (originFile._owninguserValue != null)
+                    {
+                        task.OwninguserTaskODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owninguserValue);
+                    }
+                    else if (originFile._owningteamValue != null)
+                    {
+                        task.OwningteamTaskODataBind = _dynamicsClient.GetEntityURI("teams", originFile._owningteamValue);
+                    }
+                    else
+                    {
+                        _logger.LogInformation("File has no owner, cannot create User Request");
+                        return new Response("File has no owner");
+                    }
+                    // task.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owneridValue);
                     task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);
                 }
                 task.Prioritycode = 1;
