@@ -12,7 +12,7 @@ namespace Csrs.Interfaces.Dynamics.Models
     /// <summary>
     /// Microsoft.Dynamics.CRM.StateOptionMetadata
     /// </summary>
-    public partial class MicrosoftDynamicsCRMStateOptionMetadata
+    public partial class MicrosoftDynamicsCRMStateOptionMetadata : MicrosoftDynamicsCRMOptionMetadata
     {
         /// <summary>
         /// Initializes a new instance of the
@@ -27,7 +27,8 @@ namespace Csrs.Interfaces.Dynamics.Models
         /// Initializes a new instance of the
         /// MicrosoftDynamicsCRMStateOptionMetadata class.
         /// </summary>
-        public MicrosoftDynamicsCRMStateOptionMetadata(int? defaultStatus = default(int?), string invariantName = default(string))
+        public MicrosoftDynamicsCRMStateOptionMetadata(int? value = default(int?), string label = default(string), string description = default(string), string color = default(string), bool? isManaged = default(bool?), string externalValue = default(string), string metadataId = default(string), bool? hasChanged = default(bool?), int? defaultStatus = default(int?), string invariantName = default(string))
+            : base(value, label, description, color, isManaged, externalValue, metadataId, hasChanged)
         {
             DefaultStatus = defaultStatus;
             InvariantName = invariantName;

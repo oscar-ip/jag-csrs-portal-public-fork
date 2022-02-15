@@ -1,7 +1,7 @@
 # This is the workflow that creates a new image for CSRS front end
 # Credit goes to Suganth /his CDDS and SCSS templates
 
-name: Main - Build Image and Push to Openshift Registry for Dev Deployment
+name: Frontend - Build Frontend Image and Push to Openshift Registry for Dev Deployment
 
 # Controls when the workflow will run
 on:

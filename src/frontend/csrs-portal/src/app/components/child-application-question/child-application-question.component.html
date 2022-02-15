@@ -72,7 +72,7 @@
 
         <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
           <form [formGroup]="secondFormGroup">
-            <ng-template matStepLabel>Your Personal Information</ng-template>            
+            <ng-template matStepLabel>Your Personal Information</ng-template>
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
@@ -157,8 +157,8 @@
                 <mat-form-field class="w-100">
                   <mat-label>Province<span class="text-danger">*</span></mat-label>
                   <mat-select formControlName="province">
-                    <mat-option *ngFor="let provinceName of provinceData; index as pi" [value]="provinceName.value">
-                      {{ provinceName.value }}
+                    <mat-option *ngFor="let province of provinces; index as pi" [value]="province.id">
+                      {{ province.value }}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -221,8 +221,8 @@
                 <mat-form-field class="w-100">
                   <mat-label>Gender</mat-label>
                   <mat-select formControlName="gender">
-                    <mat-option *ngFor="let genderValue of genderData; index as pi" [value]="genderValue.value">
-                      {{ genderValue.value }}
+                    <mat-option *ngFor="let gender of genders; index as pi" [value]="gender.id">
+                      {{ gender.value }}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -236,8 +236,8 @@
                 <mat-form-field class="w-100">
                   <mat-label>Identity</mat-label>
                   <mat-select formControlName="identity">
-                    <mat-option *ngFor="let idenityName of identityData; index as pi" value="identityName.value">
-                      {{ idenityName.value }}
+                    <mat-option *ngFor="let identity of identities; index as pi" [value]="identity.id">
+                      {{ identity.value }}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -348,8 +348,8 @@
                   <mat-label>Province</mat-label>
 
                   <mat-select formControlName="province">
-                    <mat-option *ngFor="let provinceName of provinceData; index as pi" [value]="provinceName.value">
-                      {{ provinceName.value }}
+                    <mat-option *ngFor="let province of provinces; index as pi" [value]="province.id">
+                      {{ province.value }}
                     </mat-option>
                   </mat-select>
 
@@ -412,14 +412,14 @@
                 <mat-form-field class="w-100">
                   <mat-label>Gender</mat-label>
                   <mat-select formControlName="gender">
-                    <mat-option *ngFor="let genderValue of genderData; index as pi" value='genderValue.value'>
-                      {{genderValue.value}}
+                    <mat-option *ngFor="let gender of genders; index as pi" [value]="gender.id">
+                      {{gender.value}}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
-           
+
           </div>
           <mat-divider></mat-divider>
           <div class="nextButton">
@@ -524,8 +524,8 @@
                 <span>Court location</span>
                 <mat-form-field class="w-100">
                   <mat-select formControlName="courtLocation">
-                    <mat-option *ngFor="let locationValue of courtLocationsData; index as pi" value='locationValue.value'>
-                      {{locationValue.ssg_bccourtlocationname}}
+                    <mat-option *ngFor="let courtLocation of courtLocations; index as pi" [value]="courtLocation.id">
+                      {{courtLocation.value}}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -609,7 +609,7 @@
                 <mat-label>If yes, please provide any details including if there any
                   protection orders in place involving you or the other
                   party?</mat-label>
-                <input matInput #input/>
+                <input formControlName="childSafetyDescription" matInput #input/>
               </mat-form-field>
             </div>
             <div class="row text-dark mt-2">
@@ -666,9 +666,9 @@
               <span>How did you hear about the Child Support Recalculation Service (CSRS)?</span>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-select formControlName="referals">
-                    <mat-option *ngFor="let referalsValue of referalsData; index as pi" value='referalsValue.value'>
-                      {{referalsValue.value}}
+                  <mat-select formControlName="referral">
+                    <mat-option *ngFor="let referral of referrals; index as pi" [value]="referral.id">
+                      {{referral.value}}
                     </mat-option>
                   </mat-select>
                   <mat-error>{{ "error.required" | translate }}</mat-error>
@@ -1109,7 +1109,7 @@
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
-                    My FMEP file number is: 
+                    My FMEP file number is:
                   </div>
                 </div>
                 <div class="col-md-2 stepRow ">
@@ -1124,7 +1124,7 @@
                 </div>
                 <div class="col-md-2 stepRow ">
                   <div class="bold">{{(sixFormGroup.value.incomeAssistance)?sixFormGroup.value.incomeAssistance:'-'}}</div>
-v                </div>
+                </div>
               </div>
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
@@ -1183,7 +1183,7 @@ v                </div>
             >All of the information above is correct to the best of my knowledge</mat-checkbox>
             <app-alert type="warning" icon="info">
               <ng-container #alertContent class="alert-content">
-                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission. 
+                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission.
                 </strong>
               </ng-container>
             </app-alert>
@@ -1195,17 +1195,20 @@ v                </div>
               <!-- <button mat-flat-button color="primary" matStepperPrevious>
                 Save my application for later
               </button> -->
-              <button routerLink="/communication" class="submitStep" mat-stroked-button color="basic" matStepperNext>
+              <button routerLink="/communication" class="submitStep" mat-stroked-button color="basic" matStepperNext
+              (click)="saveLater()">
                 Submit Application
               </button>
             </div>
           </form>
         </mat-step>
       </mat-stepper>
-      <!-- <div>
+      <!--
+      <div>
         <button mat-button (click)="saveLater()">Save fot later</button>
         <button mat-button (click)="save()">Save</button>
-      </div> -->
+      </div>
+    -->
     </div>
   </section>
 </div>

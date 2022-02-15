@@ -85,6 +85,7 @@ public static class WebApplicationBuilderExtensions
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<ILookupService, LookupService>();
         services.AddTransient<IDocumentService, DocumentService>();
 
     }

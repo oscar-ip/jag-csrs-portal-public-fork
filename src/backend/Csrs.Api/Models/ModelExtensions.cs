@@ -47,10 +47,8 @@ namespace Csrs.Api.Models
         {
             MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty
             {
-
                 Statecode = 0,
                 Statuscode = 1,
-                //SsgIncomeassistance = ssgIncomeassistance;
                 SsgReferral = party.Referral?.Id,
                 SsgCellphone = party.CellPhone,
                 SsgFirstname = party.FirstName,
@@ -73,15 +71,62 @@ namespace Csrs.Api.Models
                 //SsgPortalaccess = ssgPortalaccess, ????
                 SsgIdentity = party.Identity?.Id,
                 //SsgIdentityotherdetails = ssgIdentityotherdetails, ???
-                SsgStreet1 = party.AddressStreet1
+                SsgStreet1 = party.AddressStreet1,
+                SsgIncomeassistance = party.IncomeAssistance
             };
             return dynamicsParty;
         }
 
-        public static async Task<MicrosoftDynamicsCRMssgCsrsfile> ToDynamicsModel(this File file, IDynamicsClient dynamicsClient, CancellationToken cancellationToken)
+
+        public static async Task<File> ToViewModelAsync(MicrosoftDynamicsCRMssgCsrsfile dynamicsFile, IDynamicsClient dynamicsClient, IMemoryCache cache, CancellationToken cancellationToken)
         {
-            string courtlevelId = await GetCourtLevelValueAsync(dynamicsClient, file.BCCourtLevel, cancellationToken);
-            string courtLocationId = await GetCourtLocationValueAsync(dynamicsClient, file.BCCourtLocation, cancellationToken);
+            return null;
+        }
+
+        private static int? GetSection7Expenses(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+            return value switch
+            {
+                "Yes" => (int)Section7Expenses.Yes,
+                "No" => (int)Section7Expenses.No,
+                _ => (int)Section7Expenses.IDontKnow,
+            };
+        }
+
+        private static int? GetPartyEnrolled(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+            return value switch
+            {
+                "Recipient" => (int)PartyEnrolled.Recipient,
+                "Payor" => (int)PartyEnrolled.Payor,
+                _ => null,
+            };
+        }
+
+        private static bool? ConvertToBool(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+            return value switch
+            {
+                "Yes" => true,
+                "No"  => false,
+                _     => null,
+            };
+        }
+
+        public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this File file)
+        {
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
@@ -99,19 +144,35 @@ namespace Csrs.Api.Models
                 SsgIncomeonorder = ToDecimal(file.IncomeOnOrder),
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
 
+                SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
+
                 //SsgSharedparenting = true; ???
                 //SsgSplitparentingarrangement = true; ??
                 //SsgRegistrationdate = ConvertToDTOffset(file.), ??
                 //SsgStyleofcauseapplicant = "Applicant", ??
                 //SsgStyleofcauserespondent = "Respondent", ??
-
-                SsgBCCourtLevelODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtlevelId),
-                SsgBCCourtLocationODataBind = dynamicsClient.GetEntityURI("ssg_csrsfiles", courtLocationId),
-
+                    
             };
-            return dynamicsFile;
+            
+            return  dynamicsFile;
         }
 
+        public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this CSRSAccountFile file)
+        {
+            MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
+            {
+                SsgCsrsfileid = file.FileId,
+                SsgFmepfileactive = ConvertToBool(file.IsFMEPFileActive),
+                SsgFmepfilenumber = file.FMEPFileNumber,
+                SsgSafetyalert = ConvertToBool(file.SafetyAlertRecipient),
+                SsgSafetyconcerndescription = file.RecipientSafetyConcernDescription,
+                SsgSafetyalertpayor = ConvertToBool(file.SafetyAlertPayor),
+                SsgPayorssafetyconcerndescription = file.PayorSafetyConcernDescription,
+            };
+
+            return dynamicsFile;
+        }
+        
         public static MicrosoftDynamicsCRMssgCsrschild ToDynamicsModel(this Child child)
         {
             MicrosoftDynamicsCRMssgCsrschild dynamicsChild = new MicrosoftDynamicsCRMssgCsrschild
@@ -179,35 +240,7 @@ namespace Csrs.Api.Models
 
             return null;
         }
-        private static int? GetSection7Expenses(string? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return value switch
-            {
-                "Yes" => (int)Section7Expenses.Yes,
-                "No" => (int)Section7Expenses.No,
-                _ => (int)Section7Expenses.IDontKnow,
-            };
-        }
-
-        private static int? GetPartyEnrolled(string? value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            return value switch
-            {
-                "Recipient" => (int)PartyEnrolled.Recipient,
-                "Payor" => (int)PartyEnrolled.Payor,
-                _ => null
-            };
-        }
+        
 
         private static bool? ToBoolean(string? value)
         {
@@ -251,6 +284,7 @@ namespace Csrs.Api.Models
             var value = values.Where(_ => _.Id == id.Value).SingleOrDefault();
             return value;
         }
+
 
         private static async Task<string?> GetCourtLocationValueAsync(IDynamicsClient dynamicsClient, string? label, CancellationToken cancellationToken)
         {

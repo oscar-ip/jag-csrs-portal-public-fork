@@ -84,11 +84,16 @@ objects:
           app.kubernetes.io/instance: ${COMPONENT_NAME}
           app.openshift.io/runtime: angularjs
       spec:
+        volumes:
+          - name: volume-oidc-config
+            configMap:
+              name: oidc-config
+              defaultMode: 420
         containers:
           # due to permission issue not using tools space; dev is pulling from dev
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_ENV}/${APP_NAME}:${OC_ENV}
-            name: ${COMPONENT_NAME} 
+            name: ${COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
               - containerPort: 8080
@@ -110,13 +115,17 @@ objects:
                   key: SPLUNK_INDEX
             - name: BCEID_URL
               value: ${BCEID_URL}
+            # Yet to deal with proper resource allocation
             resources:
               limits:
-                cpu: 250m
+                cpu: 500m
                 memory: 1000Mi
               requests:
-                cpu: 125m
+                cpu: 250m
                 memory: 512Mi
+            volumeMounts:
+              - name: volume-oidc-config
+                mountPath: /usr/share/nginx/html/assets/config/
             # Took away readiness and liveness probe until those end points are ready
     triggers:
       - type: ConfigChange
@@ -127,10 +136,10 @@ objects:
             - ${COMPONENT_NAME}
           from:
             kind: ImageStreamTag
-            namespace: ${OC_NAMESPACE}-${OC_ENV} #do not have permission to leverage tools
+            namespace: ${OC_NAMESPACE}-${OC_ENV} #did not have permission to leverage tools
+            # need to update it to use tools space
             name: ${COMPONENT_NAME}:${OC_ENV}
   status: {}
-
 
 
 ### JAG-csrs Service ###
@@ -160,14 +169,20 @@ objects:
     haproxy.router.openshift.io/disable_cookies: "true"
     # balance algorithm
     haproxy.router.openshift.io/balance: roundrobin
+    # Needed only for DEV and TEST to restrict traffic
+    haproxy.router.openshift.io/ip_whitelist: ${CIDR_NOTATION}
   spec:
     host: ${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
     to:
       kind: Service
       name: ${COMPONENT_NAME}
     port:
-      targetPort: http
+     targetPort: http
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
+      # Volume mount of secret on route Not allowed yet https://stackoverflow.com/a/62571080
+      # However we can do variable substitution in template https://stackoverflow.com/a/69002769
+      certificate: ${CERT}
+      key: ${KEY}
     wildcardPolicy: None

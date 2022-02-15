@@ -51,7 +51,14 @@ namespace Csrs.Api.Services
             IList<LookupValue>? values = await GetPicklistOptionSetMetadataAsync("ssg_csrsparty", "ssg_referral", cancellationToken);
             return values;
         }
-        
+        public async Task<IList<LookupValue>> GetCourtFileTypesAsync(CancellationToken cancellationToken)
+        {
+            IList<LookupValue>? values = await GetPicklistOptionSetMetadataAsync("ssg_csrsfile", "ssg_referral", cancellationToken);
+            return values;
+        }
+
+
+
         public async Task<Party?> GetPartyByBCeIdAsync(string bceidGuid, CancellationToken cancellationToken)
         {
             using var scope = _logger.AddBCeIdGuid(bceidGuid);
@@ -66,6 +73,34 @@ namespace Csrs.Api.Services
             var party = await parties.Value[0].ToViewModelAsync(_dynamicsClient, _cache, cancellationToken);
             return party;
         }
+
+        public async Task<CSRSPartyFileIds> GetPartyFileIdsByBCeIdAndCSRSAccountAsync(string bceidGuid, CSRSAccount account, CancellationToken cancellationToken)
+        {
+            using var scope = _logger.AddBCeIdGuid(bceidGuid);
+
+            CSRSPartyFileIds result = new CSRSPartyFileIds();
+
+            var parties = await _dynamicsClient.GetPartyByBCeIdAndRefenceNumberAsync(bceidGuid, account.ReferenceNumber, cancellationToken);
+
+            if (parties.Value == null || parties.Value.Count == 0)
+            {
+                return result;
+            }
+
+            result.PartyId = parties.Value[0].SsgCsrspartyid;
+
+            var files = await _dynamicsClient.GetFileByPartyIdAndFileNumber(result.PartyId, account.FileNumber, cancellationToken);
+
+            if (files.Value == null || files.Value.Count == 0)
+            {
+                return result;
+            }
+
+            result.FileId = files.Value[0].SsgCsrsfileid;
+
+            return result;
+        }
+
 
         public async Task<Party> CreateOrUpdateAsync(Party party, CancellationToken cancellationToken)
         {
@@ -92,5 +127,6 @@ namespace Csrs.Api.Services
             var values = metadata.ToViewModel();
             return values;
         }
-    }
+
+    }  
 }

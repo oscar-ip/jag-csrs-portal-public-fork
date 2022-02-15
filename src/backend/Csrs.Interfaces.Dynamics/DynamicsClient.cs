@@ -66,11 +66,6 @@ namespace Csrs.Interfaces.Dynamics
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Gets the IActivitypointers.
-        /// </summary>
-        public virtual IActivitypointers Activitypointers { get; private set; }
-
-        /// <summary>
         /// Gets the ISharepointdocumentlocations.
         /// </summary>
         public virtual ISharepointdocumentlocations Sharepointdocumentlocations { get; private set; }
@@ -361,7 +356,6 @@ namespace Csrs.Interfaces.Dynamics
         /// </summary>
         private void Initialize()
         {
-            Activitypointers = new Activitypointers(this);
             Sharepointdocumentlocations = new Sharepointdocumentlocations(this);
             Sharepointsites = new Sharepointsites(this);
             Ssgcsrsbccourtlevels = new Ssgcsrsbccourtlevels(this);
