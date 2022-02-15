@@ -21,16 +21,21 @@ import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-d
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
+import { Router, ActivatedRoute } from "@angular/router";
 
 // -- import data structure
 import {
   NewFileRequest,
   PartyRole,
   FileStatus,
-  Party,
   Child,
   LookupValue,
-  CourtLookupValue
+  CourtLookupValue,
+  CSRSPartyFileIds,
+  CSRSAccount,
+  CSRSAccountRequest,
+  Party,
+  CSRSAccountFile
   } from 'app/api/model/models';
 
 import { DatePipe } from '@angular/common';
@@ -60,13 +65,27 @@ export class ApplicationFormStepperComponent implements OnInit {
 
   data: any = null;
 
+  csrsPartyFileIds: CSRSPartyFileIds = null;
+  csrsAccount: CSRSAccount = null;
+  csrsAccountRequest: CSRSAccountRequest = null;
+  party: Party = null;
+  csrsAccountFile: CSRSAccountFile = null;
+
+  partyId: any = '';
+  fileId: any = '';
+
+
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
       @Inject(LookupService) private lookupService,
       @Inject(LoggerService) private logger,
       @Inject(OidcSecurityService) private oidc,
       public dialog: MatDialog,
-      private datePipe: DatePipe) {}
+      private datePipe: DatePipe,
+      private route: ActivatedRoute) {
+        this.partyId = this.route.snapshot.paramMap.get('partyId');
+        this.fileId = this.route.snapshot.paramMap.get('partyId');
+      }
 
   ngOnInit() {
 
@@ -80,6 +99,8 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.getProvinces();
     this.getGenders();
     this.getPreferredcontactmethods();
+    // --- check account
+
 
     this.secondFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
@@ -254,6 +275,7 @@ export class ApplicationFormStepperComponent implements OnInit {
       eFormGroup: this.eFormGroup.value,
       nineFormGroup: this.nineFormGroup.value,
     };
+
     this.logger.info("formData", formData);
     this.prepareData();
     localStorage.setItem('formData', JSON.stringify(formData));

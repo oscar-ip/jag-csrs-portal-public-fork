@@ -58,7 +58,8 @@ namespace Csrs.Api.Features.Accounts
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                string userId = _userService.GetBCeIDUserId();
+                //string userId = _userService.GetBCeIDUserId();
+                string userId = "26336072-cba4-4b6e-871b-5355d27df9b3";
                 if (userId == string.Empty)
                 {
                     // no bceid value
