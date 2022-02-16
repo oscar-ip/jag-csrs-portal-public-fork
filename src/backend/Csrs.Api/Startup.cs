@@ -58,7 +58,6 @@ public static class Startup
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement { {
             new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } }, new string[] { } } });
-            
             c.EnableAnnotations();
 
             // Set the comments path for the Swagger JSON and UI.
