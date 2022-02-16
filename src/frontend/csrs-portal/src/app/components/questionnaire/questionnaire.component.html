@@ -37,7 +37,8 @@
       <div class="flex-6-col">
          <mat-vertical-stepper #stepper linear>
             <ng-template matStepperIcon="edit" let-index="index">
-             <mat-icon>{{data[index].clicked == 'Yes'&& data[index].submit ? 'done' : data[index].clicked == 'No' ? 'clear':'edit'}}</mat-icon>             </ng-template>
+ 
+             <mat-icon >{{setUIconColor1(index, data[index])}}</mat-icon>             </ng-template>
             <mat-step class="notSelected" *ngFor="let question of data; index as i;" [editable]="isEditable">
                <ng-template matStepLabel="" >
                   <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
@@ -49,7 +50,7 @@
                     <strong>{{contentItem.label}}</strong>
                      <ol type="a" *ngIf="contentItem.data">
                        <li *ngFor="let oiItem of contentItem.data.ol;index as oli ">
-                        <div style="display: flex;flex-direction: row;"><span class="list-item" id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" class="toolTipIcon">{{'info'}}</mat-icon></div>
+                        <div style="display: flex;flex-direction: row;"><span class="list-item" id="{{'ol-'+i+'-'+coi+'-'+oli}}">{{stringToHTML(i,coi,oli,oiItem.liData,'ol')}}</span><mat-icon *ngIf='oiItem.tooltipData' matTooltip="{{oiItem.tooltipData}}"  #tooltip3="matTooltip" class="toolTipIcon">{{'info'}}</mat-icon>{{stringToHTML(i,coi,oli,oiItem.liData1,'ol')}}</div>
                        </li>
                      </ol>
                   </div>
@@ -106,7 +107,7 @@
                       />
                     </span>
                     <div class="col-sm-10">
-                      <h1>Before you start your application, make sure you have:</h1>
+                      <h1 class="m-0"><strong> Before you start your application, make sure you have:</strong></h1>
                       <ul class="text-dark">
                         <li>
                           Contact information for you and the other party (to the best
@@ -123,7 +124,7 @@
                   create an account first.
                 </p>
                 <div class="flex-6-col">
-                  <mat-grid-list cols="6" rowHeight="60px" gutterSize="5px">
+                  <mat-grid-list cols="6" rowHeight="60px">
                     <mat-grid-tile
                       class="mi-tile-contents-center"
                       aria-rowindex="0"
@@ -132,8 +133,8 @@
                     >
                       <a class="useful-links bceIdLink" target="_blank" rel="noopener" (click)="login();">
                         <button
-                          style="width: 400px;margin-left:-170px;"
                           type="button"
+                          style="width: 480px"
                           mat-flat-button
                           color="primary"
                         >
@@ -149,7 +150,7 @@
                       rowspan="1"
                     >
                       <a class="useful-links bceIdLink" [attr.href]="bceIdRegisterLink" target="_blank" rel="noopener">
-                        <button style="width: 400px" mat-stroked-button color="primary">
+                        <button style="width: 480px" mat-stroked-button color="primary">
                           Register for a Basic BCeID
                         </button>
                       </a>
@@ -160,7 +161,7 @@
                   <div #alertContent class="alert-text2 row">
                     
                       <span class="text-dark"><strong style="color: #003366;"><img style="width: 2%;" src="/assets/PDF_icon.svg" /> Prefer a pdf to complete your application? </strong>
-                       You can download the PDF version of the application <a style="cursor:pointer; text-decoration: underline;" (click)="downloadApplication();">here</a> and mail the completed <br>   <span class="ml-3">package.</span></span>
+                       You can download the PDF version of the application <a style="cursor:pointer; text-decoration: underline;" (click)="downloadApplication();">here</a> and mail the completed <br>   <span style="padding-left: 24px;">package.</span></span>
                     </div>
                 </div>
                 <p>

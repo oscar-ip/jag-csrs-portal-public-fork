@@ -263,6 +263,10 @@ export class QuestionnaireComponent implements OnInit {
                 liData: '<strong>Payor stands in place of a parent.</strong>',
                 tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
+              {
+                liData: '<strong>Pattern of income</strong>',
+                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
+              },
             ],
           },
         },
@@ -272,7 +276,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service can only recalculate support based on the Child Support Guidelines.Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
+              data: '<span class="text-dark">The Child Support Recalculation Service can only recalculate support based on the Child Support Guidelines. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
             },
             {
               data: '<span class="text-dark">If your child support was based on any of the above, the recalculation service <strong>cannot</strong> recalculate it and you are not eligible for the service.',
@@ -283,7 +287,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service can only recalculate support based on the Child Support Guidelines.Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
+              data: '<span class="text-dark">The Child Support Recalculation Service can only recalculate support based on the Child Support Guidelines. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
             },
             {
               data: '<span class="text-dark">If your child support was based on any of the above, the recalculation service <strong>cannot</strong> recalculate it and you are not eligible for the service.',
@@ -405,15 +409,17 @@ export class QuestionnaireComponent implements OnInit {
             ol: [
               {
                 liData: '<strong>Children at or over the age of 19 ;</strong>',
+                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.',
               },
               {
                 liData: '<strong>Shared parenting ;</strong>',
-              },
-              {
-                liData: '<strong>Pattern of income ; or</strong>',
+                tooltipData: 'The court determines the child support amount',
+
               },
               {
                 liData: '<strong>Income over $150,000 ?</strong>',
+                tooltipData: 'The court determines the child support amount',
+
               },
             ],
           },
@@ -543,18 +549,35 @@ export class QuestionnaireComponent implements OnInit {
       const node: Node = document.querySelector(
         '#cdk-step-label-0-' + index + ' .mat-step-icon-state-edit'
       );
-      if (question.clicked === 'Yes' && node) {
+      if (question.clicked === 'Yes' && node && [4,5,8].includes(index+1))  {
+        node[style].cssText += 'background-color:#D8292F !important';
+      } else if (node && (question.clicked === 'Yes' || question.clicked === 'I don’t know')) {
+        node[style].cssText += 'background-color:#2E8540 !important';
+      } else if (node && question.clicked === 'No' && [3,4,5,6,7,8].includes(index+1)) {
         node[style].cssText += 'background-color:#2E8540 !important';
       } else if (node && question.clicked === 'No') {
         node[style].cssText += 'background-color:#D8292F !important';
-      }
+      } 
     });
   }
 
+  setUIconColor1(index, question) {
+      if (question.clicked === 'Yes' && [4,5,8].includes(index+1))  {
+        return 'clear'
+      } else if ((question.clicked === 'Yes' || question.clicked === 'I don’t know')) {
+        return 'done'
+      } else if (question.clicked === 'No' && [3,4,5,6,7,8].includes(index+1)) {
+        return 'done'
+      } else if (question.clicked === 'No') {
+        return 'clear'
+      }
+      return 'edit' 
+    }
+
   setColor(question,buttonItem,i){
-     let myGreen = false
-     let myRed = false
-    if(question.clicked == buttonItem.label && (question.clicked == 'Yes')){
+    let myGreen = false;
+    let myRed = false;
+    if((question.clicked == buttonItem.label &&  question.clicked == 'Yes')){
     
       if([4,5,8].includes(i+1)){
         myRed = true
@@ -562,20 +585,50 @@ export class QuestionnaireComponent implements OnInit {
         myGreen = true
       }
     }
-    if(question.clicked == buttonItem.label && (question.clicked == 'No')){
+    if((question.clicked == buttonItem.label &&  question.clicked == 'No')){
      
       if([3,4,5,6,7,8].includes(i+1)){
         myGreen = true
       } else {
         myRed = true
       }
+
     }
-    if(question.clicked == buttonItem.label && (question.clicked == 'I don’t know')){
+    if((question.clicked == buttonItem.label &&  question.clicked == 'I don’t know')){
       myGreen = true
     }
 
     return { 'myGreen' : myGreen, 'myRed' : myRed  }
   }
+
+  setColorIcon(question,buttonItem,i){
+    let myGreen = false;
+    let myRed = false;
+   if((question.clicked == buttonItem.label &&  question.clicked == 'Yes')){
+   
+     if([4,5,8].includes(i+1)){
+       myRed = true
+     } else {
+       myGreen = true
+     }
+     this.setUIconColor(i,question);
+   }
+   if((question.clicked == buttonItem.label &&  question.clicked == 'No')){
+    
+     if([3,4,5,6,7,8].includes(i+1)){
+       myGreen = true
+     } else {
+       myRed = true
+     }
+     this.setUIconColor(i,question);
+
+   }
+   if((question.clicked == buttonItem.label &&  question.clicked == 'I don’t know')){
+     myGreen = true
+   }
+
+   return { 'myGreen' : myGreen, 'myRed' : myRed  }
+ }
   public async ngOnInit() {
 
     this.bceIdRegisterLink = this._config.bceIdRegisterLink;

@@ -6,7 +6,7 @@ body {
 }
 body {
   margin: 0;
-  font-family: "BCSans, Noto Sans, Verdana, Arial, sans-serif";
+  font-family: "BCSans";
 }
 
 a {
@@ -111,7 +111,6 @@ i.fa-external-link-alt {
   text-decoration: none;
   display: block;
   font-size: 18px;
-  font-family: ‘Noto Sans’, Verdana, Arial, sans-serif;
   font-weight: 700;
   letter-spacing: 1px;
   cursor: not-allowed;
@@ -254,7 +253,6 @@ i.fa-external-link-alt {
 
 .bc-gov-alertbanner:before {
   float: left;
-  font-family: 'Font Awesome 5 Free';
   font-size: larger;
   font-style: normal;
   line-height: 1;

@@ -141,12 +141,12 @@
           <!--third-->
           <div class="row">
             <div class="col pr-2 py-3">
-              <p class="color_black">If you already have a Basic BCeID account log
+              <p class="color_black">If you already have a Basic BCeID account log in
                 <a
                   class ='account-link'
-                  style="cursor:pointer"
+                  style="cursor:pointer; text-decoration: underline;"
                   (click)="login();"
-                >in here.</a>
+                >here.</a>
               </p>
             </div>
             <div class="col-sm-1"></div>
@@ -156,9 +156,9 @@
           <div class="row">
             <div class="col pr-2">
               <p class="color_black"><strong>Were you provided a file number and password and
-                requested to enrol?</strong>
-              <mat-expansion-panel  style="box-shadow: none;" class="p-2" #expPanel hideToggle="true">
-                  <mat-expansion-panel-header>
+                asked to create an account?</strong>
+              <mat-expansion-panel  style="box-shadow: none;" class="pt-2 pb-4" #expPanel hideToggle="true">
+                  <mat-expansion-panel-header class="p-0">
                     <mat-panel-title style="text-decoration: underline;">
                       {{expPanel.expanded? '- See less information
                       ' : '+ See more information'}}
