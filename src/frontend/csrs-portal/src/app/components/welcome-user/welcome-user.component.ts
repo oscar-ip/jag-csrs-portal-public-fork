@@ -10,23 +10,19 @@ import { AccountService } from 'app/api/api/account.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Inject} from '@angular/core';
 import { HttpClient, HttpStatusCode, HttpResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AppRoutes } from 'app/app.routes';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
-import { DialogOptions } from '@shared/dialogs/dialog-options.model';
-
 
 // -- import data structure
 import {
-  AccountFileSummary,
-  Party,
-  FileSummary,
+  NewFileRequest,
   CSRSAccount,
-  CSRSPartyFileIds
+  ModelFile,
+  FileStatus,
 } from 'app/api/model/models';
 
 @Component({
@@ -37,19 +33,17 @@ import {
 export class WelcomeUserComponent implements OnInit {
 
   accountFormGroup: FormGroup;
-
-  _reponse: HttpResponse<AccountFileSummary>;
-
-  //csrsPartyFileIds: CSRSPartyFileIds = null;
   csrsAccount: CSRSAccount = null;
   data: any = null;
+  outData: NewFileRequest = null;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(OidcSecurityService) private oidc,
-              public dialog: MatDialog) {}
+              public dialog: MatDialog,
+              private route: ActivatedRoute) {}
 
   ngOnInit(): void {
 
@@ -58,48 +52,25 @@ export class WelcomeUserComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-    //this.checkAccount();
-
     this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
-    this.accountService.apiAccountGet('response', false).subscribe({
+    this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
-        this._reponse = data;
-        this.logger.info('data',data);
+        var user   = data.user;
+        var files  = data.files;
 
-        var user = data.body.user;
-        var files = data.body.files;
+        if (user != null && files != null && files.length > 0)
+        {
+          const listFiles = new List<ModelFile>(files); this.logger.info("listFiles", listFiles);
+          const activeStatus:ModelFile = listFiles.firstOrDefault(x=>x.status == FileStatus.Active);
+          this.logger.info("activeStatus", activeStatus);
 
-        this.logger.info("user", user);
-        this.logger.info("files", files);
-        this.logger.info("data.status", data.status);
-
-        if (data.status === HttpStatusCode.NotFound ||
-            ( data.status === HttpStatusCode.Ok && ( files === null || files.length === 0))) {
-              //redirect to application form
-              this.logger.info("redirect to AppRoutes.APPLICATIONFORM");
-              //this.router.navigate(AppRoutes.routePath(AppRoutes.APPLICATIONFORM));
-            }
-
-        if ( data.status === HttpStatusCode.Ok && ( files != null && files.length > 0)) {
-
-            let listFiles = new List<FileSummary>(files);
-            let activeStatus:FileSummary = listFiles.firstOrDefault(x=>x.status == 'Active');
-            if (activeStatus!= null)
-            {
-              this.logger.info("redirect to AppRoutes.COMMUNICATIONFORM");
-              //this.router.navigate(AppRoutes.routePath(AppRoutes.COMMUNICATIONFORM));
-            }
+          if (activeStatus)
+          {
+            this.logger.info("redirect to Communication");
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            this.router.navigate(['/communication']);
           }
-
-
-        /*
-        if (this._reponse.status === HttpStatusCode.NotFound ||
-            ( this._reponse.status === HttpStatusCode.Ok &&
-              (this._reponse.body.files === null || this._reponse.body.files.length === 0))) {
-          //redirect to application form
-          this.router.navigate(AppRoutes.routePath(AppRoutes.APPLICATIONFORM));
-        }*/
-
+        }
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -110,8 +81,6 @@ export class WelcomeUserComponent implements OnInit {
           }
       },
       complete: () => {
-        this.logger.info('apiAccountGet<AccountFileSummary> is completed');
-        this.router.navigate(AppRoutes.routePath(AppRoutes.STEPPERFORM));
       }
     })
   }
@@ -147,8 +116,6 @@ export class WelcomeUserComponent implements OnInit {
       next: (outData:any) => {
         var partyId = outData.partyId;
         var fileId = outData.fileId;
-        //this.logger.info("account.partyId", partyId);
-        //this.logger.info("account.fileId", fileId);
 
         if (!partyId || !fileId)
         {
@@ -174,8 +141,4 @@ export class WelcomeUserComponent implements OnInit {
       complete: () => this.logger.info('apiAccountCheckcsrsaccountPost is completed')
     })
   }
-
-
-
-
 }

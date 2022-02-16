@@ -25,18 +25,12 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 // -- import data structure
 import {
-  NewFileRequest,
-  PartyRole,
-  FileStatus,
-  Child,
   LookupValue,
-  CourtLookupValue,
-  CSRSPartyFileIds,
-  CSRSAccount,
   CSRSAccountRequest,
   Party,
   CSRSAccountFile
   } from 'app/api/model/models';
+
 
 import { DatePipe } from '@angular/common';
 @Component({
@@ -65,42 +59,40 @@ export class ApplicationFormStepperComponent implements OnInit {
 
   data: any = null;
 
-  csrsPartyFileIds: CSRSPartyFileIds = null;
-  csrsAccount: CSRSAccount = null;
-  csrsAccountRequest: CSRSAccountRequest = null;
-  party: Party = null;
-  csrsAccountFile: CSRSAccountFile = null;
-
   partyId: any = '';
   fileId: any = '';
-
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
       @Inject(LookupService) private lookupService,
       @Inject(LoggerService) private logger,
       @Inject(OidcSecurityService) private oidc,
+      @Inject(Router) private router,
       public dialog: MatDialog,
       private datePipe: DatePipe,
-      private route: ActivatedRoute) {
-        this.partyId = this.route.snapshot.paramMap.get('partyId');
-        this.fileId = this.route.snapshot.paramMap.get('partyId');
-      }
+      private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.route.queryParams
+    .subscribe(params => {
+      this.logger.info("params", params);
+      this.partyId = params.partyId;
+      this.fileId = params.fileId;
+      this.logger.info("account.partyId", this.partyId);
+      this.logger.info("account.fileId", this.fileId);
+    });
 
     this.provinces = [{id: '123', value: 'British Columbia'}];
     this.identities = [{id: '123', value: 'Native'}];
     this.genders =  [{id: '123', value: 'Male'}];
     this.referrals = [{id: '123', value: 'FMEP'}];
+    this.preferredContactMethods = [{id: '123', value: 'Email'}];
 
     this.getReferrals();
     this.getIdentities();
     this.getProvinces();
     this.getGenders();
     this.getPreferredcontactmethods();
-    // --- check account
-
 
     this.secondFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
@@ -334,7 +326,7 @@ export class ApplicationFormStepperComponent implements OnInit {
       let inPreferredContactMethod: LookupValue = list.firstOrDefault(x=>x.value == file2Data.contactMethod);
 
       let inParty: Party = {
-          partyId: '00000000-0000-0000-0000-000000000000',
+          partyId: this.partyId,
           firstName: partyData.firstName,
           middleName: partyData.givenNames,
           lastName: partyData.lastName,
@@ -360,85 +352,68 @@ export class ApplicationFormStepperComponent implements OnInit {
 
       // --- populate file
 
-      let inFile:any = {
-          status: FileStatus.Unknown,
-          //usersRole: partyRole,
-          fileId: '0',
+      let inFile: CSRSAccountFile = {
+          fileId: this.fileId,
           fileNumber: null,
-          //partyEnrolled: partyEnrolled,
-          //courtFileType: inCourtFileType,
-          //bcCourtLevel: inBcCourtLevel,
-          //bcCourtLocation: inBcCourtLocation,
-          //dateOfOrderOrWA: this.transformDate(file1Data.orderDate),
-          //incomeOnOrder: file1Data.payorIncome,
-          //section7Expenses: file1Data.isSpecifiedIncome,
-          safetyAlertRecipient: null,
-          recipientSafetyConcernDescription: null,
-          safetyAlertPayor: null,
-          payorSafetyConcernDescription: null,
+          safetyAlertRecipient: file2Data.childSafety,
+          recipientSafetyConcernDescription: file2Data.childSafetyDescription,
+          safetyAlertPayor: file2Data.childSafety,
+          payorSafetyConcernDescription: file2Data.childSafetyDescription,
           isFMEPFileActive: file2Data.enrollFMEP,
           fmepFileNumber: file2Data.FMEPinput,
-          //recalculationOrderByCourt: file1Data.recalculationOrdered,
-          //otherParty: inOtherParty,
-          //children: childs
       }
 
-      // --- populate
-      let newFileRequest: NewFileRequest = {
+      // --- populate csrsAccountRequest
+      let csrsAccountRequest: CSRSAccountRequest = {
         user: inParty,
-        file: inFile,
+        csrsAccountFile: inFile,
       }
 
-      /*
-      if (partyEnrolled == 'Recipient')
-      {
-        newFileRequest.file.safetyAlertRecipient = file2Data.childSafety;
-        newFileRequest.file.recipientSafetyConcernDescription = file2Data.childSafetyDescription;
-      }
-      else
-      {
-        newFileRequest.file.safetyAlertPayor = file2Data.childSafety;
-        newFileRequest.file.payorSafetyConcernDescription = file2Data.childSafetyDescription;
-      }*/
+    this.logger.info("csrsAccountRequest:", csrsAccountRequest);
 
-      this.logger.info("newFileRequest:", newFileRequest);
-
-    //this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-    this.accountService.apiAccountCreatePost(newFileRequest).subscribe({
+    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
+    this.accountService.apiAccountUpdatecsrsaccountPost(csrsAccountRequest).subscribe({
       next: (outData:any) => {
 
         var partyId = outData.partyId;
         var fileId = outData.fileId;
-        var fileNumber = outData.fileNumber;
 
         this.logger.info("partyId", partyId);
         this.logger.info("fileId", fileId);
-        this.logger.info("fileNumber", fileNumber);
 
-        let customOptions: DialogOptions = { data: {fileNumber: fileNumber}};
-        this.openDialog(customOptions);
-      },
-      error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
+        if (partyId == this.partyId && fileId == this.fileId)
+        {
+          this.logger.info("inside partyId == this.partyId &&  fileId == this.fileId");
 
           this.data = {
-            type: 'error',
-            title: e.error.message,
-            content: '',
+            type: 'check',
+            title: 'Account setup complete',
+            content: 'Your account setup request has been submitted',
+            content_normal: null,
+            content_link: null,
             weight: 'normal',
-            color: 'red'
+            color: 'green'
           };
           this.openModalDialog();
 
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
+          this.router.navigateUrl('/communication');
+        }
+      },
+      error: (e) => {
+
+        this.logger.error(e);
+        this.data = {
+          type: 'error',
+          title: 'Error',
+          content: 'The information you entered is not valid. Please enter the information given to you by yhe Child Support Recalculation Service.',
+          content_normal: 'If you continue to have problems, contact us at ',
+          content_link: '1-866-660-2644',
+          weight: 'normal',
+          color: 'red'
+         };
+         this.openModalDialog();
       },
       complete: () => this.logger.info('apiAccountCreatePost is completed')
     })
-
   }
-
 }
