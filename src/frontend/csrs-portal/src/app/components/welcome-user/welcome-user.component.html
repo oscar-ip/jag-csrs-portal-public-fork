@@ -37,21 +37,26 @@
       enrolled your order or written agreement, you have been provided a file number and a password so that you can
       create a web account. Please enter them below to proceed: </span>
     <br>
-    <div class="row">
-      <div class="col-md-6">
-        <mat-form-field class="w-100">
-          <mat-label>File number</mat-label>
-          <input matInput placeholder="XX-XXXXX-XXXXX"/>
-        </mat-form-field>
+    <form [formGroup]="accountFormGroup">
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>File number</mat-label>
+            <input matInput placeholder="XX-XXXXX-XXXXX" formControlName="fileNumber"/>
+            <mat-error>{{ "error.required" | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Password</mat-label>
+            <input matInput placeholder="XXXXXXXXXXX" formControlName="password"/>
+            <mat-error>{{ "error.required" | translate }}</mat-error>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="col-md-6">
-        <mat-form-field class="w-100">
-          <mat-label>Password</mat-label>
-          <input matInput placeholder="XXXXXXXXXXX"/>
-        </mat-form-field>
-      </div>
-    </div>
-    <button mat-raised-button color="primary" class="create-account" routerLink="/stepperform">
+    </form>
+    <button mat-raised-button color="primary" class="create-account"
+    (click)="checkAccount()">
       Create Account
     </button>
   </div>
@@ -66,7 +71,7 @@
       <p class="text-body">
         Contact the Recalculation Service toll free
         <a href="tel:+18776618026">1-877-661-8026</a>,
-        or learn more about the progrom
+        or learn more about the program
       </p>
     </div>
   </div>
