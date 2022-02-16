@@ -16,6 +16,7 @@ public static class AuthenticationExtensions
         {
             var options = new JwtBearerOptions();
             Bind(builder, options);
+            Serilog.Log.Logger.Debug("JWT Authentication settings {JwtBearerOptions}", options);
             if (string.IsNullOrEmpty(options.Audience) || string.IsNullOrEmpty(options.Authority))
             {
                 return; // no configuration
@@ -30,14 +31,25 @@ public static class AuthenticationExtensions
         .AddJwtBearer(options =>
         {
             Bind(builder, options);
+            Serilog.Log.Logger.Debug("JWT Authentication settings {JwtBearerOptions}", options);
 
             // update the MetadataAddress if needed
             options.MetadataAddress = options.GetMetadataAddress();
 
             options.Events = new JwtBearerEvents
             {
+
                 OnAuthenticationFailed = c =>
                 {
+                    if (c.Exception != null)
+                    {
+                        Serilog.Log.Logger.Information(c.Exception, "Authentication Failed Context: {@AuthenticationFailedContext}", c);
+                    }
+                    else
+                    {
+                        Serilog.Log.Logger.Information("Authentication Failed Context: {@AuthenticationFailedContext}", c);
+                    }
+
                     c.NoResult();
 
                     c.Response.StatusCode = 401;
