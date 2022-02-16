@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Microsoft.Extensions.Logging;
 
 public static class LoggerExtensions
 {

@@ -1,6 +1,10 @@
 ﻿using Csrs.Api.Configuration;
+using Csrs.Api.Infrastructure;
 using Serilog;
 using Serilog.Events;
+using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
+using Serilog.Exceptions.Destructurers;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +16,11 @@ public static class SerilogExtensions
 
         builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
         {
-            loggerConfiguration.ReadFrom.Configuration(builder.Configuration);
+            loggerConfiguration
+                .ReadFrom.Configuration(builder.Configuration)
+                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                    .WithDefaultDestructurers()
+                    .WithDestructurers(new IExceptionDestructurer[] { new HttpOperationExceptionDestructurer(), new ValidationExceptionDestructurer() }));
 
 #if false
             loggerConfiguration.Enrich.With<GitVersionEnricher>();
