@@ -19,7 +19,7 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<string> CreateTask(string fileId, string subject, string description, CancellationToken cancellationToken)
+        public async Task<bool> CreateTask(string fileId, string subject, string description, CancellationToken cancellationToken)
         {
 
             MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
@@ -29,7 +29,9 @@ namespace Csrs.Api.Services
             try
             {
 
-                MicrosoftDynamicsCRMssgCsrsfile file = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, null, null, cancellationToken);
+                var select = new List<string> { "ssg_csrsfileid", "_owningteam_value", "_owninguser_value" };
+
+                MicrosoftDynamicsCRMssgCsrsfile file = await _dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, select: select, null, cancellationToken);
 
                 if (file._owninguserValue is not null)
                 {
@@ -47,7 +49,7 @@ namespace Csrs.Api.Services
             {
                 
                 _logger.LogError("Provided fileId not found");
-                throw;
+                return false;
 
             }
 
@@ -60,7 +62,7 @@ namespace Csrs.Api.Services
 
             await _dynamicsClient.Tasks.CreateAsync(task);
            
-            return "Success";
+            return true;
         }
     }
 }
