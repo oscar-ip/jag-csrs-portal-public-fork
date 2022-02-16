@@ -41,16 +41,15 @@ public static class AuthenticationExtensions
 
             options.Events = new JwtBearerEvents
             {
-
                 OnAuthenticationFailed = c =>
                 {
                     if (c.Exception != null)
                     {
-                        logger.Information(c.Exception, "Authentication Failed Context: {@AuthenticationFailedContext}", c);
+                        logger.Debug(c.Exception, "Authentication Failed Context: {@AuthenticationFailedContext}", c);
                     }
                     else
                     {
-                        logger.Information("Authentication Failed Context: {@AuthenticationFailedContext}", c);
+                        logger.Debug("Authentication Failed Context: {@AuthenticationFailedContext}", c);
                     }
 
                     c.NoResult();
@@ -102,8 +101,9 @@ public static class AuthenticationExtensions
     private static Serilog.ILogger GetLogger()
     {
         var logger = new LoggerConfiguration()
-            .WriteTo.Console()
+            .WriteTo.Console()            
             .WriteTo.Debug()
+            .MinimumLevel.Verbose()
             .CreateLogger();
 
         return logger;
