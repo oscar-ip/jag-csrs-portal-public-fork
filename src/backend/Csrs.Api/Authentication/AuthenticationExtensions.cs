@@ -10,21 +10,8 @@ public static class AuthenticationExtensions
 
     public static void AddJwtBearerAuthentication(this WebApplicationBuilder builder)
     {
-        Serilog.ILogger logger = GetLogger();
-
         builder.Services.Configure<JwtBearerOptions>(options => builder.Configuration.GetSection(ConfigurationKey).Bind(options));
-        builder.Services.Configure<JwtAccessTokenConfiguration>(options => builder.Configuration.GetSection("JwtAccessToken").Bind(options));
-
-        if (builder.Environment.IsDevelopment())
-        {
-            var options = new JwtBearerOptions();
-            Bind(builder, options);
-            logger.Debug("JWT Authentication settings {JwtBearerOptions}", options);
-            if (string.IsNullOrEmpty(options.Audience) || string.IsNullOrEmpty(options.Authority))
-            {
-                return; // no configuration
-            }
-        }
+        LogConfiguration(builder);
 
         builder.Services.AddAuthentication(options =>
         {
@@ -33,16 +20,11 @@ public static class AuthenticationExtensions
         })
         .AddJwtBearer(options =>
         {
-            Bind(builder, options);
-            logger.Debug("JWT Authentication settings {JwtBearerOptions}", options);
-
-            // update the MetadataAddress if needed
-            options.MetadataAddress = options.GetMetadataAddress();
-
             options.Events = new JwtBearerEvents
             {
                 OnAuthenticationFailed = c =>
                 {
+                    var logger = Log.Logger;
                     if (c.Exception != null)
                     {
                         logger.Debug(c.Exception, "Authentication Failed Context: {@AuthenticationFailedContext}", c);
@@ -68,24 +50,12 @@ public static class AuthenticationExtensions
         });
     }
 
-    public static string? GetMetadataAddress(this JwtBearerOptions options)
+    private static void LogConfiguration(WebApplicationBuilder builder)
     {
-        // https://dev.oidc.gov.bc.ca/auth/realms/onestopauth-basic/.well-known/uma2-configuration
-        if (string.IsNullOrEmpty(options?.MetadataAddress))
-        {
-            if (!string.IsNullOrEmpty(options?.Authority))
-            {
-                return options.Authority.EndsWith("/")
-                    ? options.Authority + ".well-known/uma2-configuration"
-                    : options.Authority + "/" + ".well-known/uma2-configuration";
-            }
-        }
-        else
-        {
-            return options?.MetadataAddress;
-        }
-
-        return null;
+        var options = new JwtBearerOptions();
+        Bind(builder, options);
+        Serilog.ILogger logger = GetLogger();
+        logger.Information("JWT Authentication settings {@JwtBearerOptions}", new { options.Audience, options.Authority, options.MetadataAddress });
     }
 
     /// <summary>
@@ -102,8 +72,8 @@ public static class AuthenticationExtensions
     {
         var logger = new LoggerConfiguration()
             .WriteTo.Console()            
-            .WriteTo.Debug()
-            .MinimumLevel.Verbose()
+            .WriteTo.Debug()            
+            .MinimumLevel.Debug()
             .CreateLogger();
 
         return logger;
