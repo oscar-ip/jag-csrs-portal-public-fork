@@ -18,9 +18,9 @@ import { LookupValue } from './lookupValue.model';
 
 
 export interface ModelFile { 
+    fileId?: string | null;
     status?: FileStatus;
     usersRole: PartyRole;
-    fileId?: string | null;
     fileNumber?: string | null;
     partyEnrolled?: string | null;
     courtFileType?: LookupValue;
