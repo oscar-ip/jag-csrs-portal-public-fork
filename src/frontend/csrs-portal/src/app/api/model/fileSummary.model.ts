@@ -14,7 +14,14 @@ import { FileStatus } from './fileStatus.model';
 
 
 export interface FileSummary { 
+    /**
+     * The internal id of the file.
+     */
     fileId?: string | null;
+    /**
+     * The human readable file number.
+     */
+    fileNumber?: string | null;
     status?: FileStatus;
     usersRole: PartyRole;
 }

@@ -11,10 +11,8 @@
  */
 
 
-export interface UserRequest { 
-    fileId: string;
-    fileNo: string;
-    requestType: string;
-    requestMessage: string;
+export interface Timestamp { 
+    seconds?: number;
+    nanos?: number;
 }
 

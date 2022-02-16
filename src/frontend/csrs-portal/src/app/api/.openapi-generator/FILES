@@ -20,11 +20,11 @@ model/cSRSAccountRequest.model.ts
 model/cSRSPartyFileIds.model.ts
 model/child.model.ts
 model/courtLookupValue.model.ts
-model/document.model.ts
 model/feedback.model.ts
 model/file.model.ts
 model/fileStatus.model.ts
 model/fileSummary.model.ts
+model/fileSystemItem.model.ts
 model/fileToList.model.ts
 model/lookupValue.model.ts
 model/message.model.ts
@@ -33,5 +33,7 @@ model/newFileRequest.model.ts
 model/party.model.ts
 model/partyRole.model.ts
 model/problemDetails.model.ts
+model/respondentResult.model.ts
+model/timestamp.model.ts
 model/userRequest.model.ts
 variables.ts

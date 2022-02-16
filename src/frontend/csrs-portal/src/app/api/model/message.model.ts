@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Document } from './document.model';
+import { FileSystemItem } from './fileSystemItem.model';
 
 
 export interface Message { 
@@ -20,7 +20,7 @@ export interface Message {
     recievingParty?: string | null;
     date?: string | null;
     attachment?: boolean | null;
-    documents?: Array<Document> | null;
+    documents?: Array<FileSystemItem> | null;
     status?: number | null;
     isRead?: boolean | null;
 }
