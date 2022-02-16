@@ -8,6 +8,7 @@ using Google.Protobuf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Rest;
 using static Csrs.Services.FileManager.FileManager;
+using Csrs.Api.Models;
 
 namespace Csrs.Api.Services
 {
@@ -18,17 +19,20 @@ namespace Csrs.Api.Services
         private readonly ILogger<MessageService> _logger;
         private readonly FileManagerClient _fileManagerClient;
         private readonly IUserService _userService;
+        private readonly ITaskService _taskService;
 
         public DocumentService(
             IDynamicsClient dynamicsClient,
             ILogger<MessageService> logger,
             FileManagerClient fileManagerClient,
-            IUserService userService)
+            IUserService userService, 
+            ITaskService taskService)
         {
             _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _fileManagerClient = fileManagerClient ?? throw new ArgumentNullException(nameof(fileManagerClient));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
         }
         public async Task<IActionResult> DownloadAttachment(string entityId, string entityName, string serverRelativeUrl, string documentType, CancellationToken cancellationToken)
         {
@@ -94,7 +98,7 @@ namespace Csrs.Api.Services
 
         public async Task<IActionResult> UploadAttachment(string entityId, string entityName, IFormFile file, string type, CancellationToken cancellationToken)
         {
-            string result = "";
+            UploadResult result = new UploadResult();
 
             if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(type)) return new BadRequestResult();
 
@@ -129,13 +133,16 @@ namespace Csrs.Api.Services
                 // Update modifiedon to current time
                 //UpdateEntityModifiedOnDate(entityName, entityId, true);
                 _logger.LogInformation("Success");
-                result = "Uploaded Successfully";
+                result.Message = "Uploaded Successfully";
+                result.Uploaded = true;
+                result.TaskCreated = await createTask(entityId, fileName, folderName, entityName, cancellationToken);
             }
             else
             {
                 _logger.LogError(uploadResult.ResultStatus.ToString());
-
-                result = uploadResult.ErrorDetail;
+                result.Uploaded = false;
+                result.Message = uploadResult.ErrorDetail;
+                result.TaskCreated = false;
             }
 
             return new JsonResult(result);
@@ -279,6 +286,20 @@ namespace Csrs.Api.Services
                     }
                 }
             }
+        }
+
+        private async Task<bool> createTask(string fileId, string fileName, string folderName, string entityName, CancellationToken cancellationToken)
+        {
+            
+            string subject = $"File: {fileName} Uploaded";
+            string description = $"For {fileId} \n Uploaded to: {entityName}\\{folderName}\\{fileName} ";
+
+            MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
+            task.Subject = subject;
+            task.Description = description;
+
+            return await _taskService.CreateTask(fileId, subject, description, cancellationToken);
+
         }
 
     }

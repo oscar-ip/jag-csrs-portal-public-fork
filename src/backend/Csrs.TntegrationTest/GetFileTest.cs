@@ -37,7 +37,7 @@ namespace Csrs.TntegrationTest
 
             List<string> select = new List<string> { "ssg_csrsfileid" };
             List<string> orderby = new List<string> { "createdon desc" };
-            List<string> expand = new List<string> { "createdby", "modifiedby", "ownerid" };
+            List<string> expand = new List<string> { "createdby", "modifiedby", "ownerid", "owninguser" };
 
             var actual = await dynamicsClient.Ssgcsrsfiles.GetAsync(top: 5, select: select, orderby: orderby, expand: expand, cancellationToken: CancellationToken.None);
             Assert.NotNull(actual);

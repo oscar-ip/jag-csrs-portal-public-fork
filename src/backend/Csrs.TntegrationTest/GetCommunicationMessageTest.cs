@@ -26,17 +26,7 @@ namespace Csrs.TntegrationTest
 
             MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: CancellationToken.None);
 
-            List<Message> messages = new List<Message>();
-
-            foreach (var message in dynamicsMessages.Value.ToList())
-            {
-                //TODO get attachment meta from fileManager
-                //Temporary add empty array of documents
-                messages.Add(ModelExtensions.ToViewModel(message, new List<Document>()));
-            }
-
             Assert.NotNull(dynamicsMessages);
-            Assert.NotNull(messages);
             Assert.NotEmpty(dynamicsMessages.Value);
         }
 
