@@ -15,7 +15,6 @@ import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { List, Dictionary } from 'ts-generic-collections-linq';
@@ -66,7 +65,6 @@ export class ApplicationFormStepperComponent implements OnInit {
       @Inject(AccountService) private accountService,
       @Inject(LookupService) private lookupService,
       @Inject(LoggerService) private logger,
-      @Inject(OidcSecurityService) private oidc,
       @Inject(Router) private router,
       public dialog: MatDialog,
       private datePipe: DatePipe,
@@ -166,7 +164,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getIdentities() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
@@ -185,7 +182,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getProvinces() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;
@@ -204,7 +200,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getGenders() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
         this.genders = data;
@@ -223,7 +218,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getReferrals() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountReferralsGet().subscribe({
       next: (data) => {
         this.referrals = data;
@@ -242,7 +236,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getPreferredcontactmethods(){
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
         this.preferredContactMethods = data;
@@ -371,7 +364,6 @@ export class ApplicationFormStepperComponent implements OnInit {
 
     this.logger.info("csrsAccountRequest:", csrsAccountRequest);
 
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountUpdatecsrsaccountPost(csrsAccountRequest).subscribe({
       next: (outData:any) => {
 
