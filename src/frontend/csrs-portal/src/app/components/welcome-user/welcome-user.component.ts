@@ -51,7 +51,7 @@ export class WelcomeUserComponent implements OnInit {
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.accountService.configuration.credentials['Bearer'] = this.oidc.getAccessToken;
+    this.accountService.configuration.credentials['Authorization'] = this.oidc.getAccessToken;
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
         var user   = data.user;
@@ -110,7 +110,7 @@ export class WelcomeUserComponent implements OnInit {
     const accountData = this.accountFormGroup.value;
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
-    this.accountService.configuration.credentials['Bearer'] = this.oidc.getAccessToken;
+    this.accountService.configuration.credentials['Authorization'] = this.oidc.getAccessToken;
     this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
         var partyId = outData.partyId;
