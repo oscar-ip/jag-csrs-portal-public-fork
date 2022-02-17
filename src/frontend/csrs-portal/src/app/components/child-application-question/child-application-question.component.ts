@@ -93,6 +93,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this._logger = this.logger;
     this._oidc = this.oidc;
 
+
     this.provinces = [{id: '123', value: 'British Columbia'}];
     this.identities = [{id: '123', value: 'Native'}];
     this.genders =  [{id: '123', value: 'Male'}];
@@ -249,6 +250,7 @@ editPage(stepper, index){
 }
   getIdentities() {
     this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
+
     //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {

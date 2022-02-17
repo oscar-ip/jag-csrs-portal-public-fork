@@ -495,7 +495,7 @@
               </div>
               <div class="row text-dark mt-4">
                 <div class="col-md-6">
-                  <p>If a child is over age of majority, are they still a dependant?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
+                  <p>If a child is over age of majority, are they still a dependent?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
                   </p>
                 </div>
                 <div class="col-md-6">
@@ -527,8 +527,7 @@
           <form [formGroup]="fifthFormGroup" >
             <ng-template matStepLabel>Details about the Court Order or Written Agreement</ng-template>
             <div class="heading">
-              It would be helpful if you had a copy of your court order or
-              written agreement when answering the following questions
+              It would be helpful if you had a copy of your court order or written agreement when answering the following questions.
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
@@ -559,14 +558,14 @@
               <p>Payor's income amount from the order or written agreement<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
-                  <input matInput #input formControlName="payorIncome"/>
                   <mat-icon matSuffix>attach_money</mat-icon>
+                  <input matInput #input formControlName="payorIncome"/>
                 </mat-form-field>
               </div>
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Recalculation ordered by the court<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+                <p>Recalculation ordered by the court?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="recalculationOrdered">
@@ -577,7 +576,7 @@
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Does the order specify pattern of income?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+                <p>Does the order include special expenses?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="isSpecifiedIncome">
@@ -603,8 +602,7 @@
             <ng-template matStepLabel>Additional Information</ng-template>
             <div class="row text-dark mt-4">
               <div class="col-md-6">
-                <p>Do you have any concerns for your safety or your children’s
-                  safety?
+                <p>Do you have any concerns for your safety or your children’s safety?
                 </p>
               </div>
               <div class="col-md-6">
@@ -617,9 +615,7 @@
             </div>
             <div class="example-container width100">
               <mat-form-field appearance="fill">
-                <mat-label>If yes, please provide any details including if there any
-                  protection orders in place involving you or the other
-                  party?</mat-label>
+                <mat-label>If yes, please provide any details including any protection orders in place involving you or the other party</mat-label>
                 <input formControlName="childSafetyDescription" matInput #input/>
               </mat-form-field>
             </div>
@@ -637,7 +633,7 @@
             </div>
             <div class="row text-dark mt-2">
               <div class="col-md-6">
-                <p> Are you enrolled in the Family Maintenance Enforcement Program?</p>
+                <p>Are you enrolled in the Family Maintenance Enforcement Program (FMEP)?</p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="enrollFMEP" aria-label="Select an option">
@@ -663,7 +659,7 @@
             </div>
             <div class="row text-dark mt-2">
               <div class="col-md-6">
-                <p> Are you currently on income assistance?</p>
+                <p>Are you currently on income assistance?</p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">
@@ -738,45 +734,42 @@
             <div class="text-dark">
               <ul>
                 <li>
-                  I will notify the recalculation service of any changes in my
-                  contact information or any legal action which may impact the
-                  recalculation of my child support
+                  I will notify the recalculation service of any changes in my contact information or any legal action
+                  which may impact the recalculation of my child support.
                 </li>
                 <li>
-                  I understand the recalculation service may access Court
-                  Services Online to obtain copies of the child support order or
-                  written agreement.
+                  I understand the recalculation service may access Court Services Online to obtain copies of the
+                  child support order or written agreement.
                 </li>
                 <li>
-                  Unless a court orders otherwise, I may withdraw from the
-                  recalculation service providing that the other party also
-                  agrees to withdraw.
+                  Unless a court orders otherwise, I may withdraw from the recalculation service providing that the
+                  other party also agrees to withdraw.
                 </li>
                 <li>
-                  I understand that if I do not provide my income tax
-                  information, as requested by the recalculation service, the
-                  service may adjust my annual income amount using rate
-                  increases set out under the Family Law Act Regulation
+                  I understand that if I do not provide my income tax information, as requested by the recalculation
+                  service, the service may adjust my annual income amount using rate increases set out under the
+                  Family Law Act Regulation.
                 </li>
                 <li>
-                  I understand the use of the information I provide to the
-                  recalculation service is for the purposes of child support
-                  recalculation. If I am involved with the Family Maintenance
-                  Enforcement Program, my information may be shared with this
-                  program.
+                  I understand the use of the information I provide to the recalculation service is for the purposes
+                  of child support recalculation. If I am involved with the Family Maintenance Enforcement Program,
+                  my information may be shared with this program.
                 </li>
+                <li>
+                  I understand that by submitting this electronic application future program communication will
+                  occur through my recalculation service account unless I request otherwise. The information I have
+                  given on this form is true and correct to the best of my knowledge and belief.
+                </li>
+
               </ul>
               <p>
-                <strong>Collection Notices:</strong>Your personal information is
-                collected by Ministry of Attorney General’s Maintenance
-                Enforcement and Locate Services (MELS) pursuant to section 26(a)
-                and (c) of the Freedom of Information and Protection of Privacy
-                Act and the Family Law Act. MELS uses this information for the
-                purposes of establishing, recalculating or enforcing child
-                support. Should you have any questions about the collection, use
-                or disclosure of your personal information, please contact a
-                Client Relations Officer: Address: 203 - 865 Hornby Street,
-                Vancouver, BC Phone Number: (604) 660-2528.
+                <strong>Collection Notices:</strong><i>Your personal information is collected by Ministry of Attorney
+                General’s Maintenance Enforcement and Locate Services (MELS) pursuant to section 26(a) and (c) of
+                the Freedom of Information and Protection of Privacy Act and the Family Law Act. MELS uses this
+                information for the purposes of establishing, recalculating or enforcing child support. Should
+                you have any questions about the collection, use or disclosure of your personal information, please
+                contact a Client Relations Officer: Mailing Address: PO Box 2074 Station Main, Vancouver BC, V6B 3S3
+                or Phone Number: (604) 660-2528.</i>
               </p>
               <mat-checkbox color="primary"  formControlName="secondCtrl" class="example-margin">I accept and acknowledge the terms and conditions listed
                 above.</mat-checkbox>
@@ -794,12 +787,11 @@
         </mat-step>
         <mat-step [stepControl]="nineFormGroup">
           <form [formGroup]="nineFormGroup" class="text-dark">
-            <ng-template matStepLabel>Review and submit your application
+            <ng-template matStepLabel>Review and Submit Your Application
             </ng-template>
             <div>
-              Review all application details below to ensure information is
-              correct, you can go back and edit any of the information before
-              submission.
+              Review all application details below to ensure information is correct. You can go back and edit any of
+              the information before submission.
             </div>
             <div class="submit-layer">
               <div class="stepRow spaceAround leftRight">
@@ -906,7 +898,7 @@
             <br />
             <div class="submit-layer">
               <div class="stepRow spaceAround leftRight">
-                <strong class="submit-text-color">Information about third party</strong>
+                <strong class="submit-text-color">Information about the Other Party (parent, caregiver, guardian)</strong>
                 <a class="edit-text-color"(click)="editPage(stepper,2)">Edit</a>
               </div>
               <div class="row">
@@ -1018,17 +1010,17 @@
             <br />
             <div class="submit-layer ">
               <div class="stepRow spaceAround leftRight ">
-                <strong class="submit-text-color">Details about the court order or wirtten agreement</strong>
+                <strong class="submit-text-color">Details about the Court Order or Written Agreement</strong>
                 <a class="edit-text-color"(click)="editPage(stepper,4)">Edit</a>
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Court Location</div>
+                  <div>Court location:</div>
                   <!-- <div class="bold">{{(fifthFormGroup.value.courtLocation)?fifthFormGroup.value.courtLocation:'-' }}</div> -->
                   <div class="bold">Victoria Court</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Date of order</div>
+                  <div>Date of order:</div>
                   <div class="bold">{{(fifthFormGroup.value.orderdate)?fifthFormGroup.value.orderDate:'-' }}</div>
                 </div>
               </div>
