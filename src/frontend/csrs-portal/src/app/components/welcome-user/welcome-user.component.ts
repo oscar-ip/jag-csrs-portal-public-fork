@@ -9,7 +9,7 @@ import {
 import { AccountService } from 'app/api/api/account.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Inject} from '@angular/core';
-import { HttpClient, HttpStatusCode, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpStatusCode, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppRoutes } from 'app/app.routes';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
@@ -108,11 +108,27 @@ export class WelcomeUserComponent implements OnInit {
       color: 'red'
     };
 
+
+    /*
+    return this.http.get(api.get, {headers: new HttpHeaders(
+        {
+          'Authorization': 'Bearer' + my_token,
+           'Content-Type': 'application/json'
+              })});
+        }
+
+    */
+
     const accountData = this.accountFormGroup.value;
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
     this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
-    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
+    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount,
+      {headers: new HttpHeaders(
+        {
+          'Authorization': 'Bearer' + this.oidc.getAccessToken(),
+           'Content-Type': 'application/json'
+        })}).subscribe({
       next: (outData:any) => {
         var partyId = outData.partyId;
         var fileId = outData.fileId;
