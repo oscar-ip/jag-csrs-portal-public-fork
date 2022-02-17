@@ -15,7 +15,6 @@ import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { List, Dictionary } from 'ts-generic-collections-linq';
@@ -63,7 +62,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _accountService: AccountService;
   _lookupService: LookupService;
   _logger: LoggerService;
-  _oidc: OidcSecurityService;
   today = new Date();
   isEditable: boolean = false;
   child: Child;
