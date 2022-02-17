@@ -9,7 +9,7 @@ labels:
   app.kubernetes.io/name: ${APP_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 
-  
+
 parameters:
 
 - name: APP_NAME
@@ -105,14 +105,14 @@ objects:
             name: ${API_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
-              - containerPort: 8081
+              - containerPort: 8080
             env:
-            - name: JWT_AUDIENCE
+            - name: JWT__AUDIENCE
               valueFrom:
                 secretKeyRef:
                   name: ${JWT_CONFIG_NAME}
                   key: JWT__AUDIENCE
-            - name: JWT_AUTHORITY
+            - name: JWT__AUTHORITY
               valueFrom:
                 secretKeyRef:
                   name: ${JWT_CONFIG_NAME}
@@ -197,7 +197,10 @@ objects:
             - ${API_COMPONENT_NAME}
           from:
             kind: ImageStreamTag
-            namespace: ${OC_NAMESPACE}-${OC_ENV} #do not have permission to leverage tools
+            # Originally when this was built; there was not enough permission
+            # to do adjustment and copy from tools space
+            # Hence was pulling from imae stream of same environment
+            namespace: ${OC_NAMESPACE}-${OC_ENV}
             name: ${API_COMPONENT_NAME}:${OC_ENV}
   status: {}
 
@@ -212,8 +215,8 @@ objects:
     ports:
       - name: http
         protocol: TCP
-        port: 8081
-        targetPort: 8081
+        port: 8080
+        targetPort: 8080
     selector:
       name: ${API_COMPONENT_NAME}
     sessionAffinity: None

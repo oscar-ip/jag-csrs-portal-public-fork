@@ -25,6 +25,10 @@ on:
             description: 'Image Target Env'
             required: true
             default: 'test'
+        gittag:
+            description: 'Release Tag'
+            required: true
+            default: latest
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -38,6 +42,7 @@ jobs:
     env:
       app: ${{github.event.inputs.app}}
       env: ${{github.event.inputs.env}}
+      gittag: ${{github.event.inputs.tag}}
       app_from_gh_secret: ${{ secrets.APP_NAME_BASE}}
 
       # by default on tagging code we are building and deploying tagged build to test environment
@@ -55,28 +60,26 @@ jobs:
       - name: Get git tag
         id: tag
         run: |
-          tag=$(echo $(git tag --points-at HEAD))
-          echo "gittag=$tag" >> $GITHUB_ENV
-      
+          if [[ -z "$gittag" ]]; then
+            tag=$(echo $(git tag --points-at HEAD))
+            echo "gittag=$tag" >> $GITHUB_ENV
+          fi
       - name: env variables
-
         run: |
-
           if [[ -z "$app" ]]; then
             echo "app=$app_from_gh_secret" >> $GITHUB_ENV
           fi
-
           if [[ -z "$env" ]]; then
             echo "env=$env_from_gh_secret" >> $GITHUB_ENV
-          fi  
-          
+          fi
+
       - name: print env variables
 
         run: |
 
           echo "Release Application: ${{ env.app }}"
           echo "Release Git tag: ${{env.gittag}}"
-          echo "Release Git env: ${{env.env}}"
+          echo "Deployment env: ${{env.env}}"
           
        #Login to OpenShift Container Repository
       - name: Login to OpenShift Container Repository
@@ -143,7 +146,11 @@ jobs:
         env:
           appName: ${{ env.app }}
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
+          toolsSpace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
         run: |
-          oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-file-manager", "image":"${{env.app}}-file-manager:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
-          oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-api", "image":"${{env.app}}-api:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
-          oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-frontend", "image":"${{env.app}}-frontend:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
+          #oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-file-manager", "image":"${{env.app}}-file-manager:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
+          #oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-api", "image":"${{env.app}}-api:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
+          #oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-frontend", "image":"${{env.app}}-frontend:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
+          oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${appName}-file-manager"] ,"from":{"kind":"ImageStreamTag","namespace": ${toolSpace}","name": "${appName}-file-manager:${{env.gittag}}"}}}]}}'
+          oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${appName}-api"] ,"from":{"kind":"ImageStreamTag","namespace": ${toolSpace}","name": "${appName}-api:${{env.gittag}}"}}}]}}'
+          oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${appName}-frontend"] ,"from":{"kind":"ImageStreamTag","namespace": ${toolSpace}","name": "${appName}-frontend:${{env.gittag}}"}}}]}}'

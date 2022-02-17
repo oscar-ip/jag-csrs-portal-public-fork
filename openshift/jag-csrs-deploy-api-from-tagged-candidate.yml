@@ -103,20 +103,25 @@ objects:
           app.kubernetes.io/instance: ${API_COMPONENT_NAME}
           app.openshift.io/runtime: dotnet
       spec:
+        volumes:
+          - name: volume-appsettings
+            configMap:
+              name: appsettings.production.json
+              defaultMode: 420
         containers:
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${IMAGE_TAG}
             name: ${API_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
-              - containerPort: 8081
+              - containerPort: 8080
             env:
-            - name: JWT_AUDIENCE
+            - name: JWT__AUDIENCE
               valueFrom:
                 secretKeyRef:
                   name: ${JWT_CONFIG_NAME}
                   key: JWT__AUDIENCE
-            - name: JWT_AUTHORITY
+            - name: JWT__AUTHORITY
               valueFrom:
                 secretKeyRef:
                   name: ${JWT_CONFIG_NAME}
@@ -185,26 +190,32 @@ objects:
               value: ${BCEID_URL}
             resources:
               limits:
-                cpu: 250m
+                cpu: 500m
                 memory: 1000Mi
               requests:
                 cpu: 250m
                 memory: 512Mi
             # Took away readiness and liveness probe until those end points are ready
-    # Would trigger deployment from GitHub Actions by using dc patch
-    # Hence taking out the following trigger would make sense
-    #triggers:
-    #  - type: ConfigChange
-    #  - type: ImageChange
-    #    imageChangeParams:
-    #      automatic: true
-    #      containerNames:
-    #        - ${API_COMPONENT_NAME}
-    #      from:
-    #        kind: ImageStreamTag
-    #        namespace: ${OC_NAMESPACE}-tools
-    #        name: ${API_COMPONENT_NAME}:${IMAGE_TAG}
-  status: {}
+            volumeMounts:
+              - name: volume-appsettings
+                mountPath: /app/appsettings.Production.json
+                subPath: appsettings.json
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            imagePullPolicy: Always
+        restartPolicy: Always
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${API_COMPONENT_NAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${OC_NAMESPACE}-tools
+            name: ${API_COMPONENT_NAME}:${IMAGE_TAG}
+
 
 # https://stackoverflow.com/a/61452441
 ### JAG-csrs-backend Service ###
@@ -217,8 +228,8 @@ objects:
     ports:
       - name: http
         protocol: TCP
-        port: 8081
-        targetPort: 8081
+        port: 8080
+        targetPort: 8080
     selector:
       name: ${API_COMPONENT_NAME}
     sessionAffinity: None

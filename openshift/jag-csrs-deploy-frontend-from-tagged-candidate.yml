@@ -115,25 +115,25 @@ objects:
               value: ${BCEID_URL}
             resources:
               limits:
-                cpu: 250m
+                cpu: 500m
                 memory: 1000Mi
               requests:
-                cpu: 125m
+                cpu: 250m
                 memory: 512Mi
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense
-    # triggers:
-    #  - type: ConfigChange
-    #  - type: ImageChange
-    #    imageChangeParams:
-    #      automatic: true
-    #      containerNames:
-    #        - ${COMPONENT_NAME}
-    #      from:
-    #        kind: ImageStreamTag
-    #        namespace: ${OC_NAMESPACE}-tools
-    #        name: ${COMPONENT_NAME}:${IMAGE_TAG}
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${COMPONENT_NAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${OC_NAMESPACE}-tools
+            name: ${COMPONENT_NAME}:${IMAGE_TAG}
   status: {}
 
 
@@ -155,24 +155,30 @@ objects:
     sessionAffinity: None
     type: ClusterIP
 
-#- apiVersion: route.openshift.io/v1
-#  kind: Route
-#  metadata:
-#    name: ${ROUTE_PREFIX}
-#    namespace: ${OC_NAMESPACE}-${OC_ENV}
-#  annotations:
-#    # if we do not use sticky-session, disable_cookies needs to be true
-#    haproxy.router.openshift.io/disable_cookies: "true"
-#    # balance algorithm
-#    haproxy.router.openshift.io/balance: roundrobin
-#  spec:
-#    host: ${DNS}
-#    to:
-#      kind: Service
-#      name: ${COMPONENT_NAME}
-#    port:
-#      targetPort: http
-#    tls:
-#      termination: edge
-#      insecureEdgeTerminationPolicy: Redirect
-#    wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: ${ROUTE_PREFIX}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+  annotations:
+    # if we do not use sticky-session, disable_cookies needs to be true
+    haproxy.router.openshift.io/disable_cookies: "true"
+    # balance algorithm
+    haproxy.router.openshift.io/balance: roundrobin
+    # Needed only for DEV and TEST to restrict traffic temporarily
+    haproxy.router.openshift.io/ip_whitelist: ${CIDR_NOTATION}
+  spec:
+    host: ${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
+    to:
+      kind: Service
+      name: ${COMPONENT_NAME}
+    port:
+     targetPort: http
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+      # Volume mount of secret on route Not allowed yet https://stackoverflow.com/a/62571080
+      # However we can do variable substitution in template https://stackoverflow.com/a/69002769
+      certificate: ${CERT}
+      key: ${KEY}
+    wildcardPolicy: None
