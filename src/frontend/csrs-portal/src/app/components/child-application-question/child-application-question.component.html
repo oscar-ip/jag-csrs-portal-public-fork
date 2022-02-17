@@ -1006,6 +1006,13 @@
                   <div class="bold">{{(userFormGroup.value.birthdate)?(userFormGroup.value.birthdate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
               </div>
+              <div class="row">
+                <div class="stepRow spaceAround displayDetails"></div>
+                  <mat-checkbox  [checked]="eFormGroup.value.secondCtrl" [disabled]="eFormGroup.value.secondCtrl"
+                    form class="example-margin">Dependent, but over age of majority</mat-checkbox>
+                </div>
+              </div>
+
             </div>
             <br />
             <div class="submit-layer ">
@@ -1021,7 +1028,7 @@
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Date of order:</div>
-                  <div class="bold">{{(fifthFormGroup.value.orderdate)?fifthFormGroup.value.orderDate:'-' }}</div>
+                  <div class="bold">{{(fifthFormGroup.value.orderdate)?fifthFormGroup.value.orderDate :'-' }}</div>
                 </div>
               </div>
               <!-- <div class="stepRow spaceAround">
@@ -1040,12 +1047,21 @@
                 <div class="row agreement">
                   <div class="col-md-8 stepRow  leftRight">
                     <div>
-                      <strong>Payor: </strong>Guidelines income amount from the
-                      Order
+                      Recalculation ordered by the court?
                     </div>
                   </div>
                   <div class="col-md-2 stepRow  ">
-                    <div class="bold">Vancouver</div>
+                    <div class="bold">Yes</div>
+                  </div>
+                </div>
+                <div class="row agreement">
+                  <div class="col-md-8 stepRow  leftRight">
+                    <div>
+                      Does the order include special expenses?
+                    </div>
+                  </div>
+                  <div class="col-md-2 stepRow  ">
+                    <div class="bold">No</div>
                   </div>
                 </div>
                 <!-- <div class="row">
@@ -1082,7 +1098,7 @@
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
-                    Do you have any concerns for your safety or your children's safety?
+                    Do you have any concerns for your safety or your children’s safety?
                   </div>
                 </div>
                 <div class="col-md-2 stepRow ">
@@ -1102,7 +1118,7 @@
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
-                    Are you enrolled in the Family Maintenance and Enforcement Program?
+                    Are you enrolled in the Family Maintenance and Enforcement Program (FMEP)?
                   </div>
                 </div>
                 <div class="col-md-2 stepRow ">
@@ -1132,7 +1148,7 @@
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
-                    How did you hear about Child Support Recalculation Service(CSRS)?
+                    How did you hear about the Child Support Recalculation Service (CSRS)?
                   </div>
                 </div>
                 <div class="col-md-2 stepRow">
@@ -1149,44 +1165,46 @@
               <div class="text-dark">
                 <ul>
                   <li>
-                    I will notify the recalculation service of any changes in my
-                    contact information or any legal action which may impact the
-                    recalculation of my child support
+                    I will notify the recalculation service of any changes in my contact information
+                    or any legal action which may impact the recalculation of my child support.
                   </li>
                   <li>
-                    I understand the recalculation service may access Court
-                    Services Online to obtain copies of the child support order
-                    or written agreement.
+                    I understand the recalculation service may access Court Services Online
+                    to obtain copies of the child support order or written agreement.
                   </li>
                   <li>
-                    Unless a court orders otherwise, I may withdraw from the
-                    recalculation service providing that the other party also
-                    agrees to withdraw.
+                    Unless a court orders otherwise, I may withdraw from the recalculation
+                    service providing that the other party also agrees to withdraw.
                   </li>
                   <li>
-                    I understand that if I do not provide my income tax
-                    information, as requested by the recalculation service, the
-                    service may adjust my annual income amount using rate
-                    increases set out under the Family Law Act Regulation
+                    I understand that if I do not provide my income tax information, as
+                    requested by the recalculation service, the service may adjust my annual
+                    income amount using rate increases set out under the Family Law Act Regulation.
                   </li>
                   <li>
-                    I understand the use of the information I provide to the
-                    recalculation service is for the purposes of child support
-                    recalculation. If I am involved with the Family Maintenance
-                    Enforcement Program, my information may be shared with this
-                    program.
+                    I understand the use of the information I provide to the recalculation
+                    service is for the purposes of child support recalculation. If I am involved
+                    with the Family Maintenance Enforcement Program, my information may be shared
+                    with this program.
+                  </li>
+                  <li>
+                    I understand that by submitting this electronic application future program
+                    communication will occur through my recalculation service account unless I
+                    request otherwise. The information I have given on this form is true and
+                    correct to the best of my knowledge and belief.
                   </li>
                 </ul>
-                <mat-checkbox  [checked]="eFormGroup.value.secondCtrl" [disabled]="eFormGroup.value.secondCtrl" form class="example-margin">I accept and acknowledge the terms and conditions listed
-                  above.</mat-checkbox>
+                <mat-checkbox  [checked]="eFormGroup.value.secondCtrl" [disabled]="eFormGroup.value.secondCtrl"
+                form class="example-margin">I accept and acknowledge the terms and conditions listed above.</mat-checkbox>
               </div>
             </div>
             <mat-checkbox color="primary"
             [class.mat-checkbox-disabled]="false"
-            >All of the information above is correct to the best of my knowledge</mat-checkbox>
+            >All of the information above is correct to the best of my knowledge.</mat-checkbox>
             <app-alert type="warning" icon="info">
               <ng-container #alertContent class="alert-content">
-                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission.
+                <strong>After submitting this form, please complete the application process by uploading a copy of
+                  your court order or filed written agreement.
                 </strong>
               </ng-container>
             </app-alert>

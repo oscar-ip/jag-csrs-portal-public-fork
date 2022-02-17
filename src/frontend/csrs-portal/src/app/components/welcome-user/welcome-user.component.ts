@@ -109,28 +109,12 @@ export class WelcomeUserComponent implements OnInit {
       color: 'red'
     };
 
-
-    /*
-    return this.http.get(api.get, {headers: new HttpHeaders(
-        {
-          'Authorization': 'Bearer' + my_token,
-           'Content-Type': 'application/json'
-              })});
-        }
-
-    */
-
     const accountData = this.accountFormGroup.value;
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
 
     this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
-    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount,
-      {headers: new HttpHeaders(
-        {
-          'Authorization': 'Bearer' + this.oidc.getAccessToken(),
-           'Content-Type': 'application/json'
-        })}).subscribe({
+    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
         var partyId = outData.partyId;
         var fileId = outData.fileId;
