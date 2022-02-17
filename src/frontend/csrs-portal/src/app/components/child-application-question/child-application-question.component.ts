@@ -20,6 +20,7 @@ import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-d
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // -- import data structure
 import {
@@ -81,6 +82,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
               @Inject(LoggerService) private logger,
+              @Inject(Router) private router,
               public dialog: MatDialog,
               private datePipe: DatePipe) {}
 
@@ -620,25 +622,18 @@ editPage(stepper, index){
 
         let customOptions: DialogOptions = { data: {fileNumber: fileNumber}};
         this.openDialog(customOptions);
+        this.router.navigate(['/communication']);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-
-          this.data = {
-            type: 'error',
-            title: e.error.message,
-            content: '',
-            weight: 'normal',
-            color: 'red'
-          };
-          this.openModalDialog();
-
-
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this._logger.info('Backend returned ', e);
+        this.data = {
+          type: 'error',
+          title: 'Technical error',
+          content: e.error.message,
+          weight: 'normal',
+          color: 'red'
+        };
+        this.openModalDialog();
       },
       complete: () => this._logger.info('apiAccountCreatePost is completed')
     })
