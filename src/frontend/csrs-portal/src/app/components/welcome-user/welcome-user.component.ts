@@ -10,6 +10,7 @@ import { AccountService } from 'app/api/api/account.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Inject} from '@angular/core';
 import { HttpClient, HttpStatusCode, HttpResponse } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppRoutes } from 'app/app.routes';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
@@ -24,6 +25,7 @@ import {
   ModelFile,
   FileStatus,
 } from 'app/api/model/models';
+import { AuthConfigModule } from '../../auth/auth-config.module';
 
 @Component({
   selector: 'app-welcome-user',
@@ -42,16 +44,23 @@ export class WelcomeUserComponent implements OnInit {
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(OidcSecurityService) private oidc,
+              @Inject(AuthConfigModule) private authConfigModule,
               public dialog: MatDialog,
-              private route: ActivatedRoute) {}
-
+    private route: ActivatedRoute) {
+    
+  }
+  
   ngOnInit(): void {
+    this.oidc.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
+
+    });
 
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.accountService.configuration.credentials['Authorization'] = this.oidc.getAccessToken;
+    
+    this.accountService.configuration.credentials['Bearer'] = this.oidc.getAccessToken();
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
         var user   = data.user;
@@ -109,7 +118,7 @@ export class WelcomeUserComponent implements OnInit {
 
     const accountData = this.accountFormGroup.value;
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
-
+    
     this.accountService.configuration.credentials['Authorization'] = this.oidc.getAccessToken;
     this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
