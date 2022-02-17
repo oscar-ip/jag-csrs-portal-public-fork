@@ -12,7 +12,6 @@ import { Inject} from '@angular/core';
 import { HttpClient, HttpStatusCode, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppRoutes } from 'app/app.routes';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
@@ -41,19 +40,14 @@ export class WelcomeUserComponent implements OnInit {
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
-              @Inject(OidcSecurityService) private oidc,
               public dialog: MatDialog,
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.oidc.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
-
-    });
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.accountService.configuration.credentials['Bearer'] = this.oidc.getAccessToken();
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
         var user   = data.user;
@@ -113,7 +107,7 @@ export class WelcomeUserComponent implements OnInit {
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
 
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
+
     this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
         var partyId = outData.partyId;
