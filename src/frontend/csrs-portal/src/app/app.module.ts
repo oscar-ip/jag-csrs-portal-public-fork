@@ -117,9 +117,9 @@ import { FormsModule } from '@angular/forms';
           basePath: '',//environment.apiUrl,
           credentials: {
             'Bearer': () => {
-              var token = authService.getAccessToken();
+              const token: string = authService.getAccessToken();
               if (token) {
-                return 'Bearer ' + authService.getAccessToken();
+                return 'Bearer ' + token;
               }
               return undefined;
             }
