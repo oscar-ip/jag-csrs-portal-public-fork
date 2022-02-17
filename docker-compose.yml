@@ -33,7 +33,7 @@ services:
       - FILEMANAGER__ADDRESS=https://localhost:8084
       - FILEMANAGER__SECURE=true
     ports:
-      - "8081:8080"
+      - "8080:8080"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
     depends_on: [seq, zipkin]
