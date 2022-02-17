@@ -46,14 +46,10 @@ export class WelcomeUserComponent implements OnInit {
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.oidc.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
-
-    });
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.accountService.configuration.credentials['Bearer'] = this.oidc.getAccessToken();
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
         var user   = data.user;
@@ -124,7 +120,6 @@ export class WelcomeUserComponent implements OnInit {
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
 
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount,
       {headers: new HttpHeaders(
         {

@@ -166,7 +166,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getIdentities() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
@@ -185,7 +184,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getProvinces() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;
@@ -204,7 +202,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getGenders() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
         this.genders = data;
@@ -223,7 +220,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getReferrals() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountReferralsGet().subscribe({
       next: (data) => {
         this.referrals = data;
@@ -242,7 +238,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getPreferredcontactmethods(){
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
         this.preferredContactMethods = data;
@@ -371,7 +366,6 @@ export class ApplicationFormStepperComponent implements OnInit {
 
     this.logger.info("csrsAccountRequest:", csrsAccountRequest);
 
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountUpdatecsrsaccountPost(csrsAccountRequest).subscribe({
       next: (outData:any) => {
 
