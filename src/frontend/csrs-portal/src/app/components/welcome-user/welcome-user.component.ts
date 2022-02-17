@@ -41,7 +41,6 @@ export class WelcomeUserComponent implements OnInit {
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
-              @Inject(OidcSecurityService) private oidc,
               public dialog: MatDialog,
               private route: ActivatedRoute) {}
 
@@ -120,12 +119,7 @@ export class WelcomeUserComponent implements OnInit {
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
 
-    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount,
-      {headers: new HttpHeaders(
-        {
-          'Authorization': 'Bearer' + this.oidc.getAccessToken(),
-           'Content-Type': 'application/json'
-        })}).subscribe({
+    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
         var partyId = outData.partyId;
         var fileId = outData.fileId;

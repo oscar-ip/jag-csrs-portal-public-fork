@@ -83,7 +83,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
               @Inject(LoggerService) private logger,
-              @Inject(OidcSecurityService) private oidc,
               public dialog: MatDialog,
               private datePipe: DatePipe) {}
 
@@ -91,7 +90,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this._accountService = this.accountService;
     this._lookupService = this.lookupService;
     this._logger = this.logger;
-    this._oidc = this.oidc;
 
 
     this.provinces = [{id: '123', value: 'British Columbia'}];
@@ -249,9 +247,6 @@ editPage(stepper, index){
   stepper.selectedIndex = index;
 }
   getIdentities() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-
-    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
@@ -270,8 +265,6 @@ editPage(stepper, index){
   }
 
   getProvinces() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-    //this._accountService.configuration.accessToken =  this._idToken;
     this._accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;
@@ -290,7 +283,6 @@ editPage(stepper, index){
   }
 
   getGenders() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
         this.genders = data;
@@ -309,8 +301,7 @@ editPage(stepper, index){
   }
 
   getCourtLocations() {
-    this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
-      this._lookupService.apiLookupCourtlocationsGet().subscribe({
+   this._lookupService.apiLookupCourtlocationsGet().subscribe({
         next: (data) => {
           this.courtLocations = data;
           this._logger.info('this.courtLocations',this.courtLocations);
@@ -328,8 +319,7 @@ editPage(stepper, index){
   }
 
   getCourtLevels() {
-    this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
-      this._lookupService.apiLookupCourtlevelsGet().subscribe({
+     this._lookupService.apiLookupCourtlevelsGet().subscribe({
         next: (data) => {
           this.courtLevels = data;
           this._logger.info('this.courtLevels',this.courtLevels);
@@ -348,7 +338,6 @@ editPage(stepper, index){
 
 
   getReferrals() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountReferralsGet().subscribe({
       next: (data) => {
         this.referrals = data;
@@ -367,7 +356,6 @@ editPage(stepper, index){
   }
 
   getPreferredcontactmethods(){
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
         this.preferredContactMethods = data;
@@ -621,7 +609,6 @@ editPage(stepper, index){
 
       this._logger.info("newFileRequest:", newFileRequest);
 
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
     this._accountService.apiAccountCreatePost(newFileRequest).subscribe({
       next: (outData:any) => {
 

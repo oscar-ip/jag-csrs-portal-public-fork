@@ -66,7 +66,6 @@ export class ApplicationFormStepperComponent implements OnInit {
       @Inject(AccountService) private accountService,
       @Inject(LookupService) private lookupService,
       @Inject(LoggerService) private logger,
-      @Inject(OidcSecurityService) private oidc,
       @Inject(Router) private router,
       public dialog: MatDialog,
       private datePipe: DatePipe,
