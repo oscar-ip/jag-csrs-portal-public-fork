@@ -113,8 +113,8 @@ namespace Csrs.Api.Features.UserRequests
                     }
                     task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);
                 }
-                task.Prioritycode = 1;
-                task.Statuscode = 2;
+                task.Prioritycode = 1;// Normal
+                task.Statuscode = 2; // Not Started
                 //ap.Statecode = 0;  defaults in DB
                 MicrosoftDynamicsCRMtask result = await _dynamicsClient.Tasks.CreateAsync(task);
                 _logger.AddProperty("ActivityId", result.Activityid);
