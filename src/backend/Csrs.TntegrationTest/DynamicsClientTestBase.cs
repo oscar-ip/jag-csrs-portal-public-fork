@@ -36,7 +36,7 @@ namespace Csrs.TntegrationTest
                 //client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
                 client.Timeout = TimeSpan.FromSeconds(150); 
             });
-
+            services.AddSingleton(new DynamicsClientOptions { NativeOdataResourceUrl = csrsConfiguration.OAuth.ResourceUrl });
             services.AddHttpClient<IDynamicsClient, DynamicsClient>(client =>
             {
                 //client.BaseAddress = new Uri(csrsConfiguration.ApiGateway.BasePath);
