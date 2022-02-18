@@ -239,3 +239,9 @@
   letter-spacing: 1px;
   cursor: not-allowed;
 }
+.app-cancel,
+.app-save {
+  display: inline-flex;
+  justify-content: center;
+  cursor: pointer;
+}

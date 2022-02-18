@@ -56,16 +56,15 @@ namespace Csrs.Api.Features.UserRequests
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                _logger.LogDebug("Checking current user for BCeID Guid");
-
+                
+                _logger.LogInformation("Creating User Request");
                 string userId = _userService.GetBCeIDUserId();
                 if (string.IsNullOrEmpty(userId))
                 {
-                    _logger.LogInformation("No BCeID on authenticated user, cannot User Request");
+                    _logger.LogInformation("No BCeID on authenticated user, cannot create User Request");
                     return new Response("Unauthenticated");
                 }
-                var bceidScope = _logger.AddBCeIdGuid(userId);
-                // find to see if the person has an account already?
+                _logger.AddBCeIdGuid(userId);
                 MicrosoftDynamicsCRMssgCsrspartyCollection parties = await _dynamicsClient.GetPartyByBCeIdAsync(userId, cancellationToken);
                 MicrosoftDynamicsCRMssgCsrsparty party;
                 if (parties.Value.Count > 0)
@@ -77,7 +76,7 @@ namespace Csrs.Api.Features.UserRequests
                     _logger.LogInformation("No associated party, cannot create User Request");
                     return new Response("No Party Associated");
                 }
-                _logger.LogInformation("Creating User Request");
+                _logger.AddPartyId(party.SsgCsrspartyid);
                 MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
                 task.Activitytypecode = "task";
                 task.Subject = "File " + request.FileNo + " - " + request.RequestType;
@@ -86,6 +85,7 @@ namespace Csrs.Api.Features.UserRequests
                 task.Description =  desc;
                 task.Isregularactivity = true;
                 //Get the file
+                _logger.AddFileId(request.FileId);
                 MicrosoftDynamicsCRMssgCsrsfile originFile;
                 try
                 {
@@ -111,13 +111,13 @@ namespace Csrs.Api.Features.UserRequests
                         _logger.LogInformation("File has no owner, cannot create User Request");
                         return new Response("File has no owner");
                     }
-                    // task.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owneridValue);
                     task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);
                 }
-                task.Prioritycode = 1;
-                task.Statuscode = 2;
+                task.Prioritycode = 1;// Normal
+                task.Statuscode = 2; // Not Started
                 //ap.Statecode = 0;  defaults in DB
                 MicrosoftDynamicsCRMtask result = await _dynamicsClient.Tasks.CreateAsync(task);
+                _logger.AddProperty("ActivityId", result.Activityid);
                 _logger.LogDebug("User Request created successfully");
                 return new Response("User Request Created");
             }
