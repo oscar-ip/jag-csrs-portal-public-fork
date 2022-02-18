@@ -63,9 +63,10 @@ public static class WebApplicationBuilderExtensions
             client.Timeout = TimeSpan.FromSeconds(15); // set the auth timeout
             //client.Timeout = TimeSpan.FromSeconds(150); 
         });
-
+        services.AddSingleton(new DynamicsClientOptions { NativeOdataResourceUrl = oAuthOptions.ResourceUrl });
         services.AddHttpClient<IDynamicsClient, DynamicsClient>(client =>
         {
+
             client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
             client.Timeout = TimeSpan.FromSeconds(30); // data timeout
             //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
