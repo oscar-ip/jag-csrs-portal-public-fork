@@ -287,7 +287,7 @@
                     <mat-form-field class="w-100">
                       <mat-label>Choose the subject you are inquiring about</mat-label>
                       <mat-select formControlName="contactSubject">
-                        <mat-option *ngFor="let subject of contactSubjects" [value]="subject.id">
+                        <mat-option *ngFor="let subject of contactSubjects" [value]="subject.name">
                           {{subject.name}}
                         </mat-option>
                       </mat-select>

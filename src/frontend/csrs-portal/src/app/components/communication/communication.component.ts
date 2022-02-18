@@ -65,11 +65,14 @@ export class CommunicationComponent implements OnInit {
   curDateStr: string;
   portalUser: string;
   contactSubjects = [
-    { id: 1, name: "Subject One" },
-    { id: 2, name: "Subject Two" },
-    { id: 3, name: "Subject Three" },
-    { id: 4, name: "Subject Four" },
-    { id: 5, name: "Other" }
+    { id: 1, name: "Request a call" },
+    { id: 2, name: "File withdrawal" },
+    { id: 3, name: "Section 7 expenses withdrawal" },
+    { id: 4, name: "Clerical error on the Statement of Recalculation" },
+    { id: 5, name: "Safety concerns" },
+    { id: 6, name: "Update contact information" },
+    { id: 7, name: "Change preferred method of communication" },
+    { id: 8, name: "Other" }
   ];
   
   accountSummary: HttpResponse<AccountFileSummary>;
