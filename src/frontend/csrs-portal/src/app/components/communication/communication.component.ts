@@ -45,6 +45,8 @@ export class CommunicationComponent implements OnInit {
    }
   showValidationMessages: boolean;
   validationMessages: any[];
+  showSuccessMessages: boolean;
+  successMessages: any[];
   uploadFormGroup: FormGroup;
   bceIdLink: string;
   selectedFile: File = null;
@@ -135,6 +137,8 @@ export class CommunicationComponent implements OnInit {
   clearContactForm(): void {
     this.showValidationMessages = false;
     this.validationMessages = [];
+    this.showSuccessMessages = false;
+    this.successMessages = [];
     this.contactFormGroup.reset();
   }  
 
@@ -168,6 +172,8 @@ export class CommunicationComponent implements OnInit {
     }
     
   sendContact(): void {
+    this.showSuccessMessages = false;
+    this.successMessages = [];
     if (!this.contactFormGroup.valid) {
       this.validationMessages = [];
       this.showValidationMessages = true;
@@ -218,6 +224,9 @@ export class CommunicationComponent implements OnInit {
         },
         complete: () => this.logger.info('apiUserrequestCreatePost is completed')
       })
+      this.clearContactForm();
+      this.showSuccessMessages = true;
+      this.successMessages.push('Contact Request Created');
     }
   }
 
