@@ -143,7 +143,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       homePhoneNumber: [''],
       cellPhoneNumber: [''],
       workPhoneNumber: [''],
-      email: ['', Validators.required],
+      email: [''],
       gender: ['']
 
     });
