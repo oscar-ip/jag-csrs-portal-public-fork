@@ -131,3 +131,9 @@ button.submitStep{
   background-color: green;
   color: #ffffff;
 }
+
+.example-button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}

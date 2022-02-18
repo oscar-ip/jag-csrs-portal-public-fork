@@ -120,7 +120,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       city: ['', Validators.required],
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
+      phoneNumber: [''],
       email: ['', Validators.email],
       PreferredName: [''],
       saddress: [''],
@@ -151,9 +151,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.fourthFormGroup1 = this._formBuilder.group({
       users: this._formBuilder.array([
         this._formBuilder.group({
-          firstName: [''],
-          lastName: [''],
-          birthdate: [],
+          firstName: ['', Validators.required],
+          lastName: ['', Validators.required],
+          birthdate: ['', Validators.required],
           childDependency: [],
           middleName: []
         })
@@ -389,6 +389,11 @@ editPage(stepper, index){
 
     usersArray.insert(arraylen, newUsergroup);
   }
+
+  deletechild(index){
+    this.fourthFormGroup1.get('users')['controls'].splice(index,1)
+  }
+
 
   saveLater(){
     const formData = {

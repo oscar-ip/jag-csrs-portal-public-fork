@@ -62,7 +62,7 @@
               </section>
             </div>
             <mat-divider></mat-divider>
-            <div>
+            <div class="nextButton">
               <button routerLink="/communication" mat-stroked-button color="basic" matStepperPrevious>
                 < Back
               </button>
@@ -91,7 +91,6 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal middle name</mat-label>
                   <input matInput formControlName="givenNames" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -108,22 +107,11 @@
                 <mat-form-field class="w-100">
                   <mat-label>Preferred name</mat-label>
                   <input matInput formControlName="PreferredName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6">
-                <!-- <mat-form-field class="w-100">
-                  <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                  <input matInput [matDatepicker]="picker2" [max]="today" formControlName="birthdate" readonly
-                    (click)="picker.open()" />
-                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                  <mat-datepicker #picker2 startView="multi-year"></mat-datepicker> -->
-                  <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
-                                    "error.required" | translate
-                                    }}</mat-error> -->
-                <!-- </mat-form-field> -->
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
                   <input matInput [matDatepicker]="picker2" formControlName="birthdate">
@@ -146,7 +134,6 @@
                 <mat-form-field class="w-100">
                   <mat-label>Street address 2</mat-label>
                   <input matInput formControlName="saddress" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -185,10 +172,6 @@
                 <mat-form-field class="w-100">
                   <mat-label>Home phone number</mat-label>
                   <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                    "error.required" | translate
-                                    }}</mat-error>
-                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -197,20 +180,12 @@
                 <mat-form-field class="w-100">
                   <mat-label>Cell phone number</mat-label>
                   <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                    "error.required" | translate
-                                    }}</mat-error>
-                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Work phone number</mat-label>
                   <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                    "error.required" | translate
-                                    }}</mat-error>
-                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -231,7 +206,6 @@
                       {{ gender.value }}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -246,7 +220,6 @@
                       {{ identity.value }}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -457,7 +430,7 @@
                 let i = index
               " [formGroup]="userFormGroup">
               <div class="pb-1 bold">
-                Child{{fourthFormGroup1.get('users')}}
+                Child{{i+1}}
               </div>
               <div class="row row-height" >
                 <div class="col-md-6">
@@ -490,9 +463,10 @@
                       (click)="picker.open()" />
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
-                    <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
+                    <!--
+                    <mat-error *ngIf="fourthFormGroup1.get('birthdate').hasError('required')">{{
                                         "error.required" | translate
-                                        }}</mat-error> -->
+                                        }}</mat-error>-->
                   </mat-form-field>
                 </div>
               </div>
@@ -509,11 +483,26 @@
                   </mat-radio-group>
                 </div>
               </div>
-              <div class="add-child">
+
+              <div class="row button-row">
+                  <div class="col-md-8"></div>
+                  <div class="col-md-2">
+                    <div *ngIf="i>0">
+                      <button mat-button style="color:red"(click)="deletechild(i)">Delete
+                        <mat-icon style="color:red" color="danger">delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <button  mat-stroked-button (click)="callAntherchild()">+ Add another child</button>
+                  </div>
+              </div>
+
+           <!--   <div class="add-child">
                 <button  mat-stroked-button (click)="callAntherchild()">
                   + Add another child
                 </button>
-              </div>
+              </div> -->
             </ng-container>
           </form>
           <mat-divider></mat-divider>
