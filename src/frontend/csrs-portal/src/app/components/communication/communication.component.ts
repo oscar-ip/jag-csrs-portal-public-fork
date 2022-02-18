@@ -13,13 +13,14 @@ import { AppConfigService } from 'app/services/app-config.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { FileService } from 'app/api/api/file.service';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { DatePipe } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { AccountService } from 'app/api/api/account.service';
 import { AccountFileSummary } from 'app/api/model/accountFileSummary.model';
+import { UserRequestService } from 'app/api/api/userRequest.service';
+import { UserRequest } from '../../api';
 
 @Component({
   selector: 'app-communication',
@@ -36,13 +37,14 @@ export class CommunicationComponent implements OnInit {
               @Inject(LoggerService) private logger,
               @Inject(AppConfigService) private appConfigService,
               @Inject(FileService) private fileService,
-              @Inject(OidcSecurityService) private oidc,
               @Inject(AccountService) private accountService,
+              @Inject(UserRequestService) private userRequestService,
               private _http: HttpClient,
               public dialog: MatDialog,
               private datePipe: DatePipe  ) {
    }
-
+  showValidationMessages: boolean;
+  validationMessages: any[];
   uploadFormGroup: FormGroup;
   bceIdLink: string;
   selectedFile: File = null;
@@ -56,8 +58,10 @@ export class CommunicationComponent implements OnInit {
   _reponse: HttpResponse<null>;
   contactFormGroup: FormGroup;
   files: any[];
+  selectedContactFile: any;
   curDate = new Date();
-  curDateStr: string
+  curDateStr: string;
+  portalUser: string;
   contactSubjects = [
     { id: 1, name: "Subject One" },
     { id: 2, name: "Subject Two" },
@@ -70,15 +74,13 @@ export class CommunicationComponent implements OnInit {
   public toggleRow = false;
   ngOnInit(): void {
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
-    console.log('Account Get');
     this.accountService.apiAccountGet('response', false).subscribe({
       next: (data) => {
         this.accountSummary = data;
-        console.log('Files size' + this.accountSummary.body.files.length);
+        this.portalUser = this.accountSummary.body.user.firstName;
         if ( this.accountSummary.status === HttpStatusCode.Ok &&
               (this.accountSummary.body.files != null || this.accountSummary.body.files.length > 0)) {
-          console.log('Files size' + this.accountSummary.body.files.length);
-          this.files = this.accountSummary.body.files;
+           this.files = this.accountSummary.body.files;
         }
       },
       error: (e) => {
@@ -104,8 +106,6 @@ export class CommunicationComponent implements OnInit {
       {id: '5', docType: 'Other'},
     ];
 
-    this._token = '';
-
     this.contactFormGroup = this._formBuilder.group({
       contactFile: [null, Validators.required],
       contactSubject: [null, Validators.required],
@@ -124,13 +124,17 @@ export class CommunicationComponent implements OnInit {
   get contactMessage() {
     return this.contactFormGroup.get('contactMessage');
   }
-  onFileChange(ob) {
-    console.log('File changed...');
-    let file = ob.value;
-    console.log(file);
+  onFileChange(ob): void {
+    let fileValue = ob.value;
+    for (var i = 0; i < this.files.length; i++) {
+      if (fileValue == this.files[i].fileId) {
+        this.selectedContactFile = this.files[i];
+      }
+    }
   }
   clearContactForm(): void {
-    console.log('Form reset...');
+    this.showValidationMessages = false;
+    this.validationMessages = [];
     this.contactFormGroup.reset();
   }  
 
@@ -164,13 +168,58 @@ export class CommunicationComponent implements OnInit {
     }
     
   sendContact(): void {
-    if (this.contactFormGroup.valid) {
-
+    if (!this.contactFormGroup.valid) {
+      this.validationMessages = [];
+      this.showValidationMessages = true;
+      if (this.contactFile.hasError) {
+        for (const error in this.contactFile.errors) {
+          this.validationMessages.push('Contact file '+error.toString());
+        }
+      }
+      if (this.contactSubject.hasError) {
+        for (const error in this.contactFile.errors) {
+          this.validationMessages.push('Contact Subject ' + error.toString());
+        }
+      }
+      if (this.contactMessage.hasError) {
+        for (const error in this.contactFile.errors) {
+          this.validationMessages.push('Contact Message ' + error.toString());
+        }
+      }
     } else {
-      console.log('Form invalid...');
+      this.showValidationMessages = false;
+      this.validationMessages = [];
+      this.showValidationMessages = false;
+      let createUserRequest: UserRequest = {
+        fileId: this.selectedContactFile.fileId,
+        fileNo: this.selectedContactFile.fileNumber,
+        requestType: this.contactSubject.value,
+        requestMessage: this.contactMessage.value
+      }
+      this.userRequestService.apiUserrequestCreatePost(createUserRequest).subscribe({
+        next: (outData: any) => {
+        },
+        error: (e) => {
+          if (e.error instanceof Error) {
+            this.logger.error(e.error.message);
+
+            this.data = {
+              type: 'error',
+              title: e.error.message,
+              content: '',
+              weight: 'normal',
+              color: 'red'
+            };
+
+          } else {
+            //Backend returns unsuccessful response codes such as 404, 500 etc.
+            this.logger.info('Backend returned ', e);
+          }
+        },
+        complete: () => this.logger.info('apiUserrequestCreatePost is completed')
+      })
     }
   }
-
 
   ontable(element){
     console.log('>>>', element);
@@ -268,8 +317,7 @@ onDocTypeChanged(event) {
   }
 
 submitUploadedAttachment() {
-    this.fileService.configuration.accessToken = this.oidc.getAccessToken();
-
+    
     const httpOptions = {
     headers: new HttpHeaders({'Content-Type': this.selectedFile.type})
   };

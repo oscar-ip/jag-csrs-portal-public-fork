@@ -1,7 +1,7 @@
 <div class="container">
   <section>
     <div>
-      <h1 class="mb-5">Welcome, User</h1>
+      <h1 class="mb-5">Welcome, {{portalUser}}</h1>
       <hr style="opacity: 1; color: #fcba19" />
     </div>
   </section>
@@ -188,13 +188,12 @@
                 <div class="row">
                   <div class="col" style="text-align: right;" >
                     <button mat-flat-button
-                        type="button"
-                        class="large"
-                        color="primary"
-                        style="width: 250px;"
-                        (click)="onUpload()"
-                    >
-                    Upload Document
+                            type="button"
+                            class="BC-Gov-PrimaryButton"
+                            color="primary"
+                            style="width: 250px; float:right;"
+                            (click)="onUpload()">
+                      Upload Document
                     </button>
                   </div>
                 </div>
@@ -254,9 +253,9 @@
                   <div class="col">
                     <mat-form-field>
                       <mat-label>Select File</mat-label>
-                      <mat-select formControlName="contactFile">
+                      <mat-select formControlName="contactFile" (selectionChange)="onFileChange ($event)">
                         <mat-option *ngFor="let file of files" [value]="file.fileId">
-                          {{file.fileId}}
+                          {{file.fileNumber}}
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="contactFile.hasError('required')">
@@ -311,6 +310,14 @@
                     </div>
                   </div>
                   <div class="row">
+                    <section class="bc-gov-alertbanner-error" *ngIf="showValidationMessages">
+                      <p *ngFor="let message of validationMessages">
+                        <span class="app-cancel">
+                          <mat-icon aria-label="error icon" style="font-size: 15px;">error</mat-icon>
+                          {{message}}
+                        </span>
+                      </p>
+                    </section>
                   </div>
                   <div class="row">
                     <div class="col-1">
