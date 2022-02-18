@@ -52,6 +52,13 @@ export class ChildApplicationQuestionComponent implements OnInit {
   eFormGroup: FormGroup;
   nineFormGroup: FormGroup;
 
+  default_recalculationOrdered: any = 'false';
+  default_isSpecifiedIncome: any = 'false';
+  default_childSafety: any = 'false';
+  default_contactMethod: any = 'false';
+  default_enrollFMEP: any = 'false';
+  default_incomeAssistance: any = 'false';
+
   provinces: any = [];
   genders: any = [];
   identities: any = [];
@@ -160,13 +167,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
       ])
     });
-    // this.fourthFormGroup = this._formBuilder.group({
-    //   firstName: ['', Validators.required],
-    //   lastName: ['', Validators.required],
-    //   birthdate: [],
-    //   givenNames: [],
-    //   middleName: []
-    // });
+
     this.fifthFormGroup = this._formBuilder.group({
       orderDate: [],
       courtLocation: [],
@@ -174,8 +175,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
       recalculationOrdered: [],
       isSpecifiedIncome: [],
     });
+
     this.sixFormGroup = this._formBuilder.group({
-      // secondCtrl: ['', Validators.required],
       childSafety: [''],
       childSafetyDescription: [''],
       contactMethod: [''],
@@ -183,7 +184,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
       FMEPinput: [''],
       incomeAssistance: [''],
       referral: [''],
-
     });
     this.seventhFormGroup = this._formBuilder.group({
       secondCtrl: [''],

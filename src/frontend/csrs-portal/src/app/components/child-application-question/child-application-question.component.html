@@ -369,7 +369,7 @@
           </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="fourthFormGroup1" [editable]="isEditable">
+        <mat-step [stepControl]="fourthFormGroup1" [editable]="true"><!--"isEditable">-->
           <form [formGroup]="fourthFormGroup1">
             <ng-template matStepLabel>Information about the Child(ren)</ng-template>
             <div class="heading">
@@ -418,10 +418,7 @@
                       (click)="picker.open()" />
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
-                    <!--
-                    <mat-error *ngIf="fourthFormGroup1.get('birthdate').hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error>-->
+                    <mat-error>{{"error.required" | translate}}</mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -439,7 +436,7 @@
                 </div>
               </div>
 
-              <div class="row button-row">
+              <div class="row button-row pb-3">
                   <div class="col-md-8"></div>
                   <div class="col-md-2">
                     <div *ngIf="i>0">
@@ -452,12 +449,6 @@
                     <button  mat-stroked-button (click)="callAntherchild()">+ Add another child</button>
                   </div>
               </div>
-
-           <!--   <div class="add-child">
-                <button  mat-stroked-button (click)="callAntherchild()">
-                  + Add another child
-                </button>
-              </div> -->
             </ng-container>
           </form>
           <mat-divider></mat-divider>
@@ -470,7 +461,7 @@
             </button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="fifthFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="fifthFormGroup" [editable]="true">
           <form [formGroup]="fifthFormGroup" >
             <ng-template matStepLabel>Details about the Court Order or Written Agreement</ng-template>
             <div class="heading">
@@ -485,7 +476,6 @@
                       {{courtLocation.value}}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -495,9 +485,6 @@
                     (click)="picker.open()" />
                   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                   <mat-datepicker #picker1 startView="multi-year"></mat-datepicker>
-                  <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -516,8 +503,8 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="recalculationOrdered">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
-                  <mat-radio-button value="No">No</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_recalculationOrdered ==='false'" >Yes</mat-radio-button>
+                  <mat-radio-button value="No" >No</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
@@ -527,7 +514,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="isSpecifiedIncome">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_isSpecifiedIncome ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -544,7 +531,7 @@
             </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="sixFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="sixFormGroup" [editable]="true">
           <form [formGroup]="sixFormGroup">
             <ng-template matStepLabel>Additional Information</ng-template>
             <div class="row text-dark mt-4">
@@ -554,7 +541,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="childSafety" aria-label="Select an option">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_childSafety ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -573,7 +560,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="contactMethod" aria-label="Select an option">
-                  <mat-radio-button value="Email">Email</mat-radio-button>
+                  <mat-radio-button value="Email" [checked]="default_contactMethod ==='false'">Email</mat-radio-button>
                   <mat-radio-button value="Paper Mail">Paper Mail</mat-radio-button>
                 </mat-radio-group>
               </div>
@@ -584,20 +571,11 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="enrollFMEP" aria-label="Select an option">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_enrollFMEP ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
-            <!-- <div class="stepRow">
-              <div>
-                Are you enrolled in the Family Maintenance Enforcement Program?
-              </div>
-              <mat-radio-group aria-label="Select an option">
-                <mat-radio-button value="1">Yes</mat-radio-button>
-                <mat-radio-button value="2">No</mat-radio-button>
-              </mat-radio-group>
-            </div> -->
             <div class="example-container">
               <mat-form-field appearance="fill">
                 <mat-label>My FMEP file # is:</mat-label>
@@ -610,7 +588,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_incomeAssistance ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -625,7 +603,6 @@
                       {{referral.value}}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -641,38 +618,7 @@
           </form>
         </mat-step>
 
-        <!-- <mat-step [stepControl]="seventhFormGroup">
-          <form [formGroup]="seventhFormGroup">
-            <ng-template matStepLabel>Upload your documents</ng-template>
-            <div>
-              Please attach your most recent
-              <strong>Child Support Order</strong> or filed
-              <strong>Written Agreement</strong>
-            </div>
-            <div class="document-drag-container">
-              <div class="dropzone">
-                <input class="drop-file" type="file" #fileDropRef id="fileDropRef" multiple />
-                <h3>Drag and drop file here</h3>
-                <h3>or</h3>
-                <label class="browse-file" for="fileDropRef">Choose Documents</label>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-            <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
-              </button>
-              <button mat-button matStepperPrevious>
-                Save my application for later
-              </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step> -->
-
-        <mat-step [stepControl]="eFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="eFormGroup" [editable]="true">
           <form [formGroup]="eFormGroup">
             <ng-template matStepLabel>Conditions of Enrolment</ng-template>
             <div class="heading">
