@@ -536,13 +536,14 @@ export class QuestionnaireComponent implements OnInit {
     }
     document.querySelector(id).setAttribute('color', 'color:#2E8540 !important');
 
-      doc.body[style].cssText += 'color:#2E8540 !important';
+    doc.body[style].cssText += 'color:#2E8540 !important';
   }
   setLabel(question: any, buttonItem: any, index: any) {
     question.clicked = buttonItem.label;
     question.isYes = buttonItem.label === 'No' ? false : true;
   }
   setUIconColor(index, question) {
+
     question.submit = true;
     const style = 'style';
     setTimeout(() => {
@@ -604,18 +605,18 @@ export class QuestionnaireComponent implements OnInit {
   setColorIcon(question,buttonItem,i){
     let myGreen = false;
     let myRed = false;
-   if((question.clicked == buttonItem.label &&  question.clicked == 'Yes')){
+    if ((question.clicked == buttonItem.label &&  question.clicked == 'Yes')){
    
      if([4,5,8].includes(i+1)){
-       myRed = true
+       myRed = true;
      } else {
-       myGreen = true
+       myGreen = true;
      }
-     this.setUIconColor(i,question);
+     this.setUIconColor(i, question);
    }
-   if((question.clicked == buttonItem.label &&  question.clicked == 'No')){
+    if ((question.clicked === buttonItem.label &&  question.clicked == 'No')){
     
-     if([3,4,5,6,7,8].includes(i+1)){
+     if ([3, 4 , 5 , 6 , 7 , 8].includes(i + 1)){
        myGreen = true
      } else {
        myRed = true
@@ -623,11 +624,12 @@ export class QuestionnaireComponent implements OnInit {
      this.setUIconColor(i,question);
 
    }
-   if((question.clicked == buttonItem.label &&  question.clicked == 'I don’t know')){
+    if ((question.clicked == buttonItem.label &&  question.clicked === 'I don’t know')){
      myGreen = true
    }
 
-   return { 'myGreen' : myGreen, 'myRed' : myRed  }
+    // tslint:disable-next-line: object-literal-key-quotes
+    return { 'myGreen' : myGreen, 'myRed' : myRed  };
  }
   public async ngOnInit() {
 
@@ -658,7 +660,7 @@ export class QuestionnaireComponent implements OnInit {
 
   downloadApplication()
   {
-    let link = document.createElement('a');
+    const link = document.createElement('a');
     link.download = "Application.pdf";
     link.href = "assets/Application.pdf";
     link.click();

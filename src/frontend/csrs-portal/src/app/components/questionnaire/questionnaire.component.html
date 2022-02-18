@@ -79,6 +79,7 @@
                   <hr class="mt-0 mb-4" style="opacity: 1">
                   <div class="button-row">
                      <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
+                      <button *ngIf="i == 0" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)"><a href="/">< back</a></button>
                      <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
                      <button class="nextStep" [disabled]="!question.clicked" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
                      </span>
