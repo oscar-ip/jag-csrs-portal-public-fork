@@ -8,7 +8,7 @@ namespace Csrs.Interfaces.Dynamics
 {
     public static class DynamicsExtensions
     {
-        private const int Active = 1;
+        private const string ActiveStateCode = "statecode eq 0";
 
         /// <summary>
         /// Returns all the parties with matching ssg_bceid_userid, ordered by ssg_bceid_last_update descending.
@@ -24,7 +24,7 @@ namespace Csrs.Interfaces.Dynamics
             bceid = GuidGuard(bceid);
 
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
+            string filter = $"ssg_bceid_guid eq '{bceid}' and {ActiveStateCode}";
             var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
             return parties;
         }
@@ -87,7 +87,7 @@ namespace Csrs.Interfaces.Dynamics
 
             List<string> select = new List<string> { "ssg_csrspartyid" };
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active}";
+            string filter = $"ssg_bceid_guid eq '{bceid}' and {ActiveStateCode}"; 
             try
             {
                 var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
@@ -112,7 +112,7 @@ namespace Csrs.Interfaces.Dynamics
 
             partyId = GuidGuard(partyId);
 
-            var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and statuscode eq {Active}";
+            var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and {ActiveStateCode}";
             var orderby = new List<string> { "createdon" };
             var select = new List<string> { "ssg_filenumber", "_ssg_recipient_value", "_ssg_payor_value" };
 
@@ -166,6 +166,8 @@ namespace Csrs.Interfaces.Dynamics
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
+            fileId = GuidGuard(fileId);
+
             string filter = $"ssg_csrsfileid eq {fileId}";
             List<string> select = new List<string> { "ssg_csrsfileid", "ssg_filenumber", "_ownerid_value", "_owninguser_value", "_owningteam_value" };
            
@@ -178,7 +180,9 @@ namespace Csrs.Interfaces.Dynamics
             fileId = GuidGuard(fileId);
 
             string filter = $"_ssg_csrsfile_value eq {fileId}";
-            List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", "statuscode", "_ssg_toparty_value" };
+            List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", 
+                                                    "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", 
+                                                    "statuscode", "_ssg_toparty_value" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
             var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
@@ -195,14 +199,24 @@ namespace Csrs.Interfaces.Dynamics
         /// <returns>parties</returns>
         public static async Task<MicrosoftDynamicsCRMssgCsrspartyCollection> GetPartyByBCeIdAndRefenceNumberAsync(this IDynamicsClient dynamicsClient, string bceid, string referenceNumber, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            bceid = GuidGuard(bceid);
+            referenceNumber = Escape(referenceNumber);
+
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_guid eq '{bceid}' and statuscode eq {Active} and ssg_referencenumber eq '{referenceNumber}'";
+            string filter = $"ssg_bceid_guid eq '{bceid}' and {ActiveStateCode} and ssg_referencenumber eq '{referenceNumber}'";
             var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
             return parties;
         }
 
         public static async Task<MicrosoftDynamicsCRMssgCsrsfileCollection> GetFileByPartyIdAndFileNumber(this IDynamicsClient dynamicsClient, string partyId, string fileNumber, CancellationToken cancellationToken)
         {
+
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            partyId = GuidGuard(partyId);
+            fileNumber = Escape(fileNumber);
 
             string filter = $"(_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}) and ssg_filenumber eq '{fileNumber}'";
             List<string> select = new List<string> { "ssg_csrsfileid" };
@@ -302,7 +316,7 @@ namespace Csrs.Interfaces.Dynamics
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
-            var filter = $"statuscode eq {Active}";
+            var filter = $"{ActiveStateCode}";
             var select = new List<string> { "ssg_ijssbccourtlocationid", "ssg_bccourtlocationname" };
 
             var values = await dynamicsClient.Ssgijssbccourtlocations.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
@@ -322,7 +336,7 @@ namespace Csrs.Interfaces.Dynamics
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
-            var filter = $"statuscode eq {Active}";
+            var filter = $"{ActiveStateCode}";
             var select = new List<string> { "ssg_csrsbccourtlevelid", "ssg_courtlevellabel" };
 
             var values = await dynamicsClient.Ssgcsrsbccourtlevels.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);

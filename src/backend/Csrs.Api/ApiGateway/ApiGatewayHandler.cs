@@ -39,7 +39,6 @@ namespace Csrs.Api.ApiGateway
                                     Encoding.UTF8,
                                     "application/json");//CONTENT-TYPE header
 
-                _logger.LogInformation("The _apiGatewayOptions.BasePath is ", path);
                 request.RequestUri = path;
             }
 

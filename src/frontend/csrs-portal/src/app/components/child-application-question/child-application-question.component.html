@@ -11,7 +11,7 @@
   <section class="stepper-section">
     <div class="flex-6-col">
       <mat-stepper orientation="vertical" [linear]="true"  #stepper>
-        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="firstFormGroup" [editable]="true"><!--"isEditable">-->
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Getting Started</ng-template>
             <div class="text-dark">
@@ -45,7 +45,7 @@
                   <strong>
                     Do you have an order or filed written agreement?<span class="text-danger">*</span></strong>
                 </label>
-                <div class="row">
+                <div class="row py-2">
                   <div class="col-12">
                     <mat-radio-group formControlName="secondControl">
                       <mat-radio-button class="radio-question" value="Order">
@@ -63,7 +63,7 @@
             </div>
             <mat-divider></mat-divider>
             <div class="nextButton">
-              <button routerLink="/communication" mat-stroked-button color="basic" matStepperPrevious>
+              <button routerLink="/welcomeuser" mat-stroked-button color="basic" matStepperPrevious>
                 < Back
               </button>
               <button class="nextStep" [disabled]="!firstFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
@@ -73,7 +73,7 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="secondFormGroup" [editable]="true"><!--"isEditable">-->
           <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Your Personal Information</ng-template>
             <div class="pb-1">
@@ -84,7 +84,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="firstName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -97,9 +97,9 @@
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Legal last name*<span class="text-danger">*</span></mat-label>
+                  <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="lastName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -117,6 +117,7 @@
                   <input matInput [matDatepicker]="picker2" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6"></div>
@@ -126,7 +127,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Street address 1<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="address1" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -142,7 +143,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>City<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="city" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -154,7 +155,7 @@
                       {{ province.value }}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -164,7 +165,7 @@
                   <mat-label>Postal code<span class="text-danger">*</span></mat-label>
                   <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
                     formControlName="postalCode" [showMaskTyped]="false" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -194,7 +195,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Email<span class="text-danger">*</span></mat-label>
                   <input type="email" matInput formControlName="email" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -235,7 +236,7 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="thirdFormGroup" [editable]="true"><!--"isEditable">-->
           <form [formGroup]="thirdFormGroup">
             <ng-template matStepLabel>Information about the Other Party (parent, caregiver, guardian)
             </ng-template>
@@ -250,14 +251,13 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="firstName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Legal middle name</mat-label>
                   <input matInput formControlName="givenNames" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -266,7 +266,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="lastName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -274,22 +274,11 @@
                 <mat-form-field class="w-100">
                   <mat-label>Preferred name</mat-label>
                   <input matInput formControlName="pname" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
             <div class="row row-height">
               <div class="col-md-6">
-                <!-- <mat-form-field class="w-100">
-                  <mat-label>Birthdate</mat-label>
-                  <input matInput [matDatepicker]="picker" [max]="today" formControlName="birthdate" readonly
-                    (click)="picker.open()" />
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker startView="multi-year"></mat-datepicker> -->
-                  <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error> -->
-                <!-- </mat-form-field> -->
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth</mat-label>
                   <input matInput [matDatepicker]="picker" formControlName="birthdate">
@@ -303,7 +292,6 @@
                 <mat-form-field class="w-100">
                   <mat-label>Street address 1</mat-label>
                   <input matInput formControlName="saddress1" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -311,7 +299,6 @@
                 <mat-form-field class="w-100">
                   <mat-label>Street address 2</mat-label>
                   <input matInput formControlName="saddress2" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -320,21 +307,17 @@
                 <mat-form-field class="w-100">
                   <mat-label>City</mat-label>
                   <input matInput formControlName="city" />
-                  <!--<mat-error>{{ "error.required" | translate }}</mat-error>-->
                 </mat-form-field>
               </div>
 
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Province</mat-label>
-
                   <mat-select formControlName="province">
                     <mat-option *ngFor="let province of provinces; index as pi" [value]="province.id">
                       {{ province.value }}
                     </mat-option>
                   </mat-select>
-
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -344,7 +327,6 @@
                   <mat-label>Postal Code</mat-label>
                   <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
                     formControlName="postalCode" [showMaskTyped]="false" />
-                  <!--<mat-error>{{ "error.required" | translate }}</mat-error>-->
                 </mat-form-field>
               </div>
 
@@ -352,10 +334,6 @@
                 <mat-form-field class="w-100">
                   <mat-label>Home phone number</mat-label>
                   <input matInput placeholder="(XXX) XXX-XXXX" formControlName="homePhoneNumber" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error>
-                                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -364,20 +342,12 @@
                 <mat-form-field class="w-100">
                   <mat-label>Cell phone number</mat-label>
                   <input matInput placeholder="(XXX) XXX-XXXX" formControlName="cellPhoneNumber" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error>
-                                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Work phone number</mat-label>
                   <input matInput placeholder="(XXX) XXX-XXXX" formControlName="workPhoneNumber" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error>
-                                      <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -386,22 +356,8 @@
                 <mat-form-field class="w-100">
                   <mat-label>Email</mat-label>
                   <input type="email" matInput formControlName="email" />
-                  <!--<mat-error>{{ "error.required" | translate }}</mat-error>-->
                 </mat-form-field>
               </div>
-              <!--
-              <div class="col-md-6">
-                <mat-form-field class="w-100">
-                  <mat-label>Gender</mat-label>
-                  <mat-select formControlName="gender">
-                    <mat-option *ngFor="let gender of genders; index as pi" [value]="gender.id">
-                      {{gender.value}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
-                </mat-form-field>
-              </div>-->
-
           </div>
           <mat-divider></mat-divider>
           <div class="nextButton">
@@ -414,7 +370,7 @@
           </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="fourthFormGroup1" [editable]="isEditable">
+        <mat-step [stepControl]="fourthFormGroup1" [editable]="true"><!--"isEditable">-->
           <form [formGroup]="fourthFormGroup1">
             <ng-template matStepLabel>Information about the Child(ren)</ng-template>
             <div class="heading">
@@ -437,14 +393,14 @@
                   <mat-form-field class="w-100">
                     <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
                     <input matInput formControlName="firstName" />
-                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
                     <mat-label>Legal middle name</mat-label>
                     <input matInput formControlName="middleName" />
-                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -453,7 +409,7 @@
                   <mat-form-field class="w-100">
                     <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                     <input matInput formControlName="lastName" />
-                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">
@@ -463,10 +419,7 @@
                       (click)="picker.open()" />
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
-                    <!--
-                    <mat-error *ngIf="fourthFormGroup1.get('birthdate').hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error>-->
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -484,7 +437,7 @@
                 </div>
               </div>
 
-              <div class="row button-row">
+              <div class="row button-row pb-3">
                   <div class="col-md-8"></div>
                   <div class="col-md-2">
                     <div *ngIf="i>0">
@@ -497,12 +450,6 @@
                     <button  mat-stroked-button (click)="callAntherchild()">+ Add another child</button>
                   </div>
               </div>
-
-           <!--   <div class="add-child">
-                <button  mat-stroked-button (click)="callAntherchild()">
-                  + Add another child
-                </button>
-              </div> -->
             </ng-container>
           </form>
           <mat-divider></mat-divider>
@@ -515,7 +462,7 @@
             </button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="fifthFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="fifthFormGroup" [editable]="true">
           <form [formGroup]="fifthFormGroup" >
             <ng-template matStepLabel>Details about the Court Order or Written Agreement</ng-template>
             <div class="heading">
@@ -530,7 +477,6 @@
                       {{courtLocation.value}}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -540,9 +486,6 @@
                     (click)="picker.open()" />
                   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                   <mat-datepicker #picker1 startView="multi-year"></mat-datepicker>
-                  <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
-                                        "error.required" | translate
-                                        }}</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -561,8 +504,8 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="recalculationOrdered">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
-                  <mat-radio-button value="No">No</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_recalculationOrdered ==='false'" >Yes</mat-radio-button>
+                  <mat-radio-button value="No" >No</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
@@ -572,7 +515,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="isSpecifiedIncome">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_isSpecifiedIncome ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -589,7 +532,7 @@
             </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="sixFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="sixFormGroup" [editable]="true">
           <form [formGroup]="sixFormGroup">
             <ng-template matStepLabel>Additional Information</ng-template>
             <div class="row text-dark mt-4">
@@ -599,7 +542,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="childSafety" aria-label="Select an option">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_childSafety ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -618,7 +561,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="contactMethod" aria-label="Select an option">
-                  <mat-radio-button value="Email">Email</mat-radio-button>
+                  <mat-radio-button value="Email" [checked]="default_contactMethod ==='false'">Email</mat-radio-button>
                   <mat-radio-button value="Paper Mail">Paper Mail</mat-radio-button>
                 </mat-radio-group>
               </div>
@@ -629,20 +572,11 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="enrollFMEP" aria-label="Select an option">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_enrollFMEP ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
-            <!-- <div class="stepRow">
-              <div>
-                Are you enrolled in the Family Maintenance Enforcement Program?
-              </div>
-              <mat-radio-group aria-label="Select an option">
-                <mat-radio-button value="1">Yes</mat-radio-button>
-                <mat-radio-button value="2">No</mat-radio-button>
-              </mat-radio-group>
-            </div> -->
             <div class="example-container">
               <mat-form-field appearance="fill">
                 <mat-label>My FMEP file # is:</mat-label>
@@ -655,7 +589,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes" [checked]="default_incomeAssistance ==='false'">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -670,7 +604,6 @@
                       {{referral.value}}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -686,38 +619,7 @@
           </form>
         </mat-step>
 
-        <!-- <mat-step [stepControl]="seventhFormGroup">
-          <form [formGroup]="seventhFormGroup">
-            <ng-template matStepLabel>Upload your documents</ng-template>
-            <div>
-              Please attach your most recent
-              <strong>Child Support Order</strong> or filed
-              <strong>Written Agreement</strong>
-            </div>
-            <div class="document-drag-container">
-              <div class="dropzone">
-                <input class="drop-file" type="file" #fileDropRef id="fileDropRef" multiple />
-                <h3>Drag and drop file here</h3>
-                <h3>or</h3>
-                <label class="browse-file" for="fileDropRef">Choose Documents</label>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-            <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
-              </button>
-              <button mat-button matStepperPrevious>
-                Save my application for later
-              </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step> -->
-
-        <mat-step [stepControl]="eFormGroup" [editable]="isEditable">
+        <mat-step [stepControl]="eFormGroup" [editable]="true">
           <form [formGroup]="eFormGroup">
             <ng-template matStepLabel>Conditions of Enrolment</ng-template>
             <div class="heading">

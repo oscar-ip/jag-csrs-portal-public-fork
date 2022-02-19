@@ -52,6 +52,13 @@ export class ChildApplicationQuestionComponent implements OnInit {
   eFormGroup: FormGroup;
   nineFormGroup: FormGroup;
 
+  default_recalculationOrdered: any = 'false';
+  default_isSpecifiedIncome: any = 'false';
+  default_childSafety: any = 'false';
+  default_contactMethod: any = 'false';
+  default_enrollFMEP: any = 'false';
+  default_incomeAssistance: any = 'false';
+
   provinces: any = [];
   genders: any = [];
   identities: any = [];
@@ -78,6 +85,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
   data: any = null;
   result: any = [];
 
+  errorMessage: any = '';
+
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
@@ -97,6 +106,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.genders =  [{id: '123', value: 'Male'}];
     this.courtLocations =  [{id: '123', value: 'Victoria Court'}];
     this.referrals = [{id: '123', value: 'FMEP'}];
+
+    this.errorMessage = 'Error: Field is required.';
 
     this.getReferrals();
     this.getIdentities();
@@ -121,7 +132,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
       phoneNumber: [''],
-      email: ['', Validators.email],
+      email: ['', Validators.required, Validators.email],
       PreferredName: [''],
       saddress: [''],
       cellNumber: [''],
@@ -143,7 +154,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       homePhoneNumber: [''],
       cellPhoneNumber: [''],
       workPhoneNumber: [''],
-      email: ['', Validators.required],
+      email: [''],
       gender: ['']
 
     });
@@ -160,13 +171,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
       ])
     });
-    // this.fourthFormGroup = this._formBuilder.group({
-    //   firstName: ['', Validators.required],
-    //   lastName: ['', Validators.required],
-    //   birthdate: [],
-    //   givenNames: [],
-    //   middleName: []
-    // });
+
     this.fifthFormGroup = this._formBuilder.group({
       orderDate: [],
       courtLocation: [],
@@ -174,8 +179,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
       recalculationOrdered: [],
       isSpecifiedIncome: [],
     });
+
     this.sixFormGroup = this._formBuilder.group({
-      // secondCtrl: ['', Validators.required],
       childSafety: [''],
       childSafetyDescription: [''],
       contactMethod: [''],
@@ -183,7 +188,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
       FMEPinput: [''],
       incomeAssistance: [''],
       referral: [''],
-
     });
     this.seventhFormGroup = this._formBuilder.group({
       secondCtrl: [''],
