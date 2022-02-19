@@ -25,6 +25,11 @@ namespace Csrs.Interfaces.Dynamics.Models
         [JsonProperty(PropertyName = "ssg_registrationdate")]
         [JsonConverter(typeof(DateFormatConverter), "yyyy-MM-dd")]
         public System.DateTimeOffset? SsgRegistrationdate { get; set; }
+
+        [JsonProperty(PropertyName = "ssg_submissiondate")]
+        [JsonConverter(typeof(DateFormatConverter), "yyyy-MM-dd")]
+        public System.DateTimeOffset? SsgSubmissiondate { get; set; }
+
     }
 
     [MetadataType(typeof(MicrosoftDynamicsCRMssgCsrsfileMetadata))]

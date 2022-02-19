@@ -85,6 +85,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
   data: any = null;
   result: any = [];
 
+  errorMessage: any = '';
+
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
@@ -104,6 +106,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.genders =  [{id: '123', value: 'Male'}];
     this.courtLocations =  [{id: '123', value: 'Victoria Court'}];
     this.referrals = [{id: '123', value: 'FMEP'}];
+
+    this.errorMessage = 'Error: Field is required.';
 
     this.getReferrals();
     this.getIdentities();
@@ -128,7 +132,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
       phoneNumber: [''],
-      email: ['', Validators.email],
+      email: ['', Validators.required, Validators.email],
       PreferredName: [''],
       saddress: [''],
       cellNumber: [''],

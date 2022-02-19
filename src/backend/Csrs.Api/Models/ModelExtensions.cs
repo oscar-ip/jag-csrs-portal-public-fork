@@ -130,6 +130,9 @@ namespace Csrs.Api.Models
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
+                Statecode = 0,
+                Statuscode = 1,
+
                 SsgCourtfiletype = file.CourtFileType?.Id,
                 SsgFmepfileactive = ToBoolean(file.IsFMEPFileActive),
                 SsgFmepfilenumber = file.FMEPFileNumber,
@@ -145,6 +148,7 @@ namespace Csrs.Api.Models
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
 
                 SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
+                SsgSubmissiondate = new DateTimeOffset(DateTime.Now)
 
                 //SsgSharedparenting = true; ???
                 //SsgSplitparentingarrangement = true; ??
@@ -161,6 +165,9 @@ namespace Csrs.Api.Models
         {
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
+                Statecode = 0,
+                Statuscode = 1,
+
                 SsgCsrsfileid = file.FileId,
                 SsgFmepfileactive = ConvertToBool(file.IsFMEPFileActive),
                 SsgFmepfilenumber = file.FMEPFileNumber,
@@ -177,6 +184,9 @@ namespace Csrs.Api.Models
         {
             MicrosoftDynamicsCRMssgCsrschild dynamicsChild = new MicrosoftDynamicsCRMssgCsrschild
             {
+                Statecode = 0,
+                Statuscode = 1,
+
                 SsgFirstname = child.FirstName,
                 SsgMiddlename = child.MiddleName,
                 SsgLastname = child.LastName,

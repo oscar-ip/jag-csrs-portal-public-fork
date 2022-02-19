@@ -35,6 +35,7 @@ export class WelcomeUserComponent implements OnInit {
   csrsAccount: CSRSAccount = null;
   data: any = null;
   outData: NewFileRequest = null;
+  errorMessage: any = '';
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
@@ -48,6 +49,9 @@ export class WelcomeUserComponent implements OnInit {
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
     });
+
+    this.errorMessage = 'Error: Field is required.';
+
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
         var user   = data.user;

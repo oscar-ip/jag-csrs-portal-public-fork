@@ -84,7 +84,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="firstName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -99,7 +99,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="lastName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -117,6 +117,7 @@
                   <input matInput [matDatepicker]="picker2" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6"></div>
@@ -126,7 +127,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Street address 1<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="address1" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -142,7 +143,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>City<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="city" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -154,7 +155,7 @@
                       {{ province.value }}
                     </mat-option>
                   </mat-select>
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -164,7 +165,7 @@
                   <mat-label>Postal code<span class="text-danger">*</span></mat-label>
                   <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
                     formControlName="postalCode" [showMaskTyped]="false" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -194,7 +195,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Email<span class="text-danger">*</span></mat-label>
                   <input type="email" matInput formControlName="email" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -250,7 +251,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="firstName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -265,7 +266,7 @@
                 <mat-form-field class="w-100">
                   <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                   <input matInput formControlName="lastName" />
-                  <mat-error>{{ "error.required" | translate }}</mat-error>
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -392,14 +393,14 @@
                   <mat-form-field class="w-100">
                     <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
                     <input matInput formControlName="firstName" />
-                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
                     <mat-label>Legal middle name</mat-label>
                     <input matInput formControlName="middleName" />
-                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -408,7 +409,7 @@
                   <mat-form-field class="w-100">
                     <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
                     <input matInput formControlName="lastName" />
-                    <mat-error>{{ "error.required" | translate }}</mat-error>
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">
@@ -418,7 +419,7 @@
                       (click)="picker.open()" />
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
-                    <mat-error>{{"error.required" | translate}}</mat-error>
+                    <mat-error>{{ errorMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
               </div>

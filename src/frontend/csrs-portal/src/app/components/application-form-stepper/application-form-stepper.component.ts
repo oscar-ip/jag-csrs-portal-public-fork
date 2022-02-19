@@ -61,6 +61,8 @@ export class ApplicationFormStepperComponent implements OnInit {
   partyId: any = '';
   fileId: any = '';
 
+  errorMessage: any = '';
+
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
       @Inject(LookupService) private lookupService,
@@ -85,6 +87,8 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.genders =  [{id: '123', value: 'Male'}];
     this.referrals = [{id: '123', value: 'FMEP'}];
     this.preferredContactMethods = [{id: '123', value: 'Email'}];
+
+    this.errorMessage = 'Error: Field is required.';
 
     this.getReferrals();
     this.getIdentities();
