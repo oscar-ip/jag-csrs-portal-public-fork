@@ -52,13 +52,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
   eFormGroup: FormGroup;
   nineFormGroup: FormGroup;
 
-  default_recalculationOrdered: any = 'false';
-  default_isSpecifiedIncome: any = 'false';
-  default_childSafety: any = 'false';
-  default_contactMethod: any = 'false';
-  default_enrollFMEP: any = 'false';
-  default_incomeAssistance: any = 'false';
-
   provinces: any = [];
   genders: any = [];
   identities: any = [];
@@ -86,6 +79,10 @@ export class ChildApplicationQuestionComponent implements OnInit {
   result: any = [];
 
   errorMessage: any = '';
+  yesValue: any = 'Yes';
+  noValue: any = 'No';
+  emailValue: any = 'Email';
+  //recalculationOrdered: boolean = true;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
@@ -132,7 +129,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
       phoneNumber: [''],
-      email: ['', Validators.required, Validators.email],
+      email: ['', Validators.required],
       PreferredName: [''],
       saddress: [''],
       cellNumber: [''],
@@ -140,6 +137,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       gender: [''],
       identity: ['']
     });
+
     this.thirdFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
       givenNames: [''],
@@ -173,12 +171,17 @@ export class ChildApplicationQuestionComponent implements OnInit {
     });
 
     this.fifthFormGroup = this._formBuilder.group({
-      orderDate: [],
-      courtLocation: [],
-      payorIncome: [],
+      orderDate: [''],
+      courtLocation: [''],
+      payorIncome: [''],
       recalculationOrdered: [],
       isSpecifiedIncome: [],
     });
+
+
+//    this.fifthFormGroup.get('recalculationOrdered').setValue(true);
+//    this.fifthFormGroup.get('isSpecifiedIncome').setValue("I don't know");
+
 
     this.sixFormGroup = this._formBuilder.group({
       childSafety: [''],
@@ -189,6 +192,22 @@ export class ChildApplicationQuestionComponent implements OnInit {
       incomeAssistance: [''],
       referral: [''],
     });
+
+    // set up default values
+    /*
+    this.sixFormGroup.patchValue({
+      childSafety: 'Yes',
+      contactMethod: 'Email',
+      enrollFMEP: 'Yes',
+      incomeAssistance: 'Yes'
+    });*/
+
+    this.sixFormGroup.controls['childSafety'].patchValue('Yes');
+    this.sixFormGroup.controls['contactMethod'].patchValue('Email');
+    this.sixFormGroup.controls['enrollFMEP'].patchValue('Yes');
+    this.sixFormGroup.controls['incomeAssistance'].patchValue('Yes');
+
+
     this.seventhFormGroup = this._formBuilder.group({
       secondCtrl: [''],
     });
@@ -432,10 +451,44 @@ editPage(stepper, index){
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.logger.info(`Dialog result: ${result}`);
+      this._logger.info(`Dialog result: ${result}`);
     });
   }
 
+  getProvinceById(id)
+  {
+    let listProvince = new List<LookupValue>(this.provinces);
+    let province: LookupValue = listProvince.firstOrDefault(x=>x.id == id);
+    return province != null  ? province.value : '-'
+  }
+
+  getGenderById(id)
+  {
+    let listGender = new List<LookupValue>(this.genders);
+    let gender: LookupValue = listGender.firstOrDefault(x=>x.id == id);
+    return gender != null  ? gender.value : '-';
+  }
+
+  getIdentityById(id)
+  {
+    let listIdentity = new List<LookupValue>(this.identities);
+    let identity: LookupValue = listIdentity.firstOrDefault(x=>x.id == id);
+    return identity != null  ? identity.value : '-';
+  }
+
+  getReferralById(id)
+  {
+    let listReferral = new List<LookupValue>(this.referrals);
+    let referral: LookupValue = listReferral.firstOrDefault(x=>x.id == id);
+    return referral != null  ? referral.value : '-';
+  }
+
+  getCourtLocationById(id)
+  {
+    let listCourtLocation = new List<LookupValue>(this.courtLocations);
+    let courtLocation: LookupValue = listCourtLocation.firstOrDefault(x=>x.id == id);
+    return courtLocation != null  ? courtLocation.value : '-';
+  }
 
   transformDate(date) {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
@@ -480,7 +533,7 @@ editPage(stepper, index){
       let partyRole: PartyRole = PartyRole.Unknown;
       let partyEnrolled = '';
 
-      if (roleData.firstControl == 'I am the receipent, i currently receive child support')
+      if (roleData.firstControl == 'I am the recipient; I currently receive child support')
       {
         partyRole = PartyRole.Recipient;
         partyEnrolled = 'Recipient';
