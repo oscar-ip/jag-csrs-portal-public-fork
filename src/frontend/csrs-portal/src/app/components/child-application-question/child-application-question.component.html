@@ -425,7 +425,9 @@
               </div>
               <div class="row text-dark mt-4">
                 <div class="col-md-6">
-                  <p>If a child is over age of majority, are they still a dependent?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
+                  <p>If a child is over age of majority, are they still a dependent?
+                    <mat-icon *ngIf='tooltips[0]' matTooltip={{tooltips[0]}}
+                    #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon>
                   </p>
                 </div>
                 <div class="col-md-6">
@@ -480,7 +482,9 @@
                 </mat-form-field>
               </div>
               <div class="col-md-6">
-                <span>Date of order or agreement<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></span>
+                <span>Date of order or agreement
+                  <mat-icon *ngIf='tooltips[1]' matTooltip={{tooltips[1]}}
+                  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></span>
                 <mat-form-field class="w-100">
                   <input matInput [matDatepicker]="picker1" [max]="today" formControlName="orderDate" readonly
                     (click)="picker.open()" />
@@ -490,7 +494,9 @@
               </div>
             </div>
             <div class="row text-dark">
-              <p>Payor's income amount from the order or written agreement<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+              <p>Payor's income amount from the order or written agreement
+                <mat-icon *ngIf='tooltips[2]' matTooltip={{tooltips[2]}}
+                #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-icon matSuffix>attach_money</mat-icon>
@@ -500,7 +506,7 @@
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Recalculation ordered by the court?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+                <p>Recalculation ordered by the court?</p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="recalculationOrdered">
@@ -511,7 +517,9 @@
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Does the order include special expenses?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+                <p>Does the order include special expenses?
+                  <mat-icon *ngIf='tooltips[3]' matTooltip={{tooltips[3]}}
+                  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="isSpecifiedIncome">
@@ -585,7 +593,10 @@
             </div>
             <div class="row text-dark mt-2">
               <div class="col-md-6">
-                <p>Are you currently on income assistance?</p>
+                <p>Are you currently on income assistance?
+                  <mat-icon *ngIf='tooltips[4]' matTooltip={{tooltips[4]}}
+                  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
+                </p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">

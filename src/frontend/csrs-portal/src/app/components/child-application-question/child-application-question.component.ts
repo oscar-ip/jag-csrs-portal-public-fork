@@ -79,10 +79,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   result: any = [];
 
   errorMessage: any = '';
-  yesValue: any = 'Yes';
-  noValue: any = 'No';
-  emailValue: any = 'Email';
-  //recalculationOrdered: boolean = true;
+  tooltips: any = [];
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
@@ -105,6 +102,19 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.referrals = [{id: '123', value: 'FMEP'}];
 
     this.errorMessage = 'Error: Field is required.';
+
+
+    this.tooltips = [
+      'A child over the age of majority (19 in B.C.) who is still dependent on their parents. For example, due to illness, disability or pursuit of post secondary education.',
+      'On a Court Order: look for the date the order was made or granted. Often this can be found on the first page below the names of the parties. On a Written Agreement: look for the date the agreement was stamped when it was filed by the court. Often this can be found at the top of the first page.',
+      'The person paying child support.',
+      'These are additional amounts to be paid over and above the base child support amount. Some examples of these expenses (often referred to as Section 7 expenses) include childcare, medical or dental premiums, healthcare costs.',
+      'Income Assistance (IA) is the welfare program in BC. It provides financial support for low income or no income individuals. '+
+      'The Ministry of Social Development and Poverty Reduction has three income assistance programs: '+
+      'Income Assistance (IA), '+
+      'Persons with Persistent Multiple Barriers (PPMB), '+
+      'Persons with Disabilities (PWD).',
+    ]
 
     this.getReferrals();
     this.getIdentities();
@@ -178,10 +188,15 @@ export class ChildApplicationQuestionComponent implements OnInit {
       isSpecifiedIncome: [],
     });
 
+    /*
+      this.fifthFormGroup.patchValue({
+        recalculationOrdered:  ['Yes'],
+        isSpecifiedIncome:  ['Yes']
+      });
+      */
 
-//    this.fifthFormGroup.get('recalculationOrdered').setValue(true);
-//    this.fifthFormGroup.get('isSpecifiedIncome').setValue("I don't know");
-
+      this.fifthFormGroup.controls['recalculationOrdered'].patchValue('Yes');
+      this.fifthFormGroup.controls['isSpecifiedIncome'].patchValue('Yes');
 
     this.sixFormGroup = this._formBuilder.group({
       childSafety: [''],
@@ -196,10 +211,10 @@ export class ChildApplicationQuestionComponent implements OnInit {
     // set up default values
     /*
     this.sixFormGroup.patchValue({
-      childSafety: 'Yes',
-      contactMethod: 'Email',
-      enrollFMEP: 'Yes',
-      incomeAssistance: 'Yes'
+      childSafety:  ['Yes'],
+      contactMethod:  ['Email'],
+      enrollFMEP:  ['Yes'],
+      incomeAssistance:  ['Yes'],
     });*/
 
     this.sixFormGroup.controls['childSafety'].patchValue('Yes');
@@ -217,7 +232,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.nineFormGroup = this._formBuilder.group({
       secondCtrl: [''],
     });
-    this.setFormDataFromLocal();
+    //this.setFormDataFromLocal();
   }
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
