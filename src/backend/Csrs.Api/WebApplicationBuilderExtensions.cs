@@ -68,6 +68,9 @@ public static class WebApplicationBuilderExtensions
 
             client.BaseAddress = new Uri(apiGatewayOptions.BasePath);
             client.Timeout = TimeSpan.FromSeconds(30); // data timeout
+            //client.BaseAddress = new Uri(oAuthOptions.ResourceUrl);
+            //client.Timeout = TimeSpan.FromSeconds(300); // data timeout
+
         })
         .AddHttpMessageHandler<OAuthHandler>()
         .AddHttpMessageHandler<ApiGatewayHandler>();

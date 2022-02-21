@@ -826,7 +826,7 @@
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Preferred name:</div>
-                  <div class="bold">-</div>
+                  <div class="bold">{{(thirdFormGroup.value.pname)?thirdFormGroup.value.pname:'-' }}</div>
                 </div>
               </div>
               <div class="row">
@@ -1113,10 +1113,11 @@
           </form>
         </mat-step>
       </mat-stepper>
+      <!--
       <div>
         <button mat-button (click)="saveLater()">Save fot later</button>
         <button mat-button (click)="save()">Save</button>
-      </div>
+      </div>-->
     </div>
   </section>
 </div>

@@ -60,9 +60,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
   courtLevels: any = [];
   courtLocations: any = [];
 
-  _accountService: AccountService;
-  _lookupService: LookupService;
-  _logger: LoggerService;
   today = new Date();
   isEditable: boolean = false;
   child: Child;
@@ -90,10 +87,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
               private datePipe: DatePipe) {}
 
   ngOnInit() {
-    this._accountService = this.accountService;
-    this._lookupService = this.lookupService;
-    this._logger = this.logger;
-
 
     this.provinces = [{id: '123', value: 'British Columbia'}];
     this.identities = [{id: '123', value: 'Native'}];
@@ -102,7 +95,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.referrals = [{id: '123', value: 'FMEP'}];
 
     this.errorMessage = 'Error: Field is required.';
-
 
     this.tooltips = [
       'A child over the age of majority (19 in B.C.) who is still dependent on their parents. For example, due to illness, disability or pursuit of post secondary education.',
@@ -188,15 +180,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
       isSpecifiedIncome: [],
     });
 
-    /*
-      this.fifthFormGroup.patchValue({
-        recalculationOrdered:  ['Yes'],
-        isSpecifiedIncome:  ['Yes']
-      });
-      */
-
-      this.fifthFormGroup.controls['recalculationOrdered'].patchValue('Yes');
-      this.fifthFormGroup.controls['isSpecifiedIncome'].patchValue('Yes');
+    // setup default values
+    this.fifthFormGroup.controls['recalculationOrdered'].patchValue('Yes');
+    this.fifthFormGroup.controls['isSpecifiedIncome'].patchValue('Yes');
 
     this.sixFormGroup = this._formBuilder.group({
       childSafety: [''],
@@ -208,20 +194,11 @@ export class ChildApplicationQuestionComponent implements OnInit {
       referral: [''],
     });
 
-    // set up default values
-    /*
-    this.sixFormGroup.patchValue({
-      childSafety:  ['Yes'],
-      contactMethod:  ['Email'],
-      enrollFMEP:  ['Yes'],
-      incomeAssistance:  ['Yes'],
-    });*/
-
+    // setup default values
     this.sixFormGroup.controls['childSafety'].patchValue('Yes');
     this.sixFormGroup.controls['contactMethod'].patchValue('Email');
     this.sixFormGroup.controls['enrollFMEP'].patchValue('Yes');
     this.sixFormGroup.controls['incomeAssistance'].patchValue('Yes');
-
 
     this.seventhFormGroup = this._formBuilder.group({
       secondCtrl: [''],
@@ -233,6 +210,16 @@ export class ChildApplicationQuestionComponent implements OnInit {
       secondCtrl: [''],
     });
     //this.setFormDataFromLocal();
+
+
+    this.data = {
+      type: 'error',
+      title: 'Technical error',
+      weight: 'normal',
+      color: 'red'
+    };
+
+
   }
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
@@ -285,129 +272,115 @@ editPage(stepper, index){
   stepper.selectedIndex = index;
 }
   getIdentities() {
-    this._accountService.apiAccountIdentitiesGet().subscribe({
+    this.accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
-          this._logger.info('this.identities',this.identities);
+          //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-          if (e.error instanceof Error) {
-            this._logger.error(e.error.message);
-          } else {
-              // Backend returns unsuccessful response codes such as 404, 500 etc.
-              this._logger.info('Backend returned ', e);
-            }
+            this.data = {
+              content: e.message,
+            };
+            this.openModalDialog();
         },
-        complete: () => this._logger.info('apiAccountIdentitiesGet is completed')
+        //complete: () => this.logger.info('apiAccountIdentitiesGet is completed')
     });
   }
 
   getProvinces() {
-    this._accountService.apiAccountProvincesGet().subscribe({
+    this.accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;
-        this._logger.info('this.provinces',this.provinces);
+        //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.data = {
+          content: e.message,
+        };
+        this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountProvincesGet is completed')
+      //complete: () => this.logger.info('apiAccountProvincesGet is completed')
     })
   }
 
   getGenders() {
-    this._accountService.apiAccountGendersGet().subscribe({
+    this.accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
         this.genders = data;
-        this._logger.info('this.genders',this.genders);
+        //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+          this.data = {
+            content: e.message,
+          };
+          this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountGendersGet is completed')
+      //complete: () => this.logger.info('apiAccountGendersGet is completed')
     })
   }
 
   getCourtLocations() {
-   this._lookupService.apiLookupCourtlocationsGet().subscribe({
+   this.lookupService.apiLookupCourtlocationsGet().subscribe({
         next: (data) => {
           this.courtLocations = data;
-          this._logger.info('this.courtLocations',this.courtLocations);
+          //this.logger.info('this.courtLocations',this.courtLocations);
         },
         error: (e) => {
-          if (e.error instanceof Error) {
-            this._logger.error(e.error.message);
-          } else {
-              //Backend returns unsuccessful response codes such as 404, 500 etc.
-              this._logger.info('Backend returned ', e);
-            }
+          this.data = {
+            content: e.message,
+          };
+          this.openModalDialog();
         },
-        complete: () => this._logger.info('courtlocationsGet is completed')
+        //complete: () => this.logger.info('courtlocationsGet is completed')
       })
   }
 
   getCourtLevels() {
-     this._lookupService.apiLookupCourtlevelsGet().subscribe({
+     this.lookupService.apiLookupCourtlevelsGet().subscribe({
         next: (data) => {
           this.courtLevels = data;
-          this._logger.info('this.courtLevels',this.courtLevels);
+          //this.logger.info('this.courtLevels',this.courtLevels);
         },
         error: (e) => {
-          if (e.error instanceof Error) {
-            this._logger.error(e.error.message);
-          } else {
-              //Backend returns unsuccessful response codes such as 404, 500 etc.
-              this._logger.info('Backend returned ', e);
-            }
+          this.data = {
+            content: e.message,
+          };
+          this.openModalDialog();
         },
-        complete: () => this._logger.info('courtlevelsGet is completed')
+        //complete: () => this.logger.info('courtlevelsGet is completed')
       })
   }
 
 
   getReferrals() {
-    this._accountService.apiAccountReferralsGet().subscribe({
+    this.accountService.apiAccountReferralsGet().subscribe({
       next: (data) => {
         this.referrals = data;
-        this._logger.info('this.referals',this.referrals);
+        //this.logger.info('this.referals',this.referrals);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.data = {
+          content: e.message,
+        };
+        this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountReferralsGet is completed')
+      //complete: () => this.logger.info('apiAccountReferralsGet is completed')
     })
   }
 
   getPreferredcontactmethods(){
-    this._accountService.apiAccountPreferredcontactmethodsGet().subscribe({
+    this.accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
         this.preferredContactMethods = data;
-        this._logger.info('this.preferredContactMethods',this.preferredContactMethods);
+        //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.data = {
+          content: e.message,
+        };
+        this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountReferralsGet is completed')
+      //complete: () => this.logger.info('apiAccountReferralsGet is completed')
     })
   }
 
@@ -446,7 +419,7 @@ editPage(stepper, index){
       nineFormGroup: this.nineFormGroup.value,
     };
 
-    this._logger.info("formData", formData);
+    this.logger.info("formData", formData);
     this.prepareData();
 
     localStorage.setItem('formData', JSON.stringify(formData));
@@ -457,8 +430,6 @@ editPage(stepper, index){
     localStorage.getsetItemItem('formData', '');
   }
 
-
-
   openModalDialog(): void {
     const dialogRef = this.dialog.open(ModalDialogComponent, {
       width: '450px',
@@ -466,7 +437,7 @@ editPage(stepper, index){
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this._logger.info(`Dialog result: ${result}`);
+      this.logger.info(`Dialog result: ${result}`);
     });
   }
 
@@ -684,38 +655,30 @@ editPage(stepper, index){
         newFileRequest.file.payorSafetyConcernDescription = file2Data.childSafetyDescription;
       }
 
-      this._logger.info("newFileRequest:", newFileRequest);
+      //this.logger.info("newFileRequest:", newFileRequest);
 
-    this._accountService.apiAccountCreatePost(newFileRequest).subscribe({
+    this.accountService.apiAccountCreatePost(newFileRequest).subscribe({
       next: (outData:any) => {
 
         var partyId = outData.partyId;
         var fileId = outData.fileId;
         var fileNumber = outData.fileNumber;
 
-        this._logger.info("partyId", partyId);
-        this._logger.info("fileId", fileId);
-        this._logger.info("fileNumber", fileNumber);
+        this.logger.info("partyId", partyId);
+        this.logger.info("fileId", fileId);
+        this.logger.info("fileNumber", fileNumber);
 
         let customOptions: DialogOptions = { data: {fileNumber: fileNumber}};
         this.openDialog(customOptions);
         this.router.navigate(['/communication']);
       },
       error: (e) => {
-        this._logger.info('Backend returned ', e);
         this.data = {
-          type: 'error',
-          title: 'Technical error',
-          content: e.error.message,
-          weight: 'normal',
-          color: 'red'
+          content: e.message,
         };
         this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountCreatePost is completed')
+      //complete: () => this.logger.info('apiAccountCreatePost is completed')
     })
-
-    }
-
-
+  }
 }
