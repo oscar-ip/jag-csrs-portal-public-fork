@@ -179,7 +179,7 @@ export class ApplicationFormStepperComponent implements OnInit {
           //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-          this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.logger.Error(e.message, e.errorMessage);
           this.data = {
             title: 'Error',
             content: e.message + ' ' + e.errorMessage,
@@ -198,7 +198,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        this.logger.Error(e.message + ' ' + e.errorMessage);
+        this.logger.Error(e.message, e.errorMessage);
           this.data = {
             title: 'Error',
             content: e.message + ' ' + e.errorMessage,
@@ -217,7 +217,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-        this.logger.Error(e.message + ' ' + e.errorMessage);
+        this.logger.Error(e.message, e.errorMessage);
         this.data = {
           title: 'Error',
           content: e.message + ' ' + e.errorMessage,
@@ -236,7 +236,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        this.logger.Error(e.message + ' ' + e.errorMessage);
+        this.logger.Error(e.message, e.errorMessage);
           this.data = {
             title: 'Error',
             content: e.message + ' ' + e.errorMessage,
@@ -402,7 +402,7 @@ export class ApplicationFormStepperComponent implements OnInit {
       },
       error: (e) => {
 
-        this.logger.error("Error", e.message + ' ' + e.errorMessage);
+        this.logger.Error(e.message, e.errorMessage);
         this.data = {
           type: 'error',
           title: ' Error',

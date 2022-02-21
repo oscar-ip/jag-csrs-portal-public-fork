@@ -72,7 +72,7 @@ export class WelcomeUserComponent implements OnInit {
         }
       },
       error: (e) => {
-        this.logger.Error(e.message + ' ' + e.errorMessage);
+        this.logger.Error(e.message, e.errorMessage);
           this.data = {
             title: 'Error',
             content: e.message + ' ' + e.errorMessage,
@@ -128,7 +128,7 @@ export class WelcomeUserComponent implements OnInit {
           }
       },
       error: (e) => {
-        this.logger.Error(e.message + ' ' + e.errorMessage);
+        this.logger.Error(e.message, e.errorMessage);
           this.data = {
             title: 'Error',
             content: e.message + ' ' + e.errorMessage,
