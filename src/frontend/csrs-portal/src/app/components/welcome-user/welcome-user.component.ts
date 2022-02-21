@@ -110,8 +110,6 @@ export class WelcomeUserComponent implements OnInit {
     const accountData = this.accountFormGroup.value;
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
-
-
     this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
         var partyId = outData.partyId;
@@ -126,19 +124,11 @@ export class WelcomeUserComponent implements OnInit {
           {
             this.router.navigate(['/stepperform'], { queryParams: { partyId: partyId, fileId: fileId} });
           }
-
       },
       error: (e) => {
         this.openModalDialog();
-
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
-        }
+        this.logger.info('Backend returned ', e.message + ' ' + e.errorMessage);
       },
-      complete: () => this.logger.info('apiAccountCheckcsrsaccountPost is completed')
     })
   }
 }
