@@ -72,6 +72,7 @@ export class ApplicationFormStepperComponent implements OnInit {
       private route: ActivatedRoute) {}
 
   ngOnInit() {
+
     this.route.queryParams
     .subscribe(params => {
       this.logger.info("params", params);
@@ -125,10 +126,8 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.sixFormGroup.controls['incomeAssistance'].patchValue('Yes');
 
     this.eFormGroup = this._formBuilder.group({
-      //secondCtrl: ['', Validators.required],
     });
     this.nineFormGroup = this._formBuilder.group({
-      //secondCtrl: [''],
     });
 
     //this.setFormDataFromLocal();
@@ -180,12 +179,15 @@ export class ApplicationFormStepperComponent implements OnInit {
           //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-            this.data = {
-              content: e.message,
-            };
-            this.openModalDialog();
+          this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
         },
-        //complete: () => this.logger.info('apiAccountIdentitiesGet is completed')
     });
   }
 
@@ -196,12 +198,15 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        this.data = {
-          content: e.message,
-        };
-        this.openModalDialog();
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountProvincesGet is completed')
     })
   }
 
@@ -212,12 +217,15 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-          this.data = {
-            content: e.message,
-          };
-          this.openModalDialog();
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+        this.data = {
+          title: 'Error',
+          content: e.message + ' ' + e.errorMessage,
+          weight: 'normal',
+          color: 'red'
+         };
+         this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountGendersGet is completed')
     })
   }
 
@@ -228,12 +236,15 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        this.data = {
-          content: e.message,
-        };
-        this.openModalDialog();
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountReferralsGet is completed')
     })
   }
 
@@ -241,8 +252,6 @@ export class ApplicationFormStepperComponent implements OnInit {
     const formData = {
       secondFormGroup: this.secondFormGroup.value,
       sixFormGroup: this.sixFormGroup.value,
-      //eFormGroup: this.eFormGroup.value,
-      //nineFormGroup: this.nineFormGroup.value,
     };
 
     this.logger.info("formData", formData);
@@ -379,7 +388,7 @@ export class ApplicationFormStepperComponent implements OnInit {
 
           this.data = {
             type: 'check',
-            title: 'Account setup complete',
+            title: ' Account setup complete',
             content: 'Your account setup request has been submitted',
             content_normal: null,
             content_link: null,
@@ -393,10 +402,10 @@ export class ApplicationFormStepperComponent implements OnInit {
       },
       error: (e) => {
 
-        this.logger.error(e);
+        this.logger.error("Error", e.message + ' ' + e.errorMessage);
         this.data = {
           type: 'error',
-          title: 'Error',
+          title: ' Error',
           content: 'The information you entered is not valid. Please enter the information given to you by yhe Child Support Recalculation Service.',
           content_normal: 'If you continue to have problems, contact us at ',
           content_link: '1-866-660-2644',

@@ -72,12 +72,14 @@ export class WelcomeUserComponent implements OnInit {
         }
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as: 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
       complete: () => {
       }
@@ -99,7 +101,7 @@ export class WelcomeUserComponent implements OnInit {
 
     this.data = {
       type: 'error',
-      title: 'Technical error',
+      title: ' Technical error',
       content: 'Your account setup request could not be submitted.',
       content_normal: 'Please try again, or contact the Recalculation Service toll free',
       content_link: '1-866-660-2644',
@@ -126,8 +128,14 @@ export class WelcomeUserComponent implements OnInit {
           }
       },
       error: (e) => {
-        this.openModalDialog();
-        this.logger.info('Backend returned ', e.message + ' ' + e.errorMessage);
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
     })
   }

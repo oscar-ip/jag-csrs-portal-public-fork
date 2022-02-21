@@ -210,16 +210,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
       secondCtrl: [''],
     });
     //this.setFormDataFromLocal();
-
-
-    this.data = {
-      type: 'error',
-      title: 'Technical error',
-      weight: 'normal',
-      color: 'red'
-    };
-
-
   }
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
@@ -278,12 +268,15 @@ editPage(stepper, index){
           //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-            this.data = {
-              content: e.message,
-            };
-            this.openModalDialog();
+          this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
         },
-        //complete: () => this.logger.info('apiAccountIdentitiesGet is completed')
     });
   }
 
@@ -294,12 +287,15 @@ editPage(stepper, index){
         //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        this.data = {
-          content: e.message,
-        };
-        this.openModalDialog();
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountProvincesGet is completed')
     })
   }
 
@@ -310,12 +306,15 @@ editPage(stepper, index){
         //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-          this.data = {
-            content: e.message,
-          };
-          this.openModalDialog();
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+        this.data = {
+          title: 'Error',
+          content: e.message + ' ' + e.errorMessage,
+          weight: 'normal',
+          color: 'red'
+         };
+         this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountGendersGet is completed')
     })
   }
 
@@ -326,12 +325,15 @@ editPage(stepper, index){
           //this.logger.info('this.courtLocations',this.courtLocations);
         },
         error: (e) => {
+          this.logger.Error(e.message + ' ' + e.errorMessage);
           this.data = {
-            content: e.message,
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
           };
           this.openModalDialog();
         },
-        //complete: () => this.logger.info('courtlocationsGet is completed')
       })
   }
 
@@ -342,12 +344,15 @@ editPage(stepper, index){
           //this.logger.info('this.courtLevels',this.courtLevels);
         },
         error: (e) => {
+          this.logger.Error(e.message + ' ' + e.errorMessage);
           this.data = {
-            content: e.message,
-          };
-          this.openModalDialog();
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
         },
-        //complete: () => this.logger.info('courtlevelsGet is completed')
       })
   }
 
@@ -359,12 +364,15 @@ editPage(stepper, index){
         //this.logger.info('this.referals',this.referrals);
       },
       error: (e) => {
-        this.data = {
-          content: e.message,
-        };
-        this.openModalDialog();
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountReferralsGet is completed')
     })
   }
 
@@ -375,12 +383,15 @@ editPage(stepper, index){
         //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        this.data = {
-          content: e.message,
-        };
-        this.openModalDialog();
+        this.logger.Error(e.message + ' ' + e.errorMessage);
+          this.data = {
+            title: 'Error',
+            content: e.message + ' ' + e.errorMessage,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountReferralsGet is completed')
     })
   }
 
@@ -418,11 +429,10 @@ editPage(stepper, index){
       eFormGroup: this.eFormGroup.value,
       nineFormGroup: this.nineFormGroup.value,
     };
-
     this.logger.info("formData", formData);
-    this.prepareData();
 
-    localStorage.setItem('formData', JSON.stringify(formData));
+    this.prepareData();
+    //localStorage.setItem('formData', JSON.stringify(formData));
   }
   save(){
     this.prepareData();
@@ -655,7 +665,7 @@ editPage(stepper, index){
         newFileRequest.file.payorSafetyConcernDescription = file2Data.childSafetyDescription;
       }
 
-      //this.logger.info("newFileRequest:", newFileRequest);
+      this.logger.info("newFileRequest:", newFileRequest);
 
     this.accountService.apiAccountCreatePost(newFileRequest).subscribe({
       next: (outData:any) => {
@@ -673,12 +683,18 @@ editPage(stepper, index){
         this.router.navigate(['/communication']);
       },
       error: (e) => {
+
+        this.logger.Error(e.message + ' ' + e.errorMessage);
         this.data = {
-          content: e.message,
-        };
-        this.openModalDialog();
+          title: 'Error',
+          content: 'The information you entered is not valid. Please enter the information given to you by yhe Child Support Recalculation Service.',
+          content_normal: 'If you continue to have problems, contact us at ',
+          content_link: '1-866-660-2644',
+          weight: 'normal',
+          color: 'red'
+         };
+         this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountCreatePost is completed')
     })
   }
 }
