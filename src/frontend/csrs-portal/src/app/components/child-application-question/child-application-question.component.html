@@ -11,7 +11,7 @@
   <section class="stepper-section">
     <div class="flex-6-col">
       <mat-stepper orientation="vertical" [linear]="true"  #stepper>
-        <mat-step [stepControl]="firstFormGroup" [editable]="true"><!--"isEditable">-->
+        <mat-step [stepControl]="firstFormGroup" [editable]="true">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Getting Started</ng-template>
             <div class="text-dark">
@@ -26,12 +26,12 @@
                 <div class="row">
                   <div class="col-12">
                     <mat-radio-group formControlName="firstControl">
-                      <mat-radio-button class="radio-question" value="I am the receipent, i currently receive child support">
+                      <mat-radio-button class="radio-question" value="I am the recipient; I currently receive child support">
                         <span class="wrap-mat-radio-label">
                           I am the recipient; I currently receive child support
                         </span>
                       </mat-radio-button>
-                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="I am the payor, i current pay child support">
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="I am the payor; I current pay child support">
                         <span class="wrap-mat-radio-label">
                           I am the payor; I current pay child support
                         </span>
@@ -73,7 +73,7 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="secondFormGroup" [editable]="true"><!--"isEditable">-->
+        <mat-step [stepControl]="secondFormGroup" [editable]="true">
           <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Your Personal Information</ng-template>
             <div class="pb-1">
@@ -236,7 +236,7 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="thirdFormGroup" [editable]="true"><!--"isEditable">-->
+        <mat-step [stepControl]="thirdFormGroup" [editable]="true">
           <form [formGroup]="thirdFormGroup">
             <ng-template matStepLabel>Information about the Other Party (parent, caregiver, guardian)
             </ng-template>
@@ -370,7 +370,7 @@
           </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="fourthFormGroup1" [editable]="true"><!--"isEditable">-->
+        <mat-step [stepControl]="fourthFormGroup1" [editable]="true">
           <form [formGroup]="fourthFormGroup1">
             <ng-template matStepLabel>Information about the Child(ren)</ng-template>
             <div class="heading">
@@ -425,7 +425,9 @@
               </div>
               <div class="row text-dark mt-4">
                 <div class="col-md-6">
-                  <p>If a child is over age of majority, are they still a dependent?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
+                  <p>If a child is over age of majority, are they still a dependent?
+                    <mat-icon *ngIf='tooltips[0]' matTooltip={{tooltips[0]}}
+                    #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">{{'info'}}</mat-icon>
                   </p>
                 </div>
                 <div class="col-md-6">
@@ -480,7 +482,9 @@
                 </mat-form-field>
               </div>
               <div class="col-md-6">
-                <span>Date of order or agreement<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></span>
+                <span>Date of order or agreement
+                  <mat-icon *ngIf='tooltips[1]' matTooltip={{tooltips[1]}}
+                  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></span>
                 <mat-form-field class="w-100">
                   <input matInput [matDatepicker]="picker1" [max]="today" formControlName="orderDate" readonly
                     (click)="picker.open()" />
@@ -490,7 +494,9 @@
               </div>
             </div>
             <div class="row text-dark">
-              <p>Payor's income amount from the order or written agreement<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+              <p>Payor's income amount from the order or written agreement
+                <mat-icon *ngIf='tooltips[2]' matTooltip={{tooltips[2]}}
+                #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-icon matSuffix>attach_money</mat-icon>
@@ -500,22 +506,24 @@
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Recalculation ordered by the court?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+                <p>Recalculation ordered by the court?</p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="recalculationOrdered">
-                  <mat-radio-button value="Yes" [checked]="default_recalculationOrdered ==='false'" >Yes</mat-radio-button>
-                  <mat-radio-button value="No" >No</mat-radio-button>
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
+                  <mat-radio-button value="No">No</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Does the order include special expenses?<mat-icon matTooltip="" #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
+                <p>Does the order include special expenses?
+                  <mat-icon *ngIf='tooltips[3]' matTooltip={{tooltips[3]}}
+                  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group aria-label="Select an option" formControlName="isSpecifiedIncome">
-                  <mat-radio-button value="Yes" [checked]="default_isSpecifiedIncome ==='false'">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -542,7 +550,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="childSafety" aria-label="Select an option">
-                  <mat-radio-button value="Yes" [checked]="default_childSafety ==='false'">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -561,7 +569,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="contactMethod" aria-label="Select an option">
-                  <mat-radio-button value="Email" [checked]="default_contactMethod ==='false'">Email</mat-radio-button>
+                  <mat-radio-button value="Email">Email</mat-radio-button>
                   <mat-radio-button value="Paper Mail">Paper Mail</mat-radio-button>
                 </mat-radio-group>
               </div>
@@ -572,7 +580,7 @@
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="enrollFMEP" aria-label="Select an option">
-                  <mat-radio-button value="Yes" [checked]="default_enrollFMEP ==='false'">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                 </mat-radio-group>
               </div>
@@ -585,11 +593,14 @@
             </div>
             <div class="row text-dark mt-2">
               <div class="col-md-6">
-                <p>Are you currently on income assistance?</p>
+                <p>Are you currently on income assistance?
+                  <mat-icon *ngIf='tooltips[4]' matTooltip={{tooltips[4]}}
+                  #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon>
+                </p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">
-                  <mat-radio-button value="Yes" [checked]="default_incomeAssistance ==='false'">Yes</mat-radio-button>
+                  <mat-radio-button value="Yes">Yes</mat-radio-button>
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
@@ -751,7 +762,8 @@
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Province</div>
-                  <div class="bold">{{(secondFormGroup.value.Province)?secondFormGroup.value.Province:'-' }}</div>
+                  <div class="bold">{{(secondFormGroup.value.province)?
+                    getProvinceById(secondFormGroup.value.province):'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Postal Code:</div>
@@ -781,11 +793,13 @@
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Gender:</div>
-                  <div class="bold">{{(secondFormGroup.value.gender)?secondFormGroup.value.gender:'-' }}</div>
+                  <div class="bold">{{(secondFormGroup.value.gender)?
+                    getGenderById(secondFormGroup.value.gender):'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Identity:</div>
-                  <div class="bold">{{(secondFormGroup.value.identity)?secondFormGroup.value.identity:'-' }}</div>
+                  <div class="bold">{{(secondFormGroup.value.identity)?
+                    getIdentityById(secondFormGroup.value.identity):'-' }}</div>
                 </div>
               </div>
             </div>
@@ -812,7 +826,7 @@
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Preferred name:</div>
-                  <div class="bold">-</div>
+                  <div class="bold">{{(thirdFormGroup.value.pname)?thirdFormGroup.value.pname:'-' }}</div>
                 </div>
               </div>
               <div class="row">
@@ -838,7 +852,8 @@
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Province</div>
-                  <div class="bold">{{(thirdFormGroup.value.province)?thirdFormGroup.value.province:'-' }}</div>
+                  <div class="bold">{{(thirdFormGroup.value.province)?
+                    getProvinceById(thirdFormGroup.value.province):'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Postal Code:</div>
@@ -867,18 +882,19 @@
               </div>
             </div>
             <br />
-            <div class="submit-layer" *ngFor="
-            let userFormGroup of this.fourthFormGroup1.get('users')[
-              'controls'
-            ];
-            let i = index
-          " >
+           <div class="submit-layer">
               <div class="stepRow spaceAround leftRight">
                 <strong class="submit-text-color">Information about the Child(ren)</strong>
                 <a class="edit-text-color" (click)="editPage(stepper,3)">Edit</a>
               </div>
+              <div *ngFor="
+              let userFormGroup of this.fourthFormGroup1.get('users')[
+                'controls'
+              ];
+              let i = index
+            " >
               <div class="stepRow spaceAround leftRight">
-                <strong class="submit-text-color">Child 1</strong>
+                <strong class="submit-text-color">Child{{i+1}}</strong>
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
@@ -901,8 +917,12 @@
                 </div>
               </div>
               <div class="row">
-                  <mat-checkbox  [checked]="eFormGroup.value.secondCtrl" [disabled]="eFormGroup.value.secondCtrl"
+                <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <mat-checkbox  [checked]="userFormGroup.value.childDependency ==='Yes'" [disabled]="eFormGroup.value.secondCtrl"
                     form class="example-margin">Dependent, but over age of majority</mat-checkbox>
+                </div>
+              </div>
+
               </div>
             </div>
             <br />
@@ -914,12 +934,13 @@
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Court location:</div>
-                  <!-- <div class="bold">{{(fifthFormGroup.value.courtLocation)?fifthFormGroup.value.courtLocation:'-' }}</div> -->
-                  <div class="bold">Victoria Court</div>
+                    <div class="bold">{{(fifthFormGroup.value.courtLocation)?
+                      getCourtLocationById(fifthFormGroup.value.courtLocation):'-' }}
+                    </div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Date of order:</div>
-                  <div class="bold">{{(fifthFormGroup.value.orderdate)?fifthFormGroup.value.orderDate :'-' }}</div>
+                  <div class="bold">{{(fifthFormGroup.value.orderDate)?(fifthFormGroup.value.orderDate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
               </div>
               <!-- <div class="stepRow spaceAround">
@@ -932,7 +953,7 @@
                   </div>
                 </div>
                 <div class="col-md-2 stepRow  ">
-                  <div class="bold">Vancouver</div>
+                  <div class="bold">{{(fifthFormGroup.value.payorIncome)?'$'+fifthFormGroup.value.payorIncome:'-' }}</div>
                 </div>
                 </div>
                 <div class="row agreement">
@@ -942,7 +963,7 @@
                     </div>
                   </div>
                   <div class="col-md-2 stepRow  ">
-                    <div class="bold">Yes</div>
+                    <div class="bold">{{(fifthFormGroup.value.recalculationOrdered)?fifthFormGroup.value.recalculationOrdered:'-' }}</div>
                   </div>
                 </div>
                 <div class="row agreement">
@@ -952,33 +973,9 @@
                     </div>
                   </div>
                   <div class="col-md-2 stepRow  ">
-                    <div class="bold">No</div>
+                    <div class="bold">{{(fifthFormGroup.value.isSpecifiedIncome)?fifthFormGroup.value.isSpecifiedIncome:'-' }}</div>
                   </div>
                 </div>
-                <!-- <div class="row">
-                  <div class="col-md-10 stepRow  displayDetails">
-                    <div>
-                      Does the order specify pattern of income
-                      <ol>
-                        <li>income year 1</li>
-                        <li>income year 2</li>
-                        <li>income year 3</li>
-                      </ol>
-                      Does the order include specific expenses?
-                    </div>
-                  </div>
-                  <div class="col-md-2 stepRow  leftRight">
-                    <div>
-                      Yes
-                      <ul style="list-style: none; padding-left: 0px">
-                        <li>$ 1234.56</li>
-                        <li>$ 1234.56</li>
-                        <li>$ 1234.56</li>
-                      </ul>
-                      No
-                    </div>
-                  </div>
-                </div> -->
             </div>
             <br />
             <div class="submit-layer">
@@ -993,7 +990,7 @@
                   </div>
                 </div>
                 <div class="col-md-2 stepRow ">
-                  <div class="bold">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.childSafety:'-' }}</div>
+                  <div class="bold">{{(sixFormGroup.value.childSafetyDescription)?sixFormGroup.value.childSafetyDescription:'-' }}</div>
                 </div>
               </div>
               <div class="row agreement">
@@ -1043,7 +1040,8 @@
                   </div>
                 </div>
                 <div class="col-md-2 stepRow">
-                  <div class="bold">FMEP</div>
+                  <div class="bold">{{(sixFormGroup.value.referral)?
+                    getReferralById(sixFormGroup.value.referral):'-' }}</div>
                 </div>
               </div>
             </div>
@@ -1119,8 +1117,7 @@
       <div>
         <button mat-button (click)="saveLater()">Save fot later</button>
         <button mat-button (click)="save()">Save</button>
-      </div>
-    -->
+      </div>-->
     </div>
   </section>
 </div>

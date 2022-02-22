@@ -1,9 +1,9 @@
 <div class="container">
   <section class="header-section">
     <div>
-      <h2 class="mt-4 mb-0">Child Support Recalculation Application</h2>
+      <h2 class="mt-4 mb-0">Child Support Recalculation Account Setup</h2>
       <p class="text-dark">
-        To create your CSRS account, please complete the following application.
+        To create your recalculation service account, please complete the following:
       </p>
       <hr style="opacity: 1; color: #fcba19" />
     </div>
@@ -14,6 +14,9 @@
         <mat-step [stepControl]="secondFormGroup">
           <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Your Personal Information</ng-template>
+            <div class="pb-1">
+              Fields marked <span class="text-danger">*</span> are required.
+            </div>
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
@@ -49,14 +52,12 @@
             </div>
             <div class="row">
               <div class="col-md-6">
-                <mat-form-field class="w-100">
-                  <mat-label>Birthdate</mat-label>
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
                   <input matInput [matDatepicker]="picker2" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
-                  <!-- <mat-error *ngIf="form.get('birthdate').hasError('required')">{{
-                                        [errorMessage] | translate
-                                        }}</mat-error> -->
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6"></div>
@@ -102,21 +103,16 @@
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Postal code<span class="text-danger">*</span></mat-label>
+                  <mat-label>Postal Code<span class="text-danger">*</span></mat-label>
                   <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
                     formControlName="postalCode" [showMaskTyped]="false" />
                   <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
-
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Home phone number</mat-label>
                   <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                    [errorMessage] | translate
-                                    }}</mat-error>
-                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -125,20 +121,12 @@
                 <mat-form-field class="w-100">
                   <mat-label>Cell phone number</mat-label>
                   <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                    [errorMessage] | translate
-                                    }}</mat-error>
-                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Work phone number</mat-label>
                   <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
-                  <!-- <mat-error *ngIf="phoneNumber.hasError('required')">{{
-                                    [errorMessage] | translate
-                                    }}</mat-error>
-                                  <mat-error *ngIf="phoneNumber.hasError('phone')">Must be a valid phone number</mat-error> -->
                 </mat-form-field>
               </div>
             </div>
@@ -150,7 +138,6 @@
                   <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
-
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Gender</mat-label>
@@ -165,7 +152,7 @@
             </div>
             <div class="row text-dark pt-3">
               <strong>What best describes your identity?</strong>
-              <div><strong style="color: #003366;">Note:</strong> The question is voluntary. The Child Support Recalculation Program wants to ensure that families can access its services.</div>
+              <div><strong style="color: #003366;">Note:</strong> This question is voluntary. The Child Support Recalculation Program wants to ensure that families can access its services.</div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Identity</mat-label>
@@ -194,9 +181,7 @@
             <ng-template matStepLabel>Additional Information</ng-template>
             <div class="row text-dark mt-4">
               <div class="col-md-6">
-                <p>Do you have any concerns for your safety or your children’s
-                  safety?
-                </p>
+                <p>Do you have any concerns for your safety or your children’s safety?</p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="childSafety" aria-label="Select an option">
@@ -208,16 +193,13 @@
             </div>
             <div class="example-container width100">
               <mat-form-field appearance="fill">
-                <mat-label>If yes, please provide any details including if there any
-                  protection orders in place involving you or the other
-                  party?</mat-label>
-                <input matInput #input/>
+                <mat-label>If yes, please provide any details including any protection orders in place involving you or the other party</mat-label>
+                <input formControlName="childSafetyDescription" matInput #input/>
               </mat-form-field>
             </div>
             <div class="row text-dark mt-4">
               <div class="col-md-6">
-                <p>What is your preferred method of contact?
-                </p>
+                <p>What is your preferred method of contact?</p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="contactMethod" aria-label="Select an option">
@@ -228,33 +210,7 @@
             </div>
             <div class="row text-dark mt-4">
               <div class="col-md-6">
-                <p> Are you enrolled in the Family Maintenance Enforcement Program?</p>
-              </div>
-              <div class="col-md-6">
-                <mat-radio-group formControlName="enrollFMEP" aria-label="Select an option">
-                  <mat-radio-button value="Yes">Yes</mat-radio-button>
-                  <mat-radio-button value="No">No</mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </div>
-            <!-- <div class="stepRow">
-              <div>
-                Are you enrolled in the Family Maintenance Enforcement Program?
-              </div>
-              <mat-radio-group aria-label="Select an option">
-                <mat-radio-button value="1">Yes</mat-radio-button>
-                <mat-radio-button value="2">No</mat-radio-button>
-              </mat-radio-group>
-            </div> -->
-            <div class="example-container">
-              <mat-form-field appearance="fill">
-                <mat-label>My FMEP file # is:</mat-label>
-                <input formControlName="FMEPinput" matInput #input />
-              </mat-form-field>
-            </div>
-            <div class="row text-dark mt-4">
-              <div class="col-md-6">
-                <p> Are you currently on income assistance?</p>
+                <p>Are you currently on income assistance?</p>
               </div>
               <div class="col-md-6">
                 <mat-radio-group formControlName="incomeAssistance" aria-label="Select an option">
@@ -262,19 +218,6 @@
                   <mat-radio-button value="No">No</mat-radio-button>
                   <mat-radio-button value="I don't know">I don't know</mat-radio-button>
                 </mat-radio-group>
-              </div>
-            </div>
-            <div class="row text-dark pt-2">
-              <span>How did you hear about the Child Support Recalculation Service (CSRS)?</span>
-              <div class="col-md-6">
-                <mat-form-field class="w-100">
-                  <mat-select formControlName="referral">
-                    <mat-option *ngFor="let referral of referrals; index as pi" [value]="referral.id">
-                      {{referral.value}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error>{{ errorMessage | json }}</mat-error>
-                </mat-form-field>
               </div>
             </div>
             <mat-divider></mat-divider>
@@ -289,95 +232,55 @@
           </form>
         </mat-step>
 
-        <!-- <mat-step [stepControl]="seventhFormGroup">
-          <form [formGroup]="seventhFormGroup">
-            <ng-template matStepLabel>Upload your documents</ng-template>
-            <div>
-              Please attach your most recent
-              <strong>Child Support Order</strong> or filed
-              <strong>Written Agreement</strong>
-            </div>
-            <div class="document-drag-container">
-              <div class="dropzone">
-                <input class="drop-file" type="file" #fileDropRef id="fileDropRef" multiple />
-                <h3>Drag and drop file here</h3>
-                <h3>or</h3>
-                <label class="browse-file" for="fileDropRef">Choose Documents</label>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-            <div>
-              <button mat-stroked-button color="basic" matStepperPrevious>
-                Back
-              </button>
-              <button mat-button matStepperPrevious>
-                Save my application for later
-              </button>
-              <button class="nextStep" mat-stroked-button color="basic" matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step> -->
-
         <mat-step [stepControl]="eFormGroup">
           <form [formGroup]="eFormGroup">
-            <ng-template matStepLabel>Conditions of Enrolment</ng-template>
-            <div class="heading">
-              Please review and accept the conditions of enrolment:
-            </div>
+            <ng-template matStepLabel>Enrolment Responsibilities</ng-template>
+
             <div class="text-dark">
               <ul>
                 <li>
-                  I will notify the recalculation service of any changes in my
-                  contact information or any legal action which may impact the
-                  recalculation of my child support
+                  I will notify the recalculation service of any changes in my contact information or any legal action
+                  which may impact the recalculation of my child support.
                 </li>
                 <li>
-                  I understand the recalculation service may access Court
-                  Services Online to obtain copies of the child support order or
-                  written agreement.
+                  I understand the recalculation service may access Court Services Online to obtain copies of the
+                  child support order or written agreement.
                 </li>
                 <li>
-                  Unless a court orders otherwise, I may withdraw from the
-                  recalculation service providing that the other party also
-                  agrees to withdraw.
+                  Unless a court orders otherwise, I may withdraw from the recalculation service providing that the
+                  other party also agrees to withdraw.
                 </li>
                 <li>
-                  I understand that if I do not provide my income tax
-                  information, as requested by the recalculation service, the
-                  service may adjust my annual income amount using rate
-                  increases set out under the Family Law Act Regulation
+                  I understand that if I do not provide my income tax information, as requested by the recalculation
+                  service, the service may adjust my annual income amount using rate increases set out under the
+                  Family Law Act Regulation.
                 </li>
                 <li>
-                  I understand the use of the information I provide to the
-                  recalculation service is for the purposes of child support
-                  recalculation. If I am involved with the Family Maintenance
-                  Enforcement Program, my information may be shared with this
-                  program.
+                  I understand the use of the information I provide to the recalculation service is for the purposes
+                  of child support recalculation. If I am involved with the Family Maintenance Enforcement Program,
+                  my information may be shared with this program.
+                </li>
+                <li>
+                  I understand that by submitting this electronic application future program communication will
+                  occur through my recalculation service account unless I request otherwise. The information I have
+                  given on this form is true and correct to the best of my knowledge and belief.
                 </li>
               </ul>
               <p>
-                <strong>Collection Notices:</strong>Your personal information is
-                collected by Ministry of Attorney General’s Maintenance
-                Enforcement and Locate Services (MELS) pursuant to section 26(a)
-                and (c) of the Freedom of Information and Protection of Privacy
-                Act and the Family Law Act. MELS uses this information for the
-                purposes of establishing, recalculating or enforcing child
-                support. Should you have any questions about the collection, use
-                or disclosure of your personal information, please contact a
-                Client Relations Officer: Address: 203 - 865 Hornby Street,
-                Vancouver, BC Phone Number: (604) 660-2528.
+                <strong>Collection Notices: </strong><i>Your personal information is collected by Ministry of Attorney General’s Maintenance Enforcement
+                and Locate Services (MELS) pursuant to section 26(a) and (c) of the Freedom of Information and Protection of Privacy Act
+                and the Family Law Act. MELS uses this information for the purposes of establishing, recalculating or enforcing child
+                support. Should you have any questions about the collection, use or disclosure of your personal information, please
+                contact a Client Relations Officer: Mailing Address: PO Box 2074 Station Main, Vancouver BC, V6B 3S3 or Phone
+                Number: (604) 660-2528.</i>
               </p>
-              <mat-checkbox color="primary"  formControlName="secondCtrl" class="example-margin">I accept and acknowledge the terms and conditions listed
-                above.</mat-checkbox>
             </div>
             <mat-divider></mat-divider>
             <div class="nextButton">
               <button mat-stroked-button color="basic" matStepperPrevious>
                < Back
               </button>
-              <button class="nextStep"  [disabled]="!eFormGroup.valid"  mat-raised-button color="primary" matStepperNext>
+              <button class="nextStep" mat-raised-button color="primary" matStepperNext>
                 Next >
               </button>
             </div>
@@ -385,12 +288,11 @@
         </mat-step>
         <mat-step [stepControl]="nineFormGroup">
           <form [formGroup]="nineFormGroup" class="text-dark">
-            <ng-template matStepLabel>Review and submit your application
+            <ng-template matStepLabel>Review and Submit Your Account Setup Request
             </ng-template>
             <div>
-              Review all application details below to ensure information is
-              correct, you can go back and edit any of the information before
-              submission.
+              Review all application details below to ensure information is correct. You can go back and edit any of
+the information before submission.
             </div>
             <div class="submit-layer">
               <div class="stepRow spaceAround leftRight">
@@ -420,7 +322,7 @@
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Date of birth:</div>
-                  <div class="bold">{{(secondFormGroup.value.birthdate)?secondFormGroup.value.birthdate:'-' }}</div>
+                  <div class="bold">{{(secondFormGroup.value.birthdate)?(secondFormGroup.value.birthdate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Street address 1:</div>
@@ -439,8 +341,9 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Province</div>
-                  <div class="bold">{{(secondFormGroup.value.Province)?secondFormGroup.value.Province:'-' }}</div>
+                  <div>Province:</div>
+                  <div class="bold">{{(secondFormGroup.value.province)?
+                    getProvinceById(secondFormGroup.value.province):'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Postal Code:</div>
@@ -459,7 +362,7 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Work Phone number</div>
+                  <div>Work Phone number:</div>
                   <div class="bold">{{(secondFormGroup.value.workNumber)?secondFormGroup.value.workNumber:'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
@@ -470,11 +373,13 @@
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Gender:</div>
-                  <div class="bold">{{(secondFormGroup.value.gender)?secondFormGroup.value.gender:'-' }}</div>
+                  <div class="bold">{{(secondFormGroup.value.gender)?
+                    getGenderById(secondFormGroup.value.gender):'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Identity:</div>
-                  <div class="bold">{{(secondFormGroup.value.identity)?secondFormGroup.value.identity:'-' }}</div>
+                  <div class="bold">{{(secondFormGroup.value.identity)?
+                    getIdentityById(secondFormGroup.value.identity):'-' }}</div>
                 </div>
               </div>
             </div>
@@ -487,11 +392,11 @@
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
-                    Do you have any concerns for your safety or your children's safety?
+                    Do you have any concerns for your safety or your children’s safety?
                   </div>
                 </div>
                 <div class="col-md-2 stepRow ">
-                  <div class="bold">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.childSafety:'-' }}</div>
+                  <div class="bold">{{(sixFormGroup.value.childSafety)?sixFormGroup.value.childSafety:'-' }}</div>
                 </div>
               </div>
               <div class="row agreement">
@@ -507,91 +412,60 @@
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
-                    Are you enrolled in the Family Maintenance and Enforcement Program?
-                  </div>
-                </div>
-                <div class="col-md-2 stepRow ">
-                  <div class="bold">{{(sixFormGroup.value.enrollFMEP)?sixFormGroup.value.enrollFMEP:'-' }}</div>
-                </div>
-              </div>
-              <div class="row agreement">
-                <div class="col-md-8 stepRow leftRight">
-                  <div>
-                    My FMEP file number is:
-                  </div>
-                </div>
-                <div class="col-md-2 stepRow ">
-                  <div class="bold">{{(sixFormGroup.value.FMEPinput)?sixFormGroup.value.FMEPinput:'-' }}</div>
-                </div>
-              </div>
-              <div class="row agreement">
-                <div class="col-md-8 stepRow leftRight">
-                  <div>
                     Are you currently on income assistance?
                   </div>
                 </div>
-                <div class="col-md-2 stepRow ">
+                <div class="col-md-2 stepRow leftRight">
                   <div class="bold">{{(sixFormGroup.value.incomeAssistance)?sixFormGroup.value.incomeAssistance:'-' }}</div>
-v                </div>
-              </div>
-              <div class="row agreement">
-                <div class="col-md-8 stepRow leftRight">
-                  <div>
-                    How did you hear about Child Support Recalculation Service(CSRS)?
-                  </div>
-                </div>
-                <div class="col-md-2 stepRow">
-                  <div class="bold">FMEP</div>
                 </div>
               </div>
             </div>
             <br/>
             <div class="submit-layer">
               <div class="stepRow spaceAround leftRight">
-                <strong class="submit-text-color">Conditions of Enrolment</strong>
+                <strong class="submit-text-color">Enrolment Responsibilities</strong>
                 <a class="edit-text-color" (click)="editPage(stepper,3)">Edit</a>
               </div>
-              <div class="text-dark">
-                <ul>
-                  <li>
-                    I will notify the recalculation service of any changes in my
-                    contact information or any legal action which may impact the
-                    recalculation of my child support
-                  </li>
-                  <li>
-                    I understand the recalculation service may access Court
-                    Services Online to obtain copies of the child support order
-                    or written agreement.
-                  </li>
-                  <li>
-                    Unless a court orders otherwise, I may withdraw from the
-                    recalculation service providing that the other party also
-                    agrees to withdraw.
-                  </li>
-                  <li>
-                    I understand that if I do not provide my income tax
-                    information, as requested by the recalculation service, the
-                    service may adjust my annual income amount using rate
-                    increases set out under the Family Law Act Regulation
-                  </li>
-                  <li>
-                    I understand the use of the information I provide to the
-                    recalculation service is for the purposes of child support
-                    recalculation. If I am involved with the Family Maintenance
-                    Enforcement Program, my information may be shared with this
-                    program.
-                  </li>
-                </ul>
-                <mat-checkbox  [checked]="eFormGroup.value.secondCtrl" [disabled]="eFormGroup.value.secondCtrl" form class="example-margin">I accept and acknowledge the terms and conditions listed
-                  above.</mat-checkbox>
+              <div class="row agreement">
+                <div class="text-dark">
+                  <ul>
+                    <li>
+                      I will notify the recalculation service of any changes in my contact information or any legal action which may impact
+                      the recalculation of my child support.
+                    </li>
+                    <li>
+                      I understand the recalculation service may access Court Services Online to obtain copies of the child support order
+                      or written agreement.
+                    </li>
+                    <li>
+                      Unless a court orders otherwise, I may withdraw from the recalculation service providing that the other party also
+                      agrees to withdraw.
+                    </li>
+                    <li>
+                      I understand that if I do not provide my income tax information, as requested by the recalculation service, the service
+                      may adjust my annual income amount using rate increases set out under the Family Law Act Regulation.
+                    </li>
+                    <li>
+                      I understand the use of the information I provide to the recalculation service is for the purposes of child support
+                      recalculation. If I am involved with the Family Maintenance Enforcement Program, my information may be shared
+                      with this program.
+                    </li>
+                    <li>
+                      I understand that by submitting this electronic application future program communication will
+                      occur through my recalculation service account unless I request otherwise. The information I have
+                      given on this form is true and correct to the best of my knowledge and belief.
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
             <mat-checkbox color="primary"
             [class.mat-checkbox-disabled]="false"
-            >All of the information above is correct to the best of my knowledge</mat-checkbox>
+            >All of the information above is correct to the best of my knowledge.</mat-checkbox>
             <app-alert type="warning" icon="info">
               <ng-container #alertContent class="alert-content">
-                <strong>Once form has been submitted you may not make changes. Review and ensure all details are correct before submission.
+                <strong>Once the form has been submitted you may not make changes. Review and ensure all
+                  details are correct before submission.
                 </strong>
               </ng-container>
             </app-alert>
@@ -600,9 +474,6 @@ v                </div>
               <button mat-stroked-button color="basic" matStepperPrevious>
                < Back
               </button>
-              <!-- <button mat-flat-button color="primary" matStepperPrevious>
-                Save my application for later
-              </button> -->
               <button routerLink="/communication" class="submitStep" mat-stroked-button color="basic" matStepperNext
               (click)="saveLater()">
                 Submit account setup request
