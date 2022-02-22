@@ -179,10 +179,10 @@ export class ApplicationFormStepperComponent implements OnInit {
           //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-          this.logger.Error(e.message, e.errorMessage);
+          this.logger.error('error is getIdentities', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -198,10 +198,10 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error in getProvinces', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -217,10 +217,10 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error is getGenders', e);
         this.data = {
           title: 'Error',
-          content: e.message + ' ' + e.errorMessage,
+          content: e.message,
           weight: 'normal',
           color: 'red'
          };
@@ -236,10 +236,10 @@ export class ApplicationFormStepperComponent implements OnInit {
         //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error in getPreferredcontactmethods', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -402,7 +402,7 @@ export class ApplicationFormStepperComponent implements OnInit {
       },
       error: (e) => {
 
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error in prepareData', e);
         this.data = {
           type: 'error',
           title: ' Error',
@@ -414,7 +414,6 @@ export class ApplicationFormStepperComponent implements OnInit {
          };
          this.openModalDialog();
       },
-      //complete: () => this.logger.info('apiAccountCreatePost is completed')
     })
   }
 }

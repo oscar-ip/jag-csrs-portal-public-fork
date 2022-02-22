@@ -268,10 +268,10 @@ editPage(stepper, index){
           //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-          this.logger.Error(e.message, e.errorMessage);
+          this.logger.error('error is getIdentities', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -287,10 +287,10 @@ editPage(stepper, index){
         //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error in getProvinces', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -306,10 +306,10 @@ editPage(stepper, index){
         //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error is getGenders', e);
         this.data = {
           title: 'Error',
-          content: e.message + ' ' + e.errorMessage,
+          content: e.message,
           weight: 'normal',
           color: 'red'
          };
@@ -325,10 +325,10 @@ editPage(stepper, index){
           //this.logger.info('this.courtLocations',this.courtLocations);
         },
         error: (e) => {
-          this.logger.Error(e.message, e.errorMessage);
+          this.logger.error('error in getCourtLocations', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
           };
@@ -344,10 +344,10 @@ editPage(stepper, index){
           //this.logger.info('this.courtLevels',this.courtLevels);
         },
         error: (e) => {
-          this.logger.Error(e.message, e.errorMessage);
+          this.logger.error('error in getCourtLevels', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -364,10 +364,10 @@ editPage(stepper, index){
         //this.logger.info('this.referals',this.referrals);
       },
       error: (e) => {
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error in getReferrals', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -383,10 +383,10 @@ editPage(stepper, index){
         //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error in getPreferredcontactmethods', e);
           this.data = {
             title: 'Error',
-            content: e.message + ' ' + e.errorMessage,
+            content: e.message,
             weight: 'normal',
             color: 'red'
            };
@@ -684,7 +684,7 @@ editPage(stepper, index){
       },
       error: (e) => {
 
-        this.logger.Error(e.message, e.errorMessage);
+        this.logger.error('error i prepareData', e);
         this.data = {
           title: 'Error',
           content: 'The information you entered is not valid. Please enter the information given to you by yhe Child Support Recalculation Service.',
