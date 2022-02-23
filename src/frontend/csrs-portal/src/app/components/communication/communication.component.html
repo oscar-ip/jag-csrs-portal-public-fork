@@ -119,7 +119,17 @@
                     <h2 style="font-weight: bold;">File #:</h2>
                   </div>
                   <div class="col">
-                    <input type="input" #fileNumber value={{selectedFileNumber}} class="font_bold"/>
+                    <mat-form-field>
+                      <mat-label>Select File</mat-label>
+                      <mat-select formControlName="uploadFile" (selectionChange)="onUploadFileNumberChange ($event)">
+                        <mat-option *ngFor="let file of files" [value]="file.fileId">
+                          {{file.fileNumber}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="uploadFile.hasError('required')">
+                        File is required.
+                      </mat-error>
+                    </mat-form-field>
                   </div>
                   <div class="col-8">
                     <h2 class="text-dark">
@@ -260,7 +270,7 @@
                   <div class="col">
                     <mat-form-field>
                       <mat-label>Select File</mat-label>
-                      <mat-select formControlName="contactFile" (selectionChange)="onFileChange ($event)">
+                      <mat-select formControlName="contactFile" (selectionChange)="onContactFileNumberChange ($event)">
                         <mat-option *ngFor="let file of files" [value]="file.fileId">
                           {{file.fileNumber}}
                         </mat-option>

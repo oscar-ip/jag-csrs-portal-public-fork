@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AccountService } from 'app/api/api/account.service';
 import { AccountFileSummary } from 'app/api/model/accountFileSummary.model';
 import { UserRequestService } from 'app/api/api/userRequest.service';
+import { DocumentService } from 'app/api/api/document.service';
 import { UserRequest } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
 
@@ -40,6 +41,7 @@ export class CommunicationComponent implements OnInit {
               @Inject(FileService) private fileService,
               @Inject(AccountService) private accountService,
               @Inject(UserRequestService) private userRequestService,
+              @Inject(DocumentService) private documentService,
               private _http: HttpClient,
               public dialog: MatDialog,
               private datePipe: DatePipe,
@@ -56,6 +58,7 @@ export class CommunicationComponent implements OnInit {
   // isDisabled: boolean = true;
   // isUploaing: boolean = true;
   _token = '';
+  selectedUploadFile: any;
 
   data: any = null;
   selectedDocumentType = '';
@@ -116,6 +119,7 @@ export class CommunicationComponent implements OnInit {
     })
     this.getRemoteData();
     this.uploadFormGroup = this._formBuilder.group({
+      uploadFile: [null, Validators.required],
       secondCtrl: [''],
     });
 
@@ -145,11 +149,22 @@ export class CommunicationComponent implements OnInit {
   get contactMessage() {
     return this.contactFormGroup.get('contactMessage');
   }
-  onFileChange(ob): void {
+  get uploadFile() {
+    return this.uploadFormGroup.get('uploadFile');
+  }
+  onContactFileNumberChange(ob): void {
     let fileValue = ob.value;
     for (var i = 0; i < this.files.length; i++) {
       if (fileValue == this.files[i].fileId) {
         this.selectedContactFile = this.files[i];
+      }
+    }
+  }
+  onUploadFileNumberChange(ob): void {
+    let fileValue = ob.value;
+    for (var i = 0; i < this.files.length; i++) {
+      if (fileValue == this.files[i].fileId) {
+        this.selectedUploadFile = this.files[i];
       }
     }
   }
@@ -262,8 +277,8 @@ onUpload(): void {
 
       this.data = {
           type: 'info',
-          title: 'Success - document uploaded',
-          content: 'Document uploaded to file #: 4652',
+        title: 'Success - document uploaded',
+        content: 'Document uploaded to file #: ' + this.selectedUploadFile.fileNumber,
           weight: 'bold',
           color: 'green'
         };
@@ -346,19 +361,15 @@ onDocTypeChanged(event) {
 
 submitUploadedAttachment() {
 
-    const httpOptions = {
-    headers: new HttpHeaders({'Content-Type': this.selectedFile.type})
-  };
-
     const fileData = new FormData();
     fileData.append('file', this.selectedFile, this.selectedFile.name);
     this.logger.info('File Data', fileData);
 
-    this.fileService.apiFileUploadattachmentPost(
-      'EDE069F4-0E21-4AAD-AAB1-198C195A08BC',
-      this.selectedDocumentType,
-      fileData,
-      'body'
+      this.documentService.apiDocumentUploadattachmentPost(
+        this.selectedUploadFile.fileId,
+        "ssg_csrsfile",
+        this.selectedDocumentType,
+        this.selectedFile
       ).subscribe({
       next:  (data) => {
         this._reponse = data;
