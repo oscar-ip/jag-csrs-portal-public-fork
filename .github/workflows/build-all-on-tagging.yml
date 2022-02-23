@@ -138,7 +138,7 @@ jobs:
           namespace: ${OPENSHIFT_NAMESPACE}
       - name: ENV Specific Image Tagging 
         run: |
-          oc tag  ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}  "${{env.app}}-file-manager:${{ env.env }}"
+          oc tag -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}  "${{env.app}}-file-manager:${{ env.env }}"
 
        # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
