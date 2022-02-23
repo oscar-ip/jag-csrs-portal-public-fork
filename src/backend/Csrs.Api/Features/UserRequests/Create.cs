@@ -80,7 +80,7 @@ namespace Csrs.Api.Features.UserRequests
                 MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
                 task.Activitytypecode = "task";
                 task.Subject = "File " + request.FileNo + " - " + request.RequestType;
-                string desc = "Party: " + party.SsgBceidDisplayname + "\n"+
+                string desc = "Party: " + party.SsgFullname + "\n"+
                               "Message: "+request.RequestMessage;
                 task.Description =  desc;
                 task.Isregularactivity = true;
