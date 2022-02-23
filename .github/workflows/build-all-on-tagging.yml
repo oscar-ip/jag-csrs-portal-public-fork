@@ -91,28 +91,28 @@ jobs:
 
 
       #Build and push image to OpenShift Image stream
-      - name: Build & Push frontend Image to Openshift Image Stream
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          CONTEXT: ./src/frontend/csrs-portal
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-frontend:${{env.gittag}}
-        run: |
-          docker build \
-            --tag ${IMAGE} \
-            ${CONTEXT}
-            docker push ${IMAGE}
-      - name: Build & Push API Image to Openshift Image Stream
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          CONTEXT: ./src/backend
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-api:${{env.gittag}}
-        run: |
-          docker build \
-            --tag ${IMAGE} \
-            ${CONTEXT}
-            docker push ${IMAGE}
+      #- name: Build & Push frontend Image to Openshift Image Stream
+      #  env:
+      #    COMPOSE_DOCKER_CLI_BUILD: 1
+      #    DOCKER_BUILDKIT: 1
+      #    CONTEXT: ./src/frontend/csrs-portal
+      #    IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-frontend:${{env.gittag}}
+      #  run: |
+      #    docker build \
+      #      --tag ${IMAGE} \
+      #      ${CONTEXT}
+      #      docker push ${IMAGE}
+      #- name: Build & Push API Image to Openshift Image Stream
+      #  env:
+      #    COMPOSE_DOCKER_CLI_BUILD: 1
+      #    DOCKER_BUILDKIT: 1
+      #    CONTEXT: ./src/backend
+      #    IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-api:${{env.gittag}}
+      #  run: |
+      #    docker build \
+      #      --tag ${IMAGE} \
+      #      ${CONTEXT}
+      #      docker push ${IMAGE}
       - name: Build & Push File Manager Image to Openshift Image Stream
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
@@ -148,9 +148,6 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
           toolsSpace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
         run: |
-          #oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-file-manager", "image":"${{env.app}}-file-manager:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
-          #oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-api", "image":"${{env.app}}-api:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
-          #oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-frontend", "image":"${{env.app}}-frontend:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
-          oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${{appName}}-file-manager"] ,"from":{"kind":"ImageStreamTag","namespace": ${{toolSpace}}","name": "${{appName}}-file-manager:${{env.gittag}}"}}}]}}'
-          oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${{appName}}-api"] ,"from":{"kind":"ImageStreamTag","namespace": ${{toolSpace}}","name": "${{appName}}-api:${{env.gittag}}"}}}]}}'
-          oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${{appName}}-frontend"] ,"from":{"kind":"ImageStreamTag","namespace": ${{toolSpace}}","name": "${{appName}}-frontend:${{env.gittag}}"}}}]}}'
+           oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${appName}-file-manager"] ,"from":{"kind":"ImageStreamTag","namespace": "${toolSpace}","name": "${appName}-file-manager:${{env.gittag}}"}}}]}}'
+           #oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${appName}-api"] ,"from":{"kind":"ImageStreamTag","namespace": "${toolSpace}","name": "${appName}-api:${{env.gittag}}"}}}]}}'
+           #oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} -p '{"spec":{"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic": true, "containerNames":["${appName}-frontend"] ,"from":{"kind":"ImageStreamTag","namespace": "${toolSpace}","name": "${appName}-frontend:${{env.gittag}}"}}}]}}'
