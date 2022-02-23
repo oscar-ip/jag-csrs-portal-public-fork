@@ -12,7 +12,7 @@ on:
       - '*'
   
   # Allows you to run this workflow manually from the Actions tab
-  # Yet to add extra input variable to supply desired tag number
+
   workflow_dispatch:
     inputs:
         app:
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     #https://stackoverflow.com/a/70868036
-    environment: ${{ github.event.inputs.env }}
+    environment: test
     env:
       app: ${{github.event.inputs.app}}
       env: ${{github.event.inputs.env}}
@@ -48,7 +48,7 @@ jobs:
       # by default on tagging code we are building and deploying tagged build to test environment
       # If we want to do that to dev or prod then that has to be via manual trigger of Github
       # workflow (as of now).
-      env_from_gh_secret: ${{secrets.OPENSHIFT_ENV_TAG}}
+      env_from_gh_secret: test
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

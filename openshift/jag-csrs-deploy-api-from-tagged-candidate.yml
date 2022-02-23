@@ -110,7 +110,7 @@ objects:
               defaultMode: 420
         containers:
           - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${OC_ENV}
             name: ${API_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:

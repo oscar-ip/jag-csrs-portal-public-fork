@@ -8,7 +8,7 @@ labels:
   app: ${APP_NAME}
   app.kubernetes.io/name: ${APP_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
-
+  version: "placeholder"
 parameters:
 
 - name: APP_NAME
@@ -88,7 +88,7 @@ objects:
       spec:
         containers:
           - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${FILEMANAGER_COMPONENT_NAME}:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
             name: ${FILEMANAGER_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
@@ -160,17 +160,17 @@ objects:
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense
-    #triggers:
-    #  - type: ConfigChange
-    #  - type: ImageChange
-    #    imageChangeParams:
-    #      automatic: true
-    #      containerNames:
-    #        - ${FILEMANAGER_COMPONENT_NAME}
-    #      from:
-    #        kind: ImageStreamTag
-    #        namespace: ${OC_NAMESPACE}-tools
-    #        name: ${FILEMANAGER_COMPONENT_NAME}:${IMAGE_TAG}
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${FILEMANAGER_COMPONENT_NAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${OC_NAMESPACE}-tools
+            name: ${FILEMANAGER_COMPONENT_NAME}:${IMAGE_TAG}
   status: {}
 
 
