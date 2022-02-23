@@ -128,10 +128,14 @@ jobs:
        #Login to OpenShift Tools Space 
       - name: Login to OpenShift Tools Space 
         uses: redhat-actions/oc-login@v1
+        env:
+          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
+          OPENSHIFT_USER: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
         with:
-          username: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
-          password: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
+          #username: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
+          openshift_token: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          namespace: ${OPENSHIFT_NAMESPACE}
       - name: ENV Specific Image Tagging 
         run: |
           oc tag  ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}  "${{env.app}}-file-manager:${{ env.env }}"
