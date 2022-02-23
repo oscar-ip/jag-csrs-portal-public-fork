@@ -18,8 +18,8 @@ export interface Party {
     middleName?: string | null;
     lastName: string;
     preferredName?: string | null;
-    dateOfBirth: string;
-    gender: LookupValue;
+    dateOfBirth?: string | null;
+    gender?: LookupValue;
     addressStreet1?: string | null;
     addressStreet2?: string | null;
     city?: string | null;
@@ -28,7 +28,7 @@ export interface Party {
     homePhone?: string | null;
     workPhone?: string | null;
     cellPhone?: string | null;
-    email: string;
+    email?: string | null;
     optOutElectronicDocuments?: boolean | null;
     identity?: LookupValue;
     referral?: LookupValue;

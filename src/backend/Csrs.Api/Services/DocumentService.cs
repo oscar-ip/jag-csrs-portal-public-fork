@@ -125,10 +125,17 @@ namespace Csrs.Api.Services
                 FileName = fileName,
                 FolderName = folderName
             };
+            //This try/catch is for debugging purposes in DEV ONLY
+            var uploadResult = new UploadFileReply();
+            try
+            {
+                uploadResult = _fileManagerClient.UploadFile(uploadRequest);
+            }catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
 
-            var uploadResult = _fileManagerClient.UploadFile(uploadRequest);
-
-            if (uploadResult.ResultStatus == ResultStatus.Success)
+            if (uploadResult != null && uploadResult.ResultStatus == ResultStatus.Success)
             {
                 // Update modifiedon to current time
                 //UpdateEntityModifiedOnDate(entityName, entityId, true);

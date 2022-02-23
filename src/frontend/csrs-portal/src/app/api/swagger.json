@@ -2093,10 +2093,7 @@
       },
       "Party": {
         "required": [
-          "dateOfBirth",
-          "email",
           "firstName",
-          "gender",
           "lastName"
         ],
         "type": "object",
@@ -2121,7 +2118,8 @@
           },
           "dateOfBirth": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "nullable": true
           },
           "gender": {
             "$ref": "#/components/schemas/LookupValue"
@@ -2158,7 +2156,8 @@
             "nullable": true
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "optOutElectronicDocuments": {
             "type": "boolean",

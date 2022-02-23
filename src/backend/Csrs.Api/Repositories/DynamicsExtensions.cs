@@ -197,16 +197,14 @@ namespace Csrs.Interfaces.Dynamics
         /// <param name="referenceNumber"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>parties</returns>
-        public static async Task<MicrosoftDynamicsCRMssgCsrspartyCollection> GetPartyByBCeIdAndRefenceNumberAsync(this IDynamicsClient dynamicsClient, string bceid, string referenceNumber, CancellationToken cancellationToken)
+        public static async Task<MicrosoftDynamicsCRMssgCsrspartyCollection> GetPartyByRefenceNumberAsync(this IDynamicsClient dynamicsClient, string referenceNumber, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
-            bceid = GuidGuard(bceid);
             referenceNumber = Escape(referenceNumber);
 
-            List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
-            string filter = $"ssg_bceid_guid eq '{bceid}' and {ActiveStateCode} and ssg_referencenumber eq '{referenceNumber}'";
-            var parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, orderby: orderby, cancellationToken: cancellationToken);
+            string filter = $"ssg_referencenumber eq '{referenceNumber}'";
+            var  parties = await dynamicsClient.Ssgcsrsparties.GetAsync(filter: filter, cancellationToken: cancellationToken);
             return parties;
         }
 

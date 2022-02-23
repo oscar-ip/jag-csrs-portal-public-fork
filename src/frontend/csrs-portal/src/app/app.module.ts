@@ -98,30 +98,20 @@ import { FormsModule } from '@angular/forms';
     DatePipe,
     AppConfigService,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { showError: true },
-      useFactory: (authService: OidcSecurityService) => new Configuration (
-        {
-          basePath: '',//environment.apiUrl,
-          accessToken: authService.getAccessToken.bind(authService)
-        }
-      ),
-      deps: [OidcSecurityService],
-      multi: false
-    },
+    {provide: STEPPER_GLOBAL_OPTIONS,useValue: {showError: true}},
     {
       provide: Configuration,
       useFactory: (authService: OidcSecurityService) => new Configuration(
         {
           basePath: '',//environment.apiUrl,
+          accessToken: authService.getAccessToken.bind(authService),
           credentials: {
             'Bearer': () => {
-              const token: string = authService.getAccessToken();
+              var token: string = authService.getAccessToken();
               if (token) {
                 return 'Bearer ' + token;
               }
-              return undefined;
+               return undefined;
             }
           }
         }

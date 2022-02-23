@@ -20,7 +20,9 @@ import { MatInputModule } from '@angular/material/input';
 import { AccountService } from 'app/api/api/account.service';
 import { AccountFileSummary } from 'app/api/model/accountFileSummary.model';
 import { UserRequestService } from 'app/api/api/userRequest.service';
+import { DocumentService } from 'app/api/api/document.service';
 import { UserRequest } from '../../api';
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-communication',
@@ -39,9 +41,11 @@ export class CommunicationComponent implements OnInit {
               @Inject(FileService) private fileService,
               @Inject(AccountService) private accountService,
               @Inject(UserRequestService) private userRequestService,
+              @Inject(DocumentService) private documentService,
               private _http: HttpClient,
               public dialog: MatDialog,
-              private datePipe: DatePipe  ) {
+              private datePipe: DatePipe,
+              private route: ActivatedRoute  ) {
    }
   showValidationMessages: boolean;
   validationMessages: any[];
@@ -54,6 +58,7 @@ export class CommunicationComponent implements OnInit {
   // isDisabled: boolean = true;
   // isUploaing: boolean = true;
   _token = '';
+  selectedUploadFile: any;
 
   data: any = null;
   selectedDocumentType = '';
@@ -74,10 +79,24 @@ export class CommunicationComponent implements OnInit {
     { id: 7, name: "Change preferred method of communication" },
     { id: 8, name: "Other" }
   ];
-  
+
   accountSummary: HttpResponse<AccountFileSummary>;
   public toggleRow = false;
+  selectedTab: number = 0;
+  selectedFileNumber: any = '';
+
   ngOnInit(): void {
+
+    this.route.queryParams
+    .subscribe(params => {
+      this.logger.info("params", params);
+      this.selectedTab = params.index;
+      this.selectedFileNumber = params.fileNumber;
+    });
+
+
+
+
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.accountService.apiAccountGet('response', false).subscribe({
       next: (data) => {
@@ -100,15 +119,16 @@ export class CommunicationComponent implements OnInit {
     })
     this.getRemoteData();
     this.uploadFormGroup = this._formBuilder.group({
+      uploadFile: [null, Validators.required],
       secondCtrl: [''],
     });
 
     this.documentTypes = [
-      {id: '1', docType: 'Order or Written Agreement'},
-      {id: '2', docType: 'Notice of Assessment'},
-      {id: '3', docType: 'Income Tax Return'},
-      {id: '4', docType: 'Court Application'},
-      {id: '5', docType: 'Other'},
+      { id: 'Order_or_Written_Agreement', docType: 'Order or Written Agreement'},
+      { id: 'Notice_of_Assessment', docType: 'Notice of Assessment'},
+      { id: 'Income_Tax_Return', docType: 'Income Tax Return'},
+      { id: 'Court_Application', docType: 'Court Application'},
+      {id: 'Other', docType: 'Other'},
     ];
 
     this.contactFormGroup = this._formBuilder.group({
@@ -129,11 +149,22 @@ export class CommunicationComponent implements OnInit {
   get contactMessage() {
     return this.contactFormGroup.get('contactMessage');
   }
-  onFileChange(ob): void {
+  get uploadFile() {
+    return this.uploadFormGroup.get('uploadFile');
+  }
+  onContactFileNumberChange(ob): void {
     let fileValue = ob.value;
     for (var i = 0; i < this.files.length; i++) {
       if (fileValue == this.files[i].fileId) {
         this.selectedContactFile = this.files[i];
+      }
+    }
+  }
+  onUploadFileNumberChange(ob): void {
+    let fileValue = ob.value;
+    for (var i = 0; i < this.files.length; i++) {
+      if (fileValue == this.files[i].fileId) {
+        this.selectedUploadFile = this.files[i];
       }
     }
   }
@@ -143,7 +174,7 @@ export class CommunicationComponent implements OnInit {
     this.showSuccessMessages = false;
     this.successMessages = [];
     this.contactFormGroup.reset();
-  }  
+  }
 
   getRemoteData() {
 
@@ -169,11 +200,11 @@ export class CommunicationComponent implements OnInit {
         attachment: 'PDF',
         link: 'http://www.africau.edu/images/default/sample.pdf',
       },
-      
+
     ];
     this.dataSource.data = remoteDummyData;
     }
-    
+
   sendContact(): void {
     this.showSuccessMessages = false;
     this.successMessages = [];
@@ -246,8 +277,8 @@ onUpload(): void {
 
       this.data = {
           type: 'info',
-          title: 'Success - document uploaded',
-          content: 'Document uploaded to file #: 4652',
+        title: 'Success - document uploaded',
+        content: 'Document uploaded to file #: ' + this.selectedUploadFile.fileNumber,
           weight: 'bold',
           color: 'green'
         };
@@ -317,7 +348,7 @@ openDialog(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent,{
       width: '550px'
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
@@ -329,20 +360,16 @@ onDocTypeChanged(event) {
   }
 
 submitUploadedAttachment() {
-    
-    const httpOptions = {
-    headers: new HttpHeaders({'Content-Type': this.selectedFile.type})
-  };
 
     const fileData = new FormData();
     fileData.append('file', this.selectedFile, this.selectedFile.name);
     this.logger.info('File Data', fileData);
 
-    this.fileService.apiFileUploadattachmentPost(
-      'EDE069F4-0E21-4AAD-AAB1-198C195A08BC',
-      this.selectedDocumentType,
-      fileData,
-      'body'
+      this.documentService.apiDocumentUploadattachmentPost(
+        this.selectedUploadFile.fileId,
+        "ssg_csrsfile",
+        this.selectedDocumentType,
+        this.selectedFile
       ).subscribe({
       next:  (data) => {
         this._reponse = data;

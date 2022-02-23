@@ -13,7 +13,7 @@ before committing an altered template, commit the original version so we have th
 
 ## api.service.mustache
 
-**Base Revision**: 9312ed831f2b8ffc3ee03bb2717f29f572735047
+**Base Revision**: 95c996f8666237a58838a72813e18185d116a756
 
 To avoid having to configure the basePath, we change the generated protected basePath on the API Service to be empty string:
 
