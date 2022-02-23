@@ -124,11 +124,11 @@ export class CommunicationComponent implements OnInit {
     });
 
     this.documentTypes = [
-      {id: '1', docType: 'Order or Written Agreement'},
-      {id: '2', docType: 'Notice of Assessment'},
-      {id: '3', docType: 'Income Tax Return'},
-      {id: '4', docType: 'Court Application'},
-      {id: '5', docType: 'Other'},
+      { id: 'Order_or_Written_Agreement', docType: 'Order or Written Agreement'},
+      { id: 'Notice_of_Assessment', docType: 'Notice of Assessment'},
+      { id: 'Income_Tax_Return', docType: 'Income Tax Return'},
+      { id: 'Court_Application', docType: 'Court Application'},
+      {id: 'Other', docType: 'Other'},
     ];
 
     this.contactFormGroup = this._formBuilder.group({
