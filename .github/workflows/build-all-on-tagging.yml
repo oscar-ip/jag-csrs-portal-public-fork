@@ -83,8 +83,7 @@ jobs:
           
        #Login to OpenShift Container Repository
       - name: Login to OpenShift Container Repository
-      - uses: docker/login-action@v1
-      - uses: redhat-actions/oc-login@v1
+        uses: docker/login-action@v1
         with:
           registry: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
@@ -125,6 +124,16 @@ jobs:
             --tag ${IMAGE} \
             ${CONTEXT}
           docker push ${IMAGE}
+
+       #Login to OpenShift Tools Space 
+      - name: Login to OpenShift Tools Space 
+        uses: redhat-actions/oc-login@v1
+        with:
+          username: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
+          password: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
+      - name: ENV Specific Image Tagging 
+        run: |
           oc tag  ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}  "${{env.app}}-file-manager:${{ env.env }}"
 
        # Login to Openshift using OC SA and Token of respective env.
