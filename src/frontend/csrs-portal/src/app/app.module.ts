@@ -109,14 +109,9 @@ import { FormsModule } from '@angular/forms';
             'Bearer': () => {
               var token: string = authService.getAccessToken();
               if (token) {
-                //return 'Bearer ' + token;
+                return 'Bearer ' + token;
               }
-              else
-              {
-                token = authService.getRefreshToken();
-              }
-              return 'Bearer ' + token;
-
+               return undefined;
             }
           }
         }
