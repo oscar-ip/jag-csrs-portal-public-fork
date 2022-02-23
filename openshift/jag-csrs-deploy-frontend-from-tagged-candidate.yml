@@ -87,10 +87,11 @@ objects:
           name: ${COMPONENT_NAME}
           app.kubernetes.io/instance: ${COMPONENT_NAME}
           app.openshift.io/runtime: angularjs
+          version: vblahblah
       spec:
         containers:
           - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${OC_ENV}
             name: ${COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
@@ -133,7 +134,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: ${OC_NAMESPACE}-tools
-            name: ${COMPONENT_NAME}:${IMAGE_TAG}
+            name: ${COMPONENT_NAME}:${OC_ENV}
   status: {}
 
 

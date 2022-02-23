@@ -102,6 +102,7 @@ objects:
           name: ${API_COMPONENT_NAME}
           app.kubernetes.io/instance: ${API_COMPONENT_NAME}
           app.openshift.io/runtime: dotnet
+          version: vblahblah
       spec:
         volumes:
           - name: volume-appsettings

@@ -8,7 +8,7 @@ labels:
   app: ${APP_NAME}
   app.kubernetes.io/name: ${APP_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
-  version: "placeholder"
+
 parameters:
 
 - name: APP_NAME
@@ -85,6 +85,7 @@ objects:
           name: ${FILEMANAGER_COMPONENT_NAME}
           app.kubernetes.io/instance: ${FILEMANAGER_COMPONENT_NAME}
           app.openshift.io/runtime: dotnet
+          version: vblahblah
       spec:
         containers:
           - image: >-
@@ -170,7 +171,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: ${OC_NAMESPACE}-tools
-            name: ${FILEMANAGER_COMPONENT_NAME}:${IMAGE_TAG}
+            name: ${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
   status: {}
 
 
