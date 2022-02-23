@@ -9,10 +9,9 @@ import {
 import { AccountService } from 'app/api/api/account.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Inject} from '@angular/core';
-import { HttpClient, HttpStatusCode, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpStatusCode, HttpResponse, HttpHeaders, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppRoutes } from 'app/app.routes';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
@@ -23,7 +22,9 @@ import {
   CSRSAccount,
   ModelFile,
   FileStatus,
+  AccountFileSummary
 } from 'app/api/model/models';
+import { IFrameService } from 'angular-auth-oidc-client/lib/iframe/existing-iframe.service';
 
 @Component({
   selector: 'app-welcome-user',
@@ -36,53 +37,55 @@ export class WelcomeUserComponent implements OnInit {
   csrsAccount: CSRSAccount = null;
   data: any = null;
   outData: NewFileRequest = null;
+  errorMessage: any = '';
+
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
-              @Inject(OidcSecurityService) private oidc,
               public dialog: MatDialog,
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.oidc.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
-
-    });
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.accountService.configuration.credentials['Bearer'] = this.oidc.getAccessToken();
+
+    this.errorMessage = 'Error: Field is required.';
+
+
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
-        var user   = data.user;
-        var files  = data.files;
 
-        if (user != null && files != null && files.length > 0)
+        if (data)
         {
-          const listFiles = new List<ModelFile>(files); this.logger.info("listFiles", listFiles);
-          const activeStatus:ModelFile = listFiles.firstOrDefault(x=>x.status == FileStatus.Active);
-          this.logger.info("activeStatus", activeStatus);
+          var user   = data.user;
+          var files  = data.files;
 
-          if (activeStatus)
+          if (user != null && files != null && files.length > 0)
           {
-            this.logger.info("redirect to Communication");
-            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-            this.router.navigate(['/communication']);
+            const listFiles = new List<ModelFile>(files); this.logger.info("listFiles", listFiles);
+            const activeStatus:ModelFile = listFiles.firstOrDefault(x=>x.status == FileStatus.Active);
+            this.logger.info("activeStatus", activeStatus);
+
+            if (activeStatus)
+            {
+              this.logger.info("redirect to Communication");
+              this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+              this.router.navigate(['/communication']);
+            }
           }
         }
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as: 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
+        if(e.error instanceof Error)
+        {
+          this.logger.info('e.error', e.error);
+        }
+
       },
-      complete: () => {
-      }
     })
   }
 
@@ -100,8 +103,7 @@ export class WelcomeUserComponent implements OnInit {
   checkAccount(){
 
     this.data = {
-      type: 'error',
-      title: 'Technical error',
+      title: ' Technical error',
       content: 'Your account setup request could not be submitted.',
       content_normal: 'Please try again, or contact the Recalculation Service toll free',
       content_link: '1-866-660-2644',
@@ -109,28 +111,10 @@ export class WelcomeUserComponent implements OnInit {
       color: 'red'
     };
 
-
-    /*
-    return this.http.get(api.get, {headers: new HttpHeaders(
-        {
-          'Authorization': 'Bearer' + my_token,
-           'Content-Type': 'application/json'
-              })});
-        }
-
-    */
-
     const accountData = this.accountFormGroup.value;
     const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
 
-
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
-    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount,
-      {headers: new HttpHeaders(
-        {
-          'Authorization': 'Bearer' + this.oidc.getAccessToken(),
-           'Content-Type': 'application/json'
-        })}).subscribe({
+    this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
         var partyId = outData.partyId;
         var fileId = outData.fileId;
@@ -144,19 +128,10 @@ export class WelcomeUserComponent implements OnInit {
           {
             this.router.navigate(['/stepperform'], { queryParams: { partyId: partyId, fileId: fileId} });
           }
-
       },
       error: (e) => {
         this.openModalDialog();
-
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
-        }
       },
-      complete: () => this.logger.info('apiAccountCheckcsrsaccountPost is completed')
     })
   }
 }

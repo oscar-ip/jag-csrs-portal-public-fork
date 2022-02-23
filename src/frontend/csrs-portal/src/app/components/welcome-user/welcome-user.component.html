@@ -42,15 +42,15 @@
         <div class="col-md-6">
           <mat-form-field class="w-100">
             <mat-label>File number</mat-label>
-            <input matInput placeholder="XX-XXXXX-XXXXX" formControlName="fileNumber"/>
-            <mat-error>{{ "error.required" | translate }}</mat-error>
+            <input matInput placeholder="XX-XXXX-XXXXX" formControlName="fileNumber"/>
+            <mat-error>{{ errorMessage | json }}</mat-error>
           </mat-form-field>
         </div>
         <div class="col-md-6">
           <mat-form-field class="w-100">
             <mat-label>Password</mat-label>
             <input matInput placeholder="XXXXXXXXXXX" formControlName="password"/>
-            <mat-error>{{ "error.required" | translate }}</mat-error>
+            <mat-error>{{ errorMessage | json }}</mat-error>
           </mat-form-field>
         </div>
       </div>

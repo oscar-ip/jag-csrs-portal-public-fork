@@ -14,10 +14,8 @@ namespace Csrs.Api.Models
         [Required]
         public string? LastName { get; set; }
         public string? PreferredName { get; set; }
-        [Required]
         [SwaggerSchema(Format = "date")]
         public string? DateOfBirth { get; set; }
-        [Required]
         public LookupValue? Gender { get; set; }
         public string? AddressStreet1 { get; set; }
         public string? AddressStreet2 { get; set; }
@@ -27,15 +25,12 @@ namespace Csrs.Api.Models
         public string? HomePhone { get; set; }
         public string? WorkPhone { get; set; }
         public string? CellPhone { get; set; }
-        [Required]
         public string? Email { get; set; }
         public bool? OptOutElectronicDocuments { get; set; }
         public LookupValue? Identity { get; set; }
         public LookupValue? Referral { get; set; }
-
         public LookupValue? PreferredContactMethod { get; set; }
         public string? ReferenceNumber { get; set; }
-
         public int? IncomeAssistance { get; set; }
     }
 }

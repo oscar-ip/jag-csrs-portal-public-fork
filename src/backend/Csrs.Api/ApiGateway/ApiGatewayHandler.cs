@@ -13,11 +13,13 @@ namespace Csrs.Api.ApiGateway
     {
 
         public readonly ApiGatewayOptions _apiGatewayOptions;
+        private readonly ILogger<ApiGatewayHandler> _logger;
 
         public ApiGatewayHandler(
-            IOptions<ApiGatewayOptions> apiGatewayOptions)
+            IOptions<ApiGatewayOptions> apiGatewayOptions, ILogger<ApiGatewayHandler> logger)
         {
             _apiGatewayOptions = apiGatewayOptions.Value;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

@@ -15,7 +15,6 @@ import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { List, Dictionary } from 'ts-generic-collections-linq';
@@ -48,7 +47,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   provinces: any = [];
   genders: any = [];
   identities: any = [];
-  referrals: any = [];
   preferredContactMethods: any = [];
 
    isEditable = false;
@@ -62,17 +60,19 @@ export class ApplicationFormStepperComponent implements OnInit {
   partyId: any = '';
   fileId: any = '';
 
+  errorMessage: any = '';
+
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
       @Inject(LookupService) private lookupService,
       @Inject(LoggerService) private logger,
-      @Inject(OidcSecurityService) private oidc,
       @Inject(Router) private router,
       public dialog: MatDialog,
       private datePipe: DatePipe,
       private route: ActivatedRoute) {}
 
   ngOnInit() {
+
     this.route.queryParams
     .subscribe(params => {
       this.logger.info("params", params);
@@ -85,10 +85,10 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.provinces = [{id: '123', value: 'British Columbia'}];
     this.identities = [{id: '123', value: 'Native'}];
     this.genders =  [{id: '123', value: 'Male'}];
-    this.referrals = [{id: '123', value: 'FMEP'}];
     this.preferredContactMethods = [{id: '123', value: 'Email'}];
 
-    this.getReferrals();
+    this.errorMessage = 'Error: Field is required.';
+
     this.getIdentities();
     this.getProvinces();
     this.getGenders();
@@ -114,22 +114,29 @@ export class ApplicationFormStepperComponent implements OnInit {
     });
 
     this.sixFormGroup = this._formBuilder.group({
-      // secondCtrl: ['', Validators.required],
       childSafety: [''],
+      childSafetyDescription: [''],
       contactMethod: [''],
-      enrollFMEP: [''],
-      FMEPinput: [''],
       incomeAssistance: [''],
-      referral: [''],
-
     });
+
+    // setup default values
+    this.sixFormGroup.controls['childSafety'].patchValue('Yes');
+    this.sixFormGroup.controls['contactMethod'].patchValue('Email');
+    this.sixFormGroup.controls['incomeAssistance'].patchValue('Yes');
+
     this.eFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required],
     });
     this.nineFormGroup = this._formBuilder.group({
-      secondCtrl: [''],
     });
-    this.setFormDataFromLocal();
+
+    //this.setFormDataFromLocal();
+    this.data = {
+      type: 'error',
+      title: 'Technical error',
+      weight: 'normal',
+      color: 'red'
+    };
   }
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
@@ -141,12 +148,12 @@ export class ApplicationFormStepperComponent implements OnInit {
       if (data['sixFormGroup']){
         this.sixFormGroup.patchValue(data['sixFormGroup']);
       }
-      if (data['eFormGroup']){
+      /*if (data['eFormGroup']){
         this.eFormGroup.patchValue(data['eFormGroup']);
       }
       if (data['nineFormGroup']){
         this.nineFormGroup.patchValue(data['nineFormGroup']);
-      }
+      }*/
   }
 }
 
@@ -166,97 +173,78 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   getIdentities() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
-          this.logger.info('this.identities',this.identities);
+          //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-          if (e.error instanceof Error) {
-            this.logger.error(e.error.message);
-          } else {
-              // Backend returns unsuccessful response codes such as 404, 500 etc.
-              this.logger.info('Backend returned ', e);
-            }
+          this.logger.error('error is getIdentities', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
         },
-        complete: () => this.logger.info('apiAccountIdentitiesGet is completed')
     });
   }
 
   getProvinces() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;
-        this.logger.info('this.provinces',this.provinces);
+        //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
+        this.logger.error('error in getProvinces', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      complete: () => this.logger.info('apiAccountProvincesGet is completed')
     })
   }
 
   getGenders() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
         this.genders = data;
-        this.logger.info('this.genders',this.genders);
+        //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
+        this.logger.error('error is getGenders', e);
+        this.data = {
+          title: 'Error',
+          content: e.message,
+          weight: 'normal',
+          color: 'red'
+         };
+         this.openModalDialog();
       },
-      complete: () => this.logger.info('apiAccountGendersGet is completed')
-    })
-  }
-
-  getReferrals() {
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
-    this.accountService.apiAccountReferralsGet().subscribe({
-      next: (data) => {
-        this.referrals = data;
-        this.logger.info('this.referals',this.referrals);
-      },
-      error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
-      },
-      complete: () => this.logger.info('apiAccountReferralsGet is completed')
     })
   }
 
   getPreferredcontactmethods(){
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
         this.preferredContactMethods = data;
-        this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
+        //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
+        this.logger.error('error in getPreferredcontactmethods', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      complete: () => this.logger.info('apiAccountReferralsGet is completed')
     })
   }
 
@@ -264,14 +252,13 @@ export class ApplicationFormStepperComponent implements OnInit {
     const formData = {
       secondFormGroup: this.secondFormGroup.value,
       sixFormGroup: this.sixFormGroup.value,
-      eFormGroup: this.eFormGroup.value,
-      nineFormGroup: this.nineFormGroup.value,
     };
 
     this.logger.info("formData", formData);
     this.prepareData();
-    localStorage.setItem('formData', JSON.stringify(formData));
+    //localStorage.setItem('formData', JSON.stringify(formData));
   }
+
   save(){
     localStorage.getsetItemItem('formData', '');
   }
@@ -287,6 +274,26 @@ export class ApplicationFormStepperComponent implements OnInit {
     });
   }
 
+  getProvinceById(id)
+  {
+    let listProvince = new List<LookupValue>(this.provinces);
+    let province: LookupValue = listProvince.firstOrDefault(x=>x.id == id);
+    return province != null  ? province.value : '-'
+  }
+
+  getGenderById(id)
+  {
+    let listGender = new List<LookupValue>(this.genders);
+    let gender: LookupValue = listGender.firstOrDefault(x=>x.id == id);
+    return gender != null  ? gender.value : '-';
+  }
+
+  getIdentityById(id)
+  {
+    let listIdentity = new List<LookupValue>(this.identities);
+    let identity: LookupValue = listIdentity.firstOrDefault(x=>x.id == id);
+    return identity != null  ? identity.value : '-';
+  }
 
   transformDate(date) {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
@@ -319,9 +326,6 @@ export class ApplicationFormStepperComponent implements OnInit {
       let listIdentityParty = new List<LookupValue>(this.identities);
       let inIdentityParty: LookupValue = listIdentityParty.firstOrDefault(x=>x.id == partyData.identity);
 
-      let listReferral = new List<LookupValue>(this.referrals);
-      let inReferral: LookupValue = listReferral.firstOrDefault(x=>x.id == file2Data.referral);
-
       let list = new List<LookupValue>(this.preferredContactMethods);
       let inPreferredContactMethod: LookupValue = list.firstOrDefault(x=>x.value == file2Data.contactMethod);
 
@@ -344,7 +348,7 @@ export class ApplicationFormStepperComponent implements OnInit {
           email: partyData.email,
           optOutElectronicDocuments: null,   // ??? may need to remove?
           identity: inIdentityParty,
-          referral: inReferral,
+          referral: null,
           preferredContactMethod: inPreferredContactMethod,
           incomeAssistance: this.findId(file2Data.incomeAssistance),
           //referenceNumber = null
@@ -359,8 +363,6 @@ export class ApplicationFormStepperComponent implements OnInit {
           recipientSafetyConcernDescription: file2Data.childSafetyDescription,
           safetyAlertPayor: file2Data.childSafety,
           payorSafetyConcernDescription: file2Data.childSafetyDescription,
-          isFMEPFileActive: file2Data.enrollFMEP,
-          fmepFileNumber: file2Data.FMEPinput,
       }
 
       // --- populate csrsAccountRequest
@@ -371,7 +373,6 @@ export class ApplicationFormStepperComponent implements OnInit {
 
     this.logger.info("csrsAccountRequest:", csrsAccountRequest);
 
-    this.accountService.configuration.accessToken =  this.oidc.getAccessToken();
     this.accountService.apiAccountUpdatecsrsaccountPost(csrsAccountRequest).subscribe({
       next: (outData:any) => {
 
@@ -387,7 +388,7 @@ export class ApplicationFormStepperComponent implements OnInit {
 
           this.data = {
             type: 'check',
-            title: 'Account setup complete',
+            title: ' Account setup complete',
             content: 'Your account setup request has been submitted',
             content_normal: null,
             content_link: null,
@@ -401,10 +402,10 @@ export class ApplicationFormStepperComponent implements OnInit {
       },
       error: (e) => {
 
-        this.logger.error(e);
+        this.logger.error('error in prepareData', e);
         this.data = {
           type: 'error',
-          title: 'Error',
+          title: ' Error',
           content: 'The information you entered is not valid. Please enter the information given to you by yhe Child Support Recalculation Service.',
           content_normal: 'If you continue to have problems, contact us at ',
           content_link: '1-866-660-2644',
@@ -413,7 +414,6 @@ export class ApplicationFormStepperComponent implements OnInit {
          };
          this.openModalDialog();
       },
-      complete: () => this.logger.info('apiAccountCreatePost is completed')
     })
   }
 }

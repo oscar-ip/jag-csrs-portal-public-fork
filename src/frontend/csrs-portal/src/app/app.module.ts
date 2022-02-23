@@ -110,6 +110,25 @@ import { FormsModule } from '@angular/forms';
       deps: [OidcSecurityService],
       multi: false
     },
+    {
+      provide: Configuration,
+      useFactory: (authService: OidcSecurityService) => new Configuration(
+        {
+          basePath: '',//environment.apiUrl,
+          credentials: {
+            'Bearer': () => {
+              const token: string = authService.getAccessToken();
+              if (token) {
+                return 'Bearer ' + token;
+              }
+              return undefined;
+            }
+          }
+        }
+      ),
+      deps: [OidcSecurityService],
+      multi: false
+    },
     WindowRefService,
   ],
   bootstrap: [AppComponent],

@@ -47,8 +47,8 @@ namespace Csrs.Api.Models
         {
             MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty
             {
-                Statecode = 0,
-                Statuscode = 1,
+                Statecode = 0,  // this state code means active party record
+                Statuscode = 1, // this status code means active party record
                 SsgReferral = party.Referral?.Id,
                 SsgCellphone = party.CellPhone,
                 SsgFirstname = party.FirstName,
@@ -130,6 +130,9 @@ namespace Csrs.Api.Models
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
+                Statecode = 0,  // this state code means active file record for applicant application
+                Statuscode = 1, // this status code means active file record for applicant application
+
                 SsgCourtfiletype = file.CourtFileType?.Id,
                 SsgFmepfileactive = ToBoolean(file.IsFMEPFileActive),
                 SsgFmepfilenumber = file.FMEPFileNumber,
@@ -145,6 +148,7 @@ namespace Csrs.Api.Models
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
 
                 SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
+                SsgSubmissiondate = new DateTimeOffset(DateTime.Now)
 
                 //SsgSharedparenting = true; ???
                 //SsgSplitparentingarrangement = true; ??
@@ -161,6 +165,9 @@ namespace Csrs.Api.Models
         {
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
+                Statecode = 0,  // this state code means active file record for respondent application
+                Statuscode = 1, // this status code means active file record for respondent application
+
                 SsgCsrsfileid = file.FileId,
                 SsgFmepfileactive = ConvertToBool(file.IsFMEPFileActive),
                 SsgFmepfilenumber = file.FMEPFileNumber,
@@ -177,6 +184,9 @@ namespace Csrs.Api.Models
         {
             MicrosoftDynamicsCRMssgCsrschild dynamicsChild = new MicrosoftDynamicsCRMssgCsrschild
             {
+                Statecode = 0,  // this state code means active child record
+                Statuscode = 1, // this status code means active child record
+
                 SsgFirstname = child.FirstName,
                 SsgMiddlename = child.MiddleName,
                 SsgLastname = child.LastName,

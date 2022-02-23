@@ -6,20 +6,28 @@ using Microsoft.Rest;
 using System.Net;
 
 namespace Csrs.Interfaces.Dynamics;
-
 public partial class DynamicsClient
 {
     private readonly ILogger<DynamicsClient> _logger;
+    private readonly string _dynamicsNativeOdataUri;
 
     [ActivatorUtilitiesConstructor]
-    public DynamicsClient(HttpClient httpClient, ILogger<DynamicsClient> logger)
+    public DynamicsClient(HttpClient httpClient, ILogger<DynamicsClient> logger, DynamicsClientOptions options)
     {
+        
         Initialize();
 
         HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _logger = logger ?? throw new ArgumentNullException(nameof(httpClient));
 
+        ArgumentNullException.ThrowIfNull(options);
         BaseUri = httpClient.BaseAddress;
+        if (String.IsNullOrEmpty(options.NativeOdataResourceUrl))
+        {
+            throw new ArgumentException("Native OData Resource URL is Required",nameof(options));
+        }
+        _dynamicsNativeOdataUri = options.NativeOdataResourceUrl;
+
     }
 
     public async Task<PicklistOptionSetMetadata> GetPicklistOptionSetMetadataAsync(string entityName, string attributeName, CancellationToken cancellationToken)
@@ -111,7 +119,7 @@ public partial class DynamicsClient
             throw new FormatException("Entity id is not a valid guid");
         }
 
-        string uri = BaseUri + entityType + "(" + key.ToString("d") + ")";
+        string uri = _dynamicsNativeOdataUri + entityType + "(" + key.ToString("d") + ")";
         return uri;
     }
 }

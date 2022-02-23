@@ -15,12 +15,12 @@ import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // -- import data structure
 import {
@@ -60,10 +60,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
   courtLevels: any = [];
   courtLocations: any = [];
 
-  _accountService: AccountService;
-  _lookupService: LookupService;
-  _logger: LoggerService;
-  _oidc: OidcSecurityService;
   today = new Date();
   isEditable: boolean = false;
   child: Child;
@@ -79,26 +75,38 @@ export class ChildApplicationQuestionComponent implements OnInit {
   data: any = null;
   result: any = [];
 
+  errorMessage: any = '';
+  tooltips: any = [];
+
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
               @Inject(LoggerService) private logger,
-              @Inject(OidcSecurityService) private oidc,
+              @Inject(Router) private router,
               public dialog: MatDialog,
               private datePipe: DatePipe) {}
 
   ngOnInit() {
-    this._accountService = this.accountService;
-    this._lookupService = this.lookupService;
-    this._logger = this.logger;
-    this._oidc = this.oidc;
-
 
     this.provinces = [{id: '123', value: 'British Columbia'}];
     this.identities = [{id: '123', value: 'Native'}];
     this.genders =  [{id: '123', value: 'Male'}];
     this.courtLocations =  [{id: '123', value: 'Victoria Court'}];
     this.referrals = [{id: '123', value: 'FMEP'}];
+
+    this.errorMessage = 'Error: Field is required.';
+
+    this.tooltips = [
+      'A child over the age of majority (19 in B.C.) who is still dependent on their parents. For example, due to illness, disability or pursuit of post secondary education.',
+      'On a Court Order: look for the date the order was made or granted. Often this can be found on the first page below the names of the parties. On a Written Agreement: look for the date the agreement was stamped when it was filed by the court. Often this can be found at the top of the first page.',
+      'The person paying child support.',
+      'These are additional amounts to be paid over and above the base child support amount. Some examples of these expenses (often referred to as Section 7 expenses) include childcare, medical or dental premiums, healthcare costs.',
+      'Income Assistance (IA) is the welfare program in BC. It provides financial support for low income or no income individuals. '+
+      'The Ministry of Social Development and Poverty Reduction has three income assistance programs: '+
+      'Income Assistance (IA), '+
+      'Persons with Persistent Multiple Barriers (PPMB), '+
+      'Persons with Disabilities (PWD).',
+    ]
 
     this.getReferrals();
     this.getIdentities();
@@ -122,8 +130,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
       city: ['', Validators.required],
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      email: ['', Validators.email],
+      phoneNumber: [''],
+      email: ['', Validators.required],
       PreferredName: [''],
       saddress: [''],
       cellNumber: [''],
@@ -131,6 +139,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       gender: [''],
       identity: ['']
     });
+
     this.thirdFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
       givenNames: [''],
@@ -145,7 +154,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       homePhoneNumber: [''],
       cellPhoneNumber: [''],
       workPhoneNumber: [''],
-      email: ['', Validators.required],
+      email: [''],
       gender: ['']
 
     });
@@ -153,31 +162,29 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.fourthFormGroup1 = this._formBuilder.group({
       users: this._formBuilder.array([
         this._formBuilder.group({
-          firstName: [''],
-          lastName: [''],
-          birthdate: [],
+          firstName: ['', Validators.required],
+          lastName: ['', Validators.required],
+          birthdate: ['', Validators.required],
           childDependency: [],
           middleName: []
         })
 
       ])
     });
-    // this.fourthFormGroup = this._formBuilder.group({
-    //   firstName: ['', Validators.required],
-    //   lastName: ['', Validators.required],
-    //   birthdate: [],
-    //   givenNames: [],
-    //   middleName: []
-    // });
+
     this.fifthFormGroup = this._formBuilder.group({
-      orderDate: [],
-      courtLocation: [],
-      payorIncome: [],
+      orderDate: [''],
+      courtLocation: [''],
+      payorIncome: [''],
       recalculationOrdered: [],
       isSpecifiedIncome: [],
     });
+
+    // setup default values
+    this.fifthFormGroup.controls['recalculationOrdered'].patchValue('Yes');
+    this.fifthFormGroup.controls['isSpecifiedIncome'].patchValue('Yes');
+
     this.sixFormGroup = this._formBuilder.group({
-      // secondCtrl: ['', Validators.required],
       childSafety: [''],
       childSafetyDescription: [''],
       contactMethod: [''],
@@ -185,8 +192,14 @@ export class ChildApplicationQuestionComponent implements OnInit {
       FMEPinput: [''],
       incomeAssistance: [''],
       referral: [''],
-
     });
+
+    // setup default values
+    this.sixFormGroup.controls['childSafety'].patchValue('Yes');
+    this.sixFormGroup.controls['contactMethod'].patchValue('Email');
+    this.sixFormGroup.controls['enrollFMEP'].patchValue('Yes');
+    this.sixFormGroup.controls['incomeAssistance'].patchValue('Yes');
+
     this.seventhFormGroup = this._formBuilder.group({
       secondCtrl: [''],
     });
@@ -196,7 +209,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.nineFormGroup = this._formBuilder.group({
       secondCtrl: [''],
     });
-    this.setFormDataFromLocal();
+    //this.setFormDataFromLocal();
   }
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
@@ -249,139 +262,136 @@ editPage(stepper, index){
   stepper.selectedIndex = index;
 }
   getIdentities() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-
-    //this._accountService.configuration.accessToken =  this._idToken;
-    this._accountService.apiAccountIdentitiesGet().subscribe({
+    this.accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
-          this._logger.info('this.identities',this.identities);
+          //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-          if (e.error instanceof Error) {
-            this._logger.error(e.error.message);
-          } else {
-              // Backend returns unsuccessful response codes such as 404, 500 etc.
-              this._logger.info('Backend returned ', e);
-            }
+          this.logger.error('error is getIdentities', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
         },
-        complete: () => this._logger.info('apiAccountIdentitiesGet is completed')
     });
   }
 
   getProvinces() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-    //this._accountService.configuration.accessToken =  this._idToken;
-    this._accountService.apiAccountProvincesGet().subscribe({
+    this.accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;
-        this._logger.info('this.provinces',this.provinces);
+        //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.logger.error('error in getProvinces', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountProvincesGet is completed')
     })
   }
 
   getGenders() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-    this._accountService.apiAccountGendersGet().subscribe({
+    this.accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
         this.genders = data;
-        this._logger.info('this.genders',this.genders);
+        //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.logger.error('error is getGenders', e);
+        this.data = {
+          title: 'Error',
+          content: e.message,
+          weight: 'normal',
+          color: 'red'
+         };
+         this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountGendersGet is completed')
     })
   }
 
   getCourtLocations() {
-    this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
-      this._lookupService.apiLookupCourtlocationsGet().subscribe({
+   this.lookupService.apiLookupCourtlocationsGet().subscribe({
         next: (data) => {
           this.courtLocations = data;
-          this._logger.info('this.courtLocations',this.courtLocations);
+          //this.logger.info('this.courtLocations',this.courtLocations);
         },
         error: (e) => {
-          if (e.error instanceof Error) {
-            this._logger.error(e.error.message);
-          } else {
-              //Backend returns unsuccessful response codes such as 404, 500 etc.
-              this._logger.info('Backend returned ', e);
-            }
+          this.logger.error('error in getCourtLocations', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+          };
+          this.openModalDialog();
         },
-        complete: () => this._logger.info('courtlocationsGet is completed')
       })
   }
 
   getCourtLevels() {
-    this._lookupService.configuration.accessToken =  this._oidc.getAccessToken();
-      this._lookupService.apiLookupCourtlevelsGet().subscribe({
+     this.lookupService.apiLookupCourtlevelsGet().subscribe({
         next: (data) => {
           this.courtLevels = data;
-          this._logger.info('this.courtLevels',this.courtLevels);
+          //this.logger.info('this.courtLevels',this.courtLevels);
         },
         error: (e) => {
-          if (e.error instanceof Error) {
-            this._logger.error(e.error.message);
-          } else {
-              //Backend returns unsuccessful response codes such as 404, 500 etc.
-              this._logger.info('Backend returned ', e);
-            }
+          this.logger.error('error in getCourtLevels', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
         },
-        complete: () => this._logger.info('courtlevelsGet is completed')
       })
   }
 
 
   getReferrals() {
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-    this._accountService.apiAccountReferralsGet().subscribe({
+    this.accountService.apiAccountReferralsGet().subscribe({
       next: (data) => {
         this.referrals = data;
-        this._logger.info('this.referals',this.referrals);
+        //this.logger.info('this.referals',this.referrals);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.logger.error('error in getReferrals', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountReferralsGet is completed')
     })
   }
 
   getPreferredcontactmethods(){
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-    this._accountService.apiAccountPreferredcontactmethodsGet().subscribe({
+    this.accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
         this.preferredContactMethods = data;
-        this._logger.info('this.preferredContactMethods',this.preferredContactMethods);
+        //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.logger.error('error in getPreferredcontactmethods', e);
+          this.data = {
+            title: 'Error',
+            content: e.message,
+            weight: 'normal',
+            color: 'red'
+           };
+           this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountReferralsGet is completed')
     })
   }
 
@@ -402,6 +412,11 @@ editPage(stepper, index){
     usersArray.insert(arraylen, newUsergroup);
   }
 
+  deletechild(index){
+    this.fourthFormGroup1.get('users')['controls'].splice(index,1)
+  }
+
+
   saveLater(){
     const formData = {
       firstStep: this.firstFormGroup.value,
@@ -414,19 +429,16 @@ editPage(stepper, index){
       eFormGroup: this.eFormGroup.value,
       nineFormGroup: this.nineFormGroup.value,
     };
+    this.logger.info("formData", formData);
 
-    this._logger.info("formData", formData);
     this.prepareData();
-
-    localStorage.setItem('formData', JSON.stringify(formData));
+    //localStorage.setItem('formData', JSON.stringify(formData));
   }
   save(){
     this.prepareData();
 
     localStorage.getsetItemItem('formData', '');
   }
-
-
 
   openModalDialog(): void {
     const dialogRef = this.dialog.open(ModalDialogComponent, {
@@ -439,6 +451,40 @@ editPage(stepper, index){
     });
   }
 
+  getProvinceById(id)
+  {
+    let listProvince = new List<LookupValue>(this.provinces);
+    let province: LookupValue = listProvince.firstOrDefault(x=>x.id == id);
+    return province != null  ? province.value : '-'
+  }
+
+  getGenderById(id)
+  {
+    let listGender = new List<LookupValue>(this.genders);
+    let gender: LookupValue = listGender.firstOrDefault(x=>x.id == id);
+    return gender != null  ? gender.value : '-';
+  }
+
+  getIdentityById(id)
+  {
+    let listIdentity = new List<LookupValue>(this.identities);
+    let identity: LookupValue = listIdentity.firstOrDefault(x=>x.id == id);
+    return identity != null  ? identity.value : '-';
+  }
+
+  getReferralById(id)
+  {
+    let listReferral = new List<LookupValue>(this.referrals);
+    let referral: LookupValue = listReferral.firstOrDefault(x=>x.id == id);
+    return referral != null  ? referral.value : '-';
+  }
+
+  getCourtLocationById(id)
+  {
+    let listCourtLocation = new List<LookupValue>(this.courtLocations);
+    let courtLocation: LookupValue = listCourtLocation.firstOrDefault(x=>x.id == id);
+    return courtLocation != null  ? courtLocation.value : '-';
+  }
 
   transformDate(date) {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
@@ -483,7 +529,7 @@ editPage(stepper, index){
       let partyRole: PartyRole = PartyRole.Unknown;
       let partyEnrolled = '';
 
-      if (roleData.firstControl == 'I am the receipent, i currently receive child support')
+      if (roleData.firstControl == 'I am the recipient; I currently receive child support')
       {
         partyRole = PartyRole.Recipient;
         partyEnrolled = 'Recipient';
@@ -619,46 +665,36 @@ editPage(stepper, index){
         newFileRequest.file.payorSafetyConcernDescription = file2Data.childSafetyDescription;
       }
 
-      this._logger.info("newFileRequest:", newFileRequest);
+      this.logger.info("newFileRequest:", newFileRequest);
 
-    this._accountService.configuration.accessToken =  this._oidc.getAccessToken();
-    this._accountService.apiAccountCreatePost(newFileRequest).subscribe({
+    this.accountService.apiAccountCreatePost(newFileRequest).subscribe({
       next: (outData:any) => {
 
         var partyId = outData.partyId;
         var fileId = outData.fileId;
         var fileNumber = outData.fileNumber;
 
-        this._logger.info("partyId", partyId);
-        this._logger.info("fileId", fileId);
-        this._logger.info("fileNumber", fileNumber);
+        this.logger.info("partyId", partyId);
+        this.logger.info("fileId", fileId);
+        this.logger.info("fileNumber", fileNumber);
 
         let customOptions: DialogOptions = { data: {fileNumber: fileNumber}};
         this.openDialog(customOptions);
+        this.router.navigate(['/communication']);
       },
       error: (e) => {
-        if (e.error instanceof Error) {
-          this._logger.error(e.error.message);
 
-          this.data = {
-            type: 'error',
-            title: e.error.message,
-            content: '',
-            weight: 'normal',
-            color: 'red'
-          };
-          this.openModalDialog();
-
-
-        } else {
-            //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this._logger.info('Backend returned ', e);
-          }
+        this.logger.error('error in prepareData', e);
+        this.data = {
+          title: 'Error',
+          content: 'The information you entered is not valid. Please enter the information given to you by the Child Support Recalculation Service.',
+          content_normal: 'If you continue to have problems, contact us at ',
+          content_link: '1-866-660-2644',
+          weight: 'normal',
+          color: 'red'
+         };
+         this.openModalDialog();
       },
-      complete: () => this._logger.info('apiAccountCreatePost is completed')
     })
-
-    }
-
-
+  }
 }

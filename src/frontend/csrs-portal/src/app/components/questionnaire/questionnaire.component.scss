@@ -259,6 +259,6 @@ mat-divider {
   height: 31px !important;
   width: 16px;
 }
-// ::ng-deep .mat-vertical-stepper-header {
-//   pointer-events: none !important;
-// }
+::ng-deep .mat-vertical-stepper-header {
+  pointer-events: none !important;
+}
