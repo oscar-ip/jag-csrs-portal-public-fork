@@ -47,14 +47,8 @@ export class LandingComponent implements OnInit {
   public async ngOnInit() {
 
       this.cscLink = this.appConfigService.cscLink;
-      this.logger.info('environment.production:',environment.production);
-      if (environment.production === false) this.bceIdRegisterLink = 'https://www.development.bceid.ca/os/?2281';
-      else
-      {
-        this.bceIdRegisterLink = 'https://www.bceid.ca/os/?7731';
-      }
 
-      //this.bceIdRegisterLink = /*environment.production ? 'https://www.bceid.ca/os/?7731' :*/ 'https://www.development.bceid.ca/os/?2281';
+      this.bceIdRegisterLink = /*environment.production ? 'https://www.bceid.ca/os/?7731' :*/ 'https://www.development.bceid.ca/os/?2281';
 
       this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 
