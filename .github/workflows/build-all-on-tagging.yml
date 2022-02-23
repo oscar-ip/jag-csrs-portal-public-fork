@@ -124,8 +124,7 @@ jobs:
             --tag ${IMAGE} \
             ${CONTEXT}
           docker push ${IMAGE}
-          oc tag  ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}  "${{env.app}}-file-manager:latest" 
-      # Login to Openshift using OC SA and Token of respective env.
+       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
         env:
@@ -148,6 +147,8 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
           toolsSpace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
         run: |
+          oc tag  ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}  "${{env.app}}-file-manager:latest" 
+
           oc patch dc "${appName}-file-manager" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"tag.${{ env.tag }}"}}}}}'
           #oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-api", "image":"${{env.app}}-api:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
           #oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-frontend", "image":"${{env.app}}-frontend:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
