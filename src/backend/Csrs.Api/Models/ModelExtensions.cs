@@ -47,8 +47,8 @@ namespace Csrs.Api.Models
         {
             MicrosoftDynamicsCRMssgCsrsparty dynamicsParty = new MicrosoftDynamicsCRMssgCsrsparty
             {
-                Statecode = 0,  // this state code means active party record
-                Statuscode = 1, // this status code means active party record
+                Statecode = 0,
+                Statuscode = 1,
                 SsgReferral = party.Referral?.Id,
                 SsgCellphone = party.CellPhone,
                 SsgFirstname = party.FirstName,
@@ -130,8 +130,8 @@ namespace Csrs.Api.Models
 
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
-                Statecode = 0,  // this state code means active file record for applicant application
-                Statuscode = 1, // this status code means active file record for applicant application
+                Statecode = (int?)null,
+                Statuscode = (int?)null,
 
                 SsgCourtfiletype = file.CourtFileType?.Id,
                 SsgFmepfileactive = ToBoolean(file.IsFMEPFileActive),
@@ -143,12 +143,12 @@ namespace Csrs.Api.Models
                 SsgPayorssafetyconcerndescription = file.PayorSafetyConcernDescription,
 
                 SsgSection7expenses = GetSection7Expenses(file.Section7Expenses),
-                SsgDateoforderorwa = ToDateTimeOffset(file.DateOfOrderOrWA),
+                SsgDateoforderorwa = ToDateTime(file.DateOfOrderOrWA),
                 SsgIncomeonorder = ToDecimal(file.IncomeOnOrder),
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
 
                 SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
-                SsgSubmissiondate = new DateTimeOffset(DateTime.Now)
+                SsgSubmissiondate = new DateTimeOffset(DateTime.Today)
 
                 //SsgSharedparenting = true; ???
                 //SsgSplitparentingarrangement = true; ??
@@ -229,6 +229,21 @@ namespace Csrs.Api.Models
             }
 
             if (DateTimeOffset.TryParse(value, out DateTimeOffset result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+
+        private static DateTime? ToDateTime(string? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (DateTime.TryParse(value, out DateTime result))
             {
                 return result;
             }

@@ -22,6 +22,7 @@ import { AccountFileSummary } from 'app/api/model/accountFileSummary.model';
 import { UserRequestService } from 'app/api/api/userRequest.service';
 import { DocumentService } from 'app/api/api/document.service';
 import { UserRequest } from '../../api';
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-communication',
@@ -43,7 +44,8 @@ export class CommunicationComponent implements OnInit {
               @Inject(DocumentService) private documentService,
               private _http: HttpClient,
               public dialog: MatDialog,
-              private datePipe: DatePipe  ) {
+              private datePipe: DatePipe,
+              private route: ActivatedRoute  ) {
    }
   showValidationMessages: boolean;
   validationMessages: any[];
@@ -77,10 +79,24 @@ export class CommunicationComponent implements OnInit {
     { id: 7, name: "Change preferred method of communication" },
     { id: 8, name: "Other" }
   ];
-  
+
   accountSummary: HttpResponse<AccountFileSummary>;
   public toggleRow = false;
+  selectedTab: number = 0;
+  selectedFileNumber: any = '';
+
   ngOnInit(): void {
+
+    this.route.queryParams
+    .subscribe(params => {
+      this.logger.info("params", params);
+      this.selectedTab = params.index;
+      this.selectedFileNumber = params.fileNumber;
+    });
+
+
+
+
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.accountService.apiAccountGet('response', false).subscribe({
       next: (data) => {
@@ -158,7 +174,7 @@ export class CommunicationComponent implements OnInit {
     this.showSuccessMessages = false;
     this.successMessages = [];
     this.contactFormGroup.reset();
-  }  
+  }
 
   getRemoteData() {
 
@@ -184,11 +200,11 @@ export class CommunicationComponent implements OnInit {
         attachment: 'PDF',
         link: 'http://www.africau.edu/images/default/sample.pdf',
       },
-      
+
     ];
     this.dataSource.data = remoteDummyData;
     }
-    
+
   sendContact(): void {
     this.showSuccessMessages = false;
     this.successMessages = [];
@@ -332,7 +348,7 @@ openDialog(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent,{
       width: '550px'
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
@@ -344,12 +360,7 @@ onDocTypeChanged(event) {
   }
 
 submitUploadedAttachment() {
-  const headers = new HttpHeaders()
-    .set('content-type', this.selectedFile.type);
- //   const httpOptions = {
- //   headers: new HttpHeaders({'Content-Type': this.selectedFile.type})
-//  };
-    
+
     const fileData = new FormData();
     fileData.append('file', this.selectedFile, this.selectedFile.name);
     this.logger.info('File Data', fileData);
