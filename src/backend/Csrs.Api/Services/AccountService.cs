@@ -80,7 +80,7 @@ namespace Csrs.Api.Services
 
             CSRSPartyFileIds result = new CSRSPartyFileIds();
 
-            var parties = await _dynamicsClient.GetPartyByBCeIdAndRefenceNumberAsync(bceidGuid, account.ReferenceNumber, cancellationToken);
+            var parties = await _dynamicsClient.GetPartyByRefenceNumberAsync(account.ReferenceNumber, cancellationToken);
 
             if (parties.Value == null || parties.Value.Count == 0)
             {

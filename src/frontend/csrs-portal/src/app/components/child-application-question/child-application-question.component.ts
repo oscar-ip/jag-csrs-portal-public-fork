@@ -649,7 +649,7 @@ editPage(stepper, index){
       }
 
       // --- populate
-      let newFileRequest: NewFileRequest = {
+      var newFileRequest: NewFileRequest = {
         user: inParty,
         file: inFile,
       }
@@ -674,13 +674,14 @@ editPage(stepper, index){
         var fileId = outData.fileId;
         var fileNumber = outData.fileNumber;
 
-        this.logger.info("partyId", partyId);
-        this.logger.info("fileId", fileId);
-        this.logger.info("fileNumber", fileNumber);
+        //this.logger.info("partyId", partyId);
+        //this.logger.info("fileId", fileId);
+        //this.logger.info("fileNumber", fileNumber);
 
         let customOptions: DialogOptions = { data: {fileNumber: fileNumber}};
         this.openDialog(customOptions);
-        this.router.navigate(['/communication']);
+        this.router.navigate(['/communication'], { queryParams: { index: 1, fileNumber: fileNumber } });
+
       },
       error: (e) => {
 
@@ -689,7 +690,7 @@ editPage(stepper, index){
           title: 'Error',
           content: 'The information you entered is not valid. Please enter the information given to you by the Child Support Recalculation Service.',
           content_normal: 'If you continue to have problems, contact us at ',
-          content_link: '1-866-660-2644',
+          content_link: '1-866-660-2684',
           weight: 'normal',
           color: 'red'
          };

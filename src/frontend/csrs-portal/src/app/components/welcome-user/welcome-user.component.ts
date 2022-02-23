@@ -106,7 +106,7 @@ export class WelcomeUserComponent implements OnInit {
       title: ' Technical error',
       content: 'Your account setup request could not be submitted.',
       content_normal: 'Please try again, or contact the Recalculation Service toll free',
-      content_link: '1-866-660-2644',
+      content_link: '1-866-660-2684',
       weight: 'bold',
       color: 'red'
     };
