@@ -148,9 +148,9 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
           toolsSpace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
         run: |
-          oc tag "${appName}-file-manager:${{env.gittag}}"  -n ${ toolsSpace } "${appName}-file-manager:latest"
-          #oc tag "${appName}-api:${{env.gittag}}"  -n ${ toolsSpace } "${appName}-api:latest"
-          #oc tag "${appName}-frontend:${{env.gittag}}"  -n ${ toolsSpace } "${appName}-frontend:latest"
+          oc tag "${appName}-file-manager:${{env.gittag}}"  -n "${toolsSpace}" "${appName}-file-manager:latest"
+          #oc tag "${appName}-api:${{env.gittag}}"  -n "${toolsSpace}" "${appName}-api:latest"
+          #oc tag "${appName}-frontend:${{env.gittag}}"  -n "${ toolsSpace}" "${appName}-frontend:latest"
           oc patch dc "${appName}-file-manager" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-file-manager", "image":"${{env.app}}-file-manager:latest"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
           #oc patch dc "${appName}-api" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-api", "image":"${{env.app}}-api:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
           #oc patch dc "${appName}-frontend" -n ${openshiftEnvNamespace} --patch '{"spec":{"template":{ "spec": {"containers":[{"name": "${{env.app}}-frontend", "image":"${{env.app}}-frontend:${{env.gittag}}"}]},"metadata":{"labels":{"version":"${{env.gittag}}"}}}}}'
