@@ -126,10 +126,10 @@ namespace Csrs.Api.Services
                 FolderName = folderName
             };
             //This try/catch is for debugging purposes in DEV ONLY
-            var uploadResult = null;
+            var uploadResult = new UploadFileReply();
             try
             {
-                 _fileManagerClient.UploadFile(uploadRequest);
+                uploadResult = _fileManagerClient.UploadFile(uploadRequest);
             }catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
