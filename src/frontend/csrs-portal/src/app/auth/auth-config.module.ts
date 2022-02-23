@@ -11,8 +11,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
       return {
         triggerAuthorizationResultEvent: true,
         postLoginRoute: window.location.origin + customConfig.postLoginRoute,
-        //logLevel: environment.production ? LogLevel.None : LogLevel.Debug,
-        logLevel: LogLevel.Debug,
+        logLevel: environment.production ? LogLevel.None : LogLevel.Debug,
         eagerLoadAuthWellKnownEndpoints: false,
         authority: customConfig.authority,
         redirectUrl: customConfig.redirectUrl,
@@ -24,7 +23,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         //silentRenewUrl: window.location.origin + '/silent-renew.html',
         silentRenewUrl: `${window.location.origin}/silent-renew.html`,
         useRefreshToken: true,
-        renewTimeBeforeTokenExpiresInSeconds: 60,
+        renewTimeBeforeTokenExpiresInSeconds: 5,
         autoUserInfo: true,
         customParamsAuthRequest: {
           prompt: customConfig.prompt,
