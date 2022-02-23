@@ -22,9 +22,6 @@ export class LandingComponent implements OnInit {
   public cscLink: string;
   public welcomeUser: string;
   public code: string;
-  public _logger: LoggerService;
-  public _config: AppConfigService;
-  public _snowplow: SnowplowService;
 
   constructor(@Inject(LoggerService) private logger,
               @Inject(Router) private router,
@@ -33,36 +30,32 @@ export class LandingComponent implements OnInit {
               @Inject(AppConfigService) private appConfigService,
               @Inject(SnowplowService) private snowplow) {
 
-    this._config = appConfigService;
-    this._logger = logger;
-    this._logger.log('info', 'logger:constructor');
-    this._snowplow = snowplow;
-
     const accessToken = oidcSecurityService.getAccessToken();
 
     if (accessToken) {
-      this._logger.log('info', `accessToken: ${accessToken}`);
+      this.logger.log('info', `accessToken: ${accessToken}`);
     }
 
     if (oidcSecurityService.isAuthenticated()) {
-      this._logger.log('info', 'authenticated');
+      this.logger.log('info', 'authenticated');
     } else {
-      this._logger.log('info', 'not authenticated');
+      this.logger.log('info', 'not authenticated');
     }
 
   }
 
   public async ngOnInit() {
 
-      this.cscLink = this._config.cscLink;
-      this.bceIdRegisterLink = environment.production ? 'https://www.bceid.ca/os/?7731' : 'https://www.development.bceid.ca/os/?2281';
+      this.cscLink = this.appConfigService.cscLink;
+
+      this.bceIdRegisterLink = /*environment.production ? 'https://www.bceid.ca/os/?7731' :*/ 'https://www.development.bceid.ca/os/?2281';
 
       this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 
-        this._logger.log('info',`isAuthenticated = ${isAuthenticated}`);
-        this._logger.log('info',`userData = ${userData}`);
-        this._logger.log('info',`accessToken = ${accessToken}`);
-        this._logger.log('info',`idToken = ${idToken}`);
+        this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
+        this.logger.log('info',`userData = ${userData}`);
+        this.logger.log('info',`accessToken = ${accessToken}`);
+        this.logger.log('info',`idToken = ${idToken}`);
 
         if (isAuthenticated === true)
         {
@@ -72,12 +65,12 @@ export class LandingComponent implements OnInit {
     }
 
   login() {
-    this._logger.log('info','inside login');
+    this.logger.log('info','inside login');
     this.oidcSecurityService.authorize();
   }
 
   logout() {
-    this._logger.log('info','inside logout');
+    this.logger.log('info','inside logout');
     this.oidcSecurityService.logoff();
   }
 
