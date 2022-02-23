@@ -106,13 +106,17 @@ import { FormsModule } from '@angular/forms';
           basePath: '',//environment.apiUrl,
           accessToken: authService.getAccessToken.bind(authService),
           credentials: {
-            //'Authorization': 'Bearer ' + authService.getAccessToken.bind(authService)
             'Bearer': () => {
-              const token: string = authService.getRefreshToken();
+              var token: string = authService.getAccessToken();
               if (token) {
-                return 'Bearer ' + token;
+                //return 'Bearer ' + token;
               }
-              return undefined;
+              else
+              {
+                token = authService.getRefreshToken();
+              }
+              return 'Bearer ' + token;
+
             }
           }
         }

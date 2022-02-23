@@ -397,7 +397,7 @@ export class ApplicationFormStepperComponent implements OnInit {
           };
           this.openModalDialog();
 
-          this.router.navigateUrl('/communication');
+          this.router.navigateUrl(['/communication']);
         }
       },
       error: (e) => {

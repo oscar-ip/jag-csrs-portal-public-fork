@@ -8,7 +8,7 @@ namespace Csrs.Interfaces.Dynamics
 {
     public static class DynamicsExtensions
     {
-        private const string ActiveStateCode = "statecode eq 1";
+        private const string ActiveStateCode = "statecode eq 0";
 
         /// <summary>
         /// Returns all the parties with matching ssg_bceid_userid, ordered by ssg_bceid_last_update descending.
