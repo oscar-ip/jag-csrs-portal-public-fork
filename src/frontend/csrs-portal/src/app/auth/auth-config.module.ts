@@ -25,6 +25,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         useRefreshToken: true,
         renewTimeBeforeTokenExpiresInSeconds: 5,
         autoUserInfo: true,
+        unauthorizedRoute: '',
         customParamsAuthRequest: {
           prompt: customConfig.prompt,
         },
