@@ -179,10 +179,17 @@
                     </label>
                   </div>
                   <div class="col mt-3 mb-3">
-                    <select class="form-control" style="width: fit-content;"
-                    (change)="onDocTypeChanged($event)">
-                      <option *ngFor="let documentType of documentTypes" [ngValue]="documentType.id">{{documentType.docType}}</option>
-                    </select>
+                    <mat-form-field class="w-100">
+                      <mat-label>Choose the type of document</mat-label>
+                      <mat-select formControlName="documentType">
+                        <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.id">
+                          {{documentType.docType}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="documentType.hasError('required')">
+                        Document Type is required.
+                      </mat-error>
+                    </mat-form-field>
                   </div>
                   <div class="col mt-3 mb-3">
                     <span class="file_name_icon" style="text-align: right;">
@@ -256,13 +263,6 @@
           <form [formGroup]="contactFormGroup" class="round1 form-control" style="padding-bottom: 20px">
             <div class="mb-3">
               <div class="container">
-                <section class="bc-gov-alertbanner-success" *ngIf="showSuccessMessages">
-                  <p *ngFor="let message of successMessages">
-                    <span class="app-cancel">
-                      {{message}}
-                    </span>
-                  </p>
-                </section>
                 <div class="row">
                   <div class="col-1">
                     <label style="font-weight: bold;">File #:</label>
