@@ -236,8 +236,8 @@ export class CommunicationComponent implements OnInit {
       this.userRequestService.apiUserrequestCreatePost(createUserRequest).subscribe({
         next: (outData: any) => {
           this._reponse = outData;
-          if (this._reponse.status === HttpStatusCode.Ok) {
-            this.logger.info('_reponse.status = HttpStatusCode.Ok');
+          
+            
             this.data = {
               type: 'info',
               title: 'Contact Request Created',
@@ -246,7 +246,6 @@ export class CommunicationComponent implements OnInit {
               color: 'green'
             };
             this.openDialog();
-          }
         },
         error: (e) => {
           if (e.error instanceof Error) {
@@ -391,9 +390,7 @@ submitUploadedAttachment() {
       ).subscribe({
       next:  (data) => {
         this._reponse = data;
-        if ( this._reponse.status === HttpStatusCode.Ok ) {
-          this.logger.info('_reponse.status = HttpStatusCode.Ok');
-          this.data = {
+        this.data = {
             type: 'info',
             title: 'Success - document uploaded',
             content: 'Document uploaded to file #: ' + this.selectedUploadFile.fileNumber,
@@ -401,7 +398,6 @@ submitUploadedAttachment() {
             color: 'green'
           };
           this.openDialog();
-        }
       },
       error: (e) => {
         if (e.error instanceof Error) {
