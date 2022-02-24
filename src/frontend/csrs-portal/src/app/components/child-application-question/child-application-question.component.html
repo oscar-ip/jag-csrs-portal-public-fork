@@ -485,8 +485,7 @@
                   <mat-icon *ngIf='tooltips[1]' matTooltip={{tooltips[1]}}
                   #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></span>
                 <mat-form-field class="w-100">
-                  <input matInput [matDatepicker]="picker1" [max]="today" formControlName="orderDate" readonly
-                    (click)="picker.open()" />
+                  <input matInput [matDatepicker]="picker1" [max]="today" formControlName="orderDate"/>
                   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                   <mat-datepicker #picker1 startView="multi-year"></mat-datepicker>
                 </mat-form-field>
