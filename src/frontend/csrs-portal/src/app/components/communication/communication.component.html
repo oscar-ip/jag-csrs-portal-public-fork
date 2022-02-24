@@ -203,7 +203,16 @@
             <div class="mt-3 mb-3">
               <div class="container">
                 <div class="row">
-                  <div class="col" style="text-align: right;" >
+                  <section class="bc-gov-alertbanner-error" *ngIf="showValidationMessages">
+                    <p *ngFor="let message of validationMessages">
+                      <span class="app-cancel">
+                        {{message}}
+                      </span>
+                    </p>
+                  </section>
+                </div>
+                <div class="row">
+                  <div class="col" style="text-align: right;">
                     <button mat-flat-button
                             type="button"
                             class="BC-Gov-PrimaryButton"

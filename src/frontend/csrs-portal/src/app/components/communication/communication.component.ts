@@ -214,12 +214,12 @@ export class CommunicationComponent implements OnInit {
         }
       }
       if (this.contactSubject.hasError) {
-        for (const error in this.contactFile.errors) {
+        for (const error in this.contactSubject.errors) {
           this.validationMessages.push('Contact Subject ' + error.toString());
         }
       }
       if (this.contactMessage.hasError) {
-        for (const error in this.contactFile.errors) {
+        for (const error in this.contactMessage.errors) {
           this.validationMessages.push('Contact Message ' + error.toString());
         }
       }
@@ -286,15 +286,30 @@ export class CommunicationComponent implements OnInit {
     this.toggleRow = element;
   }
   onUpload(): void {
-    console.log("doctype = "+this.documentType);
-    if (this.selectedFile !== null)
-{
-
-      this.submitUploadedAttachment();
-
-      
-      this.selectedFile = null;
-      // this.blob = null;
+    this.validationMessages = [];
+    this.showValidationMessages = false;
+    if (this.uploadFormGroup.valid) {
+      if (this.selectedFile !== null) {
+        this.submitUploadedAttachment();
+        this.selectedFile = null;
+      } else {
+        this.validationMessages = [];
+        this.showValidationMessages = true;
+        this.validationMessages.push('A Document Must be Provided');
+      }
+    } else {
+      this.validationMessages = [];
+      this.showValidationMessages = true;
+      if (this.uploadFile.hasError) {
+        for (const error in this.uploadFile.errors) {
+          this.validationMessages.push('Upload file ' + error.toString());
+        }
+      }
+      if (this.documentType.hasError) {
+        for (const error in this.documentType.errors) {
+          this.validationMessages.push('Document Type ' + error.toString());
+        }
+      }
     }
   }
 
