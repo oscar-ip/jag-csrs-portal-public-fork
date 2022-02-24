@@ -203,13 +203,13 @@
             <div class="mt-3 mb-3">
               <div class="container">
                 <div class="row">
-                  <section class="bc-gov-alertbanner-error" *ngIf="showValidationMessages">
+                  <div class="bc-gov-alertbanner bc-gov-alertbanner-error" role="alert" aria-labelledby="error" aria-describedby="error-desc" *ngIf="showValidationMessages">
                     <p *ngFor="let message of validationMessages">
                       <span class="app-cancel">
                         {{message}}
                       </span>
                     </p>
-                  </section>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col" style="text-align: right;">
@@ -336,13 +336,13 @@
                   </div>
                 </div>
                 <div class="row">
-                  <section class="bc-gov-alertbanner-error" *ngIf="showValidationMessages">
+                  <div class="bc-gov-alertbanner bc-gov-alertbanner-error" role="alert" aria-labelledby="error" aria-describedby="error-desc" *ngIf="showValidationMessages">
                     <p *ngFor="let message of validationMessages">
                       <span class="app-cancel">
                         {{message}}
                       </span>
                     </p>
-                  </section>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-1">
