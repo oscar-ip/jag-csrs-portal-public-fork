@@ -39,19 +39,22 @@ namespace Csrs.Api.Features.UserRequests
             private readonly IAccountService _accountService;
             private readonly IFileService _fileService;
             private readonly ILogger<Handler> _logger;
+            private readonly ITaskService _taskService;
 
             public Handler(
                 IDynamicsClient dynamicsClient,
                 IUserService userService,
                 IAccountService accountService,
                 IFileService fileService,
-                ILogger<Handler> logger)
+                ILogger<Handler> logger,
+                ITaskService taskService )
             {
                 _dynamicsClient = dynamicsClient ?? throw new ArgumentNullException(nameof(dynamicsClient));
                 _userService = userService ?? throw new ArgumentNullException(nameof(userService));
                 _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
                 _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+                _taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
             }
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
@@ -117,6 +120,9 @@ namespace Csrs.Api.Features.UserRequests
                 task.Statuscode = 2; // Not Started
                 //ap.Statecode = 0;  defaults in DB
                 MicrosoftDynamicsCRMtask result = await _dynamicsClient.Tasks.CreateAsync(task);
+                string subject = "Contact Us Record Created";
+                string description = "User created a contact request for file: " + request.FileNo;
+                await _taskService.CreateTask(request.FileId, subject, description, cancellationToken);
                 _logger.AddProperty("ActivityId", result.Activityid);
                 _logger.LogDebug("User Request created successfully");
                 return new Response("User Request Created");

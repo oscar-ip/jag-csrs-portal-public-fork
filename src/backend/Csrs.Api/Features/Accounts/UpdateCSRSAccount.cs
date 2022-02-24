@@ -72,6 +72,8 @@ namespace Csrs.Api.Features.Accounts
 
                 var partyId = request.CsrsAccountUser.PartyId;
                 var dynamicsParty = request.CsrsAccountUser.ToDynamicsModel();
+                dynamicsParty.SsgBceidGuid = userId;
+                dynamicsParty.SsgBceidLastUpdate = DateTimeOffset.Now;
                 try
                 {
                     await _dynamicsClient.Ssgcsrsparties.UpdateAsync(partyId, dynamicsParty, cancellationToken);
