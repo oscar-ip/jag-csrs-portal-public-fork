@@ -48,7 +48,8 @@ export class LandingComponent implements OnInit {
 
       this.cscLink = this.appConfigService.cscLink;
 
-      this.bceIdRegisterLink = /*environment.production ? 'https://www.bceid.ca/os/?7731' :*/ 'https://www.development.bceid.ca/os/?2281';
+      //this.bceIdRegisterLink = environment.production ? 'https://www.bceid.ca/os/?7731' : 'https://www.development.bceid.ca/os/?2281';
+      this.bceIdRegisterLink = 'https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
 
       this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
 

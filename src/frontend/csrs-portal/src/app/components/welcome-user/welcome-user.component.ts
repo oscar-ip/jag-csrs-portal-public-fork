@@ -24,8 +24,6 @@ import {
   FileStatus,
   AccountFileSummary
 } from 'app/api/model/models';
-import { IFrameService } from 'angular-auth-oidc-client/lib/iframe/existing-iframe.service';
-
 @Component({
   selector: 'app-welcome-user',
   templateUrl: './welcome-user.component.html',
