@@ -415,8 +415,7 @@
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
                     <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                    <input matInput [matDatepicker]="picker4" [max]="today" formControlName="birthdate" readonly
-                      (click)="picker.open()" />
+                    <input matInput [matDatepicker]="picker4" [max]="today" formControlName="birthdate"/>
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
                     <mat-error>{{ errorMessage | json }}</mat-error>
