@@ -117,17 +117,26 @@ public static class WebApplicationBuilderExtensions
             logger.Information("Using insecure channel for File Manager service");
             credentials = ChannelCredentials.Insecure;
         }
-
+        credentials = ChannelCredentials.SecureSsl;
         logger.Information("Using file manager service {Address}", address);
 
         builder.Services.AddSingleton(services =>
         {
+
+            // Return "true" to allow certificates that are untrusted/invalid
+            var httpHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
                 Credentials = credentials,
                 ServiceConfig = new ServiceConfig { LoadBalancingConfigs = { new RoundRobinConfig() } },
-                ServiceProvider = services
-                
+                ServiceProvider = services,
+                HttpHandler = httpHandler
+
             });
 
             return channel;
