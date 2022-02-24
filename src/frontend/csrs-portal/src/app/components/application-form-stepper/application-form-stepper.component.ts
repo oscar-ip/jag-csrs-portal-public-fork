@@ -408,7 +408,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         this.data = {
           type: 'error',
           title: ' Error',
-          content: 'The information you entered is not valid. Please enter the information given to you by yhe Child Support Recalculation Service.',
+          content: 'The information you entered is not valid. Please enter the information given to you by the Child Support Recalculation Service.',
           content_normal: 'If you continue to have problems, contact us at ',
           content_link: '1-866-660-2684',
           weight: 'normal',
