@@ -114,7 +114,7 @@ namespace Csrs.Api.Services
 
             var folderName = dynamicsFile.GetDocumentFolderName();
 
-            await CreateAccountDocumentLocation(dynamicsFile, folderName, cancellationToken);
+           // await CreateAccountDocumentLocation(dynamicsFile, folderName, cancellationToken);
 
             // call the web service
             var uploadRequest = new UploadFileRequest
