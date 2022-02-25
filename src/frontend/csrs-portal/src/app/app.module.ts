@@ -97,6 +97,7 @@ import { FormsModule } from '@angular/forms';
     CurrencyPipe,
     DatePipe,
     AppConfigService,
+    AuthConfigModule,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     {provide: STEPPER_GLOBAL_OPTIONS,useValue: {showError: true}},
     {
