@@ -49,8 +49,6 @@ export class CommunicationComponent implements OnInit {
    }
   showValidationMessages: boolean;
   validationMessages: any[];
-  showSuccessMessages: boolean;
-  successMessages: any[];
   uploadFormGroup: FormGroup;
   bceIdLink: string;
   selectedFile: File = null;
@@ -61,7 +59,6 @@ export class CommunicationComponent implements OnInit {
   selectedUploadFile: any;
 
   data: any = null;
-  selectedDocumentType = '';
   _reponse: HttpResponse<null>;
   contactFormGroup: FormGroup;
   files: any[];
@@ -120,6 +117,7 @@ export class CommunicationComponent implements OnInit {
     this.getRemoteData();
     this.uploadFormGroup = this._formBuilder.group({
       uploadFile: [null, Validators.required],
+      documentType: [null, Validators.required],
       secondCtrl: [''],
     });
 
@@ -152,6 +150,9 @@ export class CommunicationComponent implements OnInit {
   get uploadFile() {
     return this.uploadFormGroup.get('uploadFile');
   }
+  get documentType() {
+    return this.uploadFormGroup.get('documentType');
+  }
   onContactFileNumberChange(ob): void {
     let fileValue = ob.value;
     for (var i = 0; i < this.files.length; i++) {
@@ -171,8 +172,6 @@ export class CommunicationComponent implements OnInit {
   clearContactForm(): void {
     this.showValidationMessages = false;
     this.validationMessages = [];
-    this.showSuccessMessages = false;
-    this.successMessages = [];
     this.contactFormGroup.reset();
   }
 
@@ -206,8 +205,6 @@ export class CommunicationComponent implements OnInit {
     }
 
   sendContact(): void {
-    this.showSuccessMessages = false;
-    this.successMessages = [];
     if (!this.contactFormGroup.valid) {
       this.validationMessages = [];
       this.showValidationMessages = true;
@@ -217,12 +214,12 @@ export class CommunicationComponent implements OnInit {
         }
       }
       if (this.contactSubject.hasError) {
-        for (const error in this.contactFile.errors) {
+        for (const error in this.contactSubject.errors) {
           this.validationMessages.push('Contact Subject ' + error.toString());
         }
       }
       if (this.contactMessage.hasError) {
-        for (const error in this.contactFile.errors) {
+        for (const error in this.contactMessage.errors) {
           this.validationMessages.push('Contact Message ' + error.toString());
         }
       }
@@ -238,6 +235,17 @@ export class CommunicationComponent implements OnInit {
       }
       this.userRequestService.apiUserrequestCreatePost(createUserRequest).subscribe({
         next: (outData: any) => {
+          this._reponse = outData;
+          
+            
+            this.data = {
+              type: 'info',
+              title: 'Contact Request Created',
+              content: 'File #: ' + this.selectedContactFile.fileNumber,
+              weight: 'bold',
+              color: 'green'
+            };
+            this.openDialog();
         },
         error: (e) => {
           if (e.error instanceof Error) {
@@ -245,22 +253,30 @@ export class CommunicationComponent implements OnInit {
 
             this.data = {
               type: 'error',
-              title: e.error.message,
-              content: '',
+              title: 'Error encountered',
+              content: e.error.message,
               weight: 'normal',
               color: 'red'
             };
+            this.openDialog();
 
           } else {
             //Backend returns unsuccessful response codes such as 404, 500 etc.
             this.logger.info('Backend returned ', e);
+            this.data = {
+              type: 'error',
+              title: 'Contact Request Failed',
+              content: e.error.message,
+              weight: 'normal',
+              color: 'red'
+            };
+            this.openDialog();
           }
         },
         complete: () => this.logger.info('apiUserrequestCreatePost is completed')
       })
       this.clearContactForm();
-      this.showSuccessMessages = true;
-      this.successMessages.push('Contact Request Created');
+      
     }
   }
 
@@ -268,24 +284,31 @@ export class CommunicationComponent implements OnInit {
     console.log('>>>', element);
     this.toggleRow = element;
   }
-onUpload(): void {
-
-    if (this.selectedFile !== null)
-{
-
-      this.submitUploadedAttachment();
-
-      this.data = {
-          type: 'info',
-        title: 'Success - document uploaded',
-        content: 'Document uploaded to file #: ' + this.selectedUploadFile.fileNumber,
-          weight: 'bold',
-          color: 'green'
-        };
-
-      this.openDialog();
-      this.selectedFile = null;
-      // this.blob = null;
+  onUpload(): void {
+    this.validationMessages = [];
+    this.showValidationMessages = false;
+    if (this.uploadFormGroup.valid) {
+      if (this.selectedFile !== null) {
+        this.submitUploadedAttachment();
+        this.selectedFile = null;
+      } else {
+        this.validationMessages = [];
+        this.showValidationMessages = true;
+        this.validationMessages.push('A Document Must be Provided');
+      }
+    } else {
+      this.validationMessages = [];
+      this.showValidationMessages = true;
+      if (this.uploadFile.hasError) {
+        for (const error in this.uploadFile.errors) {
+          this.validationMessages.push('Upload file ' + error.toString());
+        }
+      }
+      if (this.documentType.hasError) {
+        for (const error in this.documentType.errors) {
+          this.validationMessages.push('Document Type ' + error.toString());
+        }
+      }
     }
   }
 
@@ -354,13 +377,7 @@ openDialog(): void {
     });
   }
 
-onDocTypeChanged(event) {
-    this.selectedDocumentType = event.target.value;
-    this.logger.info('selectedDocumentType', this.selectedDocumentType);
-  }
-
 submitUploadedAttachment() {
-
     const fileData = new FormData();
     fileData.append('file', this.selectedFile, this.selectedFile.name);
     this.logger.info('File Data', fileData);
@@ -368,26 +385,47 @@ submitUploadedAttachment() {
       this.documentService.apiDocumentUploadattachmentPost(
         this.selectedUploadFile.fileId,
         "ssg_csrsfile",
-        this.selectedDocumentType,
+        this.documentType.value,
         this.selectedFile
       ).subscribe({
       next:  (data) => {
         this._reponse = data;
-        if ( this._reponse.status === HttpStatusCode.Ok ) {
-          this.logger.info('_reponse.status = HttpStatusCode.Ok');
-
-        }
+        this.data = {
+            type: 'info',
+            title: 'Success - document uploaded',
+            content: 'Document uploaded to file #: ' + this.selectedUploadFile.fileNumber,
+            weight: 'bold',
+            color: 'green'
+          };
+          this.openDialog();
       },
       error: (e) => {
         if (e.error instanceof Error) {
           this.logger.error(e.error.message);
+          this.data = {
+            type: 'error',
+            title: 'Error Encountered',
+            content: e.error.message,
+            weight: 'normal',
+            color: 'red'
+          };
+          this.openDialog();
+
         } else {
             // Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
+          this.logger.info('Backend returned ', e);
+          this.data = {
+            type: 'error',
+            title: 'Upload Failed',
+            content: e.error.message,
+            weight: 'normal',
+            color: 'red'
+          };
+          this.openDialog();
           }
       },
       complete: () => this.logger.info('apiFileUploadattachmentPost is completed')
-    });
-
+      });
+      
   }
 }
