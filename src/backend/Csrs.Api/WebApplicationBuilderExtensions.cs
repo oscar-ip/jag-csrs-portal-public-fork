@@ -124,7 +124,8 @@ public static class WebApplicationBuilderExtensions
         {
             var httpHandler = new HttpClientHandler();
             // Return "true" to allow certificates that are untrusted/invalid
-            if (false)
+            //Should be disabled for PROD
+            if (true)
             {
                 httpHandler.ServerCertificateCustomValidationCallback =
                     HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
