@@ -119,10 +119,9 @@ public static class WebApplicationBuilderExtensions
             credentials = ChannelCredentials.Insecure;
         }
         logger.Information("Using file manager service {Address}", address);
-
+        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
         builder.Services.AddSingleton(services =>
         {
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var httpHandler = new HttpClientHandler();
             // Return "true" to allow certificates that are untrusted/invalid
             if (false)
