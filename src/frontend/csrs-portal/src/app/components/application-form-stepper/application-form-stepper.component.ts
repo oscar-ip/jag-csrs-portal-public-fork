@@ -21,6 +21,7 @@ import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 import { Router, ActivatedRoute } from "@angular/router";
+import { AuthService } from 'app/auth/auth.service';
 
 // -- import data structure
 import {
@@ -62,7 +63,8 @@ export class ApplicationFormStepperComponent implements OnInit {
 
   errorMessage: any = '';
 
-  constructor(private _formBuilder: FormBuilder, private http: HttpClient,
+  constructor(public authService: AuthService,
+      private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
       @Inject(LookupService) private lookupService,
       @Inject(LoggerService) private logger,
@@ -72,6 +74,16 @@ export class ApplicationFormStepperComponent implements OnInit {
       private route: ActivatedRoute) {}
 
   ngOnInit() {
+
+    this.authService.checkAuth().subscribe(({isAuthenticated}) => {
+      this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
+      if (isAuthenticated === false)
+      {
+        this.router.navigate(['/']);
+      }
+    });
+
+
 
     this.route.queryParams
     .subscribe(params => {

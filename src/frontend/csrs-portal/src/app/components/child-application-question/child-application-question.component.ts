@@ -21,6 +21,8 @@ import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 import { Router, ActivatedRoute } from '@angular/router';
+//import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { AuthService } from 'app/auth/auth.service';
 
 // -- import data structure
 import {
@@ -78,7 +80,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
   errorMessage: any = '';
   tooltips: any = [];
 
-  constructor(private _formBuilder: FormBuilder, private http: HttpClient,
+  constructor(public authService: AuthService,
+              private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
               @Inject(LoggerService) private logger,
@@ -87,6 +90,14 @@ export class ChildApplicationQuestionComponent implements OnInit {
               private datePipe: DatePipe) {}
 
   ngOnInit() {
+
+    this.authService.checkAuth().subscribe(({isAuthenticated}) => {
+      this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
+      if (isAuthenticated === false)
+      {
+        this.router.navigate(['/']);
+      }
+    });
 
     this.provinces = [{id: '123', value: 'British Columbia'}];
     this.identities = [{id: '123', value: 'Native'}];

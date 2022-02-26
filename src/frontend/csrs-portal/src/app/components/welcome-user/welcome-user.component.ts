@@ -15,6 +15,8 @@ import { AppRoutes } from 'app/app.routes';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
+//import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { AuthService } from 'app/auth/auth.service';
 
 // -- import data structure
 import {
@@ -38,7 +40,8 @@ export class WelcomeUserComponent implements OnInit {
   errorMessage: any = '';
 
 
-  constructor(private _formBuilder: FormBuilder, private http: HttpClient,
+  constructor(public authService: AuthService,
+              private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
@@ -46,6 +49,15 @@ export class WelcomeUserComponent implements OnInit {
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+
+     this.authService.checkAuth().subscribe(({isAuthenticated}) => {
+      this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
+      if (isAuthenticated === false)
+      {
+        this.router.navigate(['/']);
+      }
+    });
+
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
@@ -53,10 +65,11 @@ export class WelcomeUserComponent implements OnInit {
 
     this.errorMessage = 'Error: Field is required.';
 
+    this.logger.info("before accountService.apiAccountGet");
 
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
-
+        this.logger.info("data:", data);
         if (data)
         {
           var user   = data.user;

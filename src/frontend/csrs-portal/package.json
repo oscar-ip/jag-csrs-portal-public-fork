@@ -27,6 +27,7 @@
     "@angular/platform-browser": "~12.2.7",
     "@angular/platform-browser-dynamic": "~12.2.7",
     "@angular/router": "~12.2.7",
+    "@auth0/angular-jwt": "^5.0.2",
     "@bcgov/bc-sans": "^1.0.1",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",

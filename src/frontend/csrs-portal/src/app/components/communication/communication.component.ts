@@ -23,6 +23,7 @@ import { UserRequestService } from 'app/api/api/userRequest.service';
 import { DocumentService } from 'app/api/api/document.service';
 import { UserRequest } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
+import { AuthService } from 'app/auth/auth.service';
 
 @Component({
   selector: 'app-communication',
@@ -35,7 +36,8 @@ export class CommunicationComponent implements OnInit {
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['id', 'name', 'username', 'email', 'phone'];
 
-  constructor(private _formBuilder: FormBuilder,
+  constructor(public authService: AuthService,
+              private _formBuilder: FormBuilder,
               @Inject(LoggerService) private logger,
               @Inject(AppConfigService) private appConfigService,
               @Inject(FileService) private fileService,
@@ -45,7 +47,8 @@ export class CommunicationComponent implements OnInit {
               private _http: HttpClient,
               public dialog: MatDialog,
               private datePipe: DatePipe,
-              private route: ActivatedRoute  ) {
+              private route: ActivatedRoute,
+              @Inject(Router) private router  ) {
    }
   showValidationMessages: boolean;
   validationMessages: any[];
@@ -83,6 +86,14 @@ export class CommunicationComponent implements OnInit {
   selectedFileNumber: any = '';
 
   ngOnInit(): void {
+
+    this.authService.checkAuth().subscribe(({isAuthenticated}) => {
+      this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
+      if (isAuthenticated === false)
+      {
+        this.router.navigate(['/']);
+      }
+    });
 
     this.route.queryParams
     .subscribe(params => {
@@ -236,8 +247,8 @@ export class CommunicationComponent implements OnInit {
       this.userRequestService.apiUserrequestCreatePost(createUserRequest).subscribe({
         next: (outData: any) => {
           this._reponse = outData;
-          
-            
+
+
             this.data = {
               type: 'info',
               title: 'Contact Request Created',
@@ -276,7 +287,7 @@ export class CommunicationComponent implements OnInit {
         complete: () => this.logger.info('apiUserrequestCreatePost is completed')
       })
       this.clearContactForm();
-      
+
     }
   }
 
@@ -426,6 +437,6 @@ submitUploadedAttachment() {
       },
       complete: () => this.logger.info('apiFileUploadattachmentPost is completed')
       });
-      
+
   }
 }
