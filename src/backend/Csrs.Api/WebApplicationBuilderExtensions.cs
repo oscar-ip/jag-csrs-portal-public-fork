@@ -119,28 +119,14 @@ public static class WebApplicationBuilderExtensions
             credentials = ChannelCredentials.Insecure;
         }
         logger.Information("Using file manager service {Address}", address);
-        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
         builder.Services.AddSingleton(services =>
         {
-            var httpHandler = new HttpClientHandler();
-            // Return "true" to allow certificates that are untrusted/invalid
-            //Should be disabled for PROD
-            if (true)
-            {
-                httpHandler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            }
-
-            var httpClient = new HttpClient(httpHandler);
-            // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-            httpClient.DefaultRequestVersion = HttpVersion.Version20;
-
+            
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
                 Credentials = credentials,
                 ServiceConfig = new ServiceConfig { LoadBalancingConfigs = { new RoundRobinConfig() } },
-                ServiceProvider = services,
-                HttpClient = httpClient
+                ServiceProvider = services
 
             });
 
