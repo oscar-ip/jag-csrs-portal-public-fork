@@ -287,11 +287,12 @@ namespace Csrs.Services.FileManager
 
             var _sharePointFileManager = new SharePointFileManager(_configuration);
 
-            CreateDocumentLibraryIfMissing(GetDocumentListTitle(request.EntityName),
-                GetDocumentTemplateUrlPart(request.EntityName));
+          
 
             try
             {
+                CreateDocumentLibraryIfMissing(GetDocumentListTitle(request.EntityName),
+                    GetDocumentTemplateUrlPart(request.EntityName));
                 var fileName = _sharePointFileManager.AddFile(GetDocumentTemplateUrlPart(request.EntityName),
                     request.FolderName,
                     request.FileName,
