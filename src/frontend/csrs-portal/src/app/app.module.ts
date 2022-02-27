@@ -50,8 +50,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 import { MatTabsModule } from '@angular/material/tabs';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
 import { FormsModule } from '@angular/forms';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthService } from './auth/auth.service';
 
 @NgModule({
   declarations: [
@@ -99,18 +97,18 @@ import { AuthService } from './auth/auth.service';
     CurrencyPipe,
     DatePipe,
     AppConfigService,
-    AuthService,
+    AuthConfigModule,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     {provide: STEPPER_GLOBAL_OPTIONS,useValue: {showError: true}},
     {
       provide: Configuration,
-      useFactory: (authService: AuthService) => new Configuration(
+      useFactory: (authService: OidcSecurityService) => new Configuration(
         {
           basePath: '',//environment.apiUrl,
           //accessToken: authService.tokengetAccessToken.bind(authService),
           credentials: {
             'Bearer': () => {
-              var token: string = authService.token;//getAccessToken();
+              var token: string = authService.getAccessToken();
               if (token) {
                 return 'Bearer ' + token;
               }
@@ -119,7 +117,7 @@ import { AuthService } from './auth/auth.service';
           }
         }
       ),
-      deps: [AuthService],
+      deps: [OidcSecurityService],
       multi: false
     },
     WindowRefService,

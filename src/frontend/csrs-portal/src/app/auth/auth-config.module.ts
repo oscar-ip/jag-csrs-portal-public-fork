@@ -20,10 +20,8 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         scope: customConfig.scope,
         responseType: customConfig.responseType,
         silentRenew: true,
-        //silentRenewUrl: window.location.origin + '/silent-renew.html',
         silentRenewUrl: `${window.location.origin}/silent-renew.html`,
-        useRefreshToken: true,
-        renewTimeBeforeTokenExpiresInSeconds: 80,
+        renewTimeBeforeTokenExpiresInSeconds: 60,
         autoUserInfo: true,
         unauthorizedRoute: '/',
         customParamsAuthRequest: {

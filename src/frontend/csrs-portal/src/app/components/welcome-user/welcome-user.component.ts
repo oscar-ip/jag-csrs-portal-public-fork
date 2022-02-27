@@ -16,7 +16,6 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 //import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { AuthService } from 'app/auth/auth.service';
 
 // -- import data structure
 import {
@@ -40,8 +39,7 @@ export class WelcomeUserComponent implements OnInit {
   errorMessage: any = '';
 
 
-  constructor(public authService: AuthService,
-              private _formBuilder: FormBuilder, private http: HttpClient,
+  constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
@@ -49,14 +47,6 @@ export class WelcomeUserComponent implements OnInit {
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-
-     this.authService.checkAuth().subscribe(({isAuthenticated}) => {
-      this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
-      if (isAuthenticated === false)
-      {
-        this.router.navigate(['/']);
-      }
-    });
 
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],

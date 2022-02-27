@@ -23,8 +23,6 @@ import { UserRequestService } from 'app/api/api/userRequest.service';
 import { DocumentService } from 'app/api/api/document.service';
 import { UserRequest } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
-import { AuthService } from 'app/auth/auth.service';
-
 @Component({
   selector: 'app-communication',
   templateUrl: './communication.component.html',
@@ -36,8 +34,7 @@ export class CommunicationComponent implements OnInit {
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['id', 'name', 'username', 'email', 'phone'];
 
-  constructor(public authService: AuthService,
-              private _formBuilder: FormBuilder,
+  constructor(private _formBuilder: FormBuilder,
               @Inject(LoggerService) private logger,
               @Inject(AppConfigService) private appConfigService,
               @Inject(FileService) private fileService,
@@ -87,23 +84,12 @@ export class CommunicationComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.authService.checkAuth().subscribe(({isAuthenticated}) => {
-      this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
-      if (isAuthenticated === false)
-      {
-        this.router.navigate(['/']);
-      }
-    });
-
     this.route.queryParams
     .subscribe(params => {
       this.logger.info("params", params);
       this.selectedTab = params.index;
       this.selectedFileNumber = params.fileNumber;
     });
-
-
-
 
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.accountService.apiAccountGet('response', false).subscribe({

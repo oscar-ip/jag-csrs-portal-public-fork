@@ -23,24 +23,12 @@ export class LandingComponent implements OnInit {
   public welcomeUser: string;
   public code: string;
 
-  constructor(@Inject(LoggerService) private logger,
+  constructor(public oidcSecurityService : OidcSecurityService,
+              @Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
-              @Inject(OidcSecurityService) private oidcSecurityService,
               @Inject(AppConfigService) private appConfigService,
               @Inject(SnowplowService) private snowplow) {
-
-    const accessToken = oidcSecurityService.getAccessToken();
-
-    if (accessToken) {
-      this.logger.log('info', `accessToken: ${accessToken}`);
-    }
-
-    if (oidcSecurityService.isAuthenticated()) {
-      this.logger.log('info', 'authenticated');
-    } else {
-      this.logger.log('info', 'not authenticated');
-    }
 
   }
 
