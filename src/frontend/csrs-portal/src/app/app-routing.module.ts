@@ -8,6 +8,7 @@ import { ApplicationFormStepperComponent } from './components/application-form-s
 import { LandingComponent } from './components/landing/landing.component';
 import { QuestionnaireComponent } from './components/questionnaire/questionnaire.component';
 import { CommunicationComponent } from './components/communication/communication.component';
+import { AutoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 
 const routes: Routes = [
 
@@ -22,14 +23,17 @@ const routes: Routes = [
   {
     path: AppRoutes.WELCOMEUSER,
     component: WelcomeUserComponent,
+    canActivate: [AutoLoginPartialRoutesGuard],
   },
   {
     path: AppRoutes.STEPPERFORM,
     component: ApplicationFormStepperComponent,
+    canActivate: [AutoLoginPartialRoutesGuard],
   },
   {
     path: AppRoutes.APPLICATIONFORM,
     component: ChildApplicationQuestionComponent,
+    canActivate: [AutoLoginPartialRoutesGuard],
   },
   {
     path: AppRoutes.MAILBOX,
@@ -38,6 +42,7 @@ const routes: Routes = [
   {
     path: AppRoutes.COMMUNICATIONFORM,
     component: CommunicationComponent,
+    canActivate: [AutoLoginPartialRoutesGuard],
   },
   {
     path: '**',

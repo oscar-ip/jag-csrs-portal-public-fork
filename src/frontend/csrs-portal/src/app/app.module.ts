@@ -37,7 +37,7 @@ import { ChildApplicationQuestionComponent } from './components/child-applicatio
 import { AuthConfigModule } from './auth/auth-config.module';
 import { ApiModule } from './api/api.module';
 import { Configuration } from './api/configuration';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityService, EventTypes, PublicEventsService } from 'angular-auth-oidc-client';
 import { MailboxComponent } from './components/mailbox/mailbox.component';
 import { CommunicationComponent } from './components/communication/communication.component';
 import { MatIconModule } from '@angular/material/icon'
@@ -50,6 +50,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 import { MatTabsModule } from '@angular/material/tabs';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { filter } from 'rxjs/operators';
 
 @NgModule({
   declarations: [
@@ -125,4 +126,13 @@ import { FormsModule } from '@angular/forms';
   bootstrap: [AppComponent],
 })
 
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly eventService: PublicEventsService) {
+    this.eventService
+      .registerForEvents()
+      .pipe(filter((notification) => notification.type === EventTypes.ConfigLoaded))
+      .subscribe((config) => {
+        console.log('ConfigLoaded', config);
+      });
+  }
+}
