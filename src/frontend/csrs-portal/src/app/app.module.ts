@@ -98,7 +98,6 @@ import { filter } from 'rxjs/operators';
     CurrencyPipe,
     DatePipe,
     AppConfigService,
-    AuthConfigModule,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     {provide: STEPPER_GLOBAL_OPTIONS,useValue: {showError: true}},
     {
@@ -106,11 +105,11 @@ import { filter } from 'rxjs/operators';
       useFactory: (authService: OidcSecurityService) => new Configuration(
         {
           basePath: '',//environment.apiUrl,
-          //accessToken: authService.tokengetAccessToken.bind(authService),
+          accessToken: authService.getAccessToken.bind(authService),
           credentials: {
             'Bearer': () => {
               var token: string = authService.getAccessToken();
-              if (token) {
+              if (token !== 'invalid_token') {
                 return 'Bearer ' + token;
               }
               return undefined;

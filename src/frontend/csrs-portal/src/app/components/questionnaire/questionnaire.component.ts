@@ -532,7 +532,7 @@ export class QuestionnaireComponent implements OnInit {
       document.querySelector(id).childElementCount === 0
     ) {
       document.querySelector(id).appendChild(doc.body);
-      
+
     }
     document.querySelector(id).setAttribute('color', 'color:#2E8540 !important');
 
@@ -558,7 +558,7 @@ export class QuestionnaireComponent implements OnInit {
         node[style].cssText += 'background-color:#2E8540 !important';
       } else if (node && question.clicked === 'No') {
         node[style].cssText += 'background-color:#D8292F !important';
-      } 
+      }
     });
   }
 
@@ -572,14 +572,14 @@ export class QuestionnaireComponent implements OnInit {
       } else if (question.clicked === 'No') {
         return 'clear'
       }
-      return 'edit' 
+      return 'edit'
     }
 
   setColor(question,buttonItem,i){
     let myGreen = false;
     let myRed = false;
     if((question.clicked == buttonItem.label &&  question.clicked == 'Yes')){
-    
+
       if([4,5,8].includes(i+1)){
         myRed = true
       } else {
@@ -587,7 +587,7 @@ export class QuestionnaireComponent implements OnInit {
       }
     }
     if((question.clicked == buttonItem.label &&  question.clicked == 'No')){
-     
+
       if([3,4,5,6,7,8].includes(i+1)){
         myGreen = true
       } else {
@@ -606,7 +606,7 @@ export class QuestionnaireComponent implements OnInit {
     let myGreen = false;
     let myRed = false;
     if ((question.clicked == buttonItem.label &&  question.clicked == 'Yes')){
-   
+
      if([4,5,8].includes(i+1)){
        myRed = true;
      } else {
@@ -615,7 +615,7 @@ export class QuestionnaireComponent implements OnInit {
      this.setUIconColor(i, question);
    }
     if ((question.clicked === buttonItem.label &&  question.clicked == 'No')){
-    
+
      if ([3, 4 , 5 , 6 , 7 , 8].includes(i + 1)){
        myGreen = true
      } else {
@@ -634,13 +634,8 @@ export class QuestionnaireComponent implements OnInit {
   public async ngOnInit() {
 
     this.bceIdRegisterLink = this._config.bceIdRegisterLink;
-    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
-
-      this._logger.log('info',`Questionnaire: isAuthenticated = ${isAuthenticated}`);
-      this._logger.log('info',`Questionnaire: userData = ${userData}`);
-      this._logger.log('info',`Questionnaire: accessToken = ${accessToken}`);
-      this._logger.log('info',`Questionnaire: idToken = ${idToken}`);
-
+    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
+      this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
       if (isAuthenticated === true)
       {
         this.router.navigate(['/welcomeuser']);
