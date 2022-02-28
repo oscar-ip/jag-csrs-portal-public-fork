@@ -2,7 +2,6 @@ name: CSRS File Manager Build and Deployment
 
 on:
   push:
-  pull_request:
     branches:
       - 'main'
       # as per https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onpushpull_requestbranchestags 

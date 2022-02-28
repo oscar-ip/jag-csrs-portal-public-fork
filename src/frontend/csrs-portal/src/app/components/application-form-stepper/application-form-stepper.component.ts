@@ -75,11 +75,8 @@ export class ApplicationFormStepperComponent implements OnInit {
 
     this.route.queryParams
     .subscribe(params => {
-      this.logger.info("params", params);
       this.partyId = params.partyId;
       this.fileId = params.fileId;
-      this.logger.info("account.partyId", this.partyId);
-      this.logger.info("account.fileId", this.fileId);
     });
 
     this.provinces = [{id: '123', value: 'British Columbia'}];
@@ -148,12 +145,6 @@ export class ApplicationFormStepperComponent implements OnInit {
       if (data['sixFormGroup']){
         this.sixFormGroup.patchValue(data['sixFormGroup']);
       }
-      /*if (data['eFormGroup']){
-        this.eFormGroup.patchValue(data['eFormGroup']);
-      }
-      if (data['nineFormGroup']){
-        this.nineFormGroup.patchValue(data['nineFormGroup']);
-      }*/
   }
 }
 
@@ -176,7 +167,6 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.accountService.apiAccountIdentitiesGet().subscribe({
         next: (data) => {
           this.identities = data;
-          //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
           this.logger.error('error is getIdentities', e);
@@ -195,7 +185,6 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.accountService.apiAccountProvincesGet().subscribe({
       next: (data) => {
         this.provinces = data;
-        //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
         this.logger.error('error in getProvinces', e);
@@ -214,7 +203,6 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.accountService.apiAccountGendersGet().subscribe({
       next: (data) => {
         this.genders = data;
-        //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
         this.logger.error('error is getGenders', e);
@@ -233,7 +221,6 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.accountService.apiAccountPreferredcontactmethodsGet().subscribe({
       next: (data) => {
         this.preferredContactMethods = data;
-        //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
         this.logger.error('error in getPreferredcontactmethods', e);

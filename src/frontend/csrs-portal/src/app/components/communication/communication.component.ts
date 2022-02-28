@@ -23,7 +23,6 @@ import { UserRequestService } from 'app/api/api/userRequest.service';
 import { DocumentService } from 'app/api/api/document.service';
 import { UserRequest } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
-
 @Component({
   selector: 'app-communication',
   templateUrl: './communication.component.html',
@@ -45,7 +44,8 @@ export class CommunicationComponent implements OnInit {
               private _http: HttpClient,
               public dialog: MatDialog,
               private datePipe: DatePipe,
-              private route: ActivatedRoute  ) {
+              private route: ActivatedRoute,
+              @Inject(Router) private router  ) {
    }
   showValidationMessages: boolean;
   validationMessages: any[];
@@ -90,9 +90,6 @@ export class CommunicationComponent implements OnInit {
       this.selectedTab = params.index;
       this.selectedFileNumber = params.fileNumber;
     });
-
-
-
 
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.accountService.apiAccountGet('response', false).subscribe({
@@ -236,8 +233,8 @@ export class CommunicationComponent implements OnInit {
       this.userRequestService.apiUserrequestCreatePost(createUserRequest).subscribe({
         next: (outData: any) => {
           this._reponse = outData;
-          
-            
+
+
             this.data = {
               type: 'info',
               title: 'Contact Request Created',
@@ -276,7 +273,7 @@ export class CommunicationComponent implements OnInit {
         complete: () => this.logger.info('apiUserrequestCreatePost is completed')
       })
       this.clearContactForm();
-      
+
     }
   }
 
@@ -426,6 +423,6 @@ submitUploadedAttachment() {
       },
       complete: () => this.logger.info('apiFileUploadattachmentPost is completed')
       });
-      
+
   }
 }

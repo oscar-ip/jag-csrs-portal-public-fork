@@ -46,6 +46,7 @@ export class WelcomeUserComponent implements OnInit {
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
       password: ['', Validators.required]
@@ -53,10 +54,11 @@ export class WelcomeUserComponent implements OnInit {
 
     this.errorMessage = 'Error: Field is required.';
 
+    this.logger.info("before accountService.apiAccountGet");
 
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
-
+        this.logger.info("data:", data);
         if (data)
         {
           var user   = data.user;
