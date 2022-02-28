@@ -109,7 +109,7 @@ objects:
             name: ${API_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
-              - containerPort: 8081
+              - containerPort: 8080
             env:
             - name: JWT_AUDIENCE
               valueFrom:
@@ -217,8 +217,8 @@ objects:
     ports:
       - name: http
         protocol: TCP
-        port: 8081
-        targetPort: 8081
+        port: 8080
+        targetPort: 8080
     selector:
       name: ${API_COMPONENT_NAME}
     sessionAffinity: None

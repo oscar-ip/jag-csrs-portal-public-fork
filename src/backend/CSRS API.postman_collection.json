@@ -243,12 +243,12 @@
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8081/api/document/downloadattachment?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&serverRelativeUrl=/ssg_csrsfile/1118_F8CC3E5A5484EC11B83100505683FBF4/sdf__Bob-Ross-RCC-signed_33.pdf&documentType=sdf",
+									"raw": "http://localhost:8080/api/document/downloadattachment?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&serverRelativeUrl=/ssg_csrsfile/1118_F8CC3E5A5484EC11B83100505683FBF4/sdf__Bob-Ross-RCC-signed_33.pdf&documentType=sdf",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"document",
@@ -287,12 +287,12 @@
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8081/api/document/getattachmentlist?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&documentType=sdf",
+									"raw": "http://localhost:8080/api/document/getattachmentlist?entityId=f8cc3e5a-5484-ec11-b831-00505683fbf4&entityName=ssg_csrsfile&documentType=sdf",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"document",

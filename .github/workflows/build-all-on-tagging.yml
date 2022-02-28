@@ -106,7 +106,7 @@ jobs:
           CONTEXT: ./src/backend
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-api:${{env.gittag}}
         run: |
-          docker build \
+          docker build ./src/backend/Dockerfile.rhel8 \
             --tag ${IMAGE} \
             ${CONTEXT}
             docker push ${IMAGE}
