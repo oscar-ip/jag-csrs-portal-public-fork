@@ -132,7 +132,7 @@ namespace Csrs.Api.Services
                 uploadResult = _fileManagerClient.UploadFile(uploadRequest);
             }catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex);
             }
 
             if (uploadResult != null && uploadResult.ResultStatus == ResultStatus.Success)
