@@ -15,13 +15,21 @@ import { LookupService } from 'app/api/api/lookup.service';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { of } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 import { Router, ActivatedRoute } from '@angular/router';
-//import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcClientNotification,
+         OidcSecurityService,
+         OpenIdConfiguration,
+         UserDataResult,
+         EventTypes,
+         PublicEventsService,
+         LoginResponse,
+         TokenHelperService, TokenValidationService } from 'angular-auth-oidc-client';
 
 // -- import data structure
 import {
@@ -35,6 +43,7 @@ import {
   } from 'app/api/model/models';
 
 import { DatePipe } from '@angular/common';
+import { CheckAuthService } from 'angular-auth-oidc-client/lib/check-auth.service';
 
 @Component({
   selector: 'app-child-application-question',
@@ -79,7 +88,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
   errorMessage: any = '';
   tooltips: any = [];
 
-  constructor(private _formBuilder: FormBuilder, private http: HttpClient,
+  constructor(public oidc : OidcSecurityService,
+              private eventService: PublicEventsService,
+              private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LookupService) private lookupService,
               @Inject(LoggerService) private logger,

@@ -34,14 +34,16 @@ import { WelcomeUserComponent } from './components/welcome-user/welcome-user.com
 import { ApplicationFormStepperComponent } from './components/application-form-stepper/application-form-stepper.component';
 import { ChildApplicationQuestionComponent } from './components/child-application-question/child-application-question.component';
 
-import { AuthConfigModule } from './auth/auth-config.module';
 import { ApiModule } from './api/api.module';
 import { Configuration } from './api/configuration';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MailboxComponent } from './components/mailbox/mailbox.component';
 import { CommunicationComponent } from './components/communication/communication.component';
 import { MatIconModule } from '@angular/material/icon'
 import { MatDialogModule, MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+
+import { OidcSecurityService, EventTypes, PublicEventsService } from 'angular-auth-oidc-client';
+import { AuthConfigModule } from './auth/auth-config.module';
+
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -50,6 +52,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 import { MatTabsModule } from '@angular/material/tabs';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { filter } from 'rxjs/operators';
 
 @NgModule({
   declarations: [
@@ -97,7 +100,6 @@ import { FormsModule } from '@angular/forms';
     CurrencyPipe,
     DatePipe,
     AppConfigService,
-    AuthConfigModule,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     {provide: STEPPER_GLOBAL_OPTIONS,useValue: {showError: true}},
     {
@@ -105,7 +107,7 @@ import { FormsModule } from '@angular/forms';
       useFactory: (authService: OidcSecurityService) => new Configuration(
         {
           basePath: '',//environment.apiUrl,
-          //accessToken: authService.tokengetAccessToken.bind(authService),
+          accessToken: authService.getAccessToken.bind(authService),
           credentials: {
             'Bearer': () => {
               var token: string = authService.getAccessToken();
@@ -125,4 +127,13 @@ import { FormsModule } from '@angular/forms';
   bootstrap: [AppComponent],
 })
 
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly eventService: PublicEventsService) {
+    this.eventService
+      .registerForEvents()
+      .pipe(filter((notification) => notification.type === EventTypes.ConfigLoaded))
+      .subscribe((config) => {
+        console.log('ConfigLoaded', config);
+      });
+  }
+}
