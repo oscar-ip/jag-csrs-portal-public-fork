@@ -16,7 +16,7 @@ namespace Csrs.Api.Services
     {
 
         private readonly IDynamicsClient _dynamicsClient;
-        private readonly ILogger<MessageService> _logger;
+        private readonly ILogger<DocumentService> _logger;
         private readonly FileManagerClient _fileManagerClient;
         private readonly IUserService _userService;
         private readonly ITaskService _taskService;
