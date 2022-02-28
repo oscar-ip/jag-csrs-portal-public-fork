@@ -34,14 +34,16 @@ import { WelcomeUserComponent } from './components/welcome-user/welcome-user.com
 import { ApplicationFormStepperComponent } from './components/application-form-stepper/application-form-stepper.component';
 import { ChildApplicationQuestionComponent } from './components/child-application-question/child-application-question.component';
 
-import { AuthConfigModule } from './auth/auth-config.module';
 import { ApiModule } from './api/api.module';
 import { Configuration } from './api/configuration';
-import { OidcSecurityService, EventTypes, PublicEventsService } from 'angular-auth-oidc-client';
 import { MailboxComponent } from './components/mailbox/mailbox.component';
 import { CommunicationComponent } from './components/communication/communication.component';
 import { MatIconModule } from '@angular/material/icon'
 import { MatDialogModule, MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+
+import { OidcSecurityService, EventTypes, PublicEventsService } from 'angular-auth-oidc-client';
+import { AuthConfigModule } from './auth/auth-config.module';
+
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -109,7 +111,7 @@ import { filter } from 'rxjs/operators';
           credentials: {
             'Bearer': () => {
               var token: string = authService.getAccessToken();
-              if (token !== 'invalid_token') {
+              if (token) {
                 return 'Bearer ' + token;
               }
               return undefined;

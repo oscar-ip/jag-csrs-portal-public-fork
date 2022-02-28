@@ -15,13 +15,8 @@ import { AppConfigService } from 'app/services/app-config.service';
 export class QuestionnaireComponent implements OnInit {
   public isLoggedIn = false;
   public bceIdRegisterLink: string;
-  public _logger: LoggerService;
-  public _oidc: OidcSecurityService;
-  public _router: Router;
   public   isEditable = true;
   public welcomeUser: string;
-  public _config: AppConfigService;
-
 
   data: any = [
     {
@@ -503,23 +498,8 @@ export class QuestionnaireComponent implements OnInit {
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
-              @Inject(AppConfigService) private appConfigService) {
+              @Inject(AppConfigService) private config) {
 
-          this._config = appConfigService;
-          this._logger = logger;
-          this._logger.log('info', 'Questionnaire: constructor');
-
-          const accessToken = oidcSecurityService.getAccessToken();
-
-          if (accessToken) {
-            this._logger.log('info', `Questionnaire: accessToken: ${accessToken}`);
-          }
-
-          if (oidcSecurityService.isAuthenticated()) {
-            this._logger.log('info', 'Questionnaire: authenticated');
-          } else {
-            this._logger.log('info', 'Questionnaire: not authenticated');
-          }
   }
 
   stringToHTML(i, yi, ci, str, idLabel) {
@@ -633,7 +613,7 @@ export class QuestionnaireComponent implements OnInit {
  }
   public async ngOnInit() {
 
-    this.bceIdRegisterLink = this._config.bceIdRegisterLink;
+    this.bceIdRegisterLink = this.config.bceIdRegisterLink;
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
       this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
       if (isAuthenticated === true)
@@ -644,12 +624,10 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   login() {
-    this._logger.log('info','Questionnaire: inside login');
     this.oidcSecurityService.authorize();
   }
 
   logout() {
-    this._logger.log('info','Questionnaire: inside logout');
     this.oidcSecurityService.logoff();
   }
 

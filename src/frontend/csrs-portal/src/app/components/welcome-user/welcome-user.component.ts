@@ -15,7 +15,6 @@ import { AppRoutes } from 'app/app.routes';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
-//import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 // -- import data structure
 import {
