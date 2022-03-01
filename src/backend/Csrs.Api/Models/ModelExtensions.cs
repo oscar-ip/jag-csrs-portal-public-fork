@@ -148,7 +148,7 @@ namespace Csrs.Api.Models
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
 
                 SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
-                SsgSubmissiondate = new DateTimeOffset(DateTime.Today)
+                SsgSubmissiondate = new DateTimeOffset(DateTime.Now)
 
                 //SsgSharedparenting = true; ???
                 //SsgSplitparentingarrangement = true; ??

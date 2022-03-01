@@ -114,7 +114,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                  <input matInput [matDatepicker]="picker2" formControlName="birthdate">
+                  <input matInput [matDatepicker]="picker2" [max]="today" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
                   <mat-error>{{ errorMessage | json }}</mat-error>
@@ -194,8 +194,8 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email<span class="text-danger">*</span></mat-label>
-                  <input type="email" matInput formControlName="email" />
-                  <mat-error>{{ errorMessage | json }}</mat-error>
+                  <input type="email" matInput placeholder="name@domain.ca" formControlName="email" />
+                  <mat-error>{{ errorMessage + errorMailMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
 
@@ -281,7 +281,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth</mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="birthdate">
+                  <input matInput [matDatepicker]="picker" [max]="today" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -355,7 +355,8 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email</mat-label>
-                  <input type="email" matInput formControlName="email" />
+                  <input type="email" matInput placeholder="name@domain.ca" formControlName="email" />
+                  <mat-error>{{ errorMailMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
           </div>
@@ -498,7 +499,8 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-icon matSuffix>attach_money</mat-icon>
-                  <input matInput #input formControlName="payorIncome"/>
+                  <input matInput #input formControlName="payorIncome" />
+                  <mat-error>{{ errorIncomeMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -1086,6 +1088,7 @@
               </div>
             </div>
             <mat-checkbox color="primary"
+            #checkbox (change)='forSubmitBtn($event)' value=''
             [class.mat-checkbox-disabled]="false"
             >All of the information above is correct to the best of my knowledge.</mat-checkbox>
             <app-alert type="warning" icon="info">
@@ -1103,8 +1106,8 @@
               <!-- <button mat-flat-button color="primary" matStepperPrevious>
                 Save my application for later
               </button> -->
-              <button class="submitStep" [disabled]="isDisabledSubmit" mat-stroked-button color="basic" matStepperNext
-              (click)="saveLater()">
+              <button class="submitStep"  mat-stroked-button color="basic" matStepperNext
+              (click)="saveLater($event)" [disabled]="isDisabledSubmit">
                 Submit Application
               </button>
             </div>

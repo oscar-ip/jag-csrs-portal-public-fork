@@ -50,6 +50,7 @@ export class ApplicationFormStepperComponent implements OnInit {
   preferredContactMethods: any = [];
 
    isEditable = false;
+   isDisabledSubmit: boolean = false;
 
   _yes: number = 867670000;
   _no: number = 867670001;
@@ -129,7 +130,7 @@ export class ApplicationFormStepperComponent implements OnInit {
 
     //this.setFormDataFromLocal();
     this.data = {
-      type: 'error',
+      //type: 'error',
       title: 'Technical error',
       weight: 'normal',
       color: 'red'
@@ -393,11 +394,11 @@ export class ApplicationFormStepperComponent implements OnInit {
 
         this.logger.error('error in prepareData', e);
         this.data = {
-          type: 'error',
-          title: ' Error',
+          //type: 'error',
+          title: 'Error.',
           content: 'The information you entered is not valid. Please enter the information given to you by the Child Support Recalculation Service.',
           content_normal: 'If you continue to have problems, contact us at ',
-          content_link: '1-866-660-2684',
+          content_link: '1-866-660-2684.',
           weight: 'normal',
           color: 'red'
          };
