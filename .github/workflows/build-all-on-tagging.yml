@@ -10,7 +10,7 @@ on:
   # https://github.community/t/how-to-run-github-actions-workflow-only-for-new-tags/16075/23
   push:
     tags:
-      - '*'
+      - 'v*'
   
   # Allows you to run this workflow manually from the Actions tab
 
@@ -166,6 +166,6 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
           toolsSpace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
         run: |
-          oc patch dc "${appName}-file-manager" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
-          oc patch dc "${appName}-api" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
-          oc patch dc "${appName}-frontend" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-file-manager" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-api" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-frontend" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
