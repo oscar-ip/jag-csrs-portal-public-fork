@@ -8,6 +8,8 @@ namespace Csrs.Api.Models
         public string MessageId { get; set; }
         [Required]
         public string FileId { get; set; }
+        public string FileNumber { get; set; }
+
         [Required]
         public string? Subject { get; set; }
         public string? Content { get; set; }
