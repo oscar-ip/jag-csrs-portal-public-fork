@@ -9,18 +9,19 @@ using Csrs.Interfaces;
 using Grpc.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Csrs.Services.FileManager
 {
     public class FileManagerService : FileManager.FileManagerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly ILogger<FileManagerService> _logger;
+        private readonly IServiceProvider _serviceProvider;
 
-        public FileManagerService(IConfiguration configuration, ILogger<FileManagerService> logger)
+        public FileManagerService(ILogger<FileManagerService> logger, IServiceProvider serviceProvider)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
         public override async Task<CreateFolderReply> CreateFolder(CreateFolderRequest request, ServerCallContext context)
@@ -37,12 +38,12 @@ namespace Csrs.Services.FileManager
 
             await CreateDocumentLibraryIfMissing(listTitle, documentTemplateUrl);
 
-            var _sharePointFileManager = new SharePointFileManager(_configuration);
+            var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
 
             var folderExists = false;
             try
             {
-                var folder = await _sharePointFileManager.GetFolder(listTitle, request.FolderName);
+                var folder = await sharePointFileManager.GetFolder(listTitle, request.FolderName);
                 if (folder != null) folderExists = true;
             }
             catch (SharePointRestException ex)
@@ -66,8 +67,8 @@ namespace Csrs.Services.FileManager
             {
                 try
                 {
-                    await _sharePointFileManager.CreateFolder(GetDocumentListTitle(request.EntityName), request.FolderName);
-                    var folder = await _sharePointFileManager.GetFolder(listTitle, request.FolderName);
+                    await sharePointFileManager.CreateFolder(GetDocumentListTitle(request.EntityName), request.FolderName);
+                    var folder = await sharePointFileManager.GetFolder(listTitle, request.FolderName);
                     if (folder != null) result.ResultStatus = ResultStatus.Success;
                 }
                 catch (SharePointRestException ex)
@@ -96,13 +97,13 @@ namespace Csrs.Services.FileManager
 
             var result = new FileExistsReply();
 
-            var _sharePointFileManager = new SharePointFileManager(_configuration);
+            var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
 
             List<SharePointFileManager.FileDetailsList> fileDetailsList = null;
             try
             {
                 var documentTemplateUrl = GetDocumentTemplateUrlPart(request.EntityName);
-                fileDetailsList = await _sharePointFileManager.GetFileDetailsListInFolder(documentTemplateUrl, request.FolderName, request.DocumentType);
+                fileDetailsList = await sharePointFileManager.GetFileDetailsListInFolder(documentTemplateUrl, request.FolderName, request.DocumentType);
                 if (fileDetailsList != null)
                 {
                     var hasFile = fileDetailsList.Any(f => f.ServerRelativeUrl == request.ServerRelativeUrl);
@@ -131,11 +132,11 @@ namespace Csrs.Services.FileManager
 
             var logUrl = WordSanitizer.Sanitize(request.ServerRelativeUrl);
 
-            var _sharePointFileManager = new SharePointFileManager(_configuration);
+            var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
 
             try
             {
-                var success = await _sharePointFileManager.DeleteFile(request.ServerRelativeUrl);
+                var success = await sharePointFileManager.DeleteFile(request.ServerRelativeUrl);
                 result.ResultStatus = success ? ResultStatus.Success : ResultStatus.Fail;
             }
             catch (SharePointRestException ex)
@@ -160,11 +161,11 @@ namespace Csrs.Services.FileManager
 
             var result = new DownloadFileReply();
             var logUrl = WordSanitizer.Sanitize(request.ServerRelativeUrl);
-            var _sharePointFileManager = new SharePointFileManager(_configuration);
+            var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
 
             try
             {
-                var data = await _sharePointFileManager.DownloadFile(request.ServerRelativeUrl);
+                var data = await sharePointFileManager.DownloadFile(request.ServerRelativeUrl);
 
                 if (data != null)
                 {
@@ -205,14 +206,14 @@ namespace Csrs.Services.FileManager
 
             try
             {
-                var _sharePointFileManager = new SharePointFileManager(_configuration);
+                var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
 
                 var listTitle = GetDocumentListTitle(request.EntityName);
                 var documentTemplateUrlPart = GetDocumentTemplateUrlPart(request.EntityName);
 
                 await CreateDocumentLibraryIfMissing(listTitle, documentTemplateUrlPart);
 
-                var fileName = await _sharePointFileManager.AddFile(
+                var fileName = await sharePointFileManager.AddFile(
                     GetDocumentTemplateUrlPart(request.EntityName),
                     request.FolderName,
                     request.FileName,
@@ -249,12 +250,12 @@ namespace Csrs.Services.FileManager
 
             // Get the file details list in folder
             List<SharePointFileManager.FileDetailsList> fileDetailsList = null;
-            var _sharePointFileManager = new SharePointFileManager(_configuration);
+            var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
             try
             {
                 var d = GetDocumentTemplateUrlPart(request.EntityName);
 
-                fileDetailsList = await _sharePointFileManager.GetFileDetailsListInFolder(d, request.FolderName, request.DocumentType);
+                fileDetailsList = await sharePointFileManager.GetFileDetailsListInFolder(d, request.FolderName, request.DocumentType);
                 if (fileDetailsList != null)
 
                 {
@@ -306,7 +307,8 @@ namespace Csrs.Services.FileManager
             return Task.FromResult(result);
         }
 
-        public override Task<TruncatedFilenameReply> GetTruncatedFilename(TruncatedFilenameRequest request,
+        public override Task<TruncatedFilenameReply> GetTruncatedFilename(
+            TruncatedFilenameRequest request,
             ServerCallContext context)
         {
             var result = new TruncatedFilenameReply();
@@ -315,11 +317,11 @@ namespace Csrs.Services.FileManager
 
             try
             {
-                var _sharePointFileManager = new SharePointFileManager(_configuration);
+                var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
 
                 // Ask SharePoint whether this filename would be truncated upon upload
                 var listTitle = GetDocumentListTitle(request.EntityName);
-                var maybeTruncated = _sharePointFileManager.GetTruncatedFileName(request.FileName, listTitle, request.FolderName);
+                var maybeTruncated = sharePointFileManager.GetTruncatedFileName(request.FileName, listTitle, request.FolderName);
                 result.FileName = maybeTruncated;
                 result.ResultStatus = ResultStatus.Success;
             }
@@ -335,12 +337,12 @@ namespace Csrs.Services.FileManager
 
         private async Task CreateDocumentLibraryIfMissing(string listTitle, string documentTemplateUrl = null)
         {
-            var _sharePointFileManager = new SharePointFileManager(_configuration);
+            var sharePointFileManager = _serviceProvider.GetService<SharePointFileManager>();
 
-            var exists = await _sharePointFileManager.DocumentLibraryExists(listTitle);
+            var exists = await sharePointFileManager.DocumentLibraryExists(listTitle);
             if (!exists)
             {
-                await _sharePointFileManager.CreateDocumentLibrary(listTitle, documentTemplateUrl);
+                await sharePointFileManager.CreateDocumentLibrary(listTitle, documentTemplateUrl);
             }
         }
 

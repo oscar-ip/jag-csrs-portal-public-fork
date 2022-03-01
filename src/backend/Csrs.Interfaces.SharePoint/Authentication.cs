@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -105,7 +106,7 @@ namespace Csrs.Interfaces
 
 
 
-        public static async Task GetFedAuth(string samlSite, string token, string relyingPartyIdentifier, HttpClient client, CookieContainer cookieContainer)
+        public static async Task GetFedAuth(string samlSite, string token, string relyingPartyIdentifier, HttpClient client, CookieContainer cookieContainer, ILogger<SharePointFileManager> logger)
         {
             // Encoding.UTF8.GetString(token.Token, 0, token.Token.Length)
             string samlToken = WrapInSoapMessage(token, relyingPartyIdentifier);
@@ -125,7 +126,22 @@ namespace Csrs.Interfaces
 
             var content = new StringContent(stringData, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            var _httpPostResponse = await client.PostAsync(sharepointSite.Wreply, content);
+            var httpPostResponse = await client.PostAsync(sharepointSite.Wreply, content);
+
+            if (!httpPostResponse.IsSuccessStatusCode)
+            {
+                string responseContent = string.Empty;
+                if (httpPostResponse.Content is not null)
+                {
+                    responseContent = await httpPostResponse.Content.ReadAsStringAsync();
+                }
+
+                logger.LogWarning("Failed to get FedAuth cookie {Response}, connection to SharePoint will fail", new
+                {
+                    httpPostResponse.StatusCode,
+                    Content = responseContent
+                });
+            }
 
             var cookieUri = new Uri(sharepointSite.Wreply);
 
@@ -133,11 +149,18 @@ namespace Csrs.Interfaces
             if (!string.Equals(sharepointSite.Wreply, $"{cookieUri.Scheme}://{cookieUri.Authority}"))
             {
                 var cookies = cookieContainer.GetCookies(cookieUri);
-                string fedAuthCookieValue = cookies["FedAuth"].Value;
+                Cookie fedAuthCookie = cookies["FedAuth"];
 
-                cookieContainer.Add(new Uri($"{cookieUri.Scheme}://{cookieUri.Authority}"), new Cookie("FedAuth", fedAuthCookieValue, "/"));
+                if (fedAuthCookie is not null)
+                {
+                    string fedAuthCookieValue = fedAuthCookie.Value;
+                    cookieContainer.Add(new Uri($"{cookieUri.Scheme}://{cookieUri.Authority}"), new Cookie("FedAuth", fedAuthCookieValue, "/"));
+                }
+                else
+                {
+                    logger.LogWarning("No FedAuth cookie exists, connection to SharePoint will fail");
+                }
             }
-
         }
 
 
