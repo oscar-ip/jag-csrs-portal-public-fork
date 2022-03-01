@@ -92,7 +92,7 @@ objects:
             ports:
               - containerPort: 8080
             env:
-            - name: SPLUNK_URL
+            - name: SPLUNK_COLLECTOR_URL
               valueFrom:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
