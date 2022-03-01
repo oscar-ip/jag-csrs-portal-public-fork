@@ -54,6 +54,8 @@ export class CommunicationComponent implements OnInit {
   showValidationMessages: boolean;
   validationMessages: any[];
   selectedInboxFile: any;
+  selectedInboxMessage: any;
+  unreadCnt: any = 0;
 
   inboxFormGroup: FormGroup;
   messages: List<Message>;
@@ -123,7 +125,6 @@ export class CommunicationComponent implements OnInit {
     this.messageService.apiMessageListGet('response', false).subscribe({
       next: (data) => {
         this.messages = data.body;
-        console.log('Found messages' + this.messages.length);
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -219,6 +220,9 @@ export class CommunicationComponent implements OnInit {
     for (var i = 0; i < this.messages.length; i++) {
       if (this.selectedInboxFile.fileId == this.messages[i].fileId) {
         selectedMsgs.push(this.messages[i]);
+        if (!this.messages[i].isRead) {
+          this.unreadCnt = this.unreadCnt+1;
+        }
       }
     }
       this.dataSource.data = selectedMsgs;
@@ -301,7 +305,14 @@ export class CommunicationComponent implements OnInit {
   }
 
   ontable(element) {
-    //this.setMessageRead(element);
+    if (element) {
+      this.setMessageRead(element);
+      for (var i = 0; i < this.messages.length; i++) {
+        if (this.messages[i].messageId == element.messageId) {
+          this.selectedInboxMessage = this.messages[i];
+        }
+      }
+    }
     this.toggleRow = element;
 
   }
