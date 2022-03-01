@@ -34,11 +34,7 @@ namespace Csrs.Services.FileManager
                 .UseStartup<Startup>()
                 .UseKestrel(options =>
                 {
-                    options.Limits.MaxRequestBodySize = 512 * 1024 * 1024; // allow large transfers
-                    // for macOS local dev but don't have env
-                    // options.ListenLocalhost(5001, o => {
-                    //     o.Protocols = HttpProtocols.Http2;
-                    // });
+                    options.Limits.MaxRequestBodySize = 25 * 1024 * 1024; // allow large transfers
                 });
         }
     }

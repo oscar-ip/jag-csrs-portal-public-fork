@@ -72,6 +72,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
   today = new Date();
   isEditable: boolean = false;
+  isDisabledSubmit: boolean = false;
   child: Child;
   _reponse: HttpResponse<any>;
 
@@ -442,9 +443,11 @@ editPage(stepper, index){
       nineFormGroup: this.nineFormGroup.value,
     };
     this.logger.info("formData", formData);
+    this.isDisabledSubmit = true;
 
     this.prepareData();
     //localStorage.setItem('formData', JSON.stringify(formData));
+    this.isDisabledSubmit = false;
   }
   save(){
     this.prepareData();

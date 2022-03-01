@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Csrs.Interfaces</RootNamespace>
-	
+	<DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

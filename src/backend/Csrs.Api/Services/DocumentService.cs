@@ -16,14 +16,14 @@ namespace Csrs.Api.Services
     {
 
         private readonly IDynamicsClient _dynamicsClient;
-        private readonly ILogger<MessageService> _logger;
+        private readonly ILogger<DocumentService> _logger;
         private readonly FileManagerClient _fileManagerClient;
         private readonly IUserService _userService;
         private readonly ITaskService _taskService;
 
         public DocumentService(
             IDynamicsClient dynamicsClient,
-            ILogger<MessageService> logger,
+            ILogger<DocumentService> logger,
             FileManagerClient fileManagerClient,
             IUserService userService, 
             ITaskService taskService)
@@ -132,7 +132,7 @@ namespace Csrs.Api.Services
                 uploadResult = _fileManagerClient.UploadFile(uploadRequest);
             }catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex, "Issue with file upload.");
             }
 
             if (uploadResult != null && uploadResult.ResultStatus == ResultStatus.Success)

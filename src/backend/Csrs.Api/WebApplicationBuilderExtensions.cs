@@ -108,39 +108,24 @@ public static class WebApplicationBuilderExtensions
         ChannelCredentials credentials;
 
         bool? secure = configuration.Secure;
-        if (secure.HasValue && secure.Value)
-        {
-            logger.Information("Using secure channel for File Manager service");
-            credentials = ChannelCredentials.SecureSsl;
-        }
-        else
+        if (secure.HasValue && !secure.Value)
         {
             logger.Information("Using insecure channel for File Manager service");
             credentials = ChannelCredentials.Insecure;
         }
+        else
+        {
+            logger.Information("Using secure channel for File Manager service");
+            credentials = ChannelCredentials.SecureSsl;
+        }
         logger.Information("Using file manager service {Address}", address);
-        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
         builder.Services.AddSingleton(services =>
         {
-            var httpHandler = new HttpClientHandler();
-            // Return "true" to allow certificates that are untrusted/invalid
-            //Should be disabled for PROD
-            if (true)
-            {
-                httpHandler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            }
-
-            var httpClient = new HttpClient(httpHandler);
-            // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-            httpClient.DefaultRequestVersion = HttpVersion.Version20;
-
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
                 Credentials = credentials,
                 ServiceConfig = new ServiceConfig { LoadBalancingConfigs = { new RoundRobinConfig() } },
-                ServiceProvider = services,
-                HttpClient = httpClient
+                ServiceProvider = services
 
             });
 
