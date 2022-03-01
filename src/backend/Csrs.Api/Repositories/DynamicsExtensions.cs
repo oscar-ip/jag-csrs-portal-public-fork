@@ -182,10 +182,11 @@ namespace Csrs.Interfaces.Dynamics
             string filter = $"_ssg_csrsfile_value eq {fileId}";
             List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", 
                                                     "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", 
-                                                    "statuscode", "_ssg_toparty_value" };
+                                                    "statuscode", "_ssg_toparty_value"};
+            List<string> expand = new List<string> { "ssg_csrsFile($select=ssg_filenumber)" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
-            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
+            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, expand: expand, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
             return messages;
         }
 

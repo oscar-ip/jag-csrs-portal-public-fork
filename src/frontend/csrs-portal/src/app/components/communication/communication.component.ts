@@ -26,6 +26,7 @@ import { UserRequest } from '../../api';
 import { Message } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
 import { List } from 'ts-generic-collections-linq';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-communication',
   templateUrl: './communication.component.html',
@@ -35,6 +36,7 @@ import { List } from 'ts-generic-collections-linq';
 
 export class CommunicationComponent implements OnInit {
   dataSource = new MatTableDataSource();
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['id', 'name', 'username', 'email', 'phone'];
 
   constructor(private _formBuilder: FormBuilder,
@@ -125,6 +127,7 @@ export class CommunicationComponent implements OnInit {
     this.messageService.apiMessageListGet('response', false).subscribe({
       next: (data) => {
         this.messages = data.body;
+        this.getRemoteData();
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -136,7 +139,7 @@ export class CommunicationComponent implements OnInit {
       },
       complete: () => this.logger.info('apiMessageListGet is completed')
     })
-    //this.getRemoteData();
+    
     this.uploadFormGroup = this._formBuilder.group({
       uploadFile: [null, Validators.required],
       documentType: [null, Validators.required],
@@ -217,15 +220,24 @@ export class CommunicationComponent implements OnInit {
 
   getRemoteData() {
     const selectedMsgs = [];
+    this.unreadCnt = 0;
     for (var i = 0; i < this.messages.length; i++) {
-      if (this.selectedInboxFile.fileId == this.messages[i].fileId) {
+      if (this.selectedInboxFile != null) {
+        if (this.selectedInboxFile.fileId == this.messages[i].fileId) {
+          selectedMsgs.push(this.messages[i]);
+          if (!this.messages[i].isRead) {
+            this.unreadCnt = this.unreadCnt + 1;
+          }
+        }
+      } else {
         selectedMsgs.push(this.messages[i]);
         if (!this.messages[i].isRead) {
-          this.unreadCnt = this.unreadCnt+1;
+          this.unreadCnt = this.unreadCnt + 1;
         }
       }
     }
-      this.dataSource.data = selectedMsgs;
+    this.dataSource.data = selectedMsgs;
+    this.dataSource.paginator = this.paginator;
   }
 
   sendContact(): void {
