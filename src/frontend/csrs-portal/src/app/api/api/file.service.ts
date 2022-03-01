@@ -164,7 +164,6 @@ export class FileService {
     }
 
     /**
-     * 
      * @param fileId The file id for the file trying to access
      * @param password The party password
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
