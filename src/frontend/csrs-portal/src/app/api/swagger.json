@@ -2036,6 +2036,10 @@
           "fileId": {
             "type": "string"
           },
+          "fileNumber": {
+            "type": "string",
+            "nullable": true
+          },
           "subject": {
             "type": "string"
           },
@@ -2217,7 +2221,7 @@
             "nullable": true
           }
         },
-        "additionalProperties": { }
+        "additionalProperties": {}
       },
       "RespondentResult": {
         "type": "object",
@@ -2283,7 +2287,7 @@
   },
   "security": [
     {
-      "Bearer": [ ]
+      "Bearer": []
     }
   ]
 }
