@@ -15,6 +15,7 @@ import { FileSystemItem } from './fileSystemItem.model';
 export interface Message { 
     messageId?: string | null;
     fileId: string;
+    fileNumber?: string | null;
     subject: string;
     content?: string | null;
     recievingParty?: string | null;
