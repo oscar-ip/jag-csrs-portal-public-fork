@@ -21,8 +21,11 @@ import { AccountService } from 'app/api/api/account.service';
 import { AccountFileSummary } from 'app/api/model/accountFileSummary.model';
 import { UserRequestService } from 'app/api/api/userRequest.service';
 import { DocumentService } from 'app/api/api/document.service';
+import { MessageService } from 'app/api/api/message.service';
 import { UserRequest } from '../../api';
+import { Message } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
+import { List } from 'ts-generic-collections-linq';
 @Component({
   selector: 'app-communication',
   templateUrl: './communication.component.html',
@@ -41,6 +44,7 @@ export class CommunicationComponent implements OnInit {
               @Inject(AccountService) private accountService,
               @Inject(UserRequestService) private userRequestService,
               @Inject(DocumentService) private documentService,
+              @Inject(MessageService) private messageService,
               private _http: HttpClient,
               public dialog: MatDialog,
               private datePipe: DatePipe,
@@ -49,6 +53,13 @@ export class CommunicationComponent implements OnInit {
    }
   showValidationMessages: boolean;
   validationMessages: any[];
+  selectedInboxFile: any;
+  selectedInboxMessage: any;
+  unreadCnt: any = 0;
+
+  inboxFormGroup: FormGroup;
+  messages: List<Message>;
+
   uploadFormGroup: FormGroup;
   bceIdLink: string;
   selectedFile: File = null;
@@ -111,7 +122,21 @@ export class CommunicationComponent implements OnInit {
       },
       complete: () => this.logger.info('apiAccountGet<AccountFileSummary> is completed')
     })
-    this.getRemoteData();
+    this.messageService.apiMessageListGet('response', false).subscribe({
+      next: (data) => {
+        this.messages = data.body;
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this.logger.error(e.error.message);
+        } else {
+          //Backend returns unsuccessful response codes such as: 500 etc.
+          this.logger.info('Backend returned ', e);
+        }
+      },
+      complete: () => this.logger.info('apiMessageListGet is completed')
+    })
+    //this.getRemoteData();
     this.uploadFormGroup = this._formBuilder.group({
       uploadFile: [null, Validators.required],
       documentType: [null, Validators.required],
@@ -130,6 +155,10 @@ export class CommunicationComponent implements OnInit {
       contactFile: [null, Validators.required],
       contactSubject: [null, Validators.required],
       contactMessage: [null, [Validators.required, Validators.maxLength(500)]]
+    });
+
+    this.inboxFormGroup = this._formBuilder.group({
+      inboxFile: [null, Validators.required]
     });
   }
   get contactFile() {
@@ -150,6 +179,9 @@ export class CommunicationComponent implements OnInit {
   get documentType() {
     return this.uploadFormGroup.get('documentType');
   }
+  get inboxFile() {
+    return this.inboxFormGroup.get('inboxFile');
+  }
   onContactFileNumberChange(ob): void {
     let fileValue = ob.value;
     for (var i = 0; i < this.files.length; i++) {
@@ -166,6 +198,17 @@ export class CommunicationComponent implements OnInit {
       }
     }
   }
+  onInboxFileNumberChange(ob): void {
+    let fileValue = ob.value;
+    for (var i = 0; i < this.files.length; i++) {
+      if (fileValue == this.files[i].fileId) {
+        this.selectedInboxFile = this.files[i];
+
+        //TODO
+        this.getRemoteData();
+      }
+    }
+  }
   clearContactForm(): void {
     this.showValidationMessages = false;
     this.validationMessages = [];
@@ -173,33 +216,17 @@ export class CommunicationComponent implements OnInit {
   }
 
   getRemoteData() {
-
-    const remoteDummyData = [
-      {
-        date: '2021/1/1',
-        file: 2453,
-        subject: 'the notice of assement for 2021 is avaiable for review',
-        attachment: 'PDF',
-        link: 'http://www.africau.edu/images/default/sample.pdf',
-      },
-      {
-        date: '2020/2/1',
-        file: 5443,
-        subject: 'the notice of assement for 2021 is avaiable for review',
-        attachment: 'PDF',
-        link: 'http://www.africau.edu/images/default/sample.pdf',
-      },
-      {
-        date: '2019/3/1',
-        file: 8754,
-        subject: 'the notice of assement for 2021 is avaiable for review',
-        attachment: 'PDF',
-        link: 'http://www.africau.edu/images/default/sample.pdf',
-      },
-
-    ];
-    this.dataSource.data = remoteDummyData;
+    const selectedMsgs = [];
+    for (var i = 0; i < this.messages.length; i++) {
+      if (this.selectedInboxFile.fileId == this.messages[i].fileId) {
+        selectedMsgs.push(this.messages[i]);
+        if (!this.messages[i].isRead) {
+          this.unreadCnt = this.unreadCnt+1;
+        }
+      }
     }
+      this.dataSource.data = selectedMsgs;
+  }
 
   sendContact(): void {
     if (!this.contactFormGroup.valid) {
@@ -277,9 +304,17 @@ export class CommunicationComponent implements OnInit {
     }
   }
 
-  ontable(element){
-    console.log('>>>', element);
+  ontable(element) {
+    if (element) {
+      this.setMessageRead(element);
+      for (var i = 0; i < this.messages.length; i++) {
+        if (this.messages[i].messageId == element.messageId) {
+          this.selectedInboxMessage = this.messages[i];
+        }
+      }
+    }
     this.toggleRow = element;
+
   }
   onUpload(): void {
     this.validationMessages = [];
@@ -374,12 +409,27 @@ openDialog(): void {
     });
   }
 
-submitUploadedAttachment() {
+  setMessageRead(element) {
+    this.messageService.apiMessageReadGet(element.messageId).subscribe({
+      next: (data) => {
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this.logger.error(e.error.message);
+        } else {
+          //Backend returns unsuccessful response codes such as: 500 etc.
+          this.logger.info('Backend returned ', e);
+        }
+      },
+      complete: () => this.logger.info('apiMessageReadGet is completed')
+    })
+  }
+
+  submitUploadedAttachment() {
     const fileData = new FormData();
     fileData.append('file', this.selectedFile, this.selectedFile.name);
-    this.logger.info('File Data', fileData);
-
-      this.documentService.apiDocumentUploadattachmentPost(
+        this.logger.info('File Data', fileData);
+     this.documentService.apiDocumentUploadattachmentPost(
         this.selectedUploadFile.fileId,
         "ssg_csrsfile",
         this.documentType.value,

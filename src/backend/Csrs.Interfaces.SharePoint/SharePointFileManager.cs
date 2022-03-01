@@ -36,7 +36,7 @@ namespace Csrs.Interfaces
 
 
         private const int MaxUrlLength = 260; // default maximum URL length.
-
+        private readonly ILogger<SharePointFileManager> _logger;
         private AuthenticationResult authenticationResult;
 
         public string OdataUri { get; set; }
@@ -66,8 +66,10 @@ namespace Csrs.Interfaces
             public string FormDigestValue { get; set; }
         }
 
-        public SharePointFileManager(IConfiguration Configuration)
+        public SharePointFileManager(IConfiguration Configuration, ILogger<SharePointFileManager> logger)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
             // create the HttpClient that is used for our direct REST calls.
             _CookieContainer = new CookieContainer();
             _HttpClientHandler = new HttpClientHandler() { UseCookies = true, AllowAutoRedirect = false, CookieContainer = _CookieContainer };
@@ -147,10 +149,14 @@ namespace Csrs.Interfaces
                 && !string.IsNullOrEmpty(sharePointStsTokenUri)
                 )
             {
+                // this really bad... making http requests in a constructor
+
                 Authorization = null;
-                var samlST = Authentication.GetStsSamlToken(sharePointRelyingPartyIdentifier, sharePointUsername, sharePointPassword, sharePointStsTokenUri).GetAwaiter().GetResult();
+                var samlST = Authentication.GetStsSamlToken(sharePointRelyingPartyIdentifier, sharePointUsername, sharePointPassword, sharePointStsTokenUri)
+                    .GetAwaiter().GetResult();
                 //FedAuthValue = 
-                Authentication.GetFedAuth(sharePointOdataUri, samlST, sharePointRelyingPartyIdentifier, _client, _CookieContainer).GetAwaiter().GetResult();
+                Authentication.GetFedAuth(sharePointOdataUri, samlST, sharePointRelyingPartyIdentifier, _client, _CookieContainer, _logger)
+                    .GetAwaiter().GetResult();
             }
             // Scenario #2 - SharePoint Online (Cloud) using a Client Certificate
             else if (!string.IsNullOrEmpty(sharePointAadTenantId)
@@ -204,7 +210,6 @@ namespace Csrs.Interfaces
             // Standard headers for API access
             _client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
             _client.DefaultRequestHeaders.Add("OData-Version", "4.0");
-
         }
 
         public bool IsValid()

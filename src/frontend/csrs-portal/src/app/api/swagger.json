@@ -2036,6 +2036,10 @@
           "fileId": {
             "type": "string"
           },
+          "fileNumber": {
+            "type": "string",
+            "nullable": true
+          },
           "subject": {
             "type": "string"
           },

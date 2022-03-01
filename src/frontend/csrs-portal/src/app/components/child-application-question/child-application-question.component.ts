@@ -72,7 +72,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
   today = new Date();
   isEditable: boolean = false;
-  isDisabledSubmit: boolean = false;
+  isDisabledSubmit: boolean = true;
   child: Child;
   _reponse: HttpResponse<any>;
 
@@ -87,6 +87,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
   result: any = [];
 
   errorMessage: any = '';
+  errorMailMessage: any = '';
+  errorIncomeMessage: any = '';
   tooltips: any = [];
 
   constructor(public oidc : OidcSecurityService,
@@ -107,7 +109,10 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.courtLocations =  [{id: '123', value: 'Victoria Court'}];
     this.referrals = [{id: '123', value: 'FMEP'}];
 
-    this.errorMessage = 'Error: Field is required.';
+    this.errorMessage = 'Error: Field is required. ';
+    this.errorMailMessage = 'Email address without @ or domain name.';
+    this.errorIncomeMessage = 'Field should have numerical values.';
+
 
     this.tooltips = [
       'A child over the age of majority (19 in B.C.) who is still dependent on their parents. For example, due to illness, disability or pursuit of post secondary education.',
@@ -144,7 +149,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
       phoneNumber: [''],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]], //Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       PreferredName: [''],
       saddress: [''],
       cellNumber: [''],
@@ -167,7 +172,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       homePhoneNumber: [''],
       cellPhoneNumber: [''],
       workPhoneNumber: [''],
-      email: [''],
+      email: ['', Validators.email],
       gender: ['']
 
     });
@@ -188,7 +193,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.fifthFormGroup = this._formBuilder.group({
       orderDate: [''],
       courtLocation: [''],
-      payorIncome: [''],
+      payorIncome: ['', Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')],
       recalculationOrdered: [],
       isSpecifiedIncome: [],
     });
@@ -220,7 +225,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
     this.nineFormGroup = this._formBuilder.group({
-      secondCtrl: [''],
+      secondCtrl: ['', Validators.required],
     });
     //this.setFormDataFromLocal();
   }
@@ -257,6 +262,12 @@ export class ChildApplicationQuestionComponent implements OnInit {
       }
   }
 
+}
+
+forSubmitBtn(event){
+  //this.logger.info(`event: ${event}`);
+  //this.logger.info(`event.checked: ${event.checked}`);
+  this.isDisabledSubmit = !event.checked;
 }
 
 openDialog(inData) {
@@ -430,7 +441,9 @@ editPage(stepper, index){
   }
 
 
-  saveLater(){
+  saveLater($event: MouseEvent) {
+    ($event.target as HTMLButtonElement).disabled = true;
+    this.isDisabledSubmit = true;
     const formData = {
       firstStep: this.firstFormGroup.value,
       secondFormGroup: this.secondFormGroup.value,
@@ -443,11 +456,11 @@ editPage(stepper, index){
       nineFormGroup: this.nineFormGroup.value,
     };
     this.logger.info("formData", formData);
-    this.isDisabledSubmit = true;
 
     this.prepareData();
     //localStorage.setItem('formData', JSON.stringify(formData));
     this.isDisabledSubmit = false;
+    ($event.target as HTMLButtonElement).disabled = false;
   }
   save(){
     this.prepareData();

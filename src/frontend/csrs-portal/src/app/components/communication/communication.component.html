@@ -10,102 +10,116 @@
       <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTab">
         <mat-tab>
           <ng-template mat-tab-label>
-            <h1 class="mb-1 tabHeader">Inbox (1)</h1>
+            <h1 class="mb-1 tabHeader">Inbox {{unreadCnt}}</h1>
           </ng-template>
-          <div class="step1" style="border: 1px solid black;" *ngIf="!toggleRow">
-            <div class="mb-3 mt-5">
-              <div class="container">
-                <div class="row">
-                  <div class="col-md-1">
-                    <h2 style="font-weight: bold;">File #:</h2>
-                  </div>
-                  <div class="col-md-1">
-                    <input style="width: 100%;" type="input" #fileNumber value="4652" class="font_bold"/>
-                  </div>
-                  <div class="col-md-10">
-                    <div style="float: right;">
-                      <h2 class="font_normal">
-                        New message
-                      </h2>
+          <form [formGroup]="inboxFormGroup" class="round1" style="padding-bottom: 20px">
+            <div class="step1" style="border: 1px solid black;" *ngIf="!toggleRow">
+              <div class="mb-3 mt-5">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-1">
+                      <h2 style="font-weight: bold;">File #:</h2>
                     </div>
+                    <div class="col-md-1">
+                      <mat-form-field>
+                        <mat-label>Select File</mat-label>
+                        <mat-select formControlName="inboxFile" (selectionChange)="onInboxFileNumberChange ($event)">
+                          <mat-option *ngFor="let file of files" [value]="file.fileId">
+                            {{file.fileNumber}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="inboxFile.hasError('required')">
+                          File is required.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-10">
+                      <div style="float: right;">
+                        <h2 class="font_normal">
+                          New message
+                        </h2>
+                      </div>
 
+                    </div>
                   </div>
                 </div>
               </div>
+              <hr class="mt-0 mb-4" style="opacity: 0.5">
+
+              <table mat-table [dataSource]="dataSource">
+
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
+                  <td mat-cell *matCellDef="let element">{{element.date | date:'shortDate'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef> File # </th>
+                  <td mat-cell *matCellDef="let element"> {{selectedInboxFile.fileNumber}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="username">
+                  <th mat-header-cell *matHeaderCellDef> Subject </th>
+                  <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef> Attachment </th>
+                  <td mat-cell *matCellDef="let element"> {{element.isRead}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="phone">
+                  <th mat-header-cell *matHeaderCellDef> Actions </th>
+                  <td class="font_normal" mat-cell *matCellDef="let element"> <a target="blank" (click)="ontable(element)">View</a> </td>
+                  <td class="font_normal" mat-cell *matCellDef="let element"> <a target="blank" (click)="setMessageRead(element)">Mark As Read</a> </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;" ></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'make-bold': !row.isRead }"></tr>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+              </table>
             </div>
-            <hr class="mt-0 mb-4" style="opacity: 0.5">
 
-            <table mat-table [dataSource]="dataSource">
-
-              <ng-container   matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
-                <td mat-cell  *matCellDef="let element"> {{element.date}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> File # </th>
-                <td mat-cell *matCellDef="let element"> {{element.file}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="username">
-                <th mat-header-cell *matHeaderCellDef> Subject </th>
-                <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef> Attachment </th>
-                <td mat-cell *matCellDef="let element"> {{element.attachment}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="phone">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
-                <td class="font_normal" mat-cell *matCellDef="let element"> <a target="blank" (click)="ontable(element)" >View</a> </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-            </table>
-          </div>
-
-          <div class="step2" *ngIf="toggleRow">
-            <div class="mb-3 mt-5">
-              <div class="container">
-                <p class="back-to-messages" (click)="ontable('')"><mat-icon style="vertical-align:middle;">arrow_back</mat-icon>  Back to all messages</p>
-                <div class="row">
-                  <div class="col-md-2">
-                    <h2 style="font-weight: bold;">File #: <span style="font-size: 14px;color: black;" >4652</span>  </h2>
-                  </div>
-                  <div class="col-md-5">
-                    <h2 style="font-weight: bold;">Date : <span  style="font-size: 14px;color: black;" >10/12/2021</span> </h2>
+            <div class="step2" *ngIf="toggleRow">
+              <div class="mb-3 mt-5">
+                <div class="container">
+                  <p class="back-to-messages" (click)="ontable('')"><mat-icon style="vertical-align:middle;">arrow_back</mat-icon>  Back to all messages</p>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <h2 style="font-weight: bold;">File #: <span style="font-size: 14px;color: black;">{{selectedInboxFile.fileNumber}}</span>  </h2>
+                    </div>
+                    <div class="col-md-5">
+                      <h2 style="font-weight: bold;">Date : <span style="font-size: 14px;color: black;">{{selectedInboxMessage.date | date:'shortDate'}}</span> </h2>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <hr class="mt-0 mb-4" style="opacity: 1">
+              <hr class="mt-0 mb-4" style="opacity: 1">
 
-            <div class="section">
-              <h2>Message</h2>
-              <div class="message-data">
-                 <h2><strong>Your Notice of assessment for 2021 is availble</strong></h2>
-                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              <div class="section">
+                <h2>Message</h2>
+                <div class="message-data">
+                  <h2><strong>{{selectedInboxMessage.subject}}</strong></h2>
+                  <p>{{selectedInboxMessage.content}}</p>
+                </div>
+                <table class="table">
+                  <tr>
+                    <th>Attachment(s)</th>
+                    <th>File size</th>
+                    <th>Actions</th>
+                  </tr>
+
+                  <tr class="text-dark">
+                    <td><strong>Notice-Assessment-10203.pdf</strong></td>
+                    <td>1 MB</td>
+                    <td><a href="#">Download</a></td>
+                  </tr>
+
+                </table>
               </div>
-              <table class="table">
-                <tr>
-                  <th>Attachment(s)</th>
-                  <th>File size</th>
-                  <th>Actions</th>
-                </tr>
 
-                <tr class="text-dark">
-                 <td><strong>Notice-Assessment-10203.pdf</strong></td>
-                 <td>1 MB</td>
-                 <td><a href="#">Download</a></td>
-               </tr>
-
-               </table>
             </div>
-          </div>
+          </form>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>

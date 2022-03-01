@@ -148,7 +148,7 @@ namespace Csrs.Api.Models
                 SsgPartyenrolled = GetPartyEnrolled(file.PartyEnrolled),
 
                 SsgRecalculationorderedbythecourt = ConvertToBool(file.RecalculationOrderByCourt),
-                SsgSubmissiondate = new DateTimeOffset(DateTime.Today)
+                SsgSubmissiondate = new DateTimeOffset(DateTime.Now)
 
                 //SsgSharedparenting = true; ???
                 //SsgSplitparentingarrangement = true; ??
@@ -209,6 +209,7 @@ namespace Csrs.Api.Models
 
             message.MessageId = inMessage.SsgCsrscommunicationmessageid;
             message.FileId = inMessage._ssgCsrsfileValue;
+            message.FileNumber = inMessage.SsgCsrsFile.SsgFilenumber;
             message.Attachment = inMessage.SsgCsrsmessageattachment;
             message.Status = inMessage.Statuscode;
             message.Documents = documents;
