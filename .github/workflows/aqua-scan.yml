@@ -18,11 +18,11 @@ jobs:
         uses: redhat-actions/oc-login@v1
         env:
           OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
-          OPENSHIFT_USER: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
+          OPENSHIFT_USER: ${{secrets.OPENSHIFT_TOOLS_DEPLOYER_SA_USERNAME}}
         with:
+          openshift_token: ${{secrets.OPENSHIFT_TOOLS_DEPLOYER_SA_PASSWORD}}
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}}
-          namespace: ${OPENSHIFT_NAMESPACE}
+          namespace:  ${OPENSHIFT_NAMESPACE}
 
       - name: Run Trivy vulnerability scanner on frontend
         uses: aquasecurity/trivy-action@master
