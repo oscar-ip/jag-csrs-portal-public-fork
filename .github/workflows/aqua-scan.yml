@@ -6,9 +6,9 @@ on:
   #  # Experimental schedule;
   #  # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
     - cron:  '15 05 * * 3'
-  push:
-    branches:
-      improving_infra_v2
+  # push:
+  #  branches:
+  #    improving_infra_v2
   workflow_dispatch:
 jobs:
   install_runner:
