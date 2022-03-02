@@ -48,10 +48,18 @@ jobs:
         with:
           # https://github.com/actions/checkout/issues/417#issuecomment-797769214
           token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}          
-      - name: Upload frontend Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        if: always()
+      #- name: Upload frontend Trivy scan results to GitHub Security tab
+      #  uses: github/codeql-action/upload-sarif@v1
+      #  if: always()
+      #  with:
+      #    # https://github.com/actions/checkout/issues/417#issuecomment-797769214
+      #    token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
+      #    sarif_file: 'trivy-results-fe.sarif'
+      # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+      # https://github.com/github/codeql-action/issues/944
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
         with:
-          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
-          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
-          sarif_file: 'trivy-results-fe.sarif'
+          name: frontnend-scan-artifact
+          path: 'trivy-results-fe.sarif'
+          retention-days: 5
