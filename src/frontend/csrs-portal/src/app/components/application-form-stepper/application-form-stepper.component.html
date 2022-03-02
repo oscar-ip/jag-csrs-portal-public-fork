@@ -194,7 +194,8 @@
             <div class="example-container width100">
               <mat-form-field appearance="fill">
                 <mat-label>If yes, please provide any details including any protection orders in place involving you or the other party</mat-label>
-                <input formControlName="childSafetyDescription" matInput #input/>
+                <textarea formControlName="childSafetyDescription" matInput #input rows="4"></textarea>
+                <mat-error>{{ errorMaxMessage | json }}</mat-error>
               </mat-form-field>
             </div>
             <div class="row text-dark mt-4">
