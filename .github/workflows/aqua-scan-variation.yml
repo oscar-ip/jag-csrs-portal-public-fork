@@ -39,7 +39,8 @@ jobs:
           #exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          #For troubleshooting
+          severity: 'CRITICAL,HIGH,Medium,Low'
         env:
           TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
           TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
