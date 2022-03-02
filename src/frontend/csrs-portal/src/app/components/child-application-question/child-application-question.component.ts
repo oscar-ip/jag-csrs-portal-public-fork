@@ -75,7 +75,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _no: number = 867670001;
   _iDontKnow: number = 867670002;
 
-  _courtOrder: number = 867670000;
+  _courtOrder: number       = 867670000;
   _writtenAgreement: number = 867670001;
 
   data: any = null;
@@ -191,7 +191,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     });
 
     this.fifthFormGroup = this._formBuilder.group({
-      orderDate: ['',Validators.required],
+      orderDate: [''],
       courtLocation: [''],
       payorIncome: ['', Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')],
       recalculationOrdered: [],
@@ -479,9 +479,7 @@ editPage(stepper, index){
   }
 
 
-  saveLater(/*$event: MouseEvent*/) {
-    //($event.target as HTMLButtonElement).disabled = true;
-    //this.logger.info(`event.target as HTMLButtonElement).disabled = ${($event.target as HTMLButtonElement).disabled}`);
+  saveLater() {
     this.isDisabledSubmit = true;
     this.logger.info(`this.isDisabledSubmit = ${this.isDisabledSubmit}`);
     const formData = {
@@ -569,8 +567,9 @@ editPage(stepper, index){
   }
 
   getCourtTyleFile(value){
-    const courtTypeFileId = value == 'Court Order' ?  this._courtOrder : this._writtenAgreement;
+    const courtTypeFileId = value == 'Order' ?  this._courtOrder : this._writtenAgreement;
     const inCourtFileType: LookupValue = {id: courtTypeFileId, value: value};
+    this.logger.warn(`inCourtFileType: ${inCourtFileType}`);
     return inCourtFileType;
   }
 
