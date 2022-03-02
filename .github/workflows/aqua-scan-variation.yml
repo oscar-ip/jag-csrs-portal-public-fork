@@ -14,6 +14,8 @@ jobs:
   build:
     runs-on: "ubuntu-latest"
     steps:
+
+      - uses: actions/checkout@v2.3.4
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
