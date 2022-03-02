@@ -2,9 +2,9 @@ name: Trivy Scan
 on:
   schedule:
     # Experimental schedule;
-
+    # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
     - cron:  '15 05 * * 3'
-
+  workflow_dispatch
 jobs:
   build:
     name: Build
