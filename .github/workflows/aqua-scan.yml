@@ -2,8 +2,8 @@ name: Trivy Scan
 on:
   schedule:
     # Experimental schedule;
-    # HAve to be mindful of load on shared system
-    - cron:  '00 05 * * 2'
+
+    - cron:  '15 05 * * 3'
 
 jobs:
   build:
