@@ -14,11 +14,13 @@ jobs:
   install_runner:
     name: Install Runner
     runs-on: ubuntu-20.04
-    - uses: docker-practice/actions-setup-docker@master
-    - run: |
-        set -x
-        docker version
+
     steps:
+      - name: Install docker
+        uses: docker-practice/actions-setup-docker@master
+        run: |
+          set -x
+          docker version
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
@@ -38,9 +40,7 @@ jobs:
   self-hosted-workflow:
     runs-on : [self-hosted]
     needs: install_runner
-    steps:
-      - name: install docker
-       
+    steps:   
       - name: Run Trivy vulnerability scanner on frontend
         uses: aquasecurity/trivy-action@master
         with:
