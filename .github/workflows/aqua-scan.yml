@@ -14,16 +14,17 @@ jobs:
   install_runner:
     name: Install Runner
     runs-on: ubuntu-20.04
+    environment:
     steps:
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
         env:
           OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
-          OPENSHIFT_USER: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
+          username: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}}
+          openshift_token: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
           namespace: ${OPENSHIFT_NAMESPACE}
 
       - name: self hosted runner installer
@@ -46,8 +47,8 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
         env:
-          TRIVY_USERNAME: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
-          TRIVY_PASSWORD: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}}
+          TRIVY_USERNAME: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
+          TRIVY_PASSWORD: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
