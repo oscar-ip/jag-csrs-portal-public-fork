@@ -276,8 +276,8 @@ export class CommunicationComponent implements OnInit {
 
             this.data = {
               type: 'info',
-              title: 'Contact Request Created',
-              content: 'File #: ' + this.selectedContactFile.fileNumber,
+              title: 'Success - Message sent',
+              content: 'Your message to the Child Support Recalculation Team was sent successfully.',
               weight: 'bold',
               color: 'green'
             };
