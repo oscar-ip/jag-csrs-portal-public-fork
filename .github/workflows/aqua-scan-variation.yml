@@ -56,17 +56,17 @@ jobs:
           TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
 
       #Could not make it working
-      - name: Upload frontend Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        if: always()
-        with:
-          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
-          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
-          sarif_file: 'trivy-results-fe.sarif'
-          sha: ${{ env.gitsha }}
-          ref: ${{ env.BRANCH_NAME }}
-          debug: true
-          #if-no-files-found: error
+      #- name: Upload frontend Trivy scan results to GitHub Security tab
+      #  uses: github/codeql-action/upload-sarif@v1
+      #  if: always()
+      #  with:
+      #    # https://github.com/actions/checkout/issues/417#issuecomment-797769214
+      #    token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
+      #    sarif_file: 'trivy-results-fe.sarif'
+      #    sha: ${{ env.gitsha }}
+      #    ref: ${{ env.BRANCH_NAME }}
+      #    debug: true
+      #    #if-no-files-found: error
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       # https://github.com/github/codeql-action/issues/944
       - name: 'Upload Artifact'

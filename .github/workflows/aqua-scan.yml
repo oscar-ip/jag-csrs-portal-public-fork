@@ -1,5 +1,6 @@
 # https://github.com/marketplace/actions/openshift-self-hosted-runner-installer
 # https://developers.redhat.com/articles/2021/06/16/deploy-self-hosted-github-actions-runners-red-hat-openshift
+# Runner based variation not working yet
 name: Trivy Scan
 on:
   schedule:
@@ -16,11 +17,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Install docker
-        uses: docker-practice/actions-setup-docker@master
-        #run: |
-        #  set -x
-        #  docker version
+
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
@@ -36,7 +33,11 @@ jobs:
         uses: redhat-actions/openshift-actions-runner-installer@v1
         with:
           github_pat: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
-   
+      - name: Install docker
+        uses: docker-practice/actions-setup-docker@master
+        #run: |
+        #  set -x
+        #  docker version   
   self-hosted-workflow:
     runs-on : [self-hosted]
     needs: install_runner
