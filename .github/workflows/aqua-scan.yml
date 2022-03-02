@@ -14,7 +14,7 @@ jobs:
   install_runner:
     name: Install Runner
     runs-on: ubuntu-20.04
-    environment:
+
     steps:
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
