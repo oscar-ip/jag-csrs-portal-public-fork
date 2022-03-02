@@ -1,14 +1,14 @@
 # https://github.com/marketplace/actions/openshift-self-hosted-runner-installer
 # https://developers.redhat.com/articles/2021/06/16/deploy-self-hosted-github-actions-runners-red-hat-openshift
-name: Trivy Scan TroubleShoot
+name: Trivy Scan
 on:
   schedule:
   #  # Experimental schedule;
   #  # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
     - cron:  '15 05 * * 3'
-  push:
-    branches:
-      improving_infra_v2
+  #push:
+  #  branches:
+  #    improving_infra_v2
   workflow_dispatch:
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
           image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
           format: 'sarif'
           output: 'trivy-results-fe.sarif'
-          exit-code: '1'
+          #exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
@@ -47,7 +47,13 @@ jobs:
         uses: actions/checkout@v2.3.4
         with:
           # https://github.com/actions/checkout/issues/417#issuecomment-797769214
-          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}          
+          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }} 
+      - name: Get git commit short sha
+        run: |
+          shortSha=$(echo $(git rev-parse --short HEAD) | cut -c1-7)
+          echo "gitsha=$shortSha" >> $GITHUB_ENV 
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
@@ -55,3 +61,13 @@ jobs:
           # https://github.com/actions/checkout/issues/417#issuecomment-797769214
           token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
           sarif_file: 'trivy-results-fe.sarif'
+          sha: ${{ env.gitsha }}
+          ref: ${{ env.BRANCH_NAME }}
+      # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+      # https://github.com/github/codeql-action/issues/944
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontnend-scan-artifact
+          path: 'trivy-results-fe.sarif'
+          retention-days: 5
