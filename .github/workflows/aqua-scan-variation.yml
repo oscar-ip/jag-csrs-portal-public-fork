@@ -27,7 +27,7 @@ jobs:
 
 
       - name: Run Trivy vulnerability scanner on frontend
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@2a2157eb22c08c9a1fac99263430307b8d1bc7a2
         with:
           image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
           format: 'sarif'
@@ -43,4 +43,8 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         if: always()
         with:
+          lfs: true
+          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
+          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
+          github_pat: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
           sarif_file: 'trivy-results.sarif'
