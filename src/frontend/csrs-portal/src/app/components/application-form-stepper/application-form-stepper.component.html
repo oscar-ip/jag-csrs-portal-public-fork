@@ -54,10 +54,10 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                  <input matInput [matDatepicker]="picker2" formControlName="birthdate">
+                  <input matInput [matDatepicker]="picker2" [max]="today" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
-                  <mat-error>{{ errorMessage | json }}</mat-error>
+                  <mat-error>{{ errorMessage + errorDateMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6"></div>
@@ -134,8 +134,8 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email<span class="text-danger">*</span></mat-label>
-                  <input matInput formControlName="email" />
-                  <mat-error>{{ errorMessage | json }}</mat-error>
+                  <input matInput placeholder="email@domain.ca" formControlName="email" />
+                  <mat-error>{{ errorMessage + errorMailMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -460,6 +460,7 @@ the information before submission.
               </div>
             </div>
             <mat-checkbox color="primary"
+            #checkbox (change)='forSubmitBtn($event)' value=''
             [class.mat-checkbox-disabled]="false"
             >All of the information above is correct to the best of my knowledge.</mat-checkbox>
             <app-alert type="warning" icon="info">
@@ -474,20 +475,19 @@ the information before submission.
               <button mat-stroked-button color="basic" matStepperPrevious>
                < Back
               </button>
-              <button class="submitStep" mat-stroked-button color="basic" matStepperNext
-              (click)="saveLater()">
-                Submit account setup request
+              <button
+              [ngClass]="{
+                'submitDisabled': isDisabledSubmit === true,
+                'submitStep': isDisabledSubmit === false
+              }"
+              mat-stroked-button color="basic" matStepperNext [disabled]="isDisabledSubmit"
+              (click)="saveLater(); isDisabledSubmit = true">
+              Submit account setup request
               </button>
             </div>
           </form>
         </mat-step>
       </mat-stepper>
-     <!--
-      <div>
-        <button mat-button (click)="saveLater()">Save fot later</button>
-        <button mat-button (click)="save()">Save</button>
-      </div>
-    -->
     </div>
   </section>
 </div>

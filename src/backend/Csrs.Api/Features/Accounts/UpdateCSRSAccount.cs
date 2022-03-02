@@ -74,6 +74,7 @@ namespace Csrs.Api.Features.Accounts
                 var dynamicsParty = request.CsrsAccountUser.ToDynamicsModel();
                 dynamicsParty.SsgBceidGuid = userId;
                 dynamicsParty.SsgBceidLastUpdate = DateTimeOffset.Now;
+
                 try
                 {
                     await _dynamicsClient.Ssgcsrsparties.UpdateAsync(partyId, dynamicsParty, cancellationToken);
@@ -85,7 +86,7 @@ namespace Csrs.Api.Features.Accounts
                 }
 
                 // update the CSRS Account file
-                await _fileService.UpdateCSRSAccountFile(request.CSRSAccountFile, cancellationToken);
+                await _fileService.UpdateCSRSAccountFile(partyId, request.CSRSAccountFile, cancellationToken);
 
                 _logger.LogDebug("Party and file were updated successfully");
                 return new Response(partyId, request.CSRSAccountFile.FileId);

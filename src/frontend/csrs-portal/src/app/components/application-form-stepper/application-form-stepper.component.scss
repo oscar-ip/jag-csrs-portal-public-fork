@@ -1,7 +1,7 @@
 .mat-stepper-vertical {
     margin-top: 8px;
   }
-  
+
   .mat-form-field {
     margin-top: 16px;
   }
@@ -10,7 +10,7 @@
     font-weight: 800;
     color: black;
     padding-bottom: 10px;
-    
+
   }
   .firstQuestionRadio{
       padding-bottom: 10px;
@@ -20,7 +20,7 @@
   }
   .example-container .mat-form-field + .mat-form-field {
     margin-left: 8px;
-  
+
   }
   .example-container{
     font-size: 12px;
@@ -80,6 +80,10 @@
     background-color: #003366;
     color: #ffffff;
   }
+  button.submitDisabled{
+    width: 250px;
+    float: right;
+  }
   button.submitStep{
     float: right;
     border: 1px solid white;
@@ -124,9 +128,9 @@
 }
 .add-child{
   margin-left: 85%;
-  border: 1px solid #003366;  
+  border: 1px solid #003366;
 }
 .edit-text-color{
   color: #009CDE;
-  
+
 }

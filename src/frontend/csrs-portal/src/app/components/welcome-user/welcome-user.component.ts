@@ -103,10 +103,10 @@ export class WelcomeUserComponent implements OnInit {
   checkAccount(){
 
     this.data = {
-      title: ' Technical error',
-      content: 'Your account setup request could not be submitted.',
-      content_normal: 'Please try again, or contact the Recalculation Service toll free',
-      content_link: '1-866-660-2684',
+      title: 'Error.',
+      content: 'The information you entered is not valid. Please enter the information given to you by the Child Support Recalculation Service. ',
+      content_normal: 'If you continue to have problems, contact us at ',
+      content_link: '1-866-660-2684.',
       weight: 'bold',
       color: 'red'
     };

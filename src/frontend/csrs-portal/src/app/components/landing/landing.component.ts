@@ -37,13 +37,26 @@ export class LandingComponent implements OnInit {
       //this.bceIdRegisterLink = environment.production ? 'https://www.bceid.ca/os/?7731' : 'https://www.development.bceid.ca/os/?2281';
       this.bceIdRegisterLink = 'https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
 
-      this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
-        this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
-        if (isAuthenticated === true)
-        {
-          this.router.navigate(['/welcomeuser']);
-        }
+      this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated,
+                                          userData,
+                                          accessToken,
+                                          idToken,
+                                          configId,
+                                          errorMessage }) => {
+          this.logger.info('isAuthenticated: ', isAuthenticated);
+          this.logger.info('userData: ', userData);
+          this.logger.info('accessToken: ', accessToken);
+          this.logger.info('idToken: ', idToken);
+          this.logger.info('configId: ', configId);
+          this.logger.info('errorMessage: ', errorMessage);
+
+          if (isAuthenticated === true)
+          {
+            this.router.navigate(['/welcomeuser']);
+          }
       });
+
+
     }
 
   login() {

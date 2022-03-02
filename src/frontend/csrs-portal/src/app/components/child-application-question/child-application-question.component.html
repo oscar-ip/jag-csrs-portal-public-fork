@@ -117,7 +117,7 @@
                   <input matInput [matDatepicker]="picker2" [max]="today" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
-                  <mat-error>{{ errorMessage | json }}</mat-error>
+                  <mat-error>{{ errorMessage + errorDateMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6"></div>
@@ -194,7 +194,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email<span class="text-danger">*</span></mat-label>
-                  <input type="email" matInput placeholder="name@domain.ca" formControlName="email" />
+                  <input type="email" matInput placeholder="email@domain.ca" formControlName="email" />
                   <mat-error>{{ errorMessage + errorMailMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
@@ -284,6 +284,7 @@
                   <input matInput [matDatepicker]="picker" [max]="today" formControlName="birthdate">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
+                  <mat-error>{{ errorDateMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -355,7 +356,7 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email</mat-label>
-                  <input type="email" matInput placeholder="name@domain.ca" formControlName="email" />
+                  <input type="email" matInput placeholder="email@domain.ca" formControlName="email" />
                   <mat-error>{{ errorMailMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
@@ -416,14 +417,14 @@
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
                     <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                    <input matInput [matDatepicker]="picker4" [max]="today" formControlName="birthdate"/>
+                    <input matInput (dateChange)="onDateChange($event,i)" [matDatepicker]="picker4" [max]="today" formControlName="birthdate"/>
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
-                    <mat-error>{{ errorMessage | json }}</mat-error>
+                    <mat-error>{{ errorMessage + errorDateMessage | json }}</mat-error>
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row text-dark mt-4">
+              <div class="row text-dark mt-4" [ngStyle]="{'visibility':isHiddens[i] ? 'visible' : 'hidden'}">
                 <div class="col-md-6">
                   <p>If a child is over age of majority, are they still a dependent?
                     <mat-icon *ngIf='tooltips[0]' matTooltip={{tooltips[0]}}
@@ -916,7 +917,7 @@
                   <div class="bold">{{(userFormGroup.value.birthdate)?(userFormGroup.value.birthdate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
               </div>
-              <div class="row">
+              <div class="row" [ngStyle]="{'visibility':isHiddens[i] ? 'visible' : 'hidden'}">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <mat-checkbox  [checked]="userFormGroup.value.childDependency ==='Yes'" [disabled]="eFormGroup.value.secondCtrl"
                     form class="example-margin">Dependent, but over age of majority</mat-checkbox>
@@ -1106,8 +1107,13 @@
               <!-- <button mat-flat-button color="primary" matStepperPrevious>
                 Save my application for later
               </button> -->
-              <button class="submitStep"  mat-stroked-button color="basic" matStepperNext
-              (click)="saveLater($event)" [disabled]="isDisabledSubmit">
+              <button #submitBtn
+              [ngClass]="{
+                'nextStep': isDisabledSubmit === true,
+                'submitStep': isDisabledSubmit === false
+              }"
+              mat-stroked-button color="basic" matStepperNext [disabled]="isDisabledSubmit"
+              (click)="saveLater(); isDisabledSubmit = true">
                 Submit Application
               </button>
             </div>
