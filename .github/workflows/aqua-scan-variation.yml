@@ -18,6 +18,16 @@ jobs:
       # required for all workflows
       security-events: write
     steps:
+      - name: GitHub related Basic Setup
+        uses: actions/checkout@v2
+        with:
+          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
+          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }} 
+      - name: Get git commit short sha
+        run: |
+          shortSha=$(echo $(git rev-parse HEAD))
+          echo "gitsha=$shortSha" >> $GITHUB_ENV 
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
@@ -40,30 +50,23 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           #For troubleshooting
-          severity: 'CRITICAL,HIGH,Medium,Low'
+          severity: 'CRITICAL,HIGH,MEDIUM'
         env:
           TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
           TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
-      - name: GitHub related Basic Setup
-        uses: actions/checkout@v2.3.4
-        with:
-          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
-          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }} 
-      - name: Get git commit short sha
-        run: |
-          shortSha=$(echo $(git rev-parse --short HEAD) | cut -c1-7)
-          echo "gitsha=$shortSha" >> $GITHUB_ENV 
-          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
 
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
-        if: always()
+        if: failure()
         with:
           # https://github.com/actions/checkout/issues/417#issuecomment-797769214
           token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
           sarif_file: 'trivy-results-fe.sarif'
           sha: ${{ env.gitsha }}
           ref: ${{ env.BRANCH_NAME }}
+          debug: true
+          if-no-files-found: error
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       # https://github.com/github/codeql-action/issues/944
       - name: 'Upload Artifact'
@@ -72,3 +75,4 @@ jobs:
           name: frontnend-scan-artifact
           path: 'trivy-results-fe.sarif'
           retention-days: 5
+          debug: true

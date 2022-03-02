@@ -14,7 +14,10 @@ jobs:
   install_runner:
     name: Install Runner
     runs-on: ubuntu-20.04
-
+    - uses: docker-practice/actions-setup-docker@master
+    - run: |
+        set -x
+        docker version
     steps:
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
@@ -31,26 +34,26 @@ jobs:
         uses: redhat-actions/openshift-actions-runner-installer@v1
         with:
           github_pat: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
-      #- name : install docker
-      #  run :     
+   
   self-hosted-workflow:
     runs-on : [self-hosted]
     needs: install_runner
     steps:
+      - name: install docker
+       
       - name: Run Trivy vulnerability scanner on frontend
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
+          format: 'sarif'
           output: 'trivy-results.sarif'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-        #env:
-        #  TRIVY_USERNAME: ${{secrets.DEFAULT_SA_TOOLS_USER}}
-        #  TRIVY_PASSWORD: ${{secrets.DEFAULT_SA_TOOLS_PASSWORD}}
+        env:
+          TRIVY_USERNAME: ${{secrets.DEFAULT_SA_TOOLS_USER}}
+          TRIVY_PASSWORD: ${{secrets.DEFAULT_SA_TOOLS_PASSWORD}}
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
