@@ -37,9 +37,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-        #env:
-        #  TRIVY_USERNAME: ${{secrets.DEFAULT_SA_TOOLS_USER}}
-        #  TRIVY_PASSWORD: ${{secrets.DEFAULT_SA_TOOLS_PASSWORD}}
+        env:
+          TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
+          TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
