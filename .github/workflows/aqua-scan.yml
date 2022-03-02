@@ -43,20 +43,27 @@ jobs:
     needs: install_runner
     steps:   
       - name: Run Trivy vulnerability scanner on frontend
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-        env:
-          TRIVY_USERNAME: ${{secrets.DEFAULT_SA_TOOLS_USER}}
-          TRIVY_PASSWORD: ${{secrets.DEFAULT_SA_TOOLS_PASSWORD}}
+        run: |
+          # https://aquasecurity.github.io/trivy/v0.18.3/installation/
+          docker pull ghcr.io/aquasecurity/trivy:0.18.3
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
+          sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+          trivy repository  --output "/tmp/trivy-results.sarif" -f json -s "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL" \
+              ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test
+        #uses: aquasecurity/trivy-action@master
+        #with:
+        #  image-ref: '${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+        #  format: 'sarif'
+        #  output: 'trivy-results.sarif'
+        #  exit-code: '1'
+        #  ignore-unfixed: true
+        #  vuln-type: 'os,library'
+        #  severity: 'CRITICAL,HIGH'
+        #env:
+        #  TRIVY_USERNAME: ${{secrets.DEFAULT_SA_TOOLS_USER}}
+        #  TRIVY_PASSWORD: ${{secrets.DEFAULT_SA_TOOLS_PASSWORD}}
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: '/tmp/trivy-results.sarif'
