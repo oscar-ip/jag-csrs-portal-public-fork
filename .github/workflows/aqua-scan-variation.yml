@@ -13,12 +13,11 @@ on:
 jobs:
   build:
     runs-on: "ubuntu-latest"
+    # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
+    permissions:
+      # required for all workflows
+      security-events: write
     steps:
-      - name: GitHub related Basic Setup
-        uses: actions/checkout@v2.3.4
-        with:
-          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
-          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
@@ -44,6 +43,11 @@ jobs:
         env:
           TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
           TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+      - name: GitHub related Basic Setup
+        uses: actions/checkout@v2.3.4
+        with:
+          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
+          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}          
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
