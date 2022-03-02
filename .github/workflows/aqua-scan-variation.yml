@@ -36,7 +36,7 @@ jobs:
           image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
           format: 'sarif'
           output: 'trivy-results-fe.sarif'
-          exit-code: '1'
+          #exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
