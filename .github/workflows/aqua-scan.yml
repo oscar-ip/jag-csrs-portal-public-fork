@@ -3,12 +3,13 @@
 name: Trivy Scan
 on:
   schedule:
-    # Experimental schedule;
-    # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
+  #  # Experimental schedule;
+  #  # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
     - cron:  '15 05 * * 3'
-  workflow_dispatch:
   push:
-      'improving_infra_v2'
+    branches:
+      improving_infra_v2
+  workflow_dispatch:
 jobs:
   install_runner:
     name: Install Runner
