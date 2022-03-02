@@ -22,14 +22,8 @@ import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { OidcClientNotification,
-         OidcSecurityService,
-         OpenIdConfiguration,
-         UserDataResult,
-         EventTypes,
-         PublicEventsService,
-         LoginResponse,
-         TokenHelperService, TokenValidationService } from 'angular-auth-oidc-client';
+import { OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 // -- import data structure
 import {
@@ -43,13 +37,14 @@ import {
   } from 'app/api/model/models';
 
 import { DatePipe } from '@angular/common';
-import { CheckAuthService } from 'angular-auth-oidc-client/lib/check-auth.service';
 
 @Component({
   selector: 'app-child-application-question',
   templateUrl: './child-application-question.component.html',
   styleUrls: ['./child-application-question.component.scss'],
 })
+
+
 export class ChildApplicationQuestionComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -89,7 +84,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
   errorMessage: any = '';
   errorMailMessage: any = '';
   errorIncomeMessage: any = '';
+  errorDateMessage: any = '';
   tooltips: any = [];
+  isHiddens: any = [];
 
   constructor(public oidc : OidcSecurityService,
               private eventService: PublicEventsService,
@@ -110,8 +107,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.referrals = [{id: '123', value: 'FMEP'}];
 
     this.errorMessage = 'Error: Field is required. ';
-    this.errorMailMessage = 'Email address without @ or domain name.';
-    this.errorIncomeMessage = 'Field should have numerical values.';
+    this.errorMailMessage = 'Email address without @ or domain name. ';
+    this.errorIncomeMessage = 'Field should have numerical values. ';
+    this.errorDateMessage = 'Date cannot be in future.'
 
 
     this.tooltips = [
@@ -263,6 +261,19 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
 }
+
+onDateChange(event: MatDatepickerInputEvent<Date>, i: number): void {
+  var childYears = this.diff_years(event.value, new Date());
+  this.isHiddens[i] = childYears >= 19 ? true : false;
+  this.logger.warn(`childYears = ${childYears}, isHiddens[i] = ${this.isHiddens[i]}`);
+}
+
+diff_years(dt2, dt1)
+ {
+   var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+   diff /= (60 * 60 * 24);
+   return Math.abs(Math.round(diff/365.25));
+ }
 
 forSubmitBtn(event){
   //this.logger.info(`event: ${event}`);
@@ -430,20 +441,25 @@ editPage(stepper, index){
       birthdate: [],
       givenNames: [],
       childDependency: [],
-      middleName: []
+      middleName: [],
     });
 
     usersArray.insert(arraylen, newUsergroup);
+    this.isHiddens.push(false);
+
   }
 
   deletechild(index){
     this.fourthFormGroup1.get('users')['controls'].splice(index,1)
+    this.isHiddens.splice(index);
   }
 
 
-  saveLater($event: MouseEvent) {
-    ($event.target as HTMLButtonElement).disabled = true;
+  saveLater(/*$event: MouseEvent*/) {
+    //($event.target as HTMLButtonElement).disabled = true;
+    //this.logger.info(`event.target as HTMLButtonElement).disabled = ${($event.target as HTMLButtonElement).disabled}`);
     this.isDisabledSubmit = true;
+    this.logger.info(`this.isDisabledSubmit = ${this.isDisabledSubmit}`);
     const formData = {
       firstStep: this.firstFormGroup.value,
       secondFormGroup: this.secondFormGroup.value,
@@ -460,7 +476,6 @@ editPage(stepper, index){
     this.prepareData();
     //localStorage.setItem('formData', JSON.stringify(formData));
     this.isDisabledSubmit = false;
-    ($event.target as HTMLButtonElement).disabled = false;
   }
   save(){
     this.prepareData();

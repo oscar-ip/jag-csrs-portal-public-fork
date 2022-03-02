@@ -49,8 +49,9 @@ export class ApplicationFormStepperComponent implements OnInit {
   identities: any = [];
   preferredContactMethods: any = [];
 
-   isEditable = false;
-   isDisabledSubmit: boolean = false;
+  today = new Date();
+  isEditable = false;
+  isDisabledSubmit: boolean = true;
 
   _yes: number = 867670000;
   _no: number = 867670001;
@@ -62,6 +63,9 @@ export class ApplicationFormStepperComponent implements OnInit {
   fileId: any = '';
 
   errorMessage: any = '';
+  errorMailMessage: any = '';
+  errorIncomeMessage: any = '';
+  errorDateMessage: any = '';
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
@@ -85,7 +89,10 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.genders =  [{id: '123', value: 'Male'}];
     this.preferredContactMethods = [{id: '123', value: 'Email'}];
 
-    this.errorMessage = 'Error: Field is required.';
+    this.errorMessage = 'Error: Field is required. ';
+    this.errorMailMessage = 'Email address without @ or domain name. ';
+    this.errorIncomeMessage = 'Field should have numerical values. ';
+    this.errorDateMessage = 'Date cannot be in future.'
 
     this.getIdentities();
     this.getProvinces();
@@ -101,8 +108,8 @@ export class ApplicationFormStepperComponent implements OnInit {
       city: ['', Validators.required],
       province: ['', Validators.required],
       postalCode: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      email: ['', Validators.email],
+      phoneNumber: [''],
+      email: ['', [Validators.required, Validators.email]],
       PreferredName: [''],
       saddress: [''],
       cellNumber: [''],
@@ -136,6 +143,14 @@ export class ApplicationFormStepperComponent implements OnInit {
       color: 'red'
     };
   }
+
+  forSubmitBtn(event){
+    //this.logger.info(`event: ${event}`);
+    //this.logger.info(`event.checked: ${event.checked}`);
+    this.isDisabledSubmit = !event.checked;
+  }
+
+
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
       let data = localStorage.getItem('formData');
