@@ -46,7 +46,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
         env:
           TRIVY_USERNAME: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
-          TRIVY_PASSWORD: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}} 
+          TRIVY_PASSWORD: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}}
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
