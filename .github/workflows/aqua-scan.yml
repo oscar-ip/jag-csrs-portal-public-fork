@@ -6,7 +6,13 @@ on:
     - cron:  '00 05 * * 2'
 
 jobs:
-  steps:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
@@ -29,46 +35,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
+          TRIVY_PASSWORD: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}} 
 
-      - name: Upload frontend Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        if: always() 
-        with:
-          sarif_file: 'trivy-results.sarif'
-
-
-      - name: Run Trivy vulnerability scanner on backend
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-api:dev'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results-fe.sarif'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Upload backend Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        if: always() 
-        with:
-          sarif_file: 'trivy-results-be.sarif'
-
-      - name: Run Trivy vulnerability scanner on file manager
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-file-manager:dev'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Upload file manager Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        if: always() 
-        with:
-          sarif_file: 'trivy-results-fm.sarif'
