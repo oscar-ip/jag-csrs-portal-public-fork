@@ -79,9 +79,9 @@
                   <hr class="mt-0 mb-4" style="opacity: 1">
                   <div class="button-row">
                      <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
-                      <button *ngIf="i == 0" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)"><a href="/">< back</a></button>
-                     <button *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
-                     <button class="nextStep" [disabled]="!question.clicked" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
+                      <button style="font-size: 20px;" *ngIf="i == 0" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)"><a href="/">< Back</a></button>
+                     <button style="font-size: 20px;" *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
+                     <button style="font-size: 20px;" class="nextStep" [disabled]="!question.clicked" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext (click)="setUIconColor(i,question)">Next ></button>
                      </span>
                   </div>
                </ng-template>
@@ -121,7 +121,7 @@
                   </div>
                 </div>
                 <p style="color: black;">
-                  Sign in with your BCeID to proceed, if you do not have a BCeID please
+                  Sign in with your BCeID to proceed, if you do not have a BCeID, please
                   create an account first.
                 </p>
                 <div class="flex-6-col">
@@ -161,7 +161,7 @@
                 <div class="container mt-4 mb-2">
                   <div #alertContent class="alert-text2 row">
                     
-                      <span class="text-dark"><strong style="color: #003366;"><img style="width: 2%;" src="/assets/PDF_icon.svg" /> Prefer a pdf to complete your application? </strong>
+                      <span class="text-dark"><strong style="color: #003366;"><img style="width: 2%;" src="/assets/PDF_icon.svg" /> Prefer a PDF to complete your application? </strong>
                        You can download the PDF version of the application <a style="cursor:pointer; text-decoration: underline;" (click)="downloadApplication();">here</a> and mail the completed <br>   <span style="padding-left: 24px;">package.</span></span>
                     </div>
                 </div>
