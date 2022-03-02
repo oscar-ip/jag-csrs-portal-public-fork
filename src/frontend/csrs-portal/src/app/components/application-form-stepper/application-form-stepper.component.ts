@@ -66,6 +66,7 @@ export class ApplicationFormStepperComponent implements OnInit {
   errorMailMessage: any = '';
   errorIncomeMessage: any = '';
   errorDateMessage: any = '';
+  errorMaxMessage: any = '';
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
@@ -93,6 +94,7 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.errorMailMessage = 'Email address without @ or domain name. ';
     this.errorIncomeMessage = 'Field should have numerical values. ';
     this.errorDateMessage = 'Date cannot be in future.'
+    this.errorMaxMessage = 'You can only enter up to 3000 characters.';
 
     this.getIdentities();
     this.getProvinces();
@@ -120,13 +122,13 @@ export class ApplicationFormStepperComponent implements OnInit {
 
     this.sixFormGroup = this._formBuilder.group({
       childSafety: [''],
-      childSafetyDescription: [''],
+      childSafetyDescription: ['',Validators.maxLength(3000)],
       contactMethod: [''],
       incomeAssistance: [''],
     });
 
     // setup default values
-    this.sixFormGroup.controls['childSafety'].patchValue('Yes');
+    this.sixFormGroup.controls['childSafety'].patchValue('No');
     this.sixFormGroup.controls['contactMethod'].patchValue('Email');
     this.sixFormGroup.controls['incomeAssistance'].patchValue('Yes');
 
