@@ -31,6 +31,8 @@ jobs:
         uses: redhat-actions/openshift-actions-runner-installer@v1
         with:
           github_pat: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
+      #- name : install docker
+      #  run :     
   self-hosted-workflow:
     runs-on : [self-hosted]
     needs: install_runner

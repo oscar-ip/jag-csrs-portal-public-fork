@@ -11,6 +11,8 @@ on:
       improving_infra_v2
   workflow_dispatch:
 jobs:
+  build:
+    runs-on: "ubuntu-18.04"
     steps:
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
