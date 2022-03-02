@@ -33,8 +33,7 @@ jobs:
         uses: redhat-actions/openshift-actions-runner-installer@v1
         with:
           github_pat: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
-      - name: Install docker
-        uses: docker-practice/actions-setup-docker@master
+
         #run: |
         #  set -x
         #  docker version   
@@ -45,7 +44,7 @@ jobs:
       - name: Run Trivy vulnerability scanner on frontend
         run: |
           # https://aquasecurity.github.io/trivy/v0.18.3/installation/
-          
+          sudo apt-get install wget
           wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
           sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
           trivy repository  --output "trivy-results.sarif" -f json -s "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL" \
