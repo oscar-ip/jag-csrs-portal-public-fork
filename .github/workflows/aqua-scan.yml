@@ -32,23 +32,23 @@ jobs:
   self-hosted-workflow:
     runs-on : [self-hosted]
     needs: install_runner
-      steps:
-        - name: Run Trivy vulnerability scanner on frontend
-            uses: aquasecurity/trivy-action@master
-            with:
-              image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
-              format: 'template'
-              template: '@/contrib/sarif.tpl'
-              output: 'trivy-results.sarif'
-              exit-code: '1'
-              ignore-unfixed: true
-              vuln-type: 'os,library'
-              severity: 'CRITICAL,HIGH'
-            env:
-              TRIVY_USERNAME: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
-              TRIVY_PASSWORD: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}} 
-        - name: Upload frontend Trivy scan results to GitHub Security tab
-          uses: github/codeql-action/upload-sarif@v1
-          if: always()
+    steps:
+      - name: Run Trivy vulnerability scanner on frontend
+          uses: aquasecurity/trivy-action@master
           with:
-            sarif_file: 'trivy-results.sarif'
+            image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+            format: 'template'
+            template: '@/contrib/sarif.tpl'
+            output: 'trivy-results.sarif'
+            exit-code: '1'
+            ignore-unfixed: true
+            vuln-type: 'os,library'
+            severity: 'CRITICAL,HIGH'
+          env:
+            TRIVY_USERNAME: ${{secrets.OPENSHIFT_DEPLOYER_SA_USERNAME}}
+            TRIVY_PASSWORD: ${{secrets.OPENSHIFT_DEPLOYER_SA_PASSWORD}} 
+      - name: Upload frontend Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
