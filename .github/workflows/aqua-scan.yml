@@ -45,10 +45,10 @@ jobs:
       - name: Run Trivy vulnerability scanner on frontend
         run: |
           # https://aquasecurity.github.io/trivy/v0.18.3/installation/
-          docker pull ghcr.io/aquasecurity/trivy:0.18.3
+          
           wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
           sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
-          trivy repository  --output "/tmp/trivy-results.sarif" -f json -s "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL" \
+          trivy repository  --output "trivy-results.sarif" -f json -s "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL" \
               ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test
         #uses: aquasecurity/trivy-action@master
         #with:
@@ -66,4 +66,4 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         if: always()
         with:
-          sarif_file: '/tmp/trivy-results.sarif'
+          sarif_file: 'trivy-results.sarif'
