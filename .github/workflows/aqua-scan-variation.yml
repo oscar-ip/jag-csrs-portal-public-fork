@@ -1,0 +1,57 @@
+# https://github.com/marketplace/actions/openshift-self-hosted-runner-installer
+# https://developers.redhat.com/articles/2021/06/16/deploy-self-hosted-github-actions-runners-red-hat-openshift
+name: Trivy Scan
+on:
+  schedule:
+  #  # Experimental schedule;
+  #  # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
+    - cron:  '15 05 * * 3'
+  push:
+    branches:
+      improving_infra_v2
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
+    permissions:
+      # required for all workflows
+      security-events: write
+    steps:
+      # Login to Openshift using OC SA and Token of respective env.
+      - name: Authenticate OC Env Specific SA
+        uses: redhat-actions/oc-login@v1
+        env:
+          OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
+          username: ${{secrets.SA_GITHUB_ACTIONS}}
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+          namespace:  ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
+
+
+      - name: Run Trivy vulnerability scanner on frontend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+          format: 'sarif'
+          output: 'trivy-results-fe.sarif'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
+          TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+      - name: GitHub related Basic Setup
+        uses: actions/checkout@v2.3.4
+        with:
+          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
+          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}          
+      - name: Upload frontend Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        if: always()
+        with:
+          # https://github.com/actions/checkout/issues/417#issuecomment-797769214
+          token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }}
+          sarif_file: 'trivy-results-fe.sarif'
