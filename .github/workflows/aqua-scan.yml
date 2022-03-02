@@ -21,10 +21,10 @@ jobs:
         uses: redhat-actions/oc-login@v1
         env:
           OPENSHIFT_NAMESPACE: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
-          username: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
+          username: ${{secrets.DEFAULT_SA_TOOLS_USER}}
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
+          openshift_token: ${{secrets.DEFAULT_SA_TOOLS_PASSWORD}}
           namespace: ${OPENSHIFT_NAMESPACE}
 
       - name: self hosted runner installer
@@ -47,8 +47,8 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
         env:
-          TRIVY_USERNAME: ${{secrets.OPENSHIFT_BUILDER_SA_USERNAME_TOOLs}}
-          TRIVY_PASSWORD: ${{secrets.OPENSHIFT_BUILDER_SA_PASSWORD_TOOLS}}
+          TRIVY_USERNAME: ${{secrets.DEFAULT_SA_TOOLS_USER}}
+          TRIVY_PASSWORD: ${{secrets.DEFAULT_SA_TOOLS_PASSWORD}}
       - name: Upload frontend Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: always()
