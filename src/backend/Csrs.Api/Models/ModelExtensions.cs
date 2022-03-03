@@ -161,7 +161,7 @@ namespace Csrs.Api.Models
             return  dynamicsFile;
         }
 
-        public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this CSRSAccountFile file)
+        public static MicrosoftDynamicsCRMssgCsrsfile ToDynamicsModel(this CSRSAccountFile file, PartyRole role)
         {
             MicrosoftDynamicsCRMssgCsrsfile dynamicsFile = new MicrosoftDynamicsCRMssgCsrsfile
             {
@@ -171,11 +171,19 @@ namespace Csrs.Api.Models
                 SsgCsrsfileid = file.FileId,
                 SsgFmepfileactive = ConvertToBool(file.IsFMEPFileActive),
                 SsgFmepfilenumber = file.FMEPFileNumber,
-                SsgSafetyalert = ConvertToBool(file.SafetyAlertRecipient),
-                SsgSafetyconcerndescription = file.RecipientSafetyConcernDescription,
-                SsgSafetyalertpayor = ConvertToBool(file.SafetyAlertPayor),
-                SsgPayorssafetyconcerndescription = file.PayorSafetyConcernDescription,
             };
+
+            if (role == PartyRole.Recipient)
+            {
+                dynamicsFile.SsgSafetyalert = ConvertToBool(file.SafetyAlertRecipient);
+                dynamicsFile.SsgSafetyconcerndescription = file.RecipientSafetyConcernDescription;
+            }
+            else
+                if (role == PartyRole.Payor)
+                {
+                    dynamicsFile.SsgSafetyalertpayor = ConvertToBool(file.SafetyAlertPayor);
+                    dynamicsFile.SsgPayorssafetyconcerndescription = file.PayorSafetyConcernDescription;
+                }
 
             return dynamicsFile;
         }

@@ -55,7 +55,7 @@
 
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef> File # </th>
-                  <td mat-cell *matCellDef="let element"> {{selectedInboxFile.fileNumber}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.fileNumber}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="username">
@@ -74,10 +74,12 @@
                   <td class="font_normal" mat-cell *matCellDef="let element"> <a target="blank" (click)="setMessageRead(element)">Mark As Read</a> </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns;" ></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'make-bold': !row.isRead }"></tr>
-                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
               </table>
+              <mat-paginator #paginator [pageSizeOptions]="[5]"
+                             showFirstLastButtons></mat-paginator>
             </div>
 
             <div class="step2" *ngIf="toggleRow">
@@ -399,7 +401,7 @@
       <p class="text-body">
         Contact the Recalculation Service toll free
         <a href="tel:+18776618026">1-877-661-8026</a>,
-        or learn more about the progrom
+        or learn more about the program
       </p>
     </div>
   </div>

@@ -106,10 +106,12 @@ namespace Csrs.Api.Services
             return Tuple.Create(csrsFile.SsgCsrsfileid, csrsFile.SsgFilenumber);
         }
 
-        public async Task<string> UpdateCSRSAccountFile(CSRSAccountFile file, CancellationToken cancellationToken)
+        public async Task<string> UpdateCSRSAccountFile(string partyId, CSRSAccountFile file, CancellationToken cancellationToken)
         {
 
-            MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel();
+            PartyRole role = await _dynamicsClient.GetFileByPartyIdAndFileId(partyId, file.FileId, cancellationToken);
+
+            MicrosoftDynamicsCRMssgCsrsfile csrsFile = file.ToDynamicsModel(role);
             var fileId = file.FileId;
             // map the party and other party to recipient and payor
             try

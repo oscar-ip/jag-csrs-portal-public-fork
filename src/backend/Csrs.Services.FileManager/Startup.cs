@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using Csrs.Interfaces;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -30,6 +31,8 @@ namespace Csrs.Services.FileManager
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<SharePointFileManager>();
+
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;

@@ -179,13 +179,14 @@ namespace Csrs.Interfaces.Dynamics
 
             fileId = GuidGuard(fileId);
 
-            string filter = $"_ssg_csrsfile_value eq {fileId}";
+            string filter = $"_ssg_csrsfile_value eq {fileId} and statuscode eq 867670001";
             List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", 
                                                     "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", 
-                                                    "statuscode", "_ssg_toparty_value" };
+                                                    "statuscode", "_ssg_toparty_value"};
+            List<string> expand = new List<string> { "ssg_csrsFile($select=ssg_filenumber)" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
-            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
+            var messages = await dynamicsClient.Ssgcsrscommunicationmessages.GetAsync(select: select, expand: expand, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
             return messages;
         }
 
@@ -217,7 +218,7 @@ namespace Csrs.Interfaces.Dynamics
             fileNumber = Escape(fileNumber);
 
             string filter = $"(_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}) and ssg_filenumber eq '{fileNumber}'";
-            List<string> select = new List<string> { "ssg_csrsfileid" };
+            List<string> select = new List<string> { "ssg_csrsfileid", "_ssg_recipient_value", "_ssg_payor_value" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
             MicrosoftDynamicsCRMssgCsrsfileCollection files;
@@ -233,7 +234,45 @@ namespace Csrs.Interfaces.Dynamics
             return files;
         }
 
-        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessage> GetCommunicationMessagesByPartyAndIdAsync(this IDynamicsClient dynamicsClient, string partyId, string messageId, CancellationToken cancellationToken)
+        public static async Task<PartyRole> GetFileByPartyIdAndFileId(this IDynamicsClient dynamicsClient, string partyId, string fileId, CancellationToken cancellationToken)
+        {
+
+            ArgumentNullException.ThrowIfNull(dynamicsClient);
+
+            partyId = GuidGuard(partyId);
+            fileId = GuidGuard(fileId);
+
+            string filter = $"(_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}) and ssg_csrsfileid eq {fileId}";
+            List<string> select = new List<string> { "ssg_csrsfileid", "_ssg_recipient_value", "_ssg_payor_value" };
+            List<string> orderby = new List<string> { "modifiedon desc" };
+
+            PartyRole role = PartyRole.Unknown;
+            try
+            {
+                MicrosoftDynamicsCRMssgCsrsfileCollection files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, cancellationToken: cancellationToken);
+                if (files is not null && files.Value.Count > 0)
+                {
+                    if (files.Value[0]._ssgRecipientValue == partyId)
+                    {
+                        role = PartyRole.Recipient;
+                    }
+                    else if (files.Value[0]._ssgPayorValue == partyId)
+                    {
+                        role = PartyRole.Payor;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return role;
+        }
+        
+
+
+public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessage> GetCommunicationMessagesByPartyAndIdAsync(this IDynamicsClient dynamicsClient, string partyId, string messageId, CancellationToken cancellationToken)
         {
 
             ArgumentNullException.ThrowIfNull(dynamicsClient);

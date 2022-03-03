@@ -29,7 +29,7 @@ export class QuestionnaireComponent implements OnInit {
           clickedContent: [
             {
               id: 'content-1',
-              data: '<span class="text-dark"><strong>Great!</strong> You’ll need to provide information from your order or written agreement if you enrol in the Child Support Recalculation Service.</span>',
+              data: '<span class="text-dark"><strong>Great!</strong></span>',
             },
             {
               data: ' <span class="text-dark">To apply for the recalculation service, you must have an order or written agreement for child support from the Provincial Court of British Columbia. You\'ll need a copy of it before you start your application.</span>',
@@ -113,7 +113,11 @@ export class QuestionnaireComponent implements OnInit {
       buttons: [
         {
           label: 'Yes',
-          clickedContent: [],
+          clickedContent: [
+            {
+              data: '<span class="text-dark"><strong>Great,</strong> to use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C residents. You’re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.'
+            }
+          ],
         },
         {
           label: 'No',
@@ -160,7 +164,7 @@ export class QuestionnaireComponent implements OnInit {
       ],
     },
     {
-      label: 'Has the financial situation of you or the other parent or guardian changed since your support order or written agreement was made?',
+      label: 'Has the financial situation of you or the other parent or guardian changed since your support order or written agreement was made? (In other words, has the annual income amount in your most recent support order or written agreement gone up or down?)',
       content: [],
       buttons: [
         {
@@ -190,7 +194,7 @@ export class QuestionnaireComponent implements OnInit {
               data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines" target="_blank" style="color:#009cde !important; text-decoration: underline">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
             },
             {
-              data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent ncome tax information and the Child Support Guidelines.',
+              data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent income tax information and the Child Support Guidelines.',
             },
             {
               data: '<span class="text-dark">Each year, the recalculation service will ask the paying parent to provide their income tax information for the most recent tax year.',
@@ -207,10 +211,10 @@ export class QuestionnaireComponent implements OnInit {
           label: 'I don’t know',
           clickedContent: [
             {
-              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines" target="_blank" style="color:#009cde !important; text-decoration: underline">the Child Support Guidelines</a>.As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
+              data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines" target="_blank" style="color:#009cde !important; text-decoration: underline">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
             },
             {
-              data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent ncome tax information and the Child Support Guidelines.',
+              data: '<span class="text-dark">Even if you\'re not sure if the income of the other parent has changed, the recalculation service can review your order or written agreement each year to ensure it is fair based on the most recent income tax information and the Child Support Guidelines.',
             },
             {
               data: '<span class="text-dark">Each year, the recalculation service will ask the paying parent to provide their income tax information for the most recent tax year.',
@@ -251,16 +255,15 @@ export class QuestionnaireComponent implements OnInit {
                 tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
               {
-                liData: '<strong>Self-employment or partnership income; or</strong>',
-                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
+                liData: '<strong>Self-employment or partnership income;</strong>',
+                tooltipData: 'Part or all of the paying parent’s income is earned from carrying a trade or business as the owner, independent contractor, or some form of partnership.'
               },
               {
-                liData: '<strong>Payor stands in place of a parent.</strong>',
-                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
+                liData: '<strong>Payor stands in place of a parent; or</strong>',
+                tooltipData: 'A step-parent or person who is not the child’s biological or adoptive parent.'
               },
               {
                 liData: '<strong>Pattern of income</strong>',
-                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.'
               },
             ],
           },
@@ -271,7 +274,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service can only recalculate support based on the Child Support Guidelines. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
+              data: '<span class="text-dark">The Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
             },
             {
               data: '<span class="text-dark">If your child support was based on any of the above, the recalculation service <strong>cannot</strong> recalculate it and you are not eligible for the service.',
@@ -282,16 +285,23 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service can only recalculate support based on the Child Support Guidelines. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
+              data: '<span class="text-dark">The Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
             },
             {
-              data: '<span class="text-dark">If your child support was based on any of the above, the recalculation service <strong>cannot</strong> recalculate it and you are not eligible for the service.',
+              data: '<span class="text-dark">Since you have answered no to this question, your order or written agreement may be eligible for recalculation.</span>',
             },
           ],
         },
         {
           label: 'I don’t know',
-          clickedContent: [],
+          clickedContent: [
+            {
+              data: '<span class="text-dark">The Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
+            },
+            {
+              data: '<span class="text-dark">If your child support was based on any of the above, the recalculation service <strong>cannot</strong> recalculate it and you are not eligible for the service.',
+            },
+          ],
         },
       ],
       forwardButtons: [
@@ -306,14 +316,14 @@ export class QuestionnaireComponent implements OnInit {
       ],
     },
     {
-      label: 'Was the amount of child support in your order based on imputed income ?',
+      label: 'Was the amount of child support in your order based on imputed income?',
       content: [],
       buttons: [
         {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service <strong>cannot</strong> recalculate support when a paying parent’s incomehas been imputed. This is because the recalculation service cannot make decisions that a judge can make about why income was imputed when child support was determined.If income has been imputed, your court order will usually say so.',
+              data: '<span class="text-dark">The Child Support Recalculation Service <strong>cannot</strong> recalculate support when a paying parent’s incomehas been imputed. This is because the recalculation service cannot make decisions that a judge can make about why income was imputed when child support was determined. If income has been imputed, your court order will usually say so.',
             },
             {
               data: '<span class="text-dark"><strong>There is one exception:</strong> If the order states that the paying parent’s income was imputed because they are exempt from paying federal or provincial income tax, then the recalculation service may be able to recalculate.',
@@ -322,11 +332,27 @@ export class QuestionnaireComponent implements OnInit {
         },
         {
           label: 'No',
-          clickedContent: [],
+          clickedContent: [
+            {
+              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying paying parent’s income was imputed.',
+            },
+            {
+              data: '<span class="text-dark">Since you have answered no / not applicable to this question, your order or written agreement may be eligible for recalculation.',
+
+            }
+          ],
         },
         {
           label: 'I don’t know',
-          clickedContent: [],
+          clickedContent: [
+            {
+              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying paying parent’s income was imputed.',
+            },
+            {
+              data: '<span class="text-dark">Since you have answered no / not applicable to this question, your order or written agreement may be eligible for recalculation.',
+
+            }
+          ],
         },
       ],
       forwardButtons: [
@@ -341,7 +367,7 @@ export class QuestionnaireComponent implements OnInit {
       ],
     },
     {
-      label: ' Does your order or written agreement require the payment of special or extraordinary expenses ?',
+      label: ' Does your order or written agreement require the payment of special or extraordinary expenses?',
       content: [],
       buttons: [
         {
@@ -371,13 +397,17 @@ export class QuestionnaireComponent implements OnInit {
               data: '<span class="text-dark">The recalculation service doesn’t have the authority to determine whether an expense continues to be eligible and payable. It may only adjust each parent’s proportionate share owing based on updated incomes.',
             },
             {
-              data: '<span class="text-dark">If parents cannot agree on the eligibility of expenses, they may ask a court to decide.',
+              data: '<span class="text-dark">If parents <strong>cannot</strong> agree on the eligibility of expenses, they may ask a court to decide.',
             },
           ],
         },
         {
           label: 'No',
-          clickedContent: [],
+          clickedContent: [
+            {
+              data: '<span class="text-dark">Since you have answered no to this question, the recalculation of special or extraordinary expenses does not apply to your situation.',
+            }
+          ],
         }
       ],
       forwardButtons: [
@@ -393,7 +423,7 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label:
-        'Does your order/written agreement include child support involving',
+        'Does your order/written agreement include child support involving:',
       content: [
         {
           label:
@@ -404,16 +434,16 @@ export class QuestionnaireComponent implements OnInit {
             ol: [
               {
                 liData: '<strong>Children at or over the age of 19 ;</strong>',
-                tooltipData: 'The court determines the child support amount to be lower or higher than the child support guidelines table amount because of special circumstances that caused exceptional difficulty for the person paying.',
+                tooltipData: 'A person legally becomes an adult at 19 years of age in B.C. However, child support can continue beyond 19 if the child continues to be financially dependent under certain situations.',
               },
               {
-                liData: '<strong>Shared parenting ;</strong>',
-                tooltipData: 'The court determines the child support amount',
+                liData: '<strong>Shared parenting; or</strong>',
+                tooltipData: 'Both parents provide primary care for the children at least 40% of the time over the course of a year.',
 
               },
               {
                 liData: '<strong>Income over $150,000 ?</strong>',
-                tooltipData: 'The court determines the child support amount',
+                tooltipData: 'If a parent’s annual income is over $150,000, a court may consider other factors, in addition to the Child Support Guideline Tables.  These factors include conditions, means and other circumstances of the children and both parent’s financial ability to contribute to the support of the child(ren).'
 
               },
             ],
@@ -425,13 +455,17 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">These areas of child support can be complex. Sometimes a judge may apply factors other than the Child Support Guideline Tables to determine the amount of child support. The Child Support Recalculation Service must review your order or written agreement first to decide whether it can recalculate your child support amount.',
+              data: '<span class="text-dark">Since you have answered yes to this question, the recalculation service will need to review your order or written agreement to decide whether it is eligible for recalculation.',
             },
           ],
         },
         {
           label: 'No',
-          clickedContent: [],
+          clickedContent: [
+            {
+              data: '<span class="text-dark">These Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. As these situations can sometimes involve other factors, the service will need to review each case for eligibility',
+            },
+          ],
         },
         {
           label: 'I don’t know',
@@ -478,7 +512,20 @@ export class QuestionnaireComponent implements OnInit {
         },
         {
           label: 'No',
-          clickedContent: [],
+          clickedContent: [
+            {
+              data: '<span class="text-dark">If you or the other parent have legal proceedings underway that may impact child support payments, the recalculation service <strong>cannot</strong> recalculate your order. Once you obtain a new order, you can apply to the Child Support Recalculation Service.',
+            },
+            {
+              data: '<span class="text-dark">The Child Support Recalculation Service recalculates child support in a less informal way than court. Parents enrolled in the service won\'t have to go to court and ask a judge to decide on child support when their income changes.',
+            },
+            {
+              data: '<span class="text-dark"><strong>Important note:</strong> The Child Support Recalculation Service cannot backdate the recalculation of your child support. It can only recalculate child support amounts going forward based on income tax information for the most recent tax year.',
+            },
+            {
+              data: '<span class="text-dark">The recalculation service provides a copy of the recalculation statement to both parents and files a copy in court. Once it\'s in effect, the recalculated amount is the child support to be paid.',
+            },
+          ],
         },
       ],
       forwardButtons: [

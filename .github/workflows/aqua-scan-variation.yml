@@ -79,5 +79,4 @@ jobs:
         with:
           name: frontnend-scan-artifact
           path: 'trivy-results-fe.sarif'
-          retention-days: 5
-          debug: true
+          retention-days: 15

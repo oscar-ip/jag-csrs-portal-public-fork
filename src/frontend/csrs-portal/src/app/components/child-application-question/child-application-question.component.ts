@@ -22,14 +22,8 @@ import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { OidcClientNotification,
-         OidcSecurityService,
-         OpenIdConfiguration,
-         UserDataResult,
-         EventTypes,
-         PublicEventsService,
-         LoginResponse,
-         TokenHelperService, TokenValidationService } from 'angular-auth-oidc-client';
+import { OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 // -- import data structure
 import {
@@ -43,13 +37,14 @@ import {
   } from 'app/api/model/models';
 
 import { DatePipe } from '@angular/common';
-import { CheckAuthService } from 'angular-auth-oidc-client/lib/check-auth.service';
 
 @Component({
   selector: 'app-child-application-question',
   templateUrl: './child-application-question.component.html',
   styleUrls: ['./child-application-question.component.scss'],
 })
+
+
 export class ChildApplicationQuestionComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -80,7 +75,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   _no: number = 867670001;
   _iDontKnow: number = 867670002;
 
-  _courtOrder: number = 867670000;
+  _courtOrder: number       = 867670000;
   _writtenAgreement: number = 867670001;
 
   data: any = null;
@@ -89,7 +84,10 @@ export class ChildApplicationQuestionComponent implements OnInit {
   errorMessage: any = '';
   errorMailMessage: any = '';
   errorIncomeMessage: any = '';
+  errorDateMessage: any = '';
+  errorMaxMessage: any = '';
   tooltips: any = [];
+  isHiddens: any = [];
 
   constructor(public oidc : OidcSecurityService,
               private eventService: PublicEventsService,
@@ -110,8 +108,10 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.referrals = [{id: '123', value: 'FMEP'}];
 
     this.errorMessage = 'Error: Field is required. ';
-    this.errorMailMessage = 'Email address without @ or domain name.';
-    this.errorIncomeMessage = 'Field should have numerical values.';
+    this.errorMailMessage = 'Email address without @ or domain name. ';
+    this.errorIncomeMessage = 'Field should have numerical values. ';
+    this.errorDateMessage = 'Date cannot be in future.'
+    this.errorMaxMessage = 'You can only enter up to 3000 characters.';
 
 
     this.tooltips = [
@@ -204,7 +204,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
     this.sixFormGroup = this._formBuilder.group({
       childSafety: [''],
-      childSafetyDescription: [''],
+      childSafetyDescription: ['',Validators.maxLength(3000)],
       contactMethod: [''],
       enrollFMEP: [''],
       FMEPinput: [''],
@@ -213,9 +213,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
     });
 
     // setup default values
-    this.sixFormGroup.controls['childSafety'].patchValue('Yes');
+    this.sixFormGroup.controls['childSafety'].patchValue('No');
     this.sixFormGroup.controls['contactMethod'].patchValue('Email');
-    this.sixFormGroup.controls['enrollFMEP'].patchValue('Yes');
+    this.sixFormGroup.controls['enrollFMEP'].patchValue('No');
     this.sixFormGroup.controls['incomeAssistance'].patchValue('Yes');
 
     this.seventhFormGroup = this._formBuilder.group({
@@ -263,6 +263,41 @@ export class ChildApplicationQuestionComponent implements OnInit {
   }
 
 }
+
+onDateChange(event: MatDatepickerInputEvent<Date>, i: number): void {
+  //var childYears = this.diff_years(event.value, new Date());
+  var childYears = this.ageFromDateOfBirthday(event.value);
+  this.logger.info(`childYears = ${childYears}`);
+  this.isHiddens[i] = childYears >= 19 ? true : false;
+  this.logger.warn(`childYears = ${childYears}, isHiddens[i] = ${this.isHiddens[i]}`);
+}
+
+diff_years(dt2, dt1)
+ {
+   var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+   diff /= (60 * 60 * 24);
+   return Math.abs(Math.round(diff/365.25));
+ }
+
+ ageFromDateOfBirthday(dateOfBirth: any): number {
+  const today = new Date();
+  this.logger.warn(`today = ${today}`);
+  const birthDate = new Date(dateOfBirth);
+  this.logger.warn(`birthDate = ${birthDate}`);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  this.logger.warn(`age = ${age}`);
+  const m = today.getMonth() - birthDate.getMonth();
+  this.logger.warn(`m = ${m}`);
+
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  this.logger.warn(`age = ${age}`);
+
+  return age;
+}
+
+
 
 forSubmitBtn(event){
   //this.logger.info(`event: ${event}`);
@@ -430,20 +465,23 @@ editPage(stepper, index){
       birthdate: [],
       givenNames: [],
       childDependency: [],
-      middleName: []
+      middleName: [],
     });
 
     usersArray.insert(arraylen, newUsergroup);
+    this.isHiddens.push(false);
+
   }
 
   deletechild(index){
     this.fourthFormGroup1.get('users')['controls'].splice(index,1)
+    this.isHiddens.splice(index);
   }
 
 
-  saveLater($event: MouseEvent) {
-    ($event.target as HTMLButtonElement).disabled = true;
+  saveLater() {
     this.isDisabledSubmit = true;
+    this.logger.info(`this.isDisabledSubmit = ${this.isDisabledSubmit}`);
     const formData = {
       firstStep: this.firstFormGroup.value,
       secondFormGroup: this.secondFormGroup.value,
@@ -460,7 +498,6 @@ editPage(stepper, index){
     this.prepareData();
     //localStorage.setItem('formData', JSON.stringify(formData));
     this.isDisabledSubmit = false;
-    ($event.target as HTMLButtonElement).disabled = false;
   }
   save(){
     this.prepareData();
@@ -530,8 +567,9 @@ editPage(stepper, index){
   }
 
   getCourtTyleFile(value){
-    const courtTypeFileId = value == 'Court Order' ?  this._courtOrder : this._writtenAgreement;
+    const courtTypeFileId = value == 'Order' ?  this._courtOrder : this._writtenAgreement;
     const inCourtFileType: LookupValue = {id: courtTypeFileId, value: value};
+    this.logger.warn(`inCourtFileType: ${inCourtFileType}`);
     return inCourtFileType;
   }
 

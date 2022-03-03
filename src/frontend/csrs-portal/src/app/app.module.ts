@@ -53,7 +53,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -122,7 +121,7 @@ import { filter } from 'rxjs/operators';
       deps: [OidcSecurityService],
       multi: false
     },
-    WindowRefService,
+     WindowRefService,
   ],
   bootstrap: [AppComponent],
 })
