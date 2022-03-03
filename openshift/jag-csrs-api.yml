@@ -71,7 +71,20 @@ parameters:
   description: BCEID_URL for dev, test or prod
   required: true
   value: https://www.development.bceid.ca/
-  
+
+- name: OPENSHIFT
+  description: Indicator of the build is for OpenShift not local
+  required: false
+  value: nonlocal
+- name: SSL_CERT_DIR
+  description: CA CERT Location
+  required: true
+  value: /opt/app-root/ssl_dir/csrs-file-manager-ca
+ - name: ASPNETCORE_ENVIRONMENT
+  description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
+  required: false
+  value: Production
+
 objects:
 
 ### JAG-csrs API Deployment Config ###
@@ -179,6 +192,12 @@ objects:
                   key: APIGATEWAY_BASEPATH
             - name: BCEID_URL
               value: ${BCEID_URL}
+            - name: OPENSHIFT
+              value: ${OPENSHIFT}
+            - name: SSL_CERT_DIR
+              value: ${SSL_CERT_DIR}
+            - name: ASPNETCORE_ENVIRONMENT
+              value: ${ASPNETCORE_ENVIRONMENT}
             # Yet to deal with proper resource allocation
             resources:
               limits:

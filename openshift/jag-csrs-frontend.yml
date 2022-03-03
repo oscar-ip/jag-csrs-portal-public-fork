@@ -154,6 +154,10 @@ objects:
         protocol: TCP
         port: 80
         targetPort: 8080
+    - name: http1
+      protocol: TCP
+      port: 8081
+      targetPort: 8081        
     selector:
       name: ${COMPONENT_NAME}
     sessionAffinity: None

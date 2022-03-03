@@ -78,6 +78,19 @@ parameters:
   required: true
   value: https://www.development.bceid.ca/
 
+- name: OPENSHIFT
+  description: Indicator of the build is for OpenShift not local
+  required: false
+  value: nonlocal
+- name: SSL_CERT_DIR
+  description: CA CERT Location
+  required: true
+  value: /opt/app-root/ssl_dir/csrs-file-manager-ca
+ - name: ASPNETCORE_ENVIRONMENT
+  description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
+  required: false
+  value: Production
+
 objects:
 
 ### JAG-csrs API Deployment Config ###
@@ -105,11 +118,23 @@ objects:
           version: vblahblah
       spec:
         volumes:
+          - name: service-cert
+            secret:
+              secretName: file-manager-service-cert
+              defaultMode: 420
           - name: volume-appsettings
             configMap:
               name: appsettings.production.json
               defaultMode: 420
-        containers:
+          - name: csrs-file-manager-ca
+            configMap:
+              name: csrs-file-manager-ca
+              defaultMode: 420
+          - name: service-trustbundle-ca
+            configMap:
+              name: service-trustbundle-ca
+              defaultMode: 420
+          containers:
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${OC_ENV}
             name: ${API_COMPONENT_NAME}
@@ -189,18 +214,29 @@ objects:
                   key: APIGATEWAY_BASEPATH
             - name: BCEID_URL
               value: ${BCEID_URL}
+            - name: OPENSHIFT
+              value: ${OPENSHIFT}
+            - name: SSL_CERT_DIR
+              value: ${SSL_CERT_DIR}
+            - name: ASPNETCORE_ENVIRONMENT
+              value: ${ASPNETCORE_ENVIRONMENT}
             resources:
               limits:
+                cpu: 1000m
+                memory: 2000Mi
+              requests:
                 cpu: 500m
                 memory: 1000Mi
-              requests:
-                cpu: 250m
-                memory: 512Mi
             # Took away readiness and liveness probe until those end points are ready
             volumeMounts:
               - name: volume-appsettings
                 mountPath: /app/appsettings.Production.json
                 subPath: appsettings.json
+              - name: csrs-file-manager-ca
+                mountPath: /opt/app-root/ssl_dir/csrs-file-manager-ca/service-ca.crt
+                subPath: service-ca.crt
+              - name: service-trustbundle-ca
+                mountPath: /opt/app-root/app/ca/service-trustbundle-ca
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             imagePullPolicy: Always

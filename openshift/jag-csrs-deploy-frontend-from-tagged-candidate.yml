@@ -94,6 +94,12 @@ objects:
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${OC_ENV}
             name: ${COMPONENT_NAME}
             imagePullPolicy: Always
+            restartPolicy: Always
+            terminationGracePeriodSeconds: 30
+            volumeMounts:
+              - name: volume-oidc-config
+                mountPath: /usr/share/nginx/html/assets/config/
+            terminationMessagePolicy: File
             ports:
               - containerPort: 8080
             env:

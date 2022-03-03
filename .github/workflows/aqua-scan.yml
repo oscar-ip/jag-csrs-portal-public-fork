@@ -1,15 +1,13 @@
 # https://github.com/marketplace/actions/openshift-self-hosted-runner-installer
 # https://developers.redhat.com/articles/2021/06/16/deploy-self-hosted-github-actions-runners-red-hat-openshift
-# Runner based variation not working yet
+# Self Hosted Runner based variation not fully working yet
+# There would be another equivalent one that is OpenShift hosted runner for OpenShift Actions
 name: Trivy Scan
 on:
   schedule:
   #  # Experimental schedule;
   #  # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
     - cron:  '15 05 * * 3'
-  push:
-    branches:
-      improving_infra_v2
   workflow_dispatch:
 jobs:
   install_runner:

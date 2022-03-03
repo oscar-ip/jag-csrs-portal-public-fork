@@ -60,6 +60,18 @@ parameters:
   required: true
   value: blahblah
 
+- name: OPENSHIFT
+  description: Indicator of the build is for OpenShift not local
+  required: false
+  value: nonlocal
+- name: SSL_CERT_DIR
+  description: CA CERT Location
+  required: true
+  value: /opt/app-root/ssl_dir/csrs-file-manager-ca
+ - name: ASPNETCORE_ENVIRONMENT
+  description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
+  required: false
+  value: Production
 
 objects:
 
@@ -151,6 +163,12 @@ objects:
                 secretKeyRef:
                   name: ${FILEMANAGER_CONFIG_NAME}
                   key: SHAREPOINT_NATIVE_BASE_URI
+            - name: OPENSHIFT
+              value: ${OPENSHIFT}
+            - name: SSL_CERT_DIR
+              value: ${SSL_CERT_DIR}
+            - name: ASPNETCORE_ENVIRONMENT
+              value: ${ASPNETCORE_ENVIRONMENT}
             resources:
               limits:
                 cpu: 250m

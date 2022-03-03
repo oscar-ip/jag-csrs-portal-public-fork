@@ -1,5 +1,6 @@
 # https://github.com/marketplace/actions/openshift-self-hosted-runner-installer
 # https://developers.redhat.com/articles/2021/06/16/deploy-self-hosted-github-actions-runners-red-hat-openshift
+# Working fine (GitHub Hosted Runner based variation)
 name: Trivy Scan
 on:
   schedule:
@@ -55,7 +56,8 @@ jobs:
           TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
           TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
 
-      #Could not make it working
+      # Could not make it working/
+      # It stopped working as of recently
       #- name: Upload frontend Trivy scan results to GitHub Security tab
       #  uses: github/codeql-action/upload-sarif@v1
       #  if: always()
@@ -67,8 +69,11 @@ jobs:
       #    ref: ${{ env.BRANCH_NAME }}
       #    debug: true
       #    #if-no-files-found: error
+
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       # https://github.com/github/codeql-action/issues/944
+      # This upload works fine
+      # Artifact appears at the bottom of workflow execution report
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
