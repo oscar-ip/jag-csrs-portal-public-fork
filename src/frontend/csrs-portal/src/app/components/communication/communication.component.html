@@ -65,7 +65,7 @@
 
                 <ng-container matColumnDef="email">
                   <th mat-header-cell *matHeaderCellDef> Attachment </th>
-                  <td mat-cell *matCellDef="let element"><img src="/assets/PDF-black_icon.svg" /> {{element.isRead}} </td>
+                  <td mat-cell *matCellDef="let element"><div *ngIf="element.attachment"><img src="/assets/PDF-black_icon.svg" /><div *ngFor="let doc of element.documents">{{doc.documentType}}</div></div></td>
                 </ng-container>
 
                 <ng-container matColumnDef="phone">
