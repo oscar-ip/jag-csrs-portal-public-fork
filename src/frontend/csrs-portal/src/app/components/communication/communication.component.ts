@@ -487,4 +487,14 @@ openDialog(): void {
       });
 
   }
+  selectTab(index) {
+    this.selectedTab = 0;
+    console.log('index ' + index);
+    if (index) {
+      this.selectedTab = index;
+    }
+  }
 }
+
+
+
