@@ -118,6 +118,7 @@ namespace Csrs.Api.Features.UserRequests
                 }
                 task.Prioritycode = 1;// Normal
                 task.Statuscode = 2; // Not Started
+                task.Scheduledend = new DateTimeOffset(DateTime.UtcNow);
                 //ap.Statecode = 0;  defaults in DB
                 MicrosoftDynamicsCRMtask result = await _dynamicsClient.Tasks.CreateAsync(task);
                 string subject = "Contact Us Record Created";
