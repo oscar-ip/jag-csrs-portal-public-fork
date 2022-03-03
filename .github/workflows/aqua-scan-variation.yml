@@ -40,13 +40,13 @@ jobs:
           openshift_token: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
           namespace:  ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
 
-
-      - name: Run Trivy vulnerability scanner on frontend
+      # Scanning the Deployed Images in Test
+      - name: TEST - Run Trivy vulnerability scanner on frontend
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
           format: 'sarif'
-          output: 'trivy-results-fe.sarif'
+          output: 'trivy-results-frontend.sarif'
           #exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
@@ -74,9 +74,128 @@ jobs:
       # https://github.com/github/codeql-action/issues/944
       # This upload works fine
       # Artifact appears at the bottom of workflow execution report
-      - name: 'Upload Artifact'
+      - name: TEST - Upload Artifact for Frontend
         uses: actions/upload-artifact@v2
         with:
-          name: frontnend-scan-artifact
-          path: 'trivy-results-fe.sarif'
+          name: frontnend-scan-artifact-test
+          path: 'trivy-results-frontend.sarif'
           retention-days: 15
+
+
+      - name: TEST - Run Trivy vulnerability scanner on API
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+          format: 'sarif'
+          output: 'trivy-results-api.sarif'
+          #exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          #For troubleshooting
+          severity: 'CRITICAL,HIGH,MEDIUM'
+        env:
+          TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
+          TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+
+      - name: TEST - Upload Artifact for API
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-scan-artifact-test
+          path: 'trivy-results-api.sarif'
+          retention-days: 15
+
+      - name: TEST - Run Trivy vulnerability scanner on File Manager
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+          format: 'sarif'
+          output: 'trivy-results-api.sarif'
+          #exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          #For troubleshooting
+          severity: 'CRITICAL,HIGH,MEDIUM'
+        env:
+          TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
+          TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+
+      - name: TEST - Upload Artifact for File Manager
+        uses: actions/upload-artifact@v2
+        with:
+          name: file-manager-scan-artifact-test
+          path: 'trivy-results-api.sarif'
+          retention-days: 15
+
+##############################################################################################
+
+# Scanning the Deployed Images in Dev
+      - name: DEV - Run Trivy vulnerability scanner on frontend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+          format: 'sarif'
+          output: 'trivy-results-frontend.sarif'
+          #exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          #For troubleshooting
+          severity: 'CRITICAL,HIGH,MEDIUM'
+        env:
+          TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
+          TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+
+      - name: DEV - Upload Artifact for Frontend
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontnend-scan-artifact-dev
+          path: 'trivy-results-frontend.sarif'
+          retention-days: 15
+
+      - name: DEV - Run Trivy vulnerability scanner on API
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+          format: 'sarif'
+          output: 'trivy-results-api.sarif'
+          #exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          #For troubleshooting
+          severity: 'CRITICAL,HIGH,MEDIUM'
+        env:
+          TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
+          TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+
+      - name: 'DEV - Upload Artifact for API'
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-scan-artifact-dev
+          path: 'trivy-results-api.sarif'
+          retention-days: 15
+
+      - name: DEV - Run Trivy vulnerability scanner on File Manager
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/jag-csrs-frontend:test'
+          format: 'sarif'
+          output: 'trivy-results-api.sarif'
+          #exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          #For troubleshooting
+          severity: 'CRITICAL,HIGH,MEDIUM'
+        env:
+          TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
+          TRIVY_PASSWORD: ${{secrets.SA_GITHUB_ACTIONS_TOKEN}}
+
+      - name: 'DEV - Upload Artifact for File Manager'
+        uses: actions/upload-artifact@v2
+        with:
+          name: file-manager-scan-artifact-dev
+          path: 'trivy-results-api.sarif'
+          retention-days: 15
+
+##############################################################################################
+
+# Scanning the Deployed Images in Dev
+# Yet to Add
