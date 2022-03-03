@@ -121,9 +121,6 @@ namespace Csrs.Api.Features.UserRequests
                 task.Scheduledend = new DateTimeOffset(DateTime.UtcNow);
                 //ap.Statecode = 0;  defaults in DB
                 MicrosoftDynamicsCRMtask result = await _dynamicsClient.Tasks.CreateAsync(task);
-                string subject = "Contact Us Record Created";
-                string description = "User created a contact request for file: " + request.FileNo;
-                await _taskService.CreateTask(request.FileId, subject, description, cancellationToken);
                 _logger.AddProperty("ActivityId", result.Activityid);
                 _logger.LogDebug("User Request created successfully");
                 return new Response("User Request Created");
