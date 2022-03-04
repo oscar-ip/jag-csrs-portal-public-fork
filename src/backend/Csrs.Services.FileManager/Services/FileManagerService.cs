@@ -93,7 +93,7 @@ namespace Csrs.Services.FileManager
 
             var result = new FileExistsReply();
 
-            List<SharePointFileManager.FileDetailsList> fileDetailsList = null;
+            List<FileDetailsList> fileDetailsList = null;
             try
             {
                 var documentTemplateUrl = GetDocumentTemplateUrlPart(request.EntityName);
@@ -238,7 +238,7 @@ namespace Csrs.Services.FileManager
             var result = new FolderFilesReply();
 
             // Get the file details list in folder
-            List<SharePointFileManager.FileDetailsList> fileDetailsList = null;
+            List<FileDetailsList> fileDetailsList = null;
 
             try
             {

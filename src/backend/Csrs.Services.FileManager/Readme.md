@@ -1,7 +1,15 @@
 # File Manager Service #
 ------------
 
-The purpose of the file manager service is to act as an interface to SharePoint.  
+The purpose of the file manager service is to act as an interface to SharePoint.  The required configuration parameters for SharePoint are:
+
+* APIGATEWAY_HOST
+* APIGATEWAY_POLICY
+* RELYING_PARTY_IDENTIFIER
+* AUTHORIZATION_URI - must be a valid url
+* RESOURCE - must be a valid url
+* SHAREPOINT_USERNAME
+* SHAREPOINT_PASSWORD
 
 ## Development ##
 
