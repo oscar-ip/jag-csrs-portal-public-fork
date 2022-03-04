@@ -86,9 +86,42 @@ namespace Csrs.Api.Features.Accounts
                 }
 
                 // update the CSRS Account file
-                await _fileService.UpdateCSRSAccountFile(partyId, request.CSRSAccountFile, cancellationToken);
+                var fileId = await _fileService.UpdateCSRSAccountFile(partyId, request.CSRSAccountFile, cancellationToken);
 
                 _logger.LogDebug("Party and file were updated successfully");
+
+                MicrosoftDynamicsCRMssgCsrsfile file = await _dynamicsClient.GetFileByFileId(fileId, cancellationToken);
+                MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
+                task.Activitytypecode = "task";
+                var parties = await _dynamicsClient.GetPartyByBCeIdAsync(userId, cancellationToken);
+                var fullName = parties?.Value[0].SsgFullname;
+
+                task.Subject = $"File {file.SsgFilenumber} - Account Setup Submitted";
+                task.Description = $"Respondent Application submitted, please review.\nParty: {fullName}"; 
+                task.Isregularactivity = true;
+
+                var owninguser = file._owninguserValue;
+                if (owninguser is not null)
+                {
+                    task.OwninguserODataBind = _dynamicsClient.GetEntityURI("systemusers", owninguser);
+                    task.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", owninguser);
+                }
+                task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", fileId);
+
+                task.Prioritycode = 1;// Normal
+                task.Statuscode = 2; // Not Started
+                task.Scheduledend = new DateTimeOffset(DateTime.UtcNow);
+
+                try
+                {
+                    MicrosoftDynamicsCRMtask result = await _dynamicsClient.Tasks.CreateAsync(task);
+                } 
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An exception occurred while creating task with partyId = {PartyId} and fileid = {FileId},  CSRS account file update will be aborted", partyId, fileId);
+                    throw;
+                }
+
                 return new Response(partyId, request.CSRSAccountFile.FileId);
             }
         }
