@@ -46,15 +46,15 @@ namespace Csrs.Api.Services
                     //Get documents from fileManager
                     try
                     {
-                        attachments = await _documentService.GetAttachmentList(message.SsgCsrscommunicationmessageid, "ssg_csrscommunicationmessage", "", cancellationToken);
+                        attachments = await _documentService.GetAttachmentList(message.SsgCsrscommunicationmessageid, "ssg_csrscommunicationmessage", message.SsgCsrsmessagesubject, cancellationToken);
                     }catch (HttpOperationException ex)
                     {
                         _logger.LogInformation($"No Attachment Retrieved for Message {message.SsgCsrscommunicationmessageid} "+ex.Message);
-                        attachments = new List<FileSystemItem>();
+                        attachments = Array.Empty<FileSystemItem>();
                     }catch (Exception ex)
                     {
                         _logger.LogInformation($"ERROR OCCURED getting attachment list for message {message.SsgCsrscommunicationmessageid} " + ex.Message);
-                        attachments = new List<FileSystemItem>();
+                        attachments = Array.Empty<FileSystemItem>();
                     }
                     
                     //Temporary add empty array of documents

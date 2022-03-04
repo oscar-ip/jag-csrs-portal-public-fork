@@ -189,10 +189,11 @@ namespace Csrs.Api.Services
                     // call the web service
                     var request = new FolderFilesRequest
                     {
-                        DocumentType = documentType,
                         EntityId = entityId,
                         EntityName = entityName,
-                        FolderName = folderName
+                        FolderName = folderName,
+                        DocumentType = documentType
+
                     };
 
                     var result = _fileManagerClient.FolderFiles(request);
@@ -203,10 +204,16 @@ namespace Csrs.Api.Services
                         // convert the results to the view model.
                         foreach (var fileDetails in result.Files)
                         {
-                            var fileSystemItemVM = new FileSystemItem
+                            var name = fileDetails.Name;
+                            if (fileDetails.Name.IndexOf("__") != -1)
+                            {
+                                name = fileDetails.Name.Substring(fileDetails.Name.IndexOf("__") + 2);
+                            }
+                                var fileSystemItemVM = new FileSystemItem
                             {
                                 // remove the document type text from file name
-                                Name = fileDetails.Name.Substring(fileDetails.Name.IndexOf("__") + 2),
+                                
+                                Name = name,
                                 // convert size from bytes (original) to KB
                                 Size = fileDetails.Size,
                                 ServerRelativeUrl = fileDetails.ServerRelativeUrl,
