@@ -35,12 +35,10 @@ namespace Csrs.Api.Services
 
                 if (file._owninguserValue is not null)
                 {
-                    task.OwninguserTaskODataBind = _dynamicsClient.GetEntityURI("systemusers", file._owninguserValue);
+                    task.OwninguserODataBind = _dynamicsClient.GetEntityURI("systemusers", file._owninguserValue);
+                    task.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", file._owninguserValue);
                 }
-                else if (file._owningteamValue is not null)
-                {
-                    task.OwningteamTaskODataBind = _dynamicsClient.GetEntityURI("teams", file._owningteamValue);
-                }
+                
 
                 task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", file.SsgCsrsfileid);
 

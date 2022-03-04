@@ -4,12 +4,11 @@ import {
   Output,
   EventEmitter,
   Input,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfigService } from 'app/services/app-config.service';
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,17 +19,12 @@ export class HeaderComponent implements OnInit {
   public fullName: string;
   @Output() public toggle: EventEmitter<void>;
 
-  public environment: string;
-  public version: string;
 
-  constructor(
-    protected logger: LoggerService,
-    private appConfigService: AppConfigService
-  ) {
-    this.toggle = new EventEmitter<void>();
- 
-    this.environment = this.appConfigService.environment;
-    this.version = this.appConfigService.version;
+  constructor(protected logger: LoggerService,
+              private appConfigService: AppConfigService,
+              ) {
+
+          this.toggle = new EventEmitter<void>();
   }
 
   public async ngOnInit() {

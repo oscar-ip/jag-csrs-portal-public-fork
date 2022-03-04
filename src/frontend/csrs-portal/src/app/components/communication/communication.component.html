@@ -18,7 +18,7 @@
                 <div class="container">
                   <div class="row">
                     <div class="col-md-1">
-                      <h2 style="font-weight: bold;">File #:</h2>
+                      <label>File #:</label>
                     </div>
                     <div class="col-md-1">
                       <mat-form-field>
@@ -36,7 +36,7 @@
                     <div class="col-md-10">
                       <div style="float: right;">
                         <h2 class="font_normal">
-                          New message
+                          <img src="/assets/Message_icon.svg" /> <a target="blank" (click)="selectTab(2)">New Message</a>
                         </h2>
                       </div>
 
@@ -65,13 +65,12 @@
 
                 <ng-container matColumnDef="email">
                   <th mat-header-cell *matHeaderCellDef> Attachment </th>
-                  <td mat-cell *matCellDef="let element"> {{element.isRead}} </td>
+                  <td mat-cell *matCellDef="let element"><div *ngIf="element.attachment"><img src="/assets/PDF-black_icon.svg" /><div *ngFor="let doc of element.documents">{{doc.documentType}}</div></div></td>
                 </ng-container>
 
                 <ng-container matColumnDef="phone">
                   <th mat-header-cell *matHeaderCellDef> Actions </th>
-                  <td class="font_normal" mat-cell *matCellDef="let element"> <a target="blank" (click)="ontable(element)">View</a> </td>
-                  <td class="font_normal" mat-cell *matCellDef="let element"> <a target="blank" (click)="setMessageRead(element)">Mark As Read</a> </td>
+                  <td class="font_normal" mat-cell *matCellDef="let element"> <img src="/assets/View_icon.svg" /><a target="blank" (click)="ontable(element)">View</a> </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
@@ -114,7 +113,7 @@
                   <tr class="text-dark">
                     <td><strong>Notice-Assessment-10203.pdf</strong></td>
                     <td>1 MB</td>
-                    <td><a href="#">Download</a></td>
+                    <td><img src="/assets/Download_icon.svg" /><a href="#">Download</a></td>
                   </tr>
 
                 </table>
@@ -132,7 +131,7 @@
               <div class="container">
                 <div class="row">
                   <div class="col-1">
-                    <h2 style="font-weight: bold;">File #:</h2>
+                    <label>File #:</label>
                   </div>
                   <div class="col">
                     <mat-form-field>
@@ -334,7 +333,7 @@
                 </div>
                 <div class="row">
                   <div class="md-textarea">
-                    <label style="font-weight: bold;">Message:</label>
+                    <label>Message:</label>
                     <mat-form-field class="w-100">
                       <textarea matInput
                                 placeholder="Type your message here ... 500 character max"

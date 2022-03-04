@@ -422,6 +422,11 @@ openDialog(): void {
   }
 
   setMessageRead(element) {
+    for (var i = 0; i < this.messages.length; i++) {
+      if (this.messages[i].messageId == element.messageId) {
+        this.messages[i].isRead = true;
+      }
+    }
     this.messageService.apiMessageReadGet(element.messageId).subscribe({
       next: (data) => {
       },
@@ -487,4 +492,14 @@ openDialog(): void {
       });
 
   }
+  selectTab(index) {
+    this.selectedTab = 0;
+    console.log('index ' + index);
+    if (index) {
+      this.selectedTab = index;
+    }
+  }
 }
+
+
+

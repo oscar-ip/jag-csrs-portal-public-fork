@@ -76,7 +76,7 @@ namespace Csrs.Api.Features.UserRequests
                 }
                 else
                 {
-                    _logger.LogInformation("No associated party, cannot create User Request");
+                    _logger.LogInformation($"No associated party, cannot create User Request. BCEID {userId}");
                     return new Response("No Party Associated");
                 }
                 _logger.AddPartyId(party.SsgCsrspartyid);
@@ -96,22 +96,19 @@ namespace Csrs.Api.Features.UserRequests
                 }
                 catch (HttpOperationException exception) when (exception.Response?.StatusCode == HttpStatusCode.NotFound)
                 {
-                    _logger.LogInformation("No file associated, cannot create User Request");
+                    _logger.LogError(exception, $"ERROR in fetching file {request.FileId}");
                     return new Response("Incorrect file number supplied");
                 }
                 if (originFile != null)
                 {
                     if (originFile._owninguserValue != null)
                     {
-                        task.OwninguserTaskODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owninguserValue);
-                    }
-                    else if (originFile._owningteamValue != null)
-                    {
-                        task.OwningteamTaskODataBind = _dynamicsClient.GetEntityURI("teams", originFile._owningteamValue);
+                        task.OwninguserODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owninguserValue);
+                        task.OwnerIdODataBind = _dynamicsClient.GetEntityURI("systemusers", originFile._owninguserValue);
                     }
                     else
                     {
-                        _logger.LogInformation("File has no owner, cannot create User Request");
+                        _logger.LogInformation($"File has no owner, cannot create User Request. File {request.FileId}");
                         return new Response("File has no owner");
                     }
                     task.RegardingobjectidSsgCsrsfileODataBind = _dynamicsClient.GetEntityURI("ssg_csrsfiles", originFile.SsgCsrsfileid);

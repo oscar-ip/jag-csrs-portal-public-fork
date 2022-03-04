@@ -42,7 +42,7 @@ export class LandingComponent implements OnInit {
                                           accessToken,
                                           idToken,
                                           configId,
-                                          errorMessage }) => {
+  errorMessage }) => {
           this.logger.info('isAuthenticated: ', isAuthenticated);
           this.logger.info('userData: ', userData);
           this.logger.info('accessToken: ', accessToken);
