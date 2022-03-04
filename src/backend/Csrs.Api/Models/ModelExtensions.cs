@@ -218,7 +218,7 @@ namespace Csrs.Api.Models
             message.MessageId = inMessage.SsgCsrscommunicationmessageid;
             message.FileId = inMessage._ssgCsrsfileValue;
             message.FileNumber = inMessage.SsgCsrsFile.SsgFilenumber;
-            message.Attachment = inMessage.SsgCsrsmessageattachment;
+            message.Attachment = documents.Count > 0;
             message.Status = inMessage.Statuscode;
             message.Documents = documents;
             message.RecievingParty = inMessage._ssgTopartyValue;
