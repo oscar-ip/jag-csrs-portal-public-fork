@@ -44,7 +44,7 @@ namespace Csrs.Interfaces
         public SharePointFileManager(SharePointFileManagerConfiguration configuration, ISamlAuthenticator samlAuthenticator, ILogger<SharePointFileManager> logger)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _samlAuthenticator = samlAuthenticator;
+            _samlAuthenticator = samlAuthenticator ?? throw new ArgumentNullException(nameof(samlAuthenticator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
