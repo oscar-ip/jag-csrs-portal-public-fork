@@ -90,6 +90,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
   isHiddens: any = [];
 
   dateOfOrder: Date;
+  birthOfDateOtherParty: Date;
+
 
   constructor(public oidc : OidcSecurityService,
               private eventService: PublicEventsService,
@@ -236,6 +238,13 @@ export class ChildApplicationQuestionComponent implements OnInit {
     event.stopPropagation();
     this.dateOfOrder = null;
   }
+
+  clearDateOtherParty(event) {
+    event.stopPropagation();
+    this.birthOfDateOtherParty = null;
+  }
+
+
 
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
