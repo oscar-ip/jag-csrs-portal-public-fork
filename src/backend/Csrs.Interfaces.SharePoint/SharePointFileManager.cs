@@ -41,11 +41,6 @@ namespace Csrs.Interfaces
         private readonly ISamlAuthenticator _samlAuthenticator;
         private readonly ILogger<SharePointFileManager> _logger;
 
-        // not used - required if using sub-sites
-        private string WebName { get; } = String.Empty;
-        // not used - was used in original code setting to sharePointOdataUri
-        private string ApiEndpoint { get; } = String.Empty;
-
         public SharePointFileManager(SharePointFileManagerConfiguration configuration, ISamlAuthenticator samlAuthenticator, ILogger<SharePointFileManager> logger)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -79,24 +74,19 @@ namespace Csrs.Interfaces
         {
             folderName = FixFoldername(folderName);
 
-            string serverRelativeUrl = "";
-            // ensure the webname has a slash.
-            if (!string.IsNullOrEmpty(WebName))
-            {
-                serverRelativeUrl += $"{WebName}/";
-            }
+            string serverRelativeUrl = Uri.EscapeUriString(listTitle);
 
-            serverRelativeUrl += Uri.EscapeUriString(listTitle);
             if (!string.IsNullOrEmpty(folderName))
             {
                 serverRelativeUrl += "/" + Uri.EscapeUriString(folderName);
             }
 
-            string _responseContent = null;
-            HttpRequestMessage _httpRequest = new HttpRequestMessage
+            serverRelativeUrl = EscapeApostrophe(serverRelativeUrl);
+            string responseContent = null;
+            using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(ApiEndpoint + "web/getFolderByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')/files"),
+                RequestUri = new Uri(_configuration.Resource, $"_api/web/getFolderByServerRelativeUrl('{serverRelativeUrl}')/files"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
@@ -104,34 +94,29 @@ namespace Csrs.Interfaces
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var _httpResponse = await httpClient.SendAsync(_httpRequest);
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            using var response = await httpClient.SendAsync(request);
+            HttpStatusCode statusCode = response.StatusCode;
 
-            if ((int)_statusCode != 200)
+            if ((int)statusCode != 200)
             {
-                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
 
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
                 throw ex;
             }
             else
             {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync();
+                responseContent = await response.Content.ReadAsStringAsync();
             }
 
             // parse the response
             JObject responseObject = null;
             try
             {
-                responseObject = JObject.Parse(_responseContent);
+                responseObject = JObject.Parse(responseContent);
             }
             catch (JsonReaderException jre)
             {
@@ -219,10 +204,10 @@ namespace Csrs.Interfaces
 
             string relativeUrl = EscapeApostrophe($"/{listTitle}/{folderName}");
 
-            HttpRequestMessage endpointRequest = new HttpRequestMessage
+            using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(ApiEndpoint + $"web/folders/add('{relativeUrl}')"),
+                RequestUri = new Uri(_configuration.Resource, $"_api/web/folders/add('{relativeUrl}')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
@@ -233,27 +218,22 @@ namespace Csrs.Interfaces
             StringContent strContent = new StringContent("", Encoding.UTF8);
             strContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
 
-            endpointRequest.Content = strContent;
+            request.Content = strContent;
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
-            HttpStatusCode _statusCode = response.StatusCode;
+            using var response = await httpClient.SendAsync(request);
+            HttpStatusCode statusCode = response.StatusCode;
 
             // check to see if the folder creation worked.
-            if (!(_statusCode == HttpStatusCode.OK || _statusCode == HttpStatusCode.Created))
+            if (!(statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.Created))
             {
-                string _responseContent;
-                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+                string responseContent;
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
 
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
                 throw ex;
             }
             else
@@ -270,7 +250,7 @@ namespace Csrs.Interfaces
         /// <returns></returns>
         public async Task<object> CreateDocumentLibrary(string listTitle, string documentTemplateUrlTitle = null)
         {
-            HttpRequestMessage endpointRequest = new HttpRequestMessage(HttpMethod.Post, ApiEndpoint + "web/Lists");
+            using var listsRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(_configuration.Resource, "_api/web/Lists"));
 
             if (string.IsNullOrEmpty(documentTemplateUrlTitle))
             {
@@ -282,39 +262,34 @@ namespace Csrs.Interfaces
             string jsonString = JsonConvert.SerializeObject(library);
             StringContent strContent = new StringContent(jsonString, Encoding.UTF8);
             strContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
-            endpointRequest.Content = strContent;
+            listsRequest.Content = strContent;
             // fix for bad request
-            endpointRequest.Headers.Add("odata-version", "3.0");
+            listsRequest.Headers.Add("odata-version", "3.0");
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
-            HttpStatusCode _statusCode = response.StatusCode;
+            using var listsResponse = await httpClient.SendAsync(listsRequest);
+            HttpStatusCode statusCode = listsResponse.StatusCode;
 
-            if (_statusCode != HttpStatusCode.Created)
+            if (statusCode != HttpStatusCode.Created)
             {
-                string _responseContent = null;
-                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+                string responseContent = null;
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
+                responseContent = await listsResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(listsRequest, null);
+                ex.Response = new HttpResponseMessageWrapper(listsResponse, responseContent);
 
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
                 throw ex;
             }
             else
             {
-                jsonString = await response.Content.ReadAsStringAsync();
+                jsonString = await listsResponse.Content.ReadAsStringAsync();
                 var ob = Newtonsoft.Json.JsonConvert.DeserializeObject<DocumentLibraryResponse>(jsonString);
 
                 if (listTitle != documentTemplateUrlTitle)
                 {
                     // update list title
-                    endpointRequest = new HttpRequestMessage(HttpMethod.Post, $"{ApiEndpoint}web/lists(guid'{ob.d.Id}')");
+                    using var titleRequest = new HttpRequestMessage(HttpMethod.Post, new Uri (_configuration.Resource, "_api/web/lists(guid'{ob.d.Id}')"));
                     var type = new { type = "SP.List" };
                     var request = new
                     {
@@ -324,13 +299,13 @@ namespace Csrs.Interfaces
                     jsonString = JsonConvert.SerializeObject(request);
                     strContent = new StringContent(jsonString, Encoding.UTF8);
                     strContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
-                    endpointRequest.Headers.Add("IF-MATCH", "*");
-                    endpointRequest.Headers.Add("X-HTTP-Method", "MERGE");
-                    endpointRequest.Content = strContent;
+                    titleRequest.Headers.Add("IF-MATCH", "*");
+                    titleRequest.Headers.Add("X-HTTP-Method", "MERGE");
+                    titleRequest.Content = strContent;
 
-                    response = await httpClient.SendAsync(endpointRequest);
-                    jsonString = await response.Content.ReadAsStringAsync();
-                    response.EnsureSuccessStatusCode();
+                    using var titleResponse = await httpClient.SendAsync(titleRequest);
+                    jsonString = await titleResponse.Content.ReadAsStringAsync();
+                    titleResponse.EnsureSuccessStatusCode();
                 }
             }
 
@@ -339,33 +314,28 @@ namespace Csrs.Interfaces
 
         public async Task<Object> UpdateDocumentLibrary(string listTitle)
         {
-            HttpRequestMessage endpointRequest = new HttpRequestMessage(HttpMethod.Put, $"{ApiEndpoint}web/Lists");
+            using var request = new HttpRequestMessage(HttpMethod.Put, new Uri(_configuration.Resource, "_api/web/Lists"));
 
             var library = CreateNewDocumentLibraryRequest(listTitle);
 
             string jsonString = JsonConvert.SerializeObject(library);
             StringContent strContent = new StringContent(jsonString, Encoding.UTF8);
             strContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
-            endpointRequest.Content = strContent;
+            request.Content = strContent;
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
-            HttpStatusCode _statusCode = response.StatusCode;
+            using var response = await httpClient.SendAsync(request);
+            HttpStatusCode statusCode = response.StatusCode;
 
-            if (_statusCode != HttpStatusCode.Created)
+            if (statusCode != HttpStatusCode.Created)
             {
-                string _responseContent = null;
-                var ex = new SharePointRestException($"Operation returned an invalid status code '{_statusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+                string responseContent = null;
+                var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
 
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
                 throw ex;
             }
             else
@@ -408,30 +378,24 @@ namespace Csrs.Interfaces
 
             bool result = false;
             // Delete is very similar to a GET.
-            string serverRelativeUrl = "/";
-            if (!string.IsNullOrEmpty(WebName))
-            {
-                serverRelativeUrl += $"{WebName}/";
-            }
+            string serverRelativeUrl = $"{listTitle}/{folderName}";
 
-            serverRelativeUrl += $"{listTitle}/{folderName}";
-
-            HttpRequestMessage endpointRequest = new HttpRequestMessage
+            using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(ApiEndpoint + "web/getFolderByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')"),
+                RequestUri = new Uri(_configuration.Resource, "_api/web/getFolderByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
             };
 
             // We want to delete this folder.
-            endpointRequest.Headers.Add("IF-MATCH", "*");
-            endpointRequest.Headers.Add("X-HTTP-Method", "DELETE");
+            request.Headers.Add("IF-MATCH", "*");
+            request.Headers.Add("X-HTTP-Method", "DELETE");
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
@@ -439,17 +403,12 @@ namespace Csrs.Interfaces
             }
             else
             {
-                string _responseContent = null;
+                string responseContent = null;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
 
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
                 throw ex;
             }
 
@@ -475,33 +434,24 @@ namespace Csrs.Interfaces
             folderName = FixFoldername(folderName);
 
             Object result = null;
-            string serverRelativeUrl = "/";
-            if (!string.IsNullOrEmpty(WebName))
-            {
-                serverRelativeUrl += $"{WebName}/";
-            }
+            string serverRelativeUrl = $"{listTitle}/{folderName}";
 
-            serverRelativeUrl += $"{listTitle}/{folderName}";
-
-
-            HttpRequestMessage endpointRequest = new HttpRequestMessage()
+            using var endpointRequest = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(ApiEndpoint + "web/getFolderByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')"),
+                RequestUri = new Uri(_configuration.Resource, "_api/web/getFolderByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
             };
 
-
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(endpointRequest);
             string jsonString = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-
                 result = JsonConvert.DeserializeObject(jsonString);
             }
 
@@ -512,12 +462,11 @@ namespace Csrs.Interfaces
         {
             Object result = null;
             string title = Uri.EscapeUriString(listTitle);
-            string query = $"web/lists/GetByTitle('{title}')";
 
-            HttpRequestMessage endpointRequest = new HttpRequestMessage
+            var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(ApiEndpoint + query),
+                RequestUri = new Uri(_configuration.Resource, $"_api/web/lists/GetByTitle('{title}')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
@@ -525,12 +474,11 @@ namespace Csrs.Interfaces
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(request);
             string jsonString = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-
                 result = JsonConvert.DeserializeObject(jsonString);
             }
 
@@ -584,29 +532,26 @@ namespace Csrs.Interfaces
         private string GetServerRelativeURL(string listTitle, string folderName)
         {
             folderName = FixFoldername(folderName);
-            string serverRelativeUrl = "";
-            if (!string.IsNullOrEmpty(WebName))
-            {
-                serverRelativeUrl += $"{WebName}/";
-            }
-
-            serverRelativeUrl += Uri.EscapeUriString(listTitle) + "/" + Uri.EscapeUriString(folderName);
-
+            string serverRelativeUrl = Uri.EscapeUriString(listTitle) + "/" + Uri.EscapeUriString(folderName);
             return serverRelativeUrl;
         }
 
         private string GenerateUploadRequestUriString(string folderServerRelativeUrl, string fileName)
         {
-            string requestUriString = ApiEndpoint + "web/getFolderByServerRelativeUrl('" + EscapeApostrophe(folderServerRelativeUrl) + "')/Files/add(url='"
-                + EscapeApostrophe(fileName) + "',overwrite=true)?$expand=ListItemAllFields";
-            return requestUriString;
+            folderServerRelativeUrl = EscapeApostrophe(folderServerRelativeUrl);
+            fileName = EscapeApostrophe(fileName);
+
+            Uri requestUri = new Uri(_configuration.Resource, $"_api/web/getFolderByServerRelativeUrl('{folderServerRelativeUrl}')/Files/add(url='{fileName}',overwrite=true)?$expand=ListItemAllFields");
+            return requestUri.ToString();
         }
 
         private string GenerateUpdateListItemUriString(string listTitle, string id)
         {
-            string requestUriString = ApiEndpoint + "web/lists/getbytitle('" + EscapeApostrophe(listTitle) + "')/items("
-                + EscapeApostrophe(id) + ")";
-            return requestUriString;
+            listTitle = EscapeApostrophe(listTitle);
+            id = EscapeApostrophe(id);
+
+            Uri requestUri = new Uri(_configuration.Resource, $"_api/web/lists/getbytitle('{listTitle}')/items({id})");
+            return requestUri.ToString();
         }
 
         /// <summary>
@@ -675,7 +620,7 @@ namespace Csrs.Interfaces
             string serverRelativeUrl = GetServerRelativeURL(listTitle, folderName);
             string requestUriString = GenerateUploadRequestUriString(serverRelativeUrl, fileName);
 
-            HttpRequestMessage endpointRequest = new HttpRequestMessage
+            using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(requestUriString),
@@ -686,34 +631,28 @@ namespace Csrs.Interfaces
 
             ByteArrayContent byteArrayContent = new ByteArrayContent(data);
             byteArrayContent.Headers.Add(@"content-length", data.Length.ToString());
-            endpointRequest.Content = byteArrayContent;
+            request.Content = byteArrayContent;
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(request);
             var streamData = response.Content.ReadAsStringAsync().Result;
 
             var listItemData = JsonConvert.DeserializeObject<AddFileResponse>(streamData);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-
                 return fileName;
-
             }
             else
             {
-                string _responseContent = null;
+                string responseContent = null;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
 
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
+                request.Dispose();
                 throw ex;
             }
         }
@@ -731,7 +670,7 @@ namespace Csrs.Interfaces
             string result = null;
             string requestUriString = GenerateUpdateListItemUriString(listTitle, itemData.ListItemAllFields.ID.ToString());
 
-            HttpRequestMessage endpointRequest = new HttpRequestMessage(HttpMethod.Post, requestUriString);
+            using var request = new HttpRequestMessage(HttpMethod.Post, requestUriString);
 
             var listItem = CreateUpdateListItemRequestRequest(contentType, fileName, listTitle);
 
@@ -739,14 +678,14 @@ namespace Csrs.Interfaces
             StringContent strContent = new StringContent(jsonString, Encoding.UTF8);
             strContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
 
-            endpointRequest.Headers.Add("Accept", "application/json;odata=verbose");
+            request.Headers.Add("Accept", "application/json;odata=verbose");
             //endpointRequest.Headers.Add("Accept", "*/*");
-            endpointRequest.Headers.Add("X-Http-Method", "MERGE");
+            request.Headers.Add("X-Http-Method", "MERGE");
             //endpointRequest.Headers.Add("X-Requested-With", "XMLHttpRequest");
-            endpointRequest.Headers.Add("IF-MATCH", "*");
+            request.Headers.Add("IF-MATCH", "*");
             //endpointRequest.Headers.Add("IF-MATCH", itemData.ETag);
-            endpointRequest.Headers.Add("odata-version", "3.0");
-            endpointRequest.Content = strContent;
+            request.Headers.Add("odata-version", "3.0");
+            request.Content = strContent;
 
             //ByteArrayContent byteArrayContent = new ByteArrayContent(data);
             //byteArrayContent.Headers.Add(@"content-length", data.Length.ToString());
@@ -754,7 +693,7 @@ namespace Csrs.Interfaces
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(request);
             var streamData = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent)
@@ -763,17 +702,12 @@ namespace Csrs.Interfaces
             }
             else
             {
-                string _responseContent = null;
+                string responseContent = null;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
 
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
                 throw ex;
             }
 
@@ -789,15 +723,17 @@ namespace Csrs.Interfaces
         {
             byte[] result = null;
 
+            url = EscapeApostrophe(url);
+
             HttpRequestMessage endpointRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(ApiEndpoint + "web/GetFileByServerRelativeUrl('" + EscapeApostrophe(url) + "')/$value"),
+                RequestUri = new Uri(_configuration.Resource, $"_api/web/GetFileByServerRelativeUrl('{url}')/$value"),
             };
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(endpointRequest);
 
             using MemoryStream ms = new MemoryStream();
             await response.Content.CopyToAsync(ms);
@@ -813,7 +749,7 @@ namespace Csrs.Interfaces
             HttpRequestMessage endpointRequest = new HttpRequestMessage()
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(ApiEndpoint + "contextinfo"),
+                RequestUri = new Uri(_configuration.Resource, "_api/contextinfo"),
                 Headers = {
                     { "Accept", "application/json;odata=verbose" }
                 }
@@ -853,20 +789,11 @@ namespace Csrs.Interfaces
         /// <returns></returns>
         public async Task<bool> DeleteFile(string listTitle, string folderName, string fileName)
         {
-            bool result = false;
             // Delete is very similar to a GET.
-            string serverRelativeUrl = "";
-            if (!string.IsNullOrEmpty(WebName))
-            {
-                serverRelativeUrl += $"{WebName}/";
-            }
-
             folderName = FixFoldername(folderName);
+            string serverRelativeUrl = $"/{listTitle}/{folderName}/{fileName}";
 
-            serverRelativeUrl += $"/{listTitle}/{folderName}/{fileName}";
-
-            result = await DeleteFile(serverRelativeUrl);
-
+            bool result = await DeleteFile(serverRelativeUrl);
             return result;
         }
 
@@ -875,22 +802,24 @@ namespace Csrs.Interfaces
             bool result = false;
             // Delete is very similar to a GET.
 
-            HttpRequestMessage endpointRequest = new HttpRequestMessage
+            serverRelativeUrl = EscapeApostrophe(serverRelativeUrl);
+
+            using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(ApiEndpoint + "web/GetFileByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')"),
+                RequestUri = new Uri(_configuration.Resource, $"_api/web/GetFileByServerRelativeUrl('{serverRelativeUrl}')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
             };
 
             // We want to delete this file.
-            endpointRequest.Headers.Add("IF-MATCH", "*");
-            endpointRequest.Headers.Add("X-HTTP-Method", "DELETE");
+            request.Headers.Add("IF-MATCH", "*");
+            request.Headers.Add("X-HTTP-Method", "DELETE");
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
@@ -898,17 +827,12 @@ namespace Csrs.Interfaces
             }
             else
             {
-                string _responseContent = null;
+                string responseContent = null;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
 
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
                 throw ex;
             }
 
@@ -923,12 +847,16 @@ namespace Csrs.Interfaces
         public async Task<bool> RenameFile(string oldServerRelativeUrl, string newServerRelativeUrl)
         {
             bool result = false;
-            string url = $"{ApiEndpoint}web/GetFileByServerRelativeUrl('{EscapeApostrophe(oldServerRelativeUrl)}')/moveto(newurl='{EscapeApostrophe(newServerRelativeUrl)}', flags=1)";
-            HttpRequestMessage endpointRequest = new HttpRequestMessage(HttpMethod.Post, url);
+
+            oldServerRelativeUrl = EscapeApostrophe(oldServerRelativeUrl);
+            newServerRelativeUrl = EscapeApostrophe(newServerRelativeUrl);
+
+            Uri url = new Uri(_configuration.Resource, $"_api/web/GetFileByServerRelativeUrl('{oldServerRelativeUrl}')/moveto(newurl='{newServerRelativeUrl}', flags=1)");
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            var response = await httpClient.SendAsync(endpointRequest);
+            using var response = await httpClient.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -936,16 +864,11 @@ namespace Csrs.Interfaces
             }
             else
             {
-                string _responseContent = null;
+                string responseContent = null;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{response.StatusCode}'");
-                _responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ex.Request = new HttpRequestMessageWrapper(endpointRequest, null);
-                ex.Response = new HttpResponseMessageWrapper(response, _responseContent);
-                endpointRequest.Dispose();
-                if (response != null)
-                {
-                    response.Dispose();
-                }
+                responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, responseContent);
                 throw ex;
             }
 

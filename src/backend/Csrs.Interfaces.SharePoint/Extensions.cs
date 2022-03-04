@@ -20,6 +20,8 @@ namespace Csrs.Interfaces
             // that can be changed to effectively clear the cache
             services.AddSingleton<ITokenCache<SamlTokenParameters, string>, SamlTokenTokenCache>();
             services.AddTransient<ISamlAuthenticator, SamlAuthenticator>();
+
+            services.AddMemoryCache();
         }
 
         private static SharePointFileManagerConfiguration GetSharePointFileManagerConfiguration(IServiceProvider serviceProvider)

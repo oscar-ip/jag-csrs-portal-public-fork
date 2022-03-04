@@ -183,9 +183,12 @@ namespace Csrs.Interfaces
             // the response could be 302 as well
             if (!httpPostResponse.IsSuccessStatusCode && httpPostResponse.StatusCode != HttpStatusCode.Found)
             {
-                _logger.LogError("POST request to {TrustUri} was not successful, HttpStatusCode={HttpStatusCode}",
+                var responseContent = await httpPostResponse.Content.ReadAsStringAsync();
+
+                _logger.LogError("POST request to {TrustUri} was not successful, HttpStatusCode={HttpStatusCode}, Response={Response}",
                     trustUri,
-                    httpPostResponse.StatusCode);
+                    httpPostResponse.StatusCode,
+                    responseContent);
             }
 
             // get the schema and authority of the SAML server (ie Sharepoint)
