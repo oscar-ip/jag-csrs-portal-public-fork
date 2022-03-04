@@ -318,9 +318,15 @@ export class CommunicationComponent implements OnInit {
 
   ontable(element) {
     if (element) {
-      this.setMessageRead(element);
+      if (!element.isRead) {
+        this.setMessageRead(element);
+        if (this.unreadCnt > 0) {
+          this.unreadCnt = this.unreadCnt - 1;
+        }
+      }
       for (var i = 0; i < this.messages.length; i++) {
         if (this.messages[i].messageId == element.messageId) {
+          console.log('setting selected message')
           this.selectedInboxMessage = this.messages[i];
         }
       }

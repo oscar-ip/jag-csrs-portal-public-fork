@@ -87,7 +87,7 @@
                   <p class="back-to-messages" (click)="ontable('')"><mat-icon style="vertical-align:middle;">arrow_back</mat-icon>  Back to all messages</p>
                   <div class="row">
                     <div class="col-md-2">
-                      <h2 style="font-weight: bold;">File #: <span style="font-size: 14px;color: black;">{{selectedInboxFile.fileNumber}}</span>  </h2>
+                      <h2 style="font-weight: bold;">File #: <span style="font-size: 14px;color: black;">{{selectedInboxMessage.fileNumber}}</span>  </h2>
                     </div>
                     <div class="col-md-5">
                       <h2 style="font-weight: bold;">Date : <span style="font-size: 14px;color: black;">{{selectedInboxMessage.date | date:'shortDate'}}</span> </h2>
@@ -103,16 +103,16 @@
                   <h2><strong>{{selectedInboxMessage.subject}}</strong></h2>
                   <p>{{selectedInboxMessage.content}}</p>
                 </div>
-                <table class="table">
+                <table class="table" *ngIf="selectedInboxMessage.attachment">
                   <tr>
                     <th>Attachment(s)</th>
                     <th>File size</th>
                     <th>Actions</th>
                   </tr>
 
-                  <tr class="text-dark">
-                    <td><strong>Notice-Assessment-10203.pdf</strong></td>
-                    <td>1 MB</td>
+                  <tr class="text-dark" *ngFor="let doc of selectedInboxMessage.documents" >
+                    <td><strong>{{doc.name}}</strong></td>
+                    <td>{{doc.size}}</td>
                     <td><img src="/assets/Download_icon.svg" /><a href="#">Download</a></td>
                   </tr>
 

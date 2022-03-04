@@ -86,7 +86,7 @@ namespace Csrs.Interfaces
             using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(_configuration.Resource, $"_api/web/getFolderByServerRelativeUrl('{serverRelativeUrl}')/files"),
+                RequestUri = new Uri(_configuration.Resource, $"_api/web/getFolderByServerRelativeUrl('/{serverRelativeUrl}')/files"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
@@ -133,26 +133,13 @@ namespace Csrs.Interfaces
                 // JToken.ToObject is a helper method that uses JsonSerializer internally
                 FileDetailsList searchResult = responseResult.ToObject<FileDetailsList>();
                 //filter by parameter documentType
-                int fileDoctypeEnd = searchResult.Name.IndexOf("__");
-                if (fileDoctypeEnd > -1)
-                {
-                    string fileDoctype = searchResult.Name.Substring(0, fileDoctypeEnd);
-                    if (fileDoctype == documentType)
-                    {
-                        searchResult.DocumentType = documentType;
-                    }
-                }
+                string fileDoctype = System.IO.Path.GetExtension(searchResult.Name).ToUpper();
+                searchResult.DocumentType = fileDoctype;
                 fileDetailsList.Add(searchResult);
-
                 if (searchResult.DocumentType == null)
                 {
                     searchResult.DocumentType = string.Empty;
                 }
-            }
-
-            if (documentType != null)
-            {
-                fileDetailsList = fileDetailsList.Where(f => f.DocumentType == documentType).ToList();
             }
             return fileDetailsList;
         }
@@ -383,7 +370,7 @@ namespace Csrs.Interfaces
             using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(_configuration.Resource, "_api/web/getFolderByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')"),
+                RequestUri = new Uri(_configuration.Resource, "_api/web/getFolderByServerRelativeUrl('/" + EscapeApostrophe(serverRelativeUrl) + "')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
@@ -439,7 +426,7 @@ namespace Csrs.Interfaces
             using var endpointRequest = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(_configuration.Resource, "_api/web/getFolderByServerRelativeUrl('" + EscapeApostrophe(serverRelativeUrl) + "')"),
+                RequestUri = new Uri(_configuration.Resource, "_api/web/getFolderByServerRelativeUrl('/" + EscapeApostrophe(serverRelativeUrl) + "')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
@@ -541,7 +528,7 @@ namespace Csrs.Interfaces
             folderServerRelativeUrl = EscapeApostrophe(folderServerRelativeUrl);
             fileName = EscapeApostrophe(fileName);
 
-            Uri requestUri = new Uri(_configuration.Resource, $"_api/web/getFolderByServerRelativeUrl('{folderServerRelativeUrl}')/Files/add(url='{fileName}',overwrite=true)?$expand=ListItemAllFields");
+            Uri requestUri = new Uri(_configuration.Resource, $"_api/web/getFolderByServerRelativeUrl('/{folderServerRelativeUrl}')/Files/add(url='{fileName}',overwrite=true)?$expand=ListItemAllFields");
             return requestUri.ToString();
         }
 
@@ -727,6 +714,7 @@ namespace Csrs.Interfaces
 
             HttpRequestMessage endpointRequest = new HttpRequestMessage
             {
+                //The URL is expected to begin with a slash.
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(_configuration.Resource, $"_api/web/GetFileByServerRelativeUrl('{url}')/$value"),
             };
@@ -807,7 +795,7 @@ namespace Csrs.Interfaces
             using var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(_configuration.Resource, $"_api/web/GetFileByServerRelativeUrl('{serverRelativeUrl}')"),
+                RequestUri = new Uri(_configuration.Resource, $"_api/web/GetFileByServerRelativeUrl('/{serverRelativeUrl}')"),
                 Headers = {
                     { "Accept", "application/json" }
                 }
