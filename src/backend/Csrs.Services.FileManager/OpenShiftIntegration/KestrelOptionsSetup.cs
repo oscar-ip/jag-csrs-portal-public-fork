@@ -22,6 +22,8 @@ namespace Csrs.Services.FileManager.OpenShiftIntegration
 
         public void Configure(KestrelServerOptions options)
         {
+            options.Limits.MaxRequestBodySize = 25 * 1024 * 1024; // allow large transfers
+
             if (_options.Value.UseHttps)
             {
                 options.ListenAnyIP(8080, configureListen =>

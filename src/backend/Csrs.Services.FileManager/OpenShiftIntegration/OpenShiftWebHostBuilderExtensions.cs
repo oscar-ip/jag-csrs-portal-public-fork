@@ -1,5 +1,6 @@
 ﻿using System;
 using Csrs.Services.FileManager.OpenShiftIntegration;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,7 +10,7 @@ namespace Microsoft.AspNetCore.Hosting;
 
 public static class OpenShiftWebHostBuilderExtensions
 {
-    public static IWebHostBuilder UseOpenShiftIntegration(this IWebHostBuilder builder, Action<OpenShiftIntegrationOptions> configureOptions)
+    public static WebApplicationBuilder UseOpenShiftIntegration(this WebApplicationBuilder builder, Action<OpenShiftIntegrationOptions> configureOptions)
     {
         ArgumentNullException.ThrowIfNull(builder);
         ArgumentNullException.ThrowIfNull(configureOptions);
@@ -17,9 +18,9 @@ public static class OpenShiftWebHostBuilderExtensions
         if (PlatformEnvironment.IsOpenShift)
         {
             // Clear the urls. We'll explicitly configure Kestrel depending on the options.
-            builder.UseUrls();
+            builder.WebHost.UseUrls();
 
-            builder.ConfigureServices(services =>
+            builder.WebHost.ConfigureServices(services =>
             {
                 services.Configure(configureOptions);
                 services.AddSingleton<OpenShiftCertificateLoader>();
