@@ -64,7 +64,7 @@ namespace Csrs.Interfaces.Dynamics
             {
                 
                 var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and ssg_csrsfileid eq {fileId}";
-                var select = new List<string> { "ssg_csrsfileid" };
+                var select = new List<string> { "ssg_csrsfileid", "ssg_filenumber" };
 
                 var files = await dynamicsClient.Ssgcsrsfiles.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
 
@@ -85,7 +85,7 @@ namespace Csrs.Interfaces.Dynamics
 
             bceid = GuidGuard(bceid);
 
-            List<string> select = new List<string> { "ssg_csrspartyid", "ssg_filenumber" };
+            List<string> select = new List<string> { "ssg_csrspartyid" };
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
             string filter = $"ssg_bceid_guid eq '{bceid}' and {ActiveStateCode}"; 
             try
