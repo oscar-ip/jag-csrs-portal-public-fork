@@ -85,7 +85,7 @@ namespace Csrs.Interfaces.Dynamics
 
             bceid = GuidGuard(bceid);
 
-            List<string> select = new List<string> { "ssg_csrspartyid", "ssg_filenumber" };
+            List<string> select = new List<string> { "ssg_csrspartyid" };
             List<string> orderby = new List<string> { "ssg_bceid_last_update desc" };
             string filter = $"ssg_bceid_guid eq '{bceid}' and {ActiveStateCode}"; 
             try
