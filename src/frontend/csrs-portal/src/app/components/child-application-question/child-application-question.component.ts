@@ -89,6 +89,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
   tooltips: any = [];
   isHiddens: any = [];
 
+  dateOfOrder: Date;
+
   constructor(public oidc : OidcSecurityService,
               private eventService: PublicEventsService,
               private _formBuilder: FormBuilder, private http: HttpClient,
@@ -229,6 +231,12 @@ export class ChildApplicationQuestionComponent implements OnInit {
     });
     //this.setFormDataFromLocal();
   }
+
+  clearDate(event) {
+    event.stopPropagation();
+    this.dateOfOrder = null;
+  }
+
   setFormDataFromLocal(){
   if (localStorage.getItem('formData')){
       let data = localStorage.getItem('formData');
