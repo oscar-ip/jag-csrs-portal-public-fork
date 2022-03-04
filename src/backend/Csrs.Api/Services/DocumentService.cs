@@ -104,6 +104,18 @@ namespace Csrs.Api.Services
 
             var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
 
+            MicrosoftDynamicsCRMssgCsrspartyCollection parties = await _dynamicsClient.GetPartyByBCeIdAsync(_userService.GetBCeIDUserId(), cancellationToken);
+            MicrosoftDynamicsCRMssgCsrsparty party;
+            string partyname = "";
+            if (parties.Value.Count > 0)
+            {
+                partyname = parties.Value.First().SsgFullname;
+            }
+            else
+            {
+                partyname = "unknown";
+            }
+
             if (dynamicsFile is null) return new NotFoundResult();
 
             var ms = new MemoryStream();
@@ -134,7 +146,6 @@ namespace Csrs.Api.Services
             {
                 _logger.LogError(ex, "Issue with file upload.");
             }
-
             if (uploadResult != null && uploadResult.ResultStatus == ResultStatus.Success)
             {
                 // Update modifiedon to current time
@@ -142,7 +153,7 @@ namespace Csrs.Api.Services
                 _logger.LogInformation("Success");
                 result.Message = "Uploaded Successfully";
                 result.Uploaded = true;
-                result.TaskCreated = await createTask(entityId, fileName, folderName, entityName, cancellationToken);
+                result.TaskCreated = await createTask(entityId, fileName, folderName, entityName, partyname, type, cancellationToken);
             }
             else
             {
@@ -295,12 +306,14 @@ namespace Csrs.Api.Services
             }
         }
 
-        private async Task<bool> createTask(string fileId, string fileName, string folderName, string entityName, CancellationToken cancellationToken)
+        private async Task<bool> createTask(string fileId, string fileName, string folderName, string entityName, string partyName, string docType, CancellationToken cancellationToken)
         {
-            
-            string subject = $"File: {fileName} Uploaded";
-            string description = $"For {fileId} \n Uploaded to: {entityName}\\{folderName}\\{fileName} ";
 
+            string subject = $"File: {fileName} Review Uploaded Document";
+            string description = $"Party: {partyName} \n" +
+                          $"Document Type: {docType} \n" +
+                          $"Document Location: {entityName}\\{folderName}\\{fileName}";
+            
             MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
             task.Subject = subject;
             task.Description = description;
