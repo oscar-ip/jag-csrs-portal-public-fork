@@ -660,7 +660,7 @@ export class QuestionnaireComponent implements OnInit {
  }
   public async ngOnInit() {
 
-    this.bceIdRegisterLink = this.config.bceIdRegisterLink;
+    this.bceIdRegisterLink = 'https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
       this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
       if (isAuthenticated === true)
