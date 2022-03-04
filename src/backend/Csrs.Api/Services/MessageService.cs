@@ -54,6 +54,7 @@ namespace Csrs.Api.Services
                     }catch (Exception ex)
                     {
                         _logger.LogInformation($"ERROR OCCURED getting attachment list for message {message.SsgCsrscommunicationmessageid} " + ex.Message);
+                        attachments = new List<FileSystemItem>();
                     }
                     
                     //Temporary add empty array of documents
