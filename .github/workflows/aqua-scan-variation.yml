@@ -19,17 +19,6 @@ jobs:
       # required for all workflows
       security-events: write
     steps:
-      #- name: GitHub related Basic Setup
-      #  uses: actions/checkout@v2
-      #  with:
-      #    # https://github.com/actions/checkout/issues/417#issuecomment-797769214
-      #    token: ${{ secrets.TOKEN_SELF_HOSTED_RUNNER }} 
-      #- name: Get git commit short sha
-      #  run: |
-      #    shortSha=$(echo $(git rev-parse HEAD))
-      #    echo "gitsha=$shortSha" >> $GITHUB_ENV 
-      #    echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-
       # Login to Openshift using OpenShift SA and Token of respective env (for test the images are in Tools space).
       # So we are using the service accounts credentials from tools space that is in GitHub too
       - name: Authenticate OC Env Specific SA
@@ -43,6 +32,7 @@ jobs:
           namespace:  ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
 
       # Scanning the Deployed Images in Test
+      # Reference: https://github.com/aquasecurity/trivy-action
       - name: TEST - Run Trivy vulnerability scanner on frontend
         uses: aquasecurity/trivy-action@master
         with:
@@ -52,7 +42,7 @@ jobs:
           #exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          #For troubleshooting
+          # For troubleshooting
           severity: 'CRITICAL,HIGH,MEDIUM'
         env:
           TRIVY_USERNAME:  ${{secrets.SA_GITHUB_ACTIONS}}
@@ -65,7 +55,7 @@ jobs:
       - name: TEST - Upload Artifact for Frontend
         uses: actions/upload-artifact@v2
         with:
-          name: frontnend-scan-artifact-test
+          name: frontend-scan-artifact-test
           path: 'trivy-results-frontend.sarif'
           retention-days: 15
 
@@ -152,7 +142,7 @@ jobs:
       - name: DEV - Upload Artifact for Frontend
         uses: actions/upload-artifact@v2
         with:
-          name: frontnend-scan-artifact-dev
+          name: frontend-scan-artifact-dev
           path: 'trivy-results-frontend.sarif'
           retention-days: 15
 
