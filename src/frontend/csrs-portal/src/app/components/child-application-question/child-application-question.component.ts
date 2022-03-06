@@ -92,7 +92,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
   dateOfOrder: Date;
   birthOfDateOtherParty: Date;
 
-
   constructor(public oidc : OidcSecurityService,
               private eventService: PublicEventsService,
               private _formBuilder: FormBuilder, private http: HttpClient,
@@ -487,12 +486,42 @@ editPage(stepper, index){
 
     usersArray.insert(arraylen, newUsergroup);
     this.isHiddens.push(false);
+    this.checkNextForChildren();
+  }
 
+
+  checkNullValue(a) {
+    if (typeof (a) == 'undefined' || a === null) {
+        return false;
+    } else {
+        return true;
+    }
+  }
+
+  checkNextForChildren(){
+    const users = this.fourthFormGroup1.value.users;
+    if (users.length === 1) return !this.fourthFormGroup1.valid;
+    else
+    {
+      if (users.length > 1)
+      {
+        if ( this.checkNullValue(users[users.length-1].firstName) === true  &&
+             this.checkNullValue(users[users.length-1].lastName)  === true &&
+             this.checkNullValue(users[users.length-1].birthdate) === true ) {
+                return false;
+             }
+        else
+        {
+          return true;
+        }
+      }
+    }
   }
 
   deletechild(index){
     this.fourthFormGroup1.get('users')['controls'].splice(index,1)
     this.isHiddens.splice(index);
+    this.checkNextForChildren();
   }
 
 
