@@ -114,7 +114,8 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                  <input matInput [matDatepicker]="picker2" [max]="today" formControlName="birthdate">
+                  <input matInput [matDatepicker]="picker2" [max]="today" formControlName="birthdate" readonly
+                  (click)="picker2.open()">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
                   <mat-error>{{ errorMessage + errorDateMessage | json }}</mat-error>
@@ -281,7 +282,9 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth</mat-label>
-                  <input matInput [matDatepicker]="picker" [max]="today" formControlName="birthdate">
+                  <input matInput [matDatepicker]="picker" [max]="today" formControlName="birthdate" readonly
+                  (click)="picker.open()"  [(ngModel)]="birthOfDateOtherParty"/>
+                  <mat-icon matDatepickerToggleIcon (click)="clearDateOtherParty($event)" class="cross-mat-icon">clear</mat-icon>
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                   <mat-error>{{ errorDateMessage | json }}</mat-error>
@@ -417,7 +420,8 @@
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
                     <mat-label>Date of birth<span class="text-danger">*</span></mat-label>
-                    <input matInput (dateChange)="onDateChange($event,i)" [matDatepicker]="picker4" [max]="today" formControlName="birthdate"/>
+                    <input matInput (dateChange)="onDateChange($event,i)" [matDatepicker]="picker4" [max]="today" formControlName="birthdate"
+                    readonly (click)="picker4.open()" />
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4 startView="multi-year"></mat-datepicker>
                     <mat-error>{{ errorMessage + errorDateMessage | json }}</mat-error>
@@ -483,11 +487,12 @@
                 </mat-form-field>
               </div>
               <div class="col-md-6">
-                <span>Date of order or agreement
-                  <mat-icon *ngIf='tooltips[1]' matTooltip={{tooltips[1]}}
+                <span>Date of order or agreement<mat-icon *ngIf='tooltips[1]' matTooltip={{tooltips[1]}}
                   #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></span>
                 <mat-form-field class="w-100">
-                  <input matInput [matDatepicker]="picker1" [max]="today" formControlName="orderDate"/>
+                  <input matInput [matDatepicker]="picker1" [max]="today" formControlName="orderDate" readonly
+                  (click)="picker1.open()" [(ngModel)]="dateOfOrder"/>
+                  <mat-icon matDatepickerToggleIcon (click)="clearDate($event)" class="cross-mat-icon">clear</mat-icon>
                   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                   <mat-datepicker #picker1 startView="multi-year"></mat-datepicker>
                   <mat-error>{{ errorDateMessage | json }}</mat-error>
@@ -495,8 +500,7 @@
               </div>
             </div>
             <div class="row text-dark">
-              <p>Payor's income amount from the order or written agreement
-                <mat-icon *ngIf='tooltips[2]' matTooltip={{tooltips[2]}}
+              <p>Payor's income amount from the order or written agreement<mat-icon *ngIf='tooltips[2]' matTooltip={{tooltips[2]}}
                 #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
@@ -519,8 +523,7 @@
             </div>
             <div class="row text-dark">
               <div class="col-md-6">
-                <p>Does the order include special expenses?
-                  <mat-icon *ngIf='tooltips[3]' matTooltip={{tooltips[3]}}
+                <p>Does the order include special expenses?<mat-icon *ngIf='tooltips[3]' matTooltip={{tooltips[3]}}
                   #tooltip3="matTooltip" matTooltipPosition ='above' class="toolTipIcon">info</mat-icon></p>
               </div>
               <div class="col-md-6">

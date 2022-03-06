@@ -104,6 +104,18 @@ namespace Csrs.Api.Services
 
             var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
 
+            MicrosoftDynamicsCRMssgCsrspartyCollection parties = await _dynamicsClient.GetPartyByBCeIdAsync(_userService.GetBCeIDUserId(), cancellationToken);
+            MicrosoftDynamicsCRMssgCsrsparty party;
+            string partyname = "";
+            if (parties.Value.Count > 0)
+            {
+                partyname = parties.Value.First().SsgFullname;
+            }
+            else
+            {
+                partyname = "unknown";
+            }
+
             if (dynamicsFile is null) return new NotFoundResult();
 
             var ms = new MemoryStream();
@@ -134,7 +146,6 @@ namespace Csrs.Api.Services
             {
                 _logger.LogError(ex, "Issue with file upload.");
             }
-
             if (uploadResult != null && uploadResult.ResultStatus == ResultStatus.Success)
             {
                 // Update modifiedon to current time
@@ -142,7 +153,7 @@ namespace Csrs.Api.Services
                 _logger.LogInformation("Success");
                 result.Message = "Uploaded Successfully";
                 result.Uploaded = true;
-                result.TaskCreated = await createTask(entityId, fileName, folderName, entityName, cancellationToken);
+                result.TaskCreated = await createTask(entityId, fileName, folderName, entityName, partyname, type, cancellationToken);
             }
             else
             {
@@ -178,10 +189,11 @@ namespace Csrs.Api.Services
                     // call the web service
                     var request = new FolderFilesRequest
                     {
-                        DocumentType = documentType,
                         EntityId = entityId,
                         EntityName = entityName,
-                        FolderName = folderName
+                        FolderName = folderName,
+                        DocumentType = documentType
+
                     };
 
                     var result = _fileManagerClient.FolderFiles(request);
@@ -192,10 +204,16 @@ namespace Csrs.Api.Services
                         // convert the results to the view model.
                         foreach (var fileDetails in result.Files)
                         {
-                            var fileSystemItemVM = new FileSystemItem
+                            var name = fileDetails.Name;
+                            if (fileDetails.Name.IndexOf("__") != -1)
+                            {
+                                name = fileDetails.Name.Substring(fileDetails.Name.IndexOf("__") + 2);
+                            }
+                                var fileSystemItemVM = new FileSystemItem
                             {
                                 // remove the document type text from file name
-                                Name = fileDetails.Name.Substring(fileDetails.Name.IndexOf("__") + 2),
+                                
+                                Name = name,
                                 // convert size from bytes (original) to KB
                                 Size = fileDetails.Size,
                                 ServerRelativeUrl = fileDetails.ServerRelativeUrl,
@@ -295,12 +313,14 @@ namespace Csrs.Api.Services
             }
         }
 
-        private async Task<bool> createTask(string fileId, string fileName, string folderName, string entityName, CancellationToken cancellationToken)
+        private async Task<bool> createTask(string fileId, string fileName, string folderName, string entityName, string partyName, string docType, CancellationToken cancellationToken)
         {
-            
-            string subject = $"File: {fileName} Uploaded";
-            string description = $"For {fileId} \n Uploaded to: {entityName}\\{folderName}\\{fileName} ";
 
+            string subject = $"File: {fileName} Review Uploaded Document";
+            string description = $"Party: {partyName} \n" +
+                          $"Document Type: {docType} \n" +
+                          $"Document Location: {entityName}\\{folderName}\\{fileName}";
+            
             MicrosoftDynamicsCRMtask task = new MicrosoftDynamicsCRMtask();
             task.Subject = subject;
             task.Description = description;

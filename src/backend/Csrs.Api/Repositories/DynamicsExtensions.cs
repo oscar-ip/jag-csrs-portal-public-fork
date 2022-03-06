@@ -64,7 +64,7 @@ namespace Csrs.Interfaces.Dynamics
             {
                 
                 var filter = $"(_ssg_recipient_value eq {partyId} or _ssg_payor_value eq {partyId}) and ssg_csrsfileid eq {fileId}";
-                var select = new List<string> { "ssg_csrsfileid" };
+                var select = new List<string> { "ssg_csrsfileid", "ssg_filenumber" };
 
                 var files = await dynamicsClient.Ssgcsrsfiles.GetAsync(filter: filter, select: select, cancellationToken: cancellationToken);
 
@@ -154,7 +154,7 @@ namespace Csrs.Interfaces.Dynamics
             partyId = GuidGuard(partyId);
 
             string filter = $"_ssg_payor_value eq {partyId} or _ssg_recipient_value eq {partyId}";
-            List<string> select = new List<string> { "ssg_csrsfileid" };
+            List<string> select = new List<string> { "ssg_csrsfileid", "ssg_filenumber" };
             List<string> orderby = new List<string> { "modifiedon desc" };
 
             var files = await dynamicsClient.Ssgcsrsfiles.GetAsync(select: select, orderby: orderby, filter: filter, expand: null, cancellationToken: cancellationToken);

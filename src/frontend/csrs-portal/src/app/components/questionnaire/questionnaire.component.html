@@ -37,7 +37,7 @@
       <div class="flex-6-col">
          <mat-vertical-stepper #stepper linear>
             <ng-template matStepperIcon="edit" let-index="index">
- 
+
              <mat-icon >{{setUIconColor1(index, data[index])}}</mat-icon>             </ng-template>
             <mat-step class="notSelected" *ngFor="let question of data; index as i;" [editable]="isEditable">
                <ng-template matStepLabel="" >
@@ -132,17 +132,17 @@
                       colspan="3"
                       rowspan="1"
                     >
-                      <a class="useful-links bceIdLink" target="_blank" rel="noopener" (click)="login();">
+                      <a class="useful-links bceIdLink" target="_blank" rel="noopener">
                         <button
                           type="button"
                           style="width: 480px"
                           mat-flat-button
                           color="primary"
+                          (click)="login()"
                         >
                           BCeID Login
                         </button>
                       </a>
-
                     </mat-grid-tile>
                     <mat-grid-tile
                       class="mi-tile-contents-center"
@@ -160,7 +160,7 @@
                 </div>
                 <div class="container mt-4 mb-2">
                   <div #alertContent class="alert-text2 row">
-                    
+
                       <span class="text-dark"><strong style="color: #003366;"><img style="width: 2%;" src="/assets/PDF_icon.svg" /> Prefer a PDF to complete your application? </strong>
                        You can download the PDF version of the application <a style="cursor:pointer; text-decoration: underline;" (click)="downloadApplication();">here</a> and mail the completed <br>   <span style="padding-left: 24px;">package.</span></span>
                     </div>
