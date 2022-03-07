@@ -1,14 +1,14 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${APP_NAME}
+  name: ${APP_NAME}-api
   description: Deployment template for the JAG-csrs
   
 labels:
-  app: ${APP_NAME}
-  app.kubernetes.io/name: ${APP_NAME}
+  app: ${APP_NAME}-api
+  app.kubernetes.io/name: ${APP_NAME}-api
   app.kubernetes.io/part-of: ${APP_NAME}
-
+  app.openshift.io/runtime: dotnet
 
 parameters:
 
@@ -56,7 +56,7 @@ parameters:
   required: true
   # Below value must be changed as per gold cluster oc nameplate
   value: blahblah
-  
+
 - name: OC_ENV
   description: The OpenShift environment, ie dev, test or prod
   required: true
@@ -67,11 +67,6 @@ parameters:
   required: false
   value: apps.silver.devops.gov.bc.ca
 
-- name: BCEID_URL
-  description: BCEID_URL for dev, test or prod
-  required: true
-  value: https://www.development.bceid.ca/
-
 - name: OPENSHIFT
   description: Indicator of the build is for OpenShift not local
   required: false
@@ -79,11 +74,24 @@ parameters:
 - name: SSL_CERT_DIR
   description: CA CERT Location
   required: true
-  value: /opt/app-root/ssl_dir/csrs-file-manager-ca
- - name: ASPNETCORE_ENVIRONMENT
+  value: /opt/app-root/ssl_dir/blahblah
+- name: ASPNETCORE_ENVIRONMENT
   description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
   required: false
   value: Production
+
+- name: RESOURCE
+  description: sharepoint location
+  required: true
+  value: sharepoint_blah_blah_location
+- name: CA_MOUNT_PATH
+  description: ca mount path
+  required: true
+  value: CA_MOUNT_PATH_blah_blah
+- name: SERVICE_TRUST_BUNDLE_MOUNT_PATH
+  description: ca mount path
+  required: true
+  value: SERVICE_TRUST_BUNDLE_MOUNT_PATH blah blah
 
 objects:
 
@@ -109,7 +117,26 @@ objects:
           name: ${API_COMPONENT_NAME}
           app.kubernetes.io/instance: ${API_COMPONENT_NAME}
           app.openshift.io/runtime: dotnet
+          version: blahblah
       spec:
+        volumes:
+          - name: service-cert
+            secret:
+              secretName: file-manager-service-cert
+              defaultMode: 420
+          - name: volume-appsettings
+            configMap:
+              name: appsettings.development.json
+              defaultMode: 420
+          - name: csrs-file-manager-ca
+            configMap:
+              name: csrs-file-manager-ca
+              defaultMode: 420
+          - name: service-trustbundle-ca
+            configMap:
+              name: service-trustbundle-ca
+              defaultMode: 420
+
         containers:
           # due to permission issue we were not using tools space; dev is pulling from dev
           # Now the permission issue is no longer there and should be pulling from tools
@@ -120,6 +147,140 @@ objects:
             ports:
               - containerPort: 8080
             env:
+            - name: JWT__AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: jwt
+                  key: JWT__AUDIENCE
+            - name: JWT__AUTHORITY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt
+                  key: JWT__AUTHORITY
+            - name: SPLUNK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-splunk-config
+                  key: SPLUNK_URL
+            - name: FILE_MANAGER_URI
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: FILEMANAGER_ADDRESS
+            - name: FILEMANAGER_SECURE
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: FILEMANAGER_SECURE
+            - name: SPLUNK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-splunk-config
+                  key: SPLUNK_TOKEN
+            - name: SPLUNK_INDEX
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-splunk-config
+                  key: SPLUNK_INDEX
+            - name: OAUTH_CLIENTID
+              valueFrom:
+                secretKeyRef:
+                  name: dynamics-oauth-credentials
+                  key: OAUTH__CLIENTID
+            - name: OAUTH_OAUTHURL
+              valueFrom:
+                secretKeyRef:
+                  name: dynamics-oauth-credentials
+                  key: OAUTH__OAUTHURL
+            - name: OAUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dynamics-oauth-credentials
+                  key: OAUTH__PASSWORD
+            - name: OAUTH_RESOURCEURL
+              valueFrom:
+                secretKeyRef:
+                  name: dynamics-oauth-credentials
+                  key: OAUTH__RESOURCEURL
+            - name: OAUTH_SECRET
+              # Dynamics
+              valueFrom:
+                secretKeyRef:
+                  name: dynamics-oauth-credentials
+                  key: OAUTH__SECRET
+            - name: OAUTH_USERNAME
+              #Dynamics
+              valueFrom:
+                secretKeyRef:
+                  name: dynamics-oauth-credentials
+                  key: OAUTH__USERNAME
+
+            - name: APIGATEWAY__BASEPATH
+              # Dynamics
+              valueFrom:
+                secretKeyRef:
+                  name: dynamics-oauth-credentials
+                  key: APIGATEWAY_BASEPATH
+            - name: OPENSHIFT
+              value: dev
+            - name: SSL_CERT_DIR
+              value: ${SSL_CERT_DIR}
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: AUTHORIZATION_URI
+              #Sharepoint
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: AUTHORIZATION_URI
+            - name: SHAREPOINT_PASSWORD
+              #Sharepoint
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: SHAREPOINT_PASSWORD
+            - name: SHAREPOINT_USERNAME
+              #Sharepoint
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: SHAREPOINT_USERNAME
+            - name: RELYING_PARTY_IDENTIFIER
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: SHAREPOINT_RELYING_PARTY_IDENTIFIER
+            - name: APIGATEWAY_HOST
+              #Sharepoint
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: APIGATEWAY_HOST
+            - name: APIGATEWAY_POLICY
+              #Sharepoint
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: APIGATEWAY_POLICY
+            - name: RESOURCE
+              value: ${RESOURCE}
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: volume-appsettings
+              mountPath: /opt/app-root/app/appsettings.Development.json
+              subPath: appsettings.Development.json
+            - name: csrs-file-manager-ca
+              mountPath: ${CA_MOUNT_PATH}
+              subPath: service-ca.crt
+            - name: service-trustbundle-ca
+              mountPath: ${SERVICE_TRUST_BUNDLE_MOUNT_PATH}
+          terminationMessagePolicy: File
+
+
+          env:
             - name: JWT__AUDIENCE
               valueFrom:
                 secretKeyRef:

@@ -1,11 +1,11 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${APP_NAME}
+  name: ${COMPONENT_NAME}
   description: Deployment template for the JAG-csrs Frontend
 
 labels:
-  app: ${APP_NAME}
+  app: ${COMPONENT_NAME}
   app.kubernetes.io/name: ${COMPONENT_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 
@@ -118,15 +118,13 @@ objects:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_INDEX
-            - name: BCEID_URL
-              value: ${BCEID_URL}
             resources:
               limits:
+                cpu: 1000m
+                memory: 4000Mi
+              requests:
                 cpu: 500m
                 memory: 1000Mi
-              requests:
-                cpu: 250m
-                memory: 512Mi
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense

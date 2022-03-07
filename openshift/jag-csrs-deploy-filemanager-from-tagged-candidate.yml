@@ -1,12 +1,12 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${APP_NAME}
+  name: ${APP_NAME}-file-manager
   description: Deployment template for the JAG-csrs filemanager
 
 labels:
-  app: ${APP_NAME}
-  app.kubernetes.io/name: ${APP_NAME}
+  app: ${APP_NAME}-file-manager
+  app.kubernetes.io/name: ${APP_NAME}-file-manager
   app.kubernetes.io/part-of: ${APP_NAME}
 
 parameters:
@@ -68,10 +68,26 @@ parameters:
   description: CA CERT Location
   required: true
   value: /opt/app-root/ssl_dir/csrs-file-manager-ca
- - name: ASPNETCORE_ENVIRONMENT
+- name: ASPNETCORE_ENVIRONMENT
   description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
   required: false
   value: Production
+
+- name: SIGNER
+  description: signer for self signed cert
+  required: true
+  value: openshift-service-serving-signer@blahblah
+
+- name: FILE_MANAGER_SERVICE_CERT
+  description: where filemanager tls cert and keys are mounted
+  required: true
+  value: /var/run/secrets/blahblah
+
+- name: FILEMANAGER_CONFIG_NAME
+  description: name of file manager config
+  required: true
+  value: blahblah
+
 
 objects:
 
@@ -99,6 +115,15 @@ objects:
           app.openshift.io/runtime: dotnet
           version: vblahblah
       spec:
+        volumes:
+          - name: service-cert
+            secret:
+              secretName: file-manager-service-cert
+              defaultMode: 420
+          - name: csrs-file-manager-ca
+            configMap:
+              name: csrs-file-manager-ca
+              defaultMode: 420
         containers:
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
@@ -112,10 +137,10 @@ objects:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_URL
-            - name: FILEMANAGER_ADDRESS
+            - name: FILE_MANAGER_URI
               valueFrom:
                 secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
+                  name: csrs-filemanager-config
                   key: FILEMANAGER_ADDRESS
             - name: FILEMANAGER_SECURE
               valueFrom:
@@ -171,8 +196,6 @@ objects:
               value: ${OPENSHIFT}
             - name: SSL_CERT_DIR
               value: ${SSL_CERT_DIR}
-            - name: ASPNETCORE_ENVIRONMENT
-              value: ${ASPNETCORE_ENVIRONMENT}
             resources:
               limits:
                 cpu: 250m
@@ -180,6 +203,12 @@ objects:
               requests:
                 cpu: 250m
                 memory: 512Mi
+            volumeMounts:
+              - name: service-cert
+                mountPath: ${FILE_MANAGER_SERVICE_CERT}
+              - name: csrs-file-manager-ca
+                mountPath: ${CA_MOUNT_PATH}
+                subPath: service-ca.crt
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense
@@ -203,19 +232,50 @@ objects:
   metadata:
     name: ${FILEMANAGER_COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
+  annotations:
+    description: File Manager cert generation (automatic)
+    service.alpha.openshift.io/serving-cert-secret-name: file-manager-service-cert
+    service.alpha.openshift.io/serving-cert-signed-by: ${SIGNER}
+    service.beta.openshift.io/serving-cert-signed-by: ${SIGNER}
   labels:
-    app: file-manager
+    app: jag-csrs-file-manager
     app.kubernetes.io/component: backend
-    app.kubernetes.io/instance: file-manager
-    app.kubernetes.io/name: file-manager
+    app.kubernetes.io/instance: jag-csrs-file-manager
+    app.kubernetes.io/name: jag-csrs-file-manager
     app.kubernetes.io/part-of: jag-csrs
   spec:
     ports:
-      - name: https
+      - name: 8080-tcp
         protocol: TCP
         port: 8080
         targetPort: 8080
+    - name: 8088-tcp
+      protocol: TCP
+      port: 8088
+      targetPort: 8088
     selector:
-      name: file-manager
+      name: jag-csrs-file-manager
     clusterIP: None
     sessionAffinity: None
+
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: ${FILE_MANAGER_ROUTE}
+  namespace: ${OC_NAMESPACE}-${OC_ENV}
+  labels:
+    app: jag-csrs-file-manager
+    app.kubernetes.io/name: jag-csrs-file-manager
+    app.kubernetes.io/part-of: jag-csrs
+spec:
+  host: ${FILE_MANAGER_ROUTE}
+  to:
+    kind: Service
+    name: jag-csrs-file-manager
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: passthrough
+  wildcardPolicy: None

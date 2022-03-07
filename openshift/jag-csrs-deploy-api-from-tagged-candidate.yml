@@ -1,12 +1,12 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${APP_NAME}
+  name: ${API_COMPONENT_NAME}
   description: Deployment template for the JAG-csrs TEST
 
 labels:
-  app: ${APP_NAME}
-  app.kubernetes.io/name: ${APP_NAME}
+  app: ${API_COMPONENT_NAME}
+  app.kubernetes.io/name: ${API_COMPONENT_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 
 
@@ -73,11 +73,6 @@ parameters:
   # Below value must be changed as per gold cluster certificate/DNS
   value: apps.silver.devops.gov.bc.ca
 
-- name: BCEID_URL
-  description: BCEID_URL for dev, test or prod
-  required: true
-  value: https://www.development.bceid.ca/
-
 - name: OPENSHIFT
   description: Indicator of the build is for OpenShift not local
   required: false
@@ -85,11 +80,25 @@ parameters:
 - name: SSL_CERT_DIR
   description: CA CERT Location
   required: true
-  value: /opt/app-root/ssl_dir/csrs-file-manager-ca
- - name: ASPNETCORE_ENVIRONMENT
+  value: /opt/app-root/ssl_dir/blahblah
+- name: ASPNETCORE_ENVIRONMENT
   description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
   required: false
   value: Production
+
+- name: RESOURCE
+  description: sharepoint location
+  required: true
+  value: sharepoint_blah_blah_location
+- name: CA_MOUNT_PATH
+  description: ca mount path
+  required: true
+  value: CA_MOUNT_PATH_blah_blah
+- name: SERVICE_TRUST_BUNDLE_MOUNT_PATH
+  description: ca mount path
+  required: true
+  value: SERVICE_TRUST_BUNDLE_MOUNT_PATH blah blah
+
 
 objects:
 
@@ -229,14 +238,14 @@ objects:
                 memory: 1000Mi
             # Took away readiness and liveness probe until those end points are ready
             volumeMounts:
-              - name: volume-appsettings
-                mountPath: /app/appsettings.Production.json
-                subPath: appsettings.json
-              - name: csrs-file-manager-ca
-                mountPath: /opt/app-root/ssl_dir/csrs-file-manager-ca/service-ca.crt
-                subPath: service-ca.crt
-              - name: service-trustbundle-ca
-                mountPath: /opt/app-root/app/ca/service-trustbundle-ca
+              #- name: volume-appsettings
+              #  mountPath: /opt/app-root/app/appsettings.Production.json
+              #  subPath: appsettings.json
+            - name: csrs-file-manager-ca
+              mountPath: ${CA_MOUNT_PATH}
+              subPath: service-ca.crt
+            - name: service-trustbundle-ca
+              mountPath: ${SERVICE_TRUST_BUNDLE_MOUNT_PATH}
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             imagePullPolicy: Always
