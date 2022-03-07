@@ -32,10 +32,9 @@ namespace Csrs.Api.Services
             MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.GetFilesByParty(partyId, cancellationToken);
 
             List<Message> messages = new List<Message>();
-            //This is inefficient. This may work better if we query only communication messages on Part To and Party From fields
             foreach (var file in files.Value)
             {
-                MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await _dynamicsClient.GetCommunicationMessagesByFile(file.SsgCsrsfileid, cancellationToken);
+                MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await _dynamicsClient.GetCommunicationMessagesByFile(file.SsgCsrsfileid, partyId, cancellationToken);
 
                 foreach (var message in dynamicsMessages.Value)
                 {
