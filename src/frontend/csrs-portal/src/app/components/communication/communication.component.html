@@ -351,12 +351,14 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="bc-gov-alertbanner bc-gov-alertbanner-error" role="alert" aria-labelledby="error" aria-describedby="error-desc" *ngIf="showValidationMessages">
-                    <p *ngFor="let message of validationMessages">
-                      <span class="app-cancel">
-                        {{message}}
-                      </span>
-                    </p>
+                  <div *ngIf="showValidationMessages">
+                    <div *ngFor="let message of validationMessages" class="bc-gov-alertbanner bc-gov-alertbanner-error" role="alert" aria-labelledby="error" aria-describedby="error-desc" >
+                      <p>
+                        <span class="app-cancel">
+                          {{message}}
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -377,7 +379,8 @@
                             type="button"
                             class="BC-Gov-PrimaryButton"
                             style="width: 250px; float:right;"
-                            (click)="sendContact()">
+                            (click)="sendContact()"
+                            [disabled]="contactFormGroup.invalid">
                       Send
                     </button>
                   </div>

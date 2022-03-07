@@ -256,7 +256,11 @@ export class CommunicationComponent implements OnInit {
       }
       if (this.contactMessage.hasError) {
         for (const error in this.contactMessage.errors) {
-          this.validationMessages.push('Contact Message ' + error.toString());
+          if (error.toString() == 'maxlength') {
+            this.validationMessages.push('Contact Message Max Length 500 Characters');
+          } else {
+            this.validationMessages.push('Contact Message ' + error.toString());
+          }
         }
       }
     } else {
