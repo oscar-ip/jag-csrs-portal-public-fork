@@ -493,7 +493,7 @@ editPage(stepper, index){
 
 
   checkNullValue(a) {
-    if (typeof (a) == 'undefined' || a === null) {
+    if (typeof (a) == 'undefined' || a === null || a === "") {
         return false;
     } else {
         return true;
@@ -504,6 +504,7 @@ editPage(stepper, index){
     const users = this.fourthFormGroup1.value.users;
     if (users.length === 1)
     {
+
       this.isChildNext = !this.fourthFormGroup1.valid;
       return !this.fourthFormGroup1.valid;
     }
@@ -511,17 +512,21 @@ editPage(stepper, index){
     {
       if (users.length > 1)
       {
-        if ( this.checkNullValue(users[users.length-1].firstName) === true  &&
+        if ((this.checkNullValue(users[users.length-1].firstName) === true  &&
              this.checkNullValue(users[users.length-1].lastName)  === true &&
-             this.checkNullValue(users[users.length-1].birthdate) === true ) {
+             this.checkNullValue(users[users.length-1].birthdate) === true) ||
+             ( this.checkNullValue(users[users.length-1].firstName) === false  &&
+                this.checkNullValue(users[users.length-1].lastName)  === false &&
+                this.checkNullValue(users[users.length-1].birthdate) === false)
+             ){
                 this.isChildNext = false;
                 return false;
              }
         else
-        {
-          this.isChildNext = true;
-          return true;
-        }
+            {
+              this.isChildNext = true;
+              return true;
+            }
       }
     }
   }
