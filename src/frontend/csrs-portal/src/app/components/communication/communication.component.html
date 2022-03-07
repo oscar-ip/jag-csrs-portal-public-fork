@@ -110,10 +110,10 @@
                     <th>Actions</th>
                   </tr>
 
-                  <tr class="text-dark" *ngFor="let doc of selectedInboxMessage.documents" >
+                  <tr class="text-dark" *ngFor="let doc of selectedInboxMessage.documents">
                     <td><strong>{{doc.name}}</strong></td>
                     <td>{{doc.size}}</td>
-                    <td><img src="/assets/Download_icon.svg" /><a href="#">Download</a></td>
+                    <td><img src="/assets/Download_icon.svg" /><a href="javascript:void(0)" (click)="downloadAttachment(doc.serverRelativeUrl, doc.documentType, doc.name)">Download</a></td>
                   </tr>
 
                 </table>
