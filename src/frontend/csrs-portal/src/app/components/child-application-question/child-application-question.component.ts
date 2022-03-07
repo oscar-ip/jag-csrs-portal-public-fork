@@ -91,6 +91,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
   dateOfOrder: Date;
   birthOfDateOtherParty: Date;
+  isChildNext: boolean = true;
+
 
   constructor(public oidc : OidcSecurityService,
               private eventService: PublicEventsService,
@@ -500,7 +502,11 @@ editPage(stepper, index){
 
   checkNextForChildren(){
     const users = this.fourthFormGroup1.value.users;
-    if (users.length === 1) return !this.fourthFormGroup1.valid;
+    if (users.length === 1)
+    {
+      this.isChildNext = !this.fourthFormGroup1.valid;
+      return !this.fourthFormGroup1.valid;
+    }
     else
     {
       if (users.length > 1)
@@ -508,10 +514,12 @@ editPage(stepper, index){
         if ( this.checkNullValue(users[users.length-1].firstName) === true  &&
              this.checkNullValue(users[users.length-1].lastName)  === true &&
              this.checkNullValue(users[users.length-1].birthdate) === true ) {
+                this.isChildNext = false;
                 return false;
              }
         else
         {
+          this.isChildNext = true;
           return true;
         }
       }
