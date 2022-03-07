@@ -39,7 +39,7 @@ namespace Csrs.Api.Services
             // get the file.
             if (string.IsNullOrEmpty(serverRelativeUrl) || string.IsNullOrEmpty(documentType) || string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName)) return new BadRequestResult();
             
-            var dynamicsFile = await CanAccessDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
+            var dynamicsFile = await CanAccessMessageDocument(entityId, _userService.GetBCeIDUserId(), cancellationToken);
 
             if (dynamicsFile is null) return new NotFoundResult();
 
