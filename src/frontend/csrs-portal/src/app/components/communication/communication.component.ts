@@ -277,7 +277,7 @@ export class CommunicationComponent implements OnInit {
             this.data = {
               type: 'info',
               title: 'Success - Message sent',
-              content: 'Your message to the Child Support Recalculation Team was sent successfully.',
+              content: 'Your message to the Child Support Recalculation team was sent successfully.',
               weight: 'bold',
               color: 'green'
             };
