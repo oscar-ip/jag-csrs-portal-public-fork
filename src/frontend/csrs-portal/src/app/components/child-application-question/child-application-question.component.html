@@ -448,7 +448,7 @@
                   <div class="col-md-8"></div>
                   <div class="col-md-2">
                     <div *ngIf="i>0">
-                      <button mat-button style="color:red"(click)="deletechild(i);checkNextForChildren()">Delete
+                      <button mat-button style="color:red"(click)="deletechild(i)">Delete
                         <mat-icon style="color:red" color="danger">delete</mat-icon>
                       </button>
                     </div>
@@ -464,7 +464,7 @@
             <button mat-stroked-button color="basic" matStepperPrevious>
              < Back
             </button>
-            <button class="nextStep" [disabled]="checkNextForChildren() || isChildNext" mat-raised-button color="primary"  matStepperNext>
+            <button class="nextStep" [disabled]="!fourthFormGroup1.valid" mat-raised-button color="primary"  matStepperNext>
               Next >
             </button>
           </div>
@@ -996,6 +996,11 @@
                   </div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div class="bold">{{(sixFormGroup.value.childSafety)?sixFormGroup.value.childSafety:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-12 stepRow spaceAround displayDetails1">
                   <div class="bold">{{(sixFormGroup.value.childSafetyDescription)?sixFormGroup.value.childSafetyDescription:'-' }}</div>
                 </div>
               </div>
