@@ -28,8 +28,10 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         ignoreNonceAfterRefresh: true,
         customParamsAuthRequest: {
           prompt: customConfig.prompt,
+          kc_idp_hint: customConfig.kc_idp_hint,
         },
         historyCleanupOff: true,
+        
       };
     })
   );
