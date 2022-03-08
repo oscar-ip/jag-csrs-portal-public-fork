@@ -1,10 +1,11 @@
 import { style } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-questionnaire',
@@ -13,10 +14,15 @@ import { AppConfigService } from 'app/services/app-config.service';
 })
 
 export class QuestionnaireComponent implements OnInit {
+
+  @ViewChild('stepper') stepper: MatStepper;
+
   public isLoggedIn = false;
   public bceIdRegisterLink: string;
   public   isEditable = true;
   public welcomeUser: string;
+  public selectedIndex: number = 0;
+
 
   data: any = [
     {
@@ -241,7 +247,6 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label: 'Was the amount of child support in your order or written agreement based on any of the following situations?',
-
       content: [
         {
           label:
@@ -317,13 +322,14 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label: 'Was the amount of child support in your order based on imputed income?',
+      toolTip: ' Imputed income is when a judge decides the amount of income that child support should be based on. For example, a judge may decide to impute income if a person is intentionally underemployed or unemployed or has failed to provide income information when legally required to do so.',
       content: [],
       buttons: [
         {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service <strong>cannot</strong> recalculate support when a paying parent’s incomehas been imputed. This is because the recalculation service cannot make decisions that a judge can make about why income was imputed when child support was determined. If income has been imputed, your court order will usually say so.',
+              data: '<span class="text-dark">The Child Support Recalculation Service <strong>cannot</strong> recalculate support when a paying parent’s income has been imputed. This is because the recalculation service cannot make decisions that a judge can make about why income was imputed when child support was determined. If income has been imputed, your court order will usually say so.',
             },
             {
               data: '<span class="text-dark"><strong>There is one exception:</strong> If the order states that the paying parent’s income was imputed because they are exempt from paying federal or provincial income tax, then the recalculation service may be able to recalculate.',
@@ -334,7 +340,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying paying parent’s income was imputed.',
+              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying paying parent’s income has been imputed.',
             },
             {
               data: '<span class="text-dark">Since you have answered no / not applicable to this question, your order or written agreement may be eligible for recalculation.',
@@ -368,6 +374,7 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label: ' Does your order or written agreement require the payment of special or extraordinary expenses?',
+      toolTip:'These are additional amounts to be paid over and above the base child support amount. Some examples of these expenses (often referred to as Section 7 expenses) include childcare, medical or dental premiums, healthcare costs.',
       content: [],
       buttons: [
         {
@@ -466,10 +473,6 @@ export class QuestionnaireComponent implements OnInit {
               data: '<span class="text-dark">These Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. As these situations can sometimes involve other factors, the service will need to review each case for eligibility',
             },
           ],
-        },
-        {
-          label: 'I don’t know',
-          clickedContent: [],
         },
       ],
       forwardButtons: [
@@ -571,7 +574,7 @@ export class QuestionnaireComponent implements OnInit {
   }
   setUIconColor(index, question) {
 
-    question.submit = true;
+    question.submit = true; 
     const style = 'style';
     setTimeout(() => {
       const node: Node = document.querySelector(
@@ -644,11 +647,11 @@ export class QuestionnaireComponent implements OnInit {
     if ((question.clicked === buttonItem.label &&  question.clicked == 'No')){
 
      if ([3, 4 , 5 , 6 , 7 , 8].includes(i + 1)){
-       myGreen = true
+       myGreen = true;
      } else {
-       myRed = true
+       myRed = true;
      }
-     this.setUIconColor(i,question);
+     this.setUIconColor(i, question);
 
    }
     if ((question.clicked == buttonItem.label &&  question.clicked === 'I don’t know')){
