@@ -91,7 +91,6 @@ export class ChildApplicationQuestionComponent implements OnInit {
 
   dateOfOrder: Date;
   birthOfDateOtherParty: Date;
-  isChildNext: boolean = true;
 
 
   constructor(public oidc : OidcSecurityService,
@@ -478,9 +477,9 @@ editPage(stepper, index){
     const arraylen = usersArray.length;
 
     const newUsergroup: FormGroup = this._formBuilder.group({
-      firstName: [''],
-      lastName: [''],
-      birthdate: [],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      birthdate: ['', Validators.required],
       givenNames: [],
       childDependency: [],
       middleName: [],
@@ -488,53 +487,12 @@ editPage(stepper, index){
 
     usersArray.insert(arraylen, newUsergroup);
     this.isHiddens.push(false);
-    this.checkNextForChildren();
-  }
 
-
-  checkNullValue(a) {
-    if (typeof (a) == 'undefined' || a === null || a === "") {
-        return false;
-    } else {
-        return true;
-    }
-  }
-
-  checkNextForChildren(){
-    const users = this.fourthFormGroup1.value.users;
-    if (users.length === 1)
-    {
-
-      this.isChildNext = !this.fourthFormGroup1.valid;
-      return !this.fourthFormGroup1.valid;
-    }
-    else
-    {
-      if (users.length > 1)
-      {
-        if ((this.checkNullValue(users[users.length-1].firstName) === true  &&
-             this.checkNullValue(users[users.length-1].lastName)  === true &&
-             this.checkNullValue(users[users.length-1].birthdate) === true) ||
-             ( this.checkNullValue(users[users.length-1].firstName) === false  &&
-                this.checkNullValue(users[users.length-1].lastName)  === false &&
-                this.checkNullValue(users[users.length-1].birthdate) === false)
-             ){
-                this.isChildNext = false;
-                return false;
-             }
-        else
-            {
-              this.isChildNext = true;
-              return true;
-            }
-      }
-    }
   }
 
   deletechild(index){
-    this.fourthFormGroup1.get('users')['controls'].splice(index,1)
-    this.isHiddens.splice(index);
-    this.checkNextForChildren();
+    this.fourthFormGroup1.get('users')['controls'].splice(index,1);
+    this.isHiddens.splice(index,1);
   }
 
 
