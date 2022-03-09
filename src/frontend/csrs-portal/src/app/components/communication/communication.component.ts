@@ -163,6 +163,7 @@ export class CommunicationComponent implements OnInit {
   }
 
   getMessages() {
+    this.dataSource.data = [];
     this.messageService.apiMessageListGet('response', false).subscribe({
       next: (data) => {
         this.messages = data.body;
@@ -348,6 +349,8 @@ export class CommunicationComponent implements OnInit {
           this.selectedInboxMessage = this.messages[i];
         }
       }
+    } else {
+      this.getMessages();
     }
     this.toggleRow = element;
 
