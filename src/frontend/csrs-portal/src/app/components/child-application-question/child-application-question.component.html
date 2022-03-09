@@ -461,12 +461,14 @@
             <div class="row button-row pb-3">
               <div class="col-md-8"></div>
               <div class="col-md-2">
-                  <button mat-button style="color:red"(click)="deletechild()">Delete
+                  <button mat-button style="color:red" [disabled]="!fourthFormGroup1.valid" (click)="deletechild()">
+                    Delete
                     <mat-icon style="color:red" color="danger">delete</mat-icon>
                   </button>
               </div>
               <div class="col-md-2">
-                <button  mat-stroked-button (click)="callAntherchild()">+ Add another child</button>
+                <button  mat-stroked-button [disabled]="!fourthFormGroup1.valid"
+                (click)="callAntherchild()">+ Add another child</button>
               </div>
           </div>
           </form>
