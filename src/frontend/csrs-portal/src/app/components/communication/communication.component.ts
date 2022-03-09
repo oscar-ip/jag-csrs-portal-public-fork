@@ -105,40 +105,8 @@ export class CommunicationComponent implements OnInit {
     });
 
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
-    this.accountService.apiAccountGet('response', false).subscribe({
-      next: (data) => {
-        this.accountSummary = data;
-        this.portalUser = this.accountSummary.body.user.firstName;
-        if ( this.accountSummary.status === HttpStatusCode.Ok &&
-              (this.accountSummary.body.files != null || this.accountSummary.body.files.length > 0)) {
-           this.files = this.accountSummary.body.files;
-        }
-      },
-      error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as: 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
-      },
-      complete: () => this.logger.info('apiAccountGet<AccountFileSummary> is completed')
-    })
-    this.messageService.apiMessageListGet('response', false).subscribe({
-      next: (data) => {
-        this.messages = data.body;
-        this.getRemoteData();
-      },
-      error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-          //Backend returns unsuccessful response codes such as: 500 etc.
-          this.logger.info('Backend returned ', e);
-        }
-      },
-      complete: () => this.logger.info('apiMessageListGet is completed')
-    })
+    this.getAccountInfo();
+    this.getMessages();
     
     this.uploadFormGroup = this._formBuilder.group({
       uploadFile: [null, Validators.required],
@@ -162,6 +130,54 @@ export class CommunicationComponent implements OnInit {
 
     this.inboxFormGroup = this._formBuilder.group({
       inboxFile: [null, Validators.required]
+    });
+
+    
+  }
+
+  getAccountInfo() {
+    this.accountService.apiAccountGet('response', false).subscribe({
+      next: (data) => {
+        this.accountSummary = data;
+        this.portalUser = this.accountSummary.body.user.firstName;
+        if (this.accountSummary.status === HttpStatusCode.Ok &&
+          (this.accountSummary.body.files != null && this.accountSummary.body.files.length > 0)) {
+          this.files = this.accountSummary.body.files;
+          if (this.files.length == 1) {
+            this.inboxFile.patchValue(this.files[0].fileId);
+            this.uploadFile.patchValue(this.files[0].fileId);
+            this.contactFile.patchValue(this.files[0].fileId);
+          }
+        }
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this.logger.error(e.error.message);
+        } else {
+          //Backend returns unsuccessful response codes such as: 500 etc.
+          this.logger.info('Backend returned ', e);
+        }
+      },
+      complete: () => this.logger.info('apiAccountGet<AccountFileSummary> is completed')
+    });
+  }
+
+  getMessages() {
+    this.dataSource.data = [];
+    this.messageService.apiMessageListGet('response', false).subscribe({
+      next: (data) => {
+        this.messages = data.body;
+        this.getRemoteData();
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this.logger.error(e.error.message);
+        } else {
+          //Backend returns unsuccessful response codes such as: 500 etc.
+          this.logger.info('Backend returned ', e);
+        }
+      },
+      complete: () => this.logger.info('apiMessageListGet is completed')
     });
   }
   get contactFile() {
@@ -333,6 +349,8 @@ export class CommunicationComponent implements OnInit {
           this.selectedInboxMessage = this.messages[i];
         }
       }
+    } else {
+      this.getMessages();
     }
     this.toggleRow = element;
 
