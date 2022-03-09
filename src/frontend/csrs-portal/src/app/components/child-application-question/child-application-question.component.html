@@ -443,7 +443,7 @@
                   </mat-radio-group>
                 </div>
               </div>
-
+              <!--
               <div class="row button-row pb-3">
                   <div class="col-md-8"></div>
                   <div class="col-md-2">
@@ -456,8 +456,19 @@
                   <div class="col-md-2">
                     <button  mat-stroked-button (click)="callAntherchild()">+ Add another child</button>
                   </div>
-              </div>
+              </div>-->
             </ng-container>
+            <div class="row button-row pb-3">
+              <div class="col-md-8"></div>
+              <div class="col-md-2">
+                  <button mat-button style="color:red"(click)="deletechild()">Delete
+                    <mat-icon style="color:red" color="danger">delete</mat-icon>
+                  </button>
+              </div>
+              <div class="col-md-2">
+                <button  mat-stroked-button (click)="callAntherchild()">+ Add another child</button>
+              </div>
+          </div>
           </form>
           <mat-divider></mat-divider>
           <div class="nextButton">

@@ -490,11 +490,20 @@ editPage(stepper, index){
 
   }
 
+  /*
   deletechild(index){
     this.fourthFormGroup1.get('users')['controls'].splice(index,1);
     this.isHiddens.splice(index,1);
-  }
+  }*/
 
+  deletechild(){
+    const arraylen = this.fourthFormGroup1.get('users')['controls'].length;
+    if (arraylen > 1)
+    {
+      this.fourthFormGroup1.get('users')['controls'].splice(arraylen-1,1);
+      this.isHiddens.splice(arraylen-1,1);
+    }
+  }
 
   saveLater() {
     this.isDisabledSubmit = true;
