@@ -68,6 +68,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   today = new Date();
   isEditable: boolean = false;
   isDisabledSubmit: boolean = true;
+  isChildDelete: boolean = true;
   child: Child;
   _reponse: HttpResponse<any>;
 
@@ -488,6 +489,15 @@ editPage(stepper, index){
     usersArray.insert(arraylen, newUsergroup);
     this.isHiddens.push(false);
 
+    if (usersArray.length >= 2)
+    {
+      this.isChildDelete = false;
+    }
+    else
+    {
+      this.isChildDelete = true;
+    }
+
   }
 
   /*
@@ -498,10 +508,17 @@ editPage(stepper, index){
 
   deletechild(){
     const arraylen = this.fourthFormGroup1.get('users')['controls'].length;
-    if (arraylen > 1)
+    this.logger.info('arraylen = ', arraylen);
+    if (arraylen >= 2)
     {
       this.fourthFormGroup1.get('users')['controls'].splice(arraylen-1,1);
       this.isHiddens.splice(arraylen-1,1);
+      this.isChildDelete = false;
+    }
+
+    if (this.fourthFormGroup1.get('users')['controls'].length == 1)
+    {
+      this.isChildDelete = true;
     }
   }
 
