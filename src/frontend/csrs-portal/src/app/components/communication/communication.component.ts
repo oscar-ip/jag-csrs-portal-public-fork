@@ -145,8 +145,11 @@ export class CommunicationComponent implements OnInit {
           this.files = this.accountSummary.body.files;
           if (this.files.length == 1) {
             this.inboxFile.patchValue(this.files[0].fileId);
+            this.selectedInboxFile = this.files[0];
             this.uploadFile.patchValue(this.files[0].fileId);
+            this.selectedUploadFile = this.files[0];
             this.contactFile.patchValue(this.files[0].fileId);
+            this.selectedContactFile = this.files[0];
           }
         }
       },
