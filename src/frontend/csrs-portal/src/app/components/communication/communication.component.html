@@ -243,42 +243,7 @@
             </div>
 
           </form>
-<!--
-          <div class="mt-3 mb-3 p-2 round4">
-            <mat-grid-list cols="6" rowHeight="55px" gutterSize="5px">
-              <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0">
-                <img class="icon-size5" src="/assets/Support_icon.svg" />
-              </mat-grid-tile>
-              <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0">
-                <p class="text-left-inside-grid font_size_24_bolder">
-                  Have questions or looking for more support?
-                </p>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="1" class="text-left-inside-grid">
-                <p class="font_size_18_lighter">
-                  Contact the recalculation service toll free at
-                  <a
-                      [attr.href]="bceIdLink"
-                      target="_blank"
-                      rel="noopener"
-                      class="useful-links bceIdLink"
-                    >
-                    1-866-660-2684
-                  </a>
-                  or learn more about the program
-                  <a
-                      [attr.href]="bceIdLink"
-                      target="_blank"
-                      rel="noopener"
-                      class="useful-links bceIdLink"
-                    >
-                      in here.
-                    </a>
-                </p>
-              </mat-grid-tile>
-            </mat-grid-list>
-          </div>
-        -->
+
 
         </mat-tab>
         <mat-tab>
@@ -393,19 +358,37 @@
       </mat-tab-group>
     </div>
   </section>
-  <div class="footer row">
-    <span class="icon-col col-md-1">
-      <img class="icon-size5" src="/assets/Support_icon.svg" />
-    </span>
-    <div class="col-md-11">
-      <h1>
-        <strong>Have questions or Looking for more support?</strong>
-      </h1>
-      <p class="text-body">
-        Contact the Recalculation Service toll free
-        <a href="tel:+18776618026">1-877-661-8026</a>,
-        or learn more about the program
-      </p>
+  <section style="padding-bottom: 20px">
+    <div class="footer row, round4" style="margin-left: 0px;">
+      <mat-grid-list cols="7" rowHeight="3em">
+        <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0">
+          <img class="support-image" src="/assets/Support_icon.svg" />
+        </mat-grid-tile>
+        <mat-grid-tile colspan="6" rowspan="1" aria-rowindex="0">
+          <p class="text-left-inside-grid font_size_24_bolder">
+            Have questions or looking for more support?
+          </p>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="6" rowspan="1">
+
+          <p class="text-left-contact font_size_18_lighter">
+            Contact the recalculation service toll free at
+            <a [attr.href]="bceIdLink"
+               target="_blank"
+               rel="noopener"
+               class="useful-links bceIdLink">
+              1-866-660-2684
+            </a>
+            or learn more about the program
+            <a [attr.href]="bceIdLink"
+               target="_blank"
+               rel="noopener"
+               class="useful-links bceIdLink">
+              here.
+            </a>
+          </p>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
-  </div>
+  </section>
 </div>
