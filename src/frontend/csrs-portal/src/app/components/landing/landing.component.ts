@@ -86,7 +86,7 @@ export class LandingComponent implements OnInit
   }
 
   logout() {
-      this.oidcSecurityService.logoff();
+      this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
   public ngAfterViewInit(): void {

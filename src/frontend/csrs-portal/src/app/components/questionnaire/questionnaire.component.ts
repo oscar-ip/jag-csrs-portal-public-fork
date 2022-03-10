@@ -679,7 +679,7 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   logout() {
-    this.oidcSecurityService.logoff();
+    this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
   downloadApplication()
