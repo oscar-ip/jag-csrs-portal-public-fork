@@ -24,13 +24,13 @@
                       <mat-form-field>
                         <mat-label>Select File</mat-label>
                         <mat-select formControlName="inboxFile" (selectionChange)="onInboxFileNumberChange ($event)">
+                          <mat-option  value="all">
+                            All
+                          </mat-option>
                           <mat-option *ngFor="let file of files" [value]="file.fileId">
                             {{file.fileNumber}}
                           </mat-option>
                         </mat-select>
-                        <mat-error *ngIf="inboxFile.hasError('required')">
-                          File is required.
-                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col-md-10">
@@ -233,7 +233,8 @@
                             class="BC-Gov-PrimaryButton"
                             color="primary"
                             style="width: 250px; float:right;"
-                            (click)="onUpload()">
+                            (click)="onUpload()"
+                            [disabled]="uploadDisabled">
                       Upload Document
                     </button>
                   </div>
