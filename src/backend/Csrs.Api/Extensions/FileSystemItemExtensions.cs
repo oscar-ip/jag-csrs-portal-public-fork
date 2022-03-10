@@ -42,7 +42,7 @@
             {
                 string tmp = name.Substring(0, idx);
                 string ext = System.IO.Path.GetExtension(name);
-                name = tmp + DateTime.Now.ToString("ddMMyyyyhhmmss")+ ext;
+                name = tmp + DateTime.Now.ToString("_yyyyMMddhhmmss")+ ext;
             }
             string result = documentType + NameDocumentTypeSeparator + name;
             return result;

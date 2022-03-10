@@ -70,6 +70,7 @@ export class CommunicationComponent implements OnInit {
   // isUploaing: boolean = true;
   _token = '';
   selectedUploadFile: any;
+  public uploadDisabled = false;
 
   data: any = null;
   _reponse: HttpResponse<null>;
@@ -129,7 +130,7 @@ export class CommunicationComponent implements OnInit {
     });
 
     this.inboxFormGroup = this._formBuilder.group({
-      inboxFile: [null, Validators.required]
+      inboxFile: [null, ]
     });
 
     
@@ -144,8 +145,7 @@ export class CommunicationComponent implements OnInit {
           (this.accountSummary.body.files != null && this.accountSummary.body.files.length > 0)) {
           this.files = this.accountSummary.body.files;
           if (this.files.length == 1) {
-            this.inboxFile.patchValue(this.files[0].fileId);
-            this.selectedInboxFile = this.files[0];
+            this.inboxFile.patchValue('all');
             this.uploadFile.patchValue(this.files[0].fileId);
             this.selectedUploadFile = this.files[0];
             this.contactFile.patchValue(this.files[0].fileId);
@@ -222,14 +222,15 @@ export class CommunicationComponent implements OnInit {
   }
   onInboxFileNumberChange(ob): void {
     let fileValue = ob.value;
-    for (var i = 0; i < this.files.length; i++) {
-      if (fileValue == this.files[i].fileId) {
-        this.selectedInboxFile = this.files[i];
-
-        //TODO
-        this.getRemoteData();
+    this.selectedInboxFile = null;
+    if (fileValue && fileValue != 'all') {
+      for (var i = 0; i < this.files.length; i++) {
+        if (fileValue == this.files[i].fileId) {
+          this.selectedInboxFile = this.files[i];
+        }
       }
     }
+    this.getRemoteData();
   }
   clearContactForm(): void {
     this.showValidationMessages = false;
@@ -474,6 +475,7 @@ openDialog(): void {
 
   submitUploadedAttachment() {
     const fileData = new FormData();
+    this.uploadDisabled = true;
     fileData.append('file', this.selectedFile, this.selectedFile.name);
         this.logger.info('File Data', fileData);
      this.documentService.apiDocumentUploadattachmentPost(
@@ -492,6 +494,7 @@ openDialog(): void {
             color: 'green'
           };
           this.openDialog();
+          this.uploadDisabled = false;
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -504,6 +507,7 @@ openDialog(): void {
             color: 'red'
           };
           this.openDialog();
+          this.uploadDisabled = false;
 
         } else {
             // Backend returns unsuccessful response codes such as 404, 500 etc.
@@ -516,11 +520,12 @@ openDialog(): void {
             color: 'red'
           };
           this.openDialog();
+          this.uploadDisabled = false;
           }
       },
       complete: () => this.logger.info('apiFileUploadattachmentPost is completed')
       });
-
+    
   }
   selectTab(index) {
     this.selectedTab = 0;
