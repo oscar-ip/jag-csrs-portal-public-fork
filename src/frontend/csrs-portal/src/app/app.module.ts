@@ -43,6 +43,7 @@ import { MatDialogModule, MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS } from '@a
 
 import { OidcSecurityService, EventTypes, PublicEventsService } from 'angular-auth-oidc-client';
 import { AuthConfigModule } from './auth/auth-config.module';
+import { LogInOutService } from 'app/services/log-in-out.service';
 
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -99,6 +100,7 @@ import { filter } from 'rxjs/operators';
     CurrencyPipe,
     DatePipe,
     AppConfigService,
+    LogInOutService,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}},
     {provide: STEPPER_GLOBAL_OPTIONS,useValue: {showError: true}},
     {

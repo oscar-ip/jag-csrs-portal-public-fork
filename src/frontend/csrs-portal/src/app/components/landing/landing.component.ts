@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewEncapsulation  } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 
@@ -7,13 +7,15 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { AppConfigService } from 'app/services/app-config.service';
 import { SnowplowService } from '@core/services/snowplow.service';
 import { environment } from './../../../environments/environment';
+import { LogInOutService } from 'app/services/log-in-out.service';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LandingComponent implements OnInit {
+export class LandingComponent implements OnInit
+{
 
   public isLoggedIn = false;
   public bceIdLink: string;
@@ -23,6 +25,7 @@ export class LandingComponent implements OnInit {
   public code: string;
 
   constructor(public oidcSecurityService : OidcSecurityService,
+              private logInOutService : LogInOutService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
@@ -36,6 +39,19 @@ export class LandingComponent implements OnInit {
 
       //this.bceIdRegisterLink = environment.production ? 'https://www.bceid.ca/os/?7731' : 'https://www.development.bceid.ca/os/?2281';
       this.bceIdRegisterLink = 'https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
+
+      this.logInOutService.getLogoutStatus.subscribe((data) => {
+        if (data !== null || data !== '')
+        {
+          if(data === 'BCeID Login'){
+            this.login();
+          }
+          else
+            if(data === 'Logout'){
+              this.logout();
+            }
+        }
+      })
 
       this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated,
                                           userData,
@@ -54,17 +70,23 @@ export class LandingComponent implements OnInit {
           {
             this.router.navigate(['/welcomeuser']);
           }
+          else
+          {
+            this.router.navigate(['/']);
+          }
+
+          this.logInOutService.currentUser(isAuthenticated);
       });
 
 
     }
 
   login() {
-    this.oidcSecurityService.authorize();
+      this.oidcSecurityService.authorize();
   }
 
   logout() {
-    this.oidcSecurityService.logoff();
+      this.oidcSecurityService.logoff();
   }
 
   public ngAfterViewInit(): void {
