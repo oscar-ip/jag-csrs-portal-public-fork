@@ -13,7 +13,7 @@
             <h1 class="mb-1 tabHeader">Inbox {{unreadCnt}}</h1>
           </ng-template>
           <form [formGroup]="inboxFormGroup" class="round1" style="padding-bottom: 20px">
-            <div class="step1" style="border: 1px solid black;" *ngIf="!toggleRow">
+            <div class="round1" style="border: 1px solid black;" *ngIf="!toggleRow">
               <div class="mb-3 mt-5">
                 <div class="container">
                   <div class="row">
@@ -46,7 +46,7 @@
               </div>
               <hr class="mt-0 mb-4" style="opacity: 0.5">
 
-              <table mat-table [dataSource]="dataSource">
+              <table mat-table [dataSource]="dataSource" >
 
                 <ng-container matColumnDef="id">
                   <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
