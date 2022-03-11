@@ -43,7 +43,7 @@
                <ng-template matStepLabel="" >
                   <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
                      <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
-                  <span class="question-label" style="font-size: 20px;">{{question.label}}</span><mat-icon *ngIf="question.toolTip"  class="toolTipIcon" matTooltip='{{question.toolTip}}'>info</mat-icon>
+                  <span  class="question-label" style="font-size: 20px;">{{question.label}}</span><mat-icon *ngIf="question.toolTip"  class="toolTipIcon" matTooltip='{{question.toolTip}}'>info</mat-icon>
 
                </ng-template>
                <ng-template class="question-content" matStepContent="">

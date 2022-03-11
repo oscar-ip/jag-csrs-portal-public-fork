@@ -106,7 +106,7 @@ div.container {
     height: 46px;
     font-size: 1.125em;
     font-weight: bold;
-    border: 1px solid #003366; 
+    border: 1px solid #003366;
     color: #003366;
     width: 100%;
   }
@@ -514,7 +514,7 @@ mat-grid-tile.bottom_line {
 }
 
 .description_text {
-  color: black; 
+  color: black;
   font-size: 18px;
   width: 80%;
   margin-bottom: 0%;
@@ -524,7 +524,7 @@ mat-grid-tile.bottom_line {
 // }
 .background_image {
   background-image: url('/assets/landing-page-background-image.png');
-  background-repeat: no-repeat; 
+  background-repeat: no-repeat;
   background-size: 110%;
 }
 
@@ -538,12 +538,12 @@ mat-grid-tile.bottom_line {
 }
 
 .font_size_24_bolder {
-  font-size: 24px; 
+  font-size: 24px;
   font-weight:bolder;
 }
 
 .font_size_24_normal {
-  font-size: 24px; 
+  font-size: 24px;
   font-weight:normal;
 }
 
@@ -552,8 +552,8 @@ mat-grid-tile.bottom_line {
 }
 
 .font_size_18_lighter {
-  color:black; 
-  font-size: 18px; 
+  color:black;
+  font-size: 18px;
   font-weight:lighter;
 }
 
@@ -573,4 +573,74 @@ mat-expansion-panel{
 }
 .start-button{
   margin-right: 20px;
+}
+
+@media (max-width: 320px) {
+  div.landing-summary {
+    background: url("/assets/landing-page-background-image.png") no-repeat !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 375px) {
+  div.landing-summary {
+    background: url("/assets/landing-page-background-image.png") no-repeat !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+@media (min-width: 376px) and (max-width: 414px) {
+  div.landing-summary {
+    background: url("/assets/landing-page-background-image.png") no-repeat !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+@media (min-width: 415px) and (max-width: 600px) {
+  div.landing-summary {
+    background: url("/assets/landing-page-background-image.png") no-repeat !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 767px) {
+  div.landing-summary {
+    background: url("/assets/landing-page-background-image.png") no-repeat !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  div.landing-summary {
+    background: url("/assets/landing-page-background-image.png") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+@media (min-width: 993px) {
+  div.landing-summary {
+    background: url("/assets/landing-page-background-image.png") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
 }
