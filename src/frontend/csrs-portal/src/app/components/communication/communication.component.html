@@ -10,10 +10,10 @@
       <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTab">
         <mat-tab>
           <ng-template mat-tab-label>
-            <h1 class="mb-1 tabHeader">Inbox {{unreadCnt}}</h1>
+            <h1 class="mb-1 tabHeader">Inbox ({{unreadCnt}})</h1>
           </ng-template>
-          <form [formGroup]="inboxFormGroup" class="round1" style="padding-bottom: 20px">
-            <div class="round1" style="border: 1px solid black;" *ngIf="!toggleRow">
+          <form [formGroup]="inboxFormGroup" style="padding-bottom: 20px">
+            <div class="round1" *ngIf="!toggleRow">
               <div class="mb-3 mt-5">
                 <div class="container">
                   <div class="row">
