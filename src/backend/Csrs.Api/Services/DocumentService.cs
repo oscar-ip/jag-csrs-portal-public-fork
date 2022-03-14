@@ -153,7 +153,7 @@ namespace Csrs.Api.Services
                 _logger.LogInformation("Success");
                 result.Message = "Uploaded Successfully";
                 result.Uploaded = true;
-                result.TaskCreated = await createTask(entityId, fileName, folderName, entityName, partyname, type, cancellationToken);
+                result.TaskCreated = await createTask(entityId, dynamicsFile.SsgFilenumber, fileName, folderName, entityName, partyname, type, cancellationToken);
             }
             else
             {
@@ -313,10 +313,10 @@ namespace Csrs.Api.Services
             }
         }
 
-        private async Task<bool> createTask(string fileId, string fileName, string folderName, string entityName, string partyName, string docType, CancellationToken cancellationToken)
+        private async Task<bool> createTask(string fileId, string fileNumber, string fileName, string folderName, string entityName, string partyName, string docType, CancellationToken cancellationToken)
         {
 
-            string subject = $"File: {fileName} Review Uploaded Document";
+            string subject = $"File: {fileNumber} - Review Uploaded Document";
             string description = $"Party: {partyName} \n" +
                           $"Document Type: {docType} \n" +
                           $"Document Location: {entityName}\\{folderName}\\{fileName}";
