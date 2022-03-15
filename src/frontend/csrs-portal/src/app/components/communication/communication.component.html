@@ -234,7 +234,7 @@
                             color="primary"
                             style="width: 250px; float:right;"
                             (click)="onUpload()"
-                            [disabled]="uploadDisabled">
+                            [disabled]="uploadDisabled || uploadFormGroup.invalid">
                       Upload Document
                     </button>
                   </div>
