@@ -1,5 +1,5 @@
 # Build image
-FROM node:14.17 as build-deps
+FROM node:17.6.0 as build-deps
 
 # set working directory
 ENV NODE_ROOT /usr/src/app
