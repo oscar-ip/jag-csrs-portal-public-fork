@@ -36,7 +36,7 @@ jobs:
   # This workflow contains a single job called "build"
   build-push-image:
     # The type of runner that the job will run on
-    runs-on: ubuntu-21.10
+    runs-on: ubuntu-latest
 
     #https://stackoverflow.com/a/70868036
     environment: test
