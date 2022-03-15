@@ -7,6 +7,13 @@
   font-weight: bolder;
   color: #003366;
 }
+
+.h2_class {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+
 .summary-header-links {
   list-style: none;
   margin-bottom: 0;
@@ -83,7 +90,8 @@ div.container {
 
 .mat-flat-button {
   min-width: 250px;
-  margin: 1em;
+  vertical-align: bottom;
+  //margin: 1em;
 
   @include media-breakpoint-down(md) {
     width: 100%;
@@ -94,7 +102,7 @@ div.container {
     height: 46px;
     font-size: 1.125em;
     font-weight: bold;
-    width: 100%;
+    min-width: 100%;
   }
 
   &.light {
@@ -108,7 +116,7 @@ div.container {
     font-weight: bold;
     border: 1px solid #003366;
     color: #003366;
-    width: 100%;
+    min-width: 100%;
   }
 
 }
@@ -143,7 +151,6 @@ div.container {
   border: 1px solid grey;
   border-radius: 12px;
   background-color: white;
-  width: 95%;
 }
 
 .round4 {
@@ -167,9 +174,19 @@ div.container {
 }
 
 .summary-content {
-  padding-top: 3%;
-  height: 13em;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  min-height: 13em;
 }
+
+.card {
+  background-color: rgba(245, 245, 245, 0);
+}
+.card-header, .card-footer {
+  opacity: 1
+}
+
+
 
 @media (max-width: 767px) {
   h1 {
@@ -281,7 +298,7 @@ div.container {
 }
 
 .icon-size3 {
-  max-width: 162px;
+  max-width: 110px;
 }
 
 .icon-size4 {
@@ -522,10 +539,36 @@ mat-grid-tile.bottom_line {
 // .mat-typography p {
 //   margin: 0px;
 // }
-.background_image {
-  background-image: url('/assets/landing-page-background-image.png');
-  background-repeat: no-repeat;
-  background-size: 110%;
+
+//.background_image {
+//  background-image: url('/assets/landing-page-background-image.png');
+//  background-repeat: no-repeat;
+//  background-size: 110%;
+//}
+
+@media (min-width: 300px) and (max-width: 441px) {
+  .background_image {
+    background-image: url('/assets/CSRS-background-image-MOBILE-414x460.jpg');
+    background-repeat: no-repeat;
+    background-size: 110%;
+  }
+
+}
+
+@media (min-width: 442px) and (max-width: 768px) {
+  .background_image {
+    background-image: url('/assets/CSRS-background-TABLET-768x460.jpg');
+    background-repeat: no-repeat;
+    background-size: 110%;
+  }
+}
+
+@media (min-width: 769px) {
+  .background_image {
+    background-image: url('/assets/landing-page-background-image.png');
+    background-repeat: no-repeat;
+    background-size: 110%;
+  }
 }
 
 .padding_right_200{
@@ -575,72 +618,3 @@ mat-expansion-panel{
   margin-right: 20px;
 }
 
-@media (max-width: 320px) {
-  div.landing-summary {
-    background: url("/assets/landing-page-background-image.png") no-repeat !important;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-}
-
-@media (min-width: 321px) and (max-width: 375px) {
-  div.landing-summary {
-    background: url("/assets/landing-page-background-image.png") no-repeat !important;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-}
-
-@media (min-width: 376px) and (max-width: 414px) {
-  div.landing-summary {
-    background: url("/assets/landing-page-background-image.png") no-repeat !important;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-}
-
-@media (min-width: 415px) and (max-width: 600px) {
-  div.landing-summary {
-    background: url("/assets/landing-page-background-image.png") no-repeat !important;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-}
-
-@media (min-width: 601px) and (max-width: 767px) {
-  div.landing-summary {
-    background: url("/assets/landing-page-background-image.png") no-repeat !important;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 992px) {
-  div.landing-summary {
-    background: url("/assets/landing-page-background-image.png") no-repeat;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-}
-
-@media (min-width: 993px) {
-  div.landing-summary {
-    background: url("/assets/landing-page-background-image.png") no-repeat;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-}

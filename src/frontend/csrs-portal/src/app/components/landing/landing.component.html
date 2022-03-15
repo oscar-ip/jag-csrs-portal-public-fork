@@ -11,7 +11,7 @@
             Home
           </a>
         </li>
-        <span class="divider">|</span>
+        <span class="divider d-none d-lg-block">|</span>
         <li>
           <a
             [routerLink]="['/questionnaire']"
@@ -27,10 +27,10 @@
   <div class="background_image">
     <div class="container">
       <section>
-        <div class="summary-content">
+        <div class="card mb-2 border-0 summary-content">
           <div>
-            <p class="h1_class">Child Support Recalculation Service</p>
-            <p class="description_text">
+            <div class="card-title h1_class">Child Support Recalculation Service</div>
+            <div class="card-body description_text" >
               The Child Support Recalculation Service helps families with child support orders and written agreements
                 maintain a fair standard of support for their children by reviewing the amount of child support each year.
                 The recalculation service adjusts the amount of child support if income has gone up or down so that
@@ -43,214 +43,186 @@
             >
             Learn more >
             </a>
-          </p>
+          </div>
           </div>
         </div>
       </section>
 
       <section>
         <div class="round3">
-          <mat-grid-list cols="7" rowHeight="80px">
-            <mat-grid-tile
-            [colspan]="1"
-            [rowspan]="2">
-            <img class="icon-size5" src="/assets/Questionnaire-icon.svg" />
-        </mat-grid-tile>
-        <mat-grid-tile
-        [colspan]="6"
-        [rowspan]="1">
-        <p class="text-left-inside-grid" style="font-size: 28px; font-weight:bolder;">
-          Is the recalculation service right for you?
-          <mat-divider style="margin-top:15px; width: 154%;"></mat-divider>
-        </p>
-    </mat-grid-tile>
-    <mat-grid-tile
-        [colspan]="4"
-        [rowspan]="1"
-        >
-        <p style="color:black" class="text-inside-grid">Complete the questionnaire to obtain important information
-          about eligibility for the service to help you decide whether to apply.</p>
-    </mat-grid-tile>
-    <mat-grid-tile
-        [colspan]="2"
-        [rowspan]="1">
-        <button mat-flat-button type="button" style="margin-right: 20px; margin-bottom: 20px;" class="large" color="accent" routerLink="/questionnaire">
-          Start questionnaire
-        </button>
-    </mat-grid-tile>
 
-            <!-- <mat-grid-tile colspan="1" rowspan="1.5" aria-rowindex="0">
-              <img class="icon-size5" src="/assets/Questionnaire-icon.svg" />
-            </mat-grid-tile>
-            <mat-grid-tile colspan="5" rowspan="1" aria-rowindex="0">
-              <p class="text-left-inside-grid" style="font-size: 28px; font-weight:bolder;">
-                Is the recalculation service right for you?
-                <mat-divider style="margin-top:15px; width: 154%;"></mat-divider>
-              </p>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="3" rowspan="1" aria-rowindex="1" class="text-left-inside-grid" style="font-size: 18px;">
-              <p style="color:black">Complete the questionnaire to obtain important information
-                about eligibility for the service to help you decide whether to apply.</p>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="2" rowspan="1"   aria-rowindex="1">
-              <button mat-flat-button type="button" style="margin-right: 20px;" class="large" color="accent" routerLink="/questionnaire">
-                Start questionnaire
-              </button>
-            </mat-grid-tile> -->
-          </mat-grid-list>
+          <div class="card-group">
+            <div class="card p-4 d-none d-lg-block mb-2 border-0" style="min-width: 15%;">
+              <img class="card-img-top icon-size3" src="/assets/Questionnaire-icon.svg" alt="Questionnaire icon">
+            </div>
+
+            <div class="card mb-2 border-0" style="min-width: 80%;">
+              <div class="card-body">
+                <p class="card-title h2_class">Is the recalculation service right for you?
+                  <mat-divider style="margin-top:15px; min-width: 100%;"></mat-divider>
+                </p>
+
+                <div class="card-group">
+                  <div class="card border-0" style="min-width: 70%;">
+                    <div class="card-body">
+                      <p class="card-text" style="color:black" class="text-inside-grid">Complete the questionnaire to obtain important information
+                        about eligibility for the service to help you decide whether to apply.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="card border-0" style="min-width: 25%;">
+                    <div class="card-body">
+                      <button mat-flat-button type="button" class="large" color="accent" routerLink="/questionnaire">
+                        <strong>Start questionnaire</strong>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-    <section class="py-4">
-      <div class="p-3 round3">
-        <div class="container">
-          <div class="row pb-2">
-            <div class="col border_bottom">
-              <p class="font_size_24_bolder pb-3">
-                New users
-              </p>
+      <section class="py-4">
+        <div class="p-3 round3">
+          <div class="card-group" >
+            <div class="card mb-2 border-0" style="min-width: 44%;">
+              <div class="card-body">
+                <p class="card-title h2_class">New users
+                  <mat-divider style="margin-top:15px; max-width: 100%;"></mat-divider>
+                </p>
+                <div class="pl-2">
+                  <p class="color_black ">You will need a <strong>Basic BCeID account </strong>
+                    <span>
+                    <mat-icon
+                    matTooltip="BCeID is a user ID and password. You can use it to log in to securely access multiple other online government services."
+                     #tooltip3="matTooltip"
+                      class="toolTipIcon">info</mat-icon>
+                    </span> to access the recalculation service and apply online.
+                  </p>
+                </div>
+                <div class="py-3">
+                  <p class="color_black">If you already have a Basic BCeID account log in
+                    <a
+                      class ='account-link'
+                      style="cursor:pointer; text-decoration: underline;"
+                      (click)="login();"
+                    >here.</a>
+                  </p>
+                </div>
+                <div class="pr-2">
+                  <p class="color_black"><strong>Were you provided a file number and password and
+                    asked to create an account?</strong>
+                  <mat-expansion-panel  style="box-shadow: none;" class="pt-2 pb-4" #expPanel hideToggle="true">
+                      <mat-expansion-panel-header class="p-0">
+                        <mat-panel-title style="text-decoration: underline;">
+                          {{expPanel.expanded? '- See less information
+                          ' : '+ See more information'}}
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      You will also need a Basic BCeID account if your court
+    order states you must register in the Child Support
+    Recalculation Program, or if the other party has started
+    the enrolment process of your order or written agreement.
+    You will have been sent a file number and password that
+    you will need to submit your information to the
+    recalculation service once you have obtained your BCeID.
+                    </mat-expansion-panel>
+                  </p>
+                </div>
+                <div>
+                  <a
+                    [attr.href]="bceIdRegisterLink"
+                    target="_blank"
+                    rel="noopener"
+                    class="useful-links bceIdLink"
+                  >
+                    <button mat-flat-button
+                            type="button"
+                            class="large_border"
+                            >
+                            Register for a Basic BCeID
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+
             </div>
-            <div class="col-sm-1"></div>
-            <div class="col border_bottom">
-              <p class="font_size_24_normal">
-                Returning users
-              </p>
-            </div>
-          </div>
-          <!--second-->
-          <div class="row">
-            <div class="col pl-2">
-              <p class="color_black ">You will need a <strong>Basic BCeID account </strong>
-                <span>
-                <mat-icon
-                matTooltip="BCeID is a user ID and password. You can use it to log in to securely access multiple other online government services."
-                 #tooltip3="matTooltip"
-                  class="toolTipIcon">info</mat-icon>
-                </span> to access the recalculation service and apply online.
-              </p>
-            </div>
-            <div class="col-sm-1"></div>
-            <div class="col pl-2 pt-2">
-              <p class="color_black">If you have previously logged in, continue to log into
-                your account with your Basic BCeID (user ID and
-                password.)
-              </p>
-            </div>
-          </div>
-          <!--third-->
-          <div class="row">
-            <div class="col pr-2 py-3">
-              <p class="color_black">If you already have a Basic BCeID account log in
-                <a
-                  class ='account-link'
-                  style="cursor:pointer; text-decoration: underline;"
-                  (click)="login();"
-                >here.</a>
-              </p>
-            </div>
-            <div class="col-sm-1"></div>
-            <div class="col pl-2"></div>
-          </div>
-          <!--fourth-->
-          <div class="row">
-            <div class="col pr-2">
-              <p class="color_black"><strong>Were you provided a file number and password and
-                asked to create an account?</strong>
-              <mat-expansion-panel  style="box-shadow: none;" class="pt-2 pb-4" #expPanel hideToggle="true">
-                  <mat-expansion-panel-header class="p-0">
-                    <mat-panel-title style="text-decoration: underline;">
-                      {{expPanel.expanded? '- See less information
-                      ' : '+ See more information'}}
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  You will also need a Basic BCeID account if your court
-order states you must register in the Child Support
-Recalculation Program, or if the other party has started
-the enrolment process of your order or written agreement.
-You will have been sent a file number and password that
-you will need to submit your information to the
-recalculation service once you have obtained your BCeID.
-                </mat-expansion-panel>
-              </p>
-            </div>
-            <div class="col-sm-1"></div>
-            <div class="col pl-2">
-            </div>
-          </div>
-          <!--fifth-->
-          <div class="row">
-            <div class="col pr-2">
-              <a
-                [attr.href]="bceIdRegisterLink"
-                target="_blank"
-                rel="noopener"
-                class="useful-links bceIdLink"
-              >
-                <button mat-flat-button
-                        type="button"
-                        class="large_border">
-                        Register for a Basic BCeID
-                </button>
-              </a>
-            </div>
-            <div class="col-sm-1"></div>
-            <div class="col pl-2">
-              <a
-                target="_blank"
-                rel="noopener"
-                class="useful-links bceIdLink"
-              >
-                <button mat-flat-button
-                        type="button"
-                        class="large"
-                        color="primary"
-                        style="size: 250px"
-                        (click)="login()"
-                        >
-                        BCeID login
-                </button>
-              </a>
+            <div class="card mb-2 border-0" style="min-width: 4%;"></div>
+
+              <div class="card mb-2 border-0" style="min-width: 44%;">
+              <div class="card-body">
+                <p class="card-title h2_class" style="font-weight: normal">Returning users
+                  <mat-divider style="margin-top:15px; max-width: 100%;"></mat-divider>
+                </p>
+                <div class="pr-2">
+                  <p class="color_black">If you have previously logged in, continue to log into
+                    your account with your Basic BCeID (user ID and
+                    password.)
+                  </p>
+                </div>
+                <div class="pr-2">
+                  <a
+                    target="_blank"
+                    rel="noopener"
+                    class="useful-links bceIdLink"
+                  >
+                    <button mat-flat-button
+                            type="button"
+                            class="large"
+                            color="primary"
+                            (click)="login()"
+                            >
+                            BCeID login
+                    </button>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
 
     <section style="padding-bottom: 20px">
       <div class="p-2 round4">
-        <mat-grid-list cols="7" rowHeight="3em">
-          <mat-grid-tile colspan="1" rowspan="2" aria-rowindex="0">
-            <img class="support-image" src="/assets/Support_icon.svg" />
-          </mat-grid-tile>
-          <mat-grid-tile colspan="6" rowspan="1" aria-rowindex="0">
-            <p class="text-left-inside-grid font_size_24_bolder">
-              Have questions or looking for more support?
-            </p>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="6" rowspan="1">
 
-            <p class="text-left-contact font_size_18_lighter">
-              Contact the recalculation service toll free at
-              <a
-                  [attr.href]="bceIdLink"
-                  target="_blank"
-                  rel="noopener"
-                  class="useful-links bceIdLink"
-                >
-                1-866-660-2684
-              </a>
-              or learn more about the program
-              <a
-                  [attr.href]="bceIdLink"
-                  target="_blank"
-                  rel="noopener"
-                  class="useful-links bceIdLink"
-                >
-                  here.
+        <div class="card-group">
+          <div class="card p-4 d-none d-lg-block mb-2 border-0" style="max-width: 15%;">
+            <img class="card-img-top support-image" src="/assets/Support_icon.svg" alt="Support icon">
+          </div>
+
+          <div class="card mb-2 border-0" style="min-width: 80%;">
+            <div class="card-body">
+              <p class="card-title font_size_24_bolder">Have questions or looking for more support?</p>
+              <p class="card-text font_size_18_lighter">Contact the recalculation service toll free at
+                <a
+                    [attr.href]="bceIdLink"
+                    target="_blank"
+                    rel="noopener"
+                    class="useful-links bceIdLink"
+                  >
+                  1-866-660-2684
                 </a>
-            </p>
-          </mat-grid-tile>
-        </mat-grid-list>
+                or learn more about the program
+                <a
+                    [attr.href]="bceIdLink"
+                    target="_blank"
+                    rel="noopener"
+                    class="useful-links bceIdLink"
+                  >
+                    here.
+                  </a>
+              </p>
+
+
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </section>
     </div>
