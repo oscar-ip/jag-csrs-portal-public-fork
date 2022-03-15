@@ -101,7 +101,9 @@
                 <h2>Message</h2>
                 <div class="message-data">
                   <h2><strong>{{selectedInboxMessage.subject}}</strong></h2>
-                  <p>{{selectedInboxMessage.content}}</p>
+                  <div style="white-space: pre-line;">
+                  {{selectedInboxMessage.content}}
+                  </div>
                 </div>
                 <table class="table" *ngIf="selectedInboxMessage.attachment">
                   <tr>
