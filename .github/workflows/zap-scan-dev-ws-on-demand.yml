@@ -1,0 +1,14 @@
+name: ZAP Scan (DEV) on Demand
+on:
+  workflow_dispatch:
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan ZAP website
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.3.0
+        with:
+          target: 'https://dev.childsupportrecalc.gov.bc.ca/'
+          token: ${{ secrets.GITHUB_TOKEN }}
