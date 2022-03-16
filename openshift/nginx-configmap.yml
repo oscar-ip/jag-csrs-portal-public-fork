@@ -53,12 +53,19 @@ data:
           #add_header  X-Frame-Options "SAMEORIGIN" always;
 
           add_header X-Frame-Options "DENY";
-          add_header Content-Security-Policy "default-src 'self' https://sfstest7.gov.bc.ca *.gov.bc.ca *.childsupportrecalc.gov.bc.ca *.devops.gov.bc.ca *.oidc.gov.bc.ca https://spt.apps.gov.bc.ca https://spm.apps.gov.bc.ca; frame-src 'self' *.gov.bc.ca;  script-src 'self' *.childsupportrecalc.gov.bc.ca https://www2.gov.bc.ca  *.gov.bc.ca ; style-src 'self' ; font-src 'self' *.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self'; connect-src 'self' *.gov.bc.ca; manifest-src 'self';" always;
 
-          set_cookie_flag Secret HttpOnly secure SameSite;
-          set_cookie_flag * HttpOnly;
-          set_cookie_flag SessionID SameSite=Lax secure;
-          set_cookie_flag SiteToken SameSite=Strict;
+          #variation that didnot load page properly
+          #add_header Content-Security-Policy "default-src 'self' https://sfstest7.gov.bc.ca *.gov.bc.ca https://www2.gov.bc.ca *.childsupportrecalc.gov.bc.ca *.devops.gov.bc.ca *.oidc.gov.bc.ca https://spt.apps.gov.bc.ca https://spm.apps.gov.bc.ca; frame-src 'self' *.gov.bc.ca;  script-src 'self' 'unsafe-inline' 'unsafe-eval' *.childsupportrecalc.gov.bc.ca https://www2.gov.bc.ca  *.gov.bc.ca ; style-src 'self' ; font-src 'self' *.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' *.gov.bc.ca; connect-src 'self' *.gov.bc.ca; manifest-src 'self' *.gov.bc.ca; object-src 'self'" always;
+          #variation that loaded page properly but too open
+          #add_header Content-Security-Policy " default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' ;" always;
+          #variation that loaded page properly but less lenient
+          add_header Content-Security-Policy " default-src 'self' *.gov.bc.ca *.*.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' ;" always;
+
+
+          add_header set_cookie_flag "Secret HttpOnly secure SameSite";
+          add_header set_cookie_flag "* HttpOnly";
+          add_header set_cookie_flag "SessionID SameSite=Lax secure";
+          add_header set_cookie_flag "SiteToken SameSite=Strict";
 
 
 
@@ -107,10 +114,11 @@ data:
           # No need to log this request, its just noise
 
           access_log off;
-          set_cookie_flag Secret HttpOnly secure SameSite;
-          set_cookie_flag * HttpOnly;
-          set_cookie_flag SessionID SameSite=Lax secure;
-          set_cookie_flag SiteToken SameSite=Strict;
+
+          add_header set_cookie_flag "Secret HttpOnly secure SameSite";
+          add_header set_cookie_flag "* HttpOnly";
+          add_header set_cookie_flag "SessionID SameSite=Lax secure";
+          add_header set_cookie_flag "SiteToken SameSite=Strict";
         }
 
 
@@ -122,7 +130,6 @@ data:
 
           client_body_timeout 180s;
 
-          add_header Content-Security-Policy "default-src 'self' https://sfstest7.gov.bc.ca *.gov.bc.ca *.childsupportrecalc.gov.bc.ca *.devops.gov.bc.ca *.oidc.gov.bc.ca https://spt.apps.gov.bc.ca https://spm.apps.gov.bc.ca; frame-src 'self' *.gov.bc.ca;  script-src 'self' *.childsupportrecalc.gov.bc.ca https://www2.gov.bc.ca  *.gov.bc.ca ; style-src 'self' ; font-src 'self' *.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self'; connect-src 'self' *.gov.bc.ca; manifest-src 'self';" always;
 
           add_header X-XSS-Protection "1; mode=block";
 
@@ -130,10 +137,10 @@ data:
 
           add_header Pragma "no-cache";
 
-          set_cookie_flag Secret HttpOnly secure SameSite;
-          set_cookie_flag * HttpOnly;
-          set_cookie_flag SessionID SameSite=Lax secure;
-          set_cookie_flag SiteToken SameSite=Strict;
+          add_header set_cookie_flag "Secret HttpOnly secure SameSite";
+          add_header set_cookie_flag "* HttpOnly";
+          add_header set_cookie_flag "SessionID SameSite=Lax secure";
+          add_header set_cookie_flag "SiteToken SameSite=Strict";
           
           add_header X-Frame-Options "DENY";
           
