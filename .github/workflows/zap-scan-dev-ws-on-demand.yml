@@ -8,7 +8,7 @@ jobs:
     name: Scan ZAP website
     steps:
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.3.0
+        uses: zaproxy/action-baseline@v0.6.1
         with:
           target: 'https://dev.childsupportrecalc.gov.bc.ca/'
           token: ${{ secrets.GITHUB_TOKEN }}
