@@ -89,6 +89,15 @@ objects:
           app.openshift.io/runtime: angularjs
           version: vblahblah
       spec:
+        volumes:
+          - name: volume-oidc-config
+            configMap:
+              name: oidc-config
+              defaultMode: 420
+          - name: nginx-config
+            configMap:
+              name: childcarerecalc-config
+              defaultMode: 420
         containers:
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${OC_ENV}
@@ -96,9 +105,7 @@ objects:
             imagePullPolicy: Always
             restartPolicy: Always
             terminationGracePeriodSeconds: 30
-            volumeMounts:
-              - name: volume-oidc-config
-                mountPath: /usr/share/nginx/html/assets/config/
+
             terminationMessagePolicy: File
             ports:
               - containerPort: 8080
@@ -125,6 +132,12 @@ objects:
               requests:
                 cpu: 500m
                 memory: 1000Mi
+            volumeMounts:
+              - name: volume-oidc-config
+                mountPath: /usr/share/nginx/html/assets/config/
+              - name: nginx-config
+                mountPath: /etc/nginx/nginx.conf
+                subPath: nginx.conf
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense

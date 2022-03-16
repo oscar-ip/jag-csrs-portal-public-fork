@@ -89,6 +89,9 @@ objects:
             configMap:
               name: oidc-config
               defaultMode: 420
+          - name: nginx-config
+            configMap:
+              name: childcarerecalc-config
         containers:
           # due to permission issue not using tools space; dev is pulling from dev
           - image: >-
@@ -126,6 +129,10 @@ objects:
             volumeMounts:
               - name: volume-oidc-config
                 mountPath: /usr/share/nginx/html/assets/config/
+              - name: nginx-config
+                mountPath: /etc/nginx/nginx.conf
+                subPath: nginx.conf
+
             # Took away readiness and liveness probe until those end points are ready
     triggers:
       - type: ConfigChange

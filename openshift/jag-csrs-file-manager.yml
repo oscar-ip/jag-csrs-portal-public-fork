@@ -213,12 +213,12 @@ objects:
               requests:
                 cpu: 250m
                 memory: 512Mi
-          volumeMounts:
-            - name: service-cert
-              mountPath: ${FILE_MANAGER_SERVICE_CERT}
-            - name: csrs-file-manager-ca
-              mountPath: ${CA_MOUNT_PATH}
-              subPath: service-ca.crt
+            volumeMounts:
+              - name: service-cert
+                mountPath: ${FILE_MANAGER_SERVICE_CERT}
+              - name: csrs-file-manager-ca
+                mountPath: ${CA_MOUNT_PATH}
+                subPath: service-ca.crt
 
             # Took away readiness and liveness probe until those end points are ready
     triggers:

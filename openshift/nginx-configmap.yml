@@ -1,0 +1,148 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: childcarerecalc-config
+  namespace: f0b5b6-dev
+data:
+  nginx.conf: |
+    error_log  /var/log/nginx/error.log;
+    events {
+      worker_connections  4096;
+    }
+    http {
+      log_format  main
+        'remote_addr:$remote_addr\t'
+        'time_local:$time_local\t'
+        'method:$request_method\t'
+        'uri:$request_uri\t'
+        'host:$host\t'
+        'status:$status\t'
+        'bytes_sent:$body_bytes_sent\t'
+        'referer:$http_referer\t'
+        'useragent:$http_user_agent\t'
+        'forwardedfor:$http_x_forwarded_for\t'
+        'request_time:$request_time';
+      access_log	/var/log/nginx/access.log main;
+      include /etc/nginx/conf.d/*.conf;
+      server {
+        listen      8080;
+        server_name  _ *.childcarerecalc.gov.bc.ca;
+
+        include /etc/nginx/conf.d/*.conf;
+
+        location / {
+
+          root   /usr/share/nginx/html;
+
+          index  index.html index.htm;
+
+          try_files $uri $uri/ /index.html;
+
+          include /etc/nginx/mime.types;
+
+
+          add_header Strict-Transport-Security "max-age=31536000; includeSubdomains;
+          preload" always;
+
+          add_header X-Content-Type-Options "nosniff" always;
+
+          add_header Referrer-Policy "no-referrer-when-downgrade";
+
+          add_header Access-Control-Allow-Credentials "true";
+
+          #add_header  X-Frame-Options "SAMEORIGIN" always;
+
+          add_header X-Frame-Options "DENY";
+          add_header Content-Security-Policy "default-src 'self' https://sfstest7.gov.bc.ca *.gov.bc.ca *.childsupportrecalc.gov.bc.ca *.devops.gov.bc.ca *.oidc.gov.bc.ca https://spt.apps.gov.bc.ca https://spm.apps.gov.bc.ca; frame-src 'self' *.gov.bc.ca;  script-src 'self' *.childsupportrecalc.gov.bc.ca https://www2.gov.bc.ca  *.gov.bc.ca ; style-src 'self' ; font-src 'self' *.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self'; connect-src 'self' *.gov.bc.ca; manifest-src 'self';" always;
+
+          set_cookie_flag Secret HttpOnly secure SameSite;
+          set_cookie_flag * HttpOnly;
+          set_cookie_flag SessionID SameSite=Lax secure;
+          set_cookie_flag SiteToken SameSite=Strict;
+
+
+
+
+          add_header X-XSS-Protection "1; mode=block";
+
+          add_header Cache-Control "no-cache, no-store, must-revalidate";
+
+          add_header Pragma "no-cache";
+
+          autoindex off;
+
+
+          gzip on;
+
+          gzip_min_length 1000;
+
+          gzip_proxied expired no-cache no-store private auth;
+
+          gzip_types text/plain text/css application/json application/javascript
+          application/x-javascript text/xml application/xml application/xml+rss
+          text/javascript;
+
+        }
+
+
+        error_page   500 502 503 504  /50x.html;
+
+
+        location = /50x.html {
+
+          root   /usr/share/nginx/html;
+  
+
+        }
+
+
+        # For status of ngnix service, OpenShift is configured to call this
+
+        location /nginx_status {
+
+          # Enable Nginx stats
+
+          stub_status on;
+
+          # No need to log this request, its just noise
+
+          access_log off;
+          set_cookie_flag Secret HttpOnly secure SameSite;
+          set_cookie_flag * HttpOnly;
+          set_cookie_flag SessionID SameSite=Lax secure;
+          set_cookie_flag SiteToken SameSite=Strict;
+        }
+
+
+        location /api/ {
+
+          proxy_pass http://jag-csrs-api:8080/api/;
+
+          client_max_body_size 10M;
+
+          client_body_timeout 180s;
+
+          add_header Content-Security-Policy "default-src 'self' https://sfstest7.gov.bc.ca *.gov.bc.ca *.childsupportrecalc.gov.bc.ca *.devops.gov.bc.ca *.oidc.gov.bc.ca https://spt.apps.gov.bc.ca https://spm.apps.gov.bc.ca; frame-src 'self' *.gov.bc.ca;  script-src 'self' *.childsupportrecalc.gov.bc.ca https://www2.gov.bc.ca  *.gov.bc.ca ; style-src 'self' ; font-src 'self' *.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self'; connect-src 'self' *.gov.bc.ca; manifest-src 'self';" always;
+
+          add_header X-XSS-Protection "1; mode=block";
+
+          add_header Cache-Control "no-cache, no-store, must-revalidate";
+
+          add_header Pragma "no-cache";
+
+          set_cookie_flag Secret HttpOnly secure SameSite;
+          set_cookie_flag * HttpOnly;
+          set_cookie_flag SessionID SameSite=Lax secure;
+          set_cookie_flag SiteToken SameSite=Strict;
+          
+          add_header X-Frame-Options "DENY";
+          
+        }
+
+
+        # Disables emitting nginx version in error messages and in the “Server”
+        #response header field.
+
+        server_tokens off;
+      }
+    }
