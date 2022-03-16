@@ -443,7 +443,7 @@
                   </mat-radio-group>
                 </div>
               </div>
-
+              <!--
               <div class="row button-row pb-3">
                   <div class="col-md-8"></div>
                   <div class="col-md-2">
@@ -456,8 +456,21 @@
                   <div class="col-md-2">
                     <button  mat-stroked-button (click)="callAntherchild()">+ Add another child</button>
                   </div>
-              </div>
+              </div>-->
             </ng-container>
+            <div class="row button-row pb-3">
+              <div class="col-md-8"></div>
+              <div class="col-md-2">
+                  <button mat-button style="color:red" [disabled]="!fourthFormGroup1.valid" (click)="deletechild()">
+                    Delete
+                    <mat-icon style="color:red" color="danger">delete</mat-icon>
+                  </button>
+              </div>
+              <div class="col-md-2">
+                <button  mat-stroked-button [disabled]="!fourthFormGroup1.valid"
+                (click)="callAntherchild()">+ Add another child</button>
+              </div>
+          </div>
           </form>
           <mat-divider></mat-divider>
           <div class="nextButton">
@@ -923,13 +936,15 @@
                 </div>
               </div>
               <div class="row" [ngStyle]="{'visibility':isHiddens[i] ? 'visible' : 'hidden'}">
-                <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <mat-checkbox  [checked]="userFormGroup.value.childDependency ==='Yes'" [disabled]="eFormGroup.value.secondCtrl"
-                    form class="example-margin">Dependent, but over age of majority</mat-checkbox>
+                <div class="col-md-12 stepRow spaceAround displayDetails1" [ngSwitch]="userFormGroup.value.childDependency">
+                  <div *ngSwitchCase="'Yes'">Child is over age of majority, but still a dependent.</div>
+                  <div *ngSwitchCase="'No'">Child is over age of majority, but is not a dependent.</div>
+                  <div *ngSwitchCase="'I don\'t know'">Child is over age of majority, don't know if they are still a dependent.</div>
+                  <div *ngSwitchDefault>Child is over age of majority.</div>
                 </div>
-              </div>
 
               </div>
+             </div>
             </div>
             <br />
             <div class="submit-layer ">
@@ -996,6 +1011,11 @@
                   </div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
+                  <div class="bold">{{(sixFormGroup.value.childSafety)?sixFormGroup.value.childSafety:'-' }}</div>
+                </div>
+              </div>
+              <div class="row agreement">
+                <div class="col-md-12 stepRow spaceAround displayDetails1">
                   <div class="bold">{{(sixFormGroup.value.childSafetyDescription)?sixFormGroup.value.childSafetyDescription:'-' }}</div>
                 </div>
               </div>

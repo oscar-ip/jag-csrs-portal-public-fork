@@ -1,10 +1,11 @@
 import { style } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-questionnaire',
@@ -13,10 +14,15 @@ import { AppConfigService } from 'app/services/app-config.service';
 })
 
 export class QuestionnaireComponent implements OnInit {
+
+  @ViewChild('stepper') stepper: MatStepper;
+
   public isLoggedIn = false;
   public bceIdRegisterLink: string;
   public   isEditable = true;
   public welcomeUser: string;
+  public selectedIndex: number = 0;
+
 
   data: any = [
     {
@@ -36,7 +42,7 @@ export class QuestionnaireComponent implements OnInit {
             },
              {data: ' <span class="text-dark">If you have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\' target="_blank"><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. </span>'},
             {
-              data: ' <span class="text-dark">You’ll need to have a copy of it before you start your application.</span>',
+              data: ' <span class="text-dark">You\'ll need to have a copy of it before you start your application.</span>',
             },
             {
               data: ' <span class="text-dark">The Child Support Recalculation Service does <strong>not</strong> recalculate:</span>',
@@ -115,7 +121,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark"><strong>Great,</strong> to use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C residents. You’re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.'
+              data: '<span class="text-dark"><strong>Great,</strong> to use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C residents. You\'re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.'
             }
           ],
         },
@@ -123,7 +129,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">To use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C. residents. You’re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.',
+              data: '<span class="text-dark">To use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C. residents. You\'re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.',
             },
             {
               data: '<span class="text-dark">If you or the other parent or guardian live in another province or territory, this service is not available to you.',
@@ -208,7 +214,7 @@ export class QuestionnaireComponent implements OnInit {
           ],
         },
         {
-          label: 'I don’t know',
+          label: 'I don\'t know',
           clickedContent: [
             {
               data: '<span class="text-dark">In B.C., the amount of child support to be paid is determined using <a href="https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/family-law/child-support/guidelines" target="_blank" style="color:#009cde !important; text-decoration: underline">the Child Support Guidelines</a>. As a general rule, the law requires courts, parents and the Child Support Recalculation Service to use the guidelines.',
@@ -241,7 +247,6 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label: 'Was the amount of child support in your order or written agreement based on any of the following situations?',
-
       content: [
         {
           label:
@@ -256,11 +261,11 @@ export class QuestionnaireComponent implements OnInit {
               },
               {
                 liData: '<strong>Self-employment or partnership income;</strong>',
-                tooltipData: 'Part or all of the paying parent’s income is earned from carrying a trade or business as the owner, independent contractor, or some form of partnership.'
+                tooltipData: 'Part or all of the paying parent\'s income is earned from carrying a trade or business as the owner, independent contractor, or some form of partnership.'
               },
               {
                 liData: '<strong>Payor stands in place of a parent; or</strong>',
-                tooltipData: 'A step-parent or person who is not the child’s biological or adoptive parent.'
+                tooltipData: 'A step-parent or person who is not the child\'s biological or adoptive parent.'
               },
               {
                 liData: '<strong>Pattern of income</strong>',
@@ -293,7 +298,7 @@ export class QuestionnaireComponent implements OnInit {
           ],
         },
         {
-          label: 'I don’t know',
+          label: 'I don\'t know',
           clickedContent: [
             {
               data: '<span class="text-dark">The Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. Unlike a judge, it <strong>cannot</strong> consider any other factors in determining the support payable.',
@@ -317,16 +322,17 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label: 'Was the amount of child support in your order based on imputed income?',
+      toolTip: ' Imputed income is when a judge decides the amount of income that child support should be based on. For example, a judge may decide to impute income if a person is intentionally underemployed or unemployed or has failed to provide income information when legally required to do so.',
       content: [],
       buttons: [
         {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service <strong>cannot</strong> recalculate support when a paying parent’s incomehas been imputed. This is because the recalculation service cannot make decisions that a judge can make about why income was imputed when child support was determined. If income has been imputed, your court order will usually say so.',
+              data: '<span class="text-dark">The Child Support Recalculation Service <strong>cannot</strong> recalculate support when a paying parent\'s income has been imputed. This is because the recalculation service cannot make decisions that a judge can make about why income was imputed when child support was determined. If income has been imputed, your court order will usually say so.',
             },
             {
-              data: '<span class="text-dark"><strong>There is one exception:</strong> If the order states that the paying parent’s income was imputed because they are exempt from paying federal or provincial income tax, then the recalculation service may be able to recalculate.',
+              data: '<span class="text-dark"><strong>There is one exception:</strong> If the order states that the paying parent\'s income was imputed because they are exempt from paying federal or provincial income tax, then the recalculation service may be able to recalculate.',
             },
           ],
         },
@@ -334,7 +340,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying paying parent’s income was imputed.',
+              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying parent\'s income has been imputed.',
             },
             {
               data: '<span class="text-dark">Since you have answered no / not applicable to this question, your order or written agreement may be eligible for recalculation.',
@@ -343,10 +349,10 @@ export class QuestionnaireComponent implements OnInit {
           ],
         },
         {
-          label: 'I don’t know',
+          label: 'I don\'t know',
           clickedContent: [
             {
-              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying paying parent’s income was imputed.',
+              data: '<span class="text-dark">The Child Support Recalculation Service cannot recalculate support when a paying parent\'s income was imputed.',
             },
             {
               data: '<span class="text-dark">Since you have answered no / not applicable to this question, your order or written agreement may be eligible for recalculation.',
@@ -368,6 +374,7 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label: ' Does your order or written agreement require the payment of special or extraordinary expenses?',
+      toolTip:'These are additional amounts to be paid over and above the base child support amount. Some examples of these expenses (often referred to as Section 7 expenses) include childcare, medical or dental premiums, healthcare costs.',
       content: [],
       buttons: [
         {
@@ -381,11 +388,11 @@ export class QuestionnaireComponent implements OnInit {
                 ul: [
                   {
                     liData:
-                      '<span class="text-dark">Both parent’s incomes are stated in the order or written agreement; and',
+                      '<span class="text-dark">Both parent\'s incomes are stated in the order or written agreement; and',
                   },
                   {
                     liData:
-                      '<span class="text-dark">Each parent’s proportion owing in relation to their incomes is clearly set out',
+                      '<span class="text-dark">Each parent\'s proportion owing in relation to their incomes is clearly set out',
                   },
                 ],
               },
@@ -394,7 +401,7 @@ export class QuestionnaireComponent implements OnInit {
               data: '<span class="text-dark">The recalculation service must review your order or written agreement first to determine whether it can recalculate your special or extraordinary Section 7 expenses.',
             },
             {
-              data: '<span class="text-dark">The recalculation service doesn’t have the authority to determine whether an expense continues to be eligible and payable. It may only adjust each parent’s proportionate share owing based on updated incomes.',
+              data: '<span class="text-dark">The recalculation service doesn\'t have the authority to determine whether an expense continues to be eligible and payable. It may only adjust each parent\'s proportionate share owing based on updated incomes.',
             },
             {
               data: '<span class="text-dark">If parents <strong>cannot</strong> agree on the eligibility of expenses, they may ask a court to decide.',
@@ -443,7 +450,7 @@ export class QuestionnaireComponent implements OnInit {
               },
               {
                 liData: '<strong>Income over $150,000 ?</strong>',
-                tooltipData: 'If a parent’s annual income is over $150,000, a court may consider other factors, in addition to the Child Support Guideline Tables.  These factors include conditions, means and other circumstances of the children and both parent’s financial ability to contribute to the support of the child(ren).'
+                tooltipData: 'If a parent\'s annual income is over $150,000, a court may consider other factors, in addition to the Child Support Guideline Tables.  These factors include conditions, means and other circumstances of the children and both parent\'s financial ability to contribute to the support of the child(ren).'
 
               },
             ],
@@ -463,13 +470,9 @@ export class QuestionnaireComponent implements OnInit {
           label: 'No',
           clickedContent: [
             {
-              data: '<span class="text-dark">These Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. As these situations can sometimes involve other factors, the service will need to review each case for eligibility',
+              data: '<span class="text-dark">The Child Support Recalculation Service recalculates orders and agreements based on the child support tables only. As these situations can sometimes involve other factors, the service will need to review each case for eligibility.',
             },
           ],
-        },
-        {
-          label: 'I don’t know',
-          clickedContent: [],
         },
       ],
       forwardButtons: [
@@ -554,6 +557,7 @@ export class QuestionnaireComponent implements OnInit {
     const parser = new DOMParser();
     const doc = parser.parseFromString(str, 'text/html');
     const id = '#' + idLabel + '-' + i + '-' + yi + '-' + ci;
+
     if (
       document.querySelector(id) &&
       document.querySelector(id).childElementCount === 0
@@ -562,8 +566,10 @@ export class QuestionnaireComponent implements OnInit {
 
     }
     document.querySelector(id).setAttribute('color', 'color:#2E8540 !important');
+    if(doc.body!==null){
+      doc.body[style].cssText += 'color:#2E8540 !important';
+    }
 
-    doc.body[style].cssText += 'color:#2E8540 !important';
   }
   setLabel(question: any, buttonItem: any, index: any) {
     question.clicked = buttonItem.label;
@@ -579,7 +585,7 @@ export class QuestionnaireComponent implements OnInit {
       );
       if (question.clicked === 'Yes' && node && [4,5,8].includes(index+1))  {
         node[style].cssText += 'background-color:#D8292F !important';
-      } else if (node && (question.clicked === 'Yes' || question.clicked === 'I don’t know')) {
+      } else if (node && (question.clicked === 'Yes' || question.clicked === 'I don\'t know')) {
         node[style].cssText += 'background-color:#2E8540 !important';
       } else if (node && question.clicked === 'No' && [3,4,5,6,7,8].includes(index+1)) {
         node[style].cssText += 'background-color:#2E8540 !important';
@@ -592,7 +598,7 @@ export class QuestionnaireComponent implements OnInit {
   setUIconColor1(index, question) {
       if (question.clicked === 'Yes' && [4,5,8].includes(index+1))  {
         return 'clear'
-      } else if ((question.clicked === 'Yes' || question.clicked === 'I don’t know')) {
+      } else if ((question.clicked === 'Yes' || question.clicked === 'I don\’t know')) {
         return 'done'
       } else if (question.clicked === 'No' && [3,4,5,6,7,8].includes(index+1)) {
         return 'done'
@@ -622,7 +628,7 @@ export class QuestionnaireComponent implements OnInit {
       }
 
     }
-    if((question.clicked == buttonItem.label &&  question.clicked == 'I don’t know')){
+    if((question.clicked == buttonItem.label &&  question.clicked == 'I don\’t know')){
       myGreen = true
     }
 
@@ -644,14 +650,14 @@ export class QuestionnaireComponent implements OnInit {
     if ((question.clicked === buttonItem.label &&  question.clicked == 'No')){
 
      if ([3, 4 , 5 , 6 , 7 , 8].includes(i + 1)){
-       myGreen = true
+       myGreen = true;
      } else {
-       myRed = true
+       myRed = true;
      }
-     this.setUIconColor(i,question);
+     this.setUIconColor(i, question);
 
    }
-    if ((question.clicked == buttonItem.label &&  question.clicked === 'I don’t know')){
+    if ((question.clicked == buttonItem.label &&  question.clicked === 'I don\’t know')){
      myGreen = true
    }
 
@@ -676,7 +682,7 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   logout() {
-    this.oidcSecurityService.logoff();
+    this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
   downloadApplication()

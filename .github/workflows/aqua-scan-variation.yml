@@ -5,8 +5,8 @@ name: Trivy Scan
 on:
   schedule:
   #  # Experimental schedule;
-  #  # 9:15 pm PST Tuesday ---> 5:15 AM UTC Wednesday
-    - cron:  '15 05 * * 3'
+  #  # 10:15 pm PST Tuesday ---> 6:15 AM UTC Wednesday
+    - cron:  '15 06 * * 3'
   push:
     branches:
       improving_infra_v2

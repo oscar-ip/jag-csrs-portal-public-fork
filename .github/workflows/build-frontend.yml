@@ -10,7 +10,8 @@ on:
     branches:
       - 'main'
     paths:
-      - 'src/frontend/**'  
+      - 'src/frontend/**' 
+  
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
@@ -28,7 +29,7 @@ jobs:
   # This workflow contains a single job called "build"
   build-push-image:
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     env:
       app: ${{github.event.inputs.app}}

@@ -37,6 +37,13 @@
 
         public static string CombineNameDocumentType(string name, string documentType)
         {
+            int idx = name.IndexOf(".");
+            if(idx > -1)
+            {
+                string tmp = name.Substring(0, idx);
+                string ext = System.IO.Path.GetExtension(name);
+                name = tmp + DateTime.Now.ToString("_yyyyMMddhhmmss")+ ext;
+            }
             string result = documentType + NameDocumentTypeSeparator + name;
             return result;
         }

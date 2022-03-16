@@ -68,6 +68,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
   today = new Date();
   isEditable: boolean = false;
   isDisabledSubmit: boolean = true;
+  isChildDelete: boolean = true;
   child: Child;
   _reponse: HttpResponse<any>;
 
@@ -477,9 +478,9 @@ editPage(stepper, index){
     const arraylen = usersArray.length;
 
     const newUsergroup: FormGroup = this._formBuilder.group({
-      firstName: [''],
-      lastName: [''],
-      birthdate: [],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      birthdate: ['', Validators.required],
       givenNames: [],
       childDependency: [],
       middleName: [],
@@ -488,13 +489,38 @@ editPage(stepper, index){
     usersArray.insert(arraylen, newUsergroup);
     this.isHiddens.push(false);
 
+    if (usersArray.length >= 2)
+    {
+      this.isChildDelete = false;
+    }
+    else
+    {
+      this.isChildDelete = true;
+    }
+
   }
 
+  /*
   deletechild(index){
-    this.fourthFormGroup1.get('users')['controls'].splice(index,1)
-    this.isHiddens.splice(index);
-  }
+    this.fourthFormGroup1.get('users')['controls'].splice(index,1);
+    this.isHiddens.splice(index,1);
+  }*/
 
+  deletechild(){
+    const arraylen = this.fourthFormGroup1.get('users')['controls'].length;
+    this.logger.info('arraylen = ', arraylen);
+    if (arraylen >= 2)
+    {
+      this.fourthFormGroup1.get('users')['controls'].splice(arraylen-1,1);
+      this.isHiddens.splice(arraylen-1,1);
+      this.isChildDelete = false;
+    }
+
+    if (this.fourthFormGroup1.get('users')['controls'].length == 1)
+    {
+      this.isChildDelete = true;
+    }
+  }
 
   saveLater() {
     this.isDisabledSubmit = true;

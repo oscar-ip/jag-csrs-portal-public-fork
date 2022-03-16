@@ -173,13 +173,13 @@ namespace Csrs.Interfaces.Dynamics
            
             return await dynamicsClient.Ssgcsrsfiles.GetByKeyAsync(fileId, select: select, expand: null, cancellationToken: cancellationToken);
         }
-        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId, CancellationToken cancellationToken)
+        public static async Task<MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection> GetCommunicationMessagesByFile(this IDynamicsClient dynamicsClient, string fileId, string partyId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(dynamicsClient);
 
             fileId = GuidGuard(fileId);
 
-            string filter = $"_ssg_csrsfile_value eq {fileId} and statuscode eq 867670001";
+            string filter = $"_ssg_csrsfile_value eq {fileId} and statuscode eq 867670001 and _ssg_toparty_value eq {partyId}";
             List<string> select = new List<string> { "_ssg_csrsfile_value", "ssg_sentreceiveddate", "ssg_csrsmessage", 
                                                     "ssg_csrsmessageattachment", "ssg_csrsmessageread", "ssg_csrsmessagesubject", 
                                                     "statuscode", "_ssg_toparty_value"};

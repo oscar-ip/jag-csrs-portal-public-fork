@@ -70,6 +70,7 @@ export class CommunicationComponent implements OnInit {
   // isUploaing: boolean = true;
   _token = '';
   selectedUploadFile: any;
+  public uploadDisabled = false;
 
   data: any = null;
   _reponse: HttpResponse<null>;
@@ -105,40 +106,8 @@ export class CommunicationComponent implements OnInit {
     });
 
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
-    this.accountService.apiAccountGet('response', false).subscribe({
-      next: (data) => {
-        this.accountSummary = data;
-        this.portalUser = this.accountSummary.body.user.firstName;
-        if ( this.accountSummary.status === HttpStatusCode.Ok &&
-              (this.accountSummary.body.files != null || this.accountSummary.body.files.length > 0)) {
-           this.files = this.accountSummary.body.files;
-        }
-      },
-      error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-            //Backend returns unsuccessful response codes such as: 500 etc.
-            this.logger.info('Backend returned ', e);
-          }
-      },
-      complete: () => this.logger.info('apiAccountGet<AccountFileSummary> is completed')
-    })
-    this.messageService.apiMessageListGet('response', false).subscribe({
-      next: (data) => {
-        this.messages = data.body;
-        this.getRemoteData();
-      },
-      error: (e) => {
-        if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
-        } else {
-          //Backend returns unsuccessful response codes such as: 500 etc.
-          this.logger.info('Backend returned ', e);
-        }
-      },
-      complete: () => this.logger.info('apiMessageListGet is completed')
-    })
+    this.getAccountInfo();
+    this.getMessages();
     
     this.uploadFormGroup = this._formBuilder.group({
       uploadFile: [null, Validators.required],
@@ -161,7 +130,57 @@ export class CommunicationComponent implements OnInit {
     });
 
     this.inboxFormGroup = this._formBuilder.group({
-      inboxFile: [null, Validators.required]
+      inboxFile: [null, ]
+    });
+
+    
+  }
+
+  getAccountInfo() {
+    this.accountService.apiAccountGet('response', false).subscribe({
+      next: (data) => {
+        this.accountSummary = data;
+        this.portalUser = this.accountSummary.body.user.firstName;
+        if (this.accountSummary.status === HttpStatusCode.Ok &&
+          (this.accountSummary.body.files != null && this.accountSummary.body.files.length > 0)) {
+          this.files = this.accountSummary.body.files;
+          if (this.files.length == 1) {
+            this.inboxFile.patchValue('all');
+            this.uploadFile.patchValue(this.files[0].fileId);
+            this.selectedUploadFile = this.files[0];
+            this.contactFile.patchValue(this.files[0].fileId);
+            this.selectedContactFile = this.files[0];
+          }
+        }
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this.logger.error(e.error.message);
+        } else {
+          //Backend returns unsuccessful response codes such as: 500 etc.
+          this.logger.info('Backend returned ', e);
+        }
+      },
+      complete: () => this.logger.info('apiAccountGet<AccountFileSummary> is completed')
+    });
+  }
+
+  getMessages() {
+    this.dataSource.data = [];
+    this.messageService.apiMessageListGet('response', false).subscribe({
+      next: (data) => {
+        this.messages = data.body;
+        this.getRemoteData();
+      },
+      error: (e) => {
+        if (e.error instanceof Error) {
+          this.logger.error(e.error.message);
+        } else {
+          //Backend returns unsuccessful response codes such as: 500 etc.
+          this.logger.info('Backend returned ', e);
+        }
+      },
+      complete: () => this.logger.info('apiMessageListGet is completed')
     });
   }
   get contactFile() {
@@ -203,14 +222,15 @@ export class CommunicationComponent implements OnInit {
   }
   onInboxFileNumberChange(ob): void {
     let fileValue = ob.value;
-    for (var i = 0; i < this.files.length; i++) {
-      if (fileValue == this.files[i].fileId) {
-        this.selectedInboxFile = this.files[i];
-
-        //TODO
-        this.getRemoteData();
+    this.selectedInboxFile = null;
+    if (fileValue && fileValue != 'all') {
+      for (var i = 0; i < this.files.length; i++) {
+        if (fileValue == this.files[i].fileId) {
+          this.selectedInboxFile = this.files[i];
+        }
       }
     }
+    this.getRemoteData();
   }
   clearContactForm(): void {
     this.showValidationMessages = false;
@@ -256,7 +276,11 @@ export class CommunicationComponent implements OnInit {
       }
       if (this.contactMessage.hasError) {
         for (const error in this.contactMessage.errors) {
-          this.validationMessages.push('Contact Message ' + error.toString());
+          if (error.toString() == 'maxlength') {
+            this.validationMessages.push('Contact Message Max Length 500 Characters');
+          } else {
+            this.validationMessages.push('Contact Message ' + error.toString());
+          }
         }
       }
     } else {
@@ -277,7 +301,7 @@ export class CommunicationComponent implements OnInit {
             this.data = {
               type: 'info',
               title: 'Success - Message sent',
-              content: 'Your message to the Child Support Recalculation Team was sent successfully.',
+              content: 'Your message to the Child Support Recalculation team was sent successfully.',
               weight: 'bold',
               color: 'green'
             };
@@ -326,10 +350,11 @@ export class CommunicationComponent implements OnInit {
       }
       for (var i = 0; i < this.messages.length; i++) {
         if (this.messages[i].messageId == element.messageId) {
-          console.log('setting selected message')
           this.selectedInboxMessage = this.messages[i];
         }
       }
+    } else {
+      this.getMessages();
     }
     this.toggleRow = element;
 
@@ -450,6 +475,7 @@ openDialog(): void {
 
   submitUploadedAttachment() {
     const fileData = new FormData();
+    this.uploadDisabled = true;
     fileData.append('file', this.selectedFile, this.selectedFile.name);
         this.logger.info('File Data', fileData);
      this.documentService.apiDocumentUploadattachmentPost(
@@ -468,6 +494,7 @@ openDialog(): void {
             color: 'green'
           };
           this.openDialog();
+          this.uploadDisabled = false;
       },
       error: (e) => {
         if (e.error instanceof Error) {
@@ -480,6 +507,7 @@ openDialog(): void {
             color: 'red'
           };
           this.openDialog();
+          this.uploadDisabled = false;
 
         } else {
             // Backend returns unsuccessful response codes such as 404, 500 etc.
@@ -492,19 +520,55 @@ openDialog(): void {
             color: 'red'
           };
           this.openDialog();
+          this.uploadDisabled = false;
           }
       },
       complete: () => this.logger.info('apiFileUploadattachmentPost is completed')
       });
-
+    
   }
   selectTab(index) {
     this.selectedTab = 0;
-    console.log('index ' + index);
     if (index) {
       this.selectedTab = index;
     }
   }
+
+  downloadAttachment(serverRelativeUrl, subject, name) {
+    //entityId: string, entityName: string, serverRelativeUrl: string, documentType: string,
+
+    
+    this.documentService.apiDocumentDownloadattachmentGet(
+      this.selectedInboxMessage.messageId,
+      "ssg_csrscommunicationmessage",
+      serverRelativeUrl,
+      subject,
+      'body', false,
+      { httpHeaderAccept: 'application/octet-stream' }
+    ).subscribe((response) => {
+      this.downLoadFile(response, subject, name);
+    });
+  }
+
+  downLoadFile(response: any, type: string, name: string) {
+    let dataType = response.type;
+    let binaryData = [];
+    binaryData.push(response);
+    let downloadLink = document.createElement('a');
+    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+    if (name)
+      downloadLink.setAttribute('download', name);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+
+    /*let blob = new Blob([response], { type: 'application/' + type.replace('.', '').toLowerCase });
+    let url = window.URL.createObjectURL(blob);
+    let pwa = window.open(url);
+    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+      alert('Please disable your Pop-up blocker and try again.');
+    }*/
+  }
+
 }
 
 

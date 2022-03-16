@@ -1,9 +1,6 @@
-name: ZAP Scan
+name: ZAP Scan (DEV) on Demand
 on:
-  schedule:
-    # Experimental schedule;
-    # HAve to be mindful of load on shared system
-    - cron:  '25 07 * * 6'
+  workflow_dispatch:
 
 jobs:
   zap_scan:

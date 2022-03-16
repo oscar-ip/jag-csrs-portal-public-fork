@@ -8,7 +8,7 @@ div.landing-summary {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-} 
+}
 
 .question-content{
   line-height: 1em;
@@ -119,6 +119,7 @@ div.container {
   margin-left: 20px;
   max-width: 50px ;
   max-height: 40px;
+  margin-bottom: 10px;
 }
 
 .mat-stroked-button {
@@ -259,8 +260,14 @@ mat-divider {
   height: 31px !important;
   width: 16px;
 }
+
 ::ng-deep .mat-vertical-stepper-header {
   pointer-events: none !important;
-  height: 40px !important;
+}
 
+::ng-deep .mat-step-header {
+  overflow: unset !important;
+}
+::ng-deep .mat-step-header[aria-selected="true"]  {
+  pointer-events: unset !important;
 }

@@ -39,11 +39,12 @@
             <ng-template matStepperIcon="edit" let-index="index">
 
              <mat-icon >{{setUIconColor1(index, data[index])}}</mat-icon>             </ng-template>
-            <mat-step class="notSelected" *ngFor="let question of data; index as i;" [editable]="isEditable">
+            <mat-step class="notSelected" (click)="setUIconColor(i,question)" *ngFor="let question of data; index as i;" [editable]="isEditable">
                <ng-template matStepLabel="" >
                   <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
                      <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
-                  <span style="font-size: 20px;">{{question.label}}</span>
+                  <span  class="question-label" style="font-size: 20px;">{{question.label}}</span><mat-icon *ngIf="question.toolTip"  class="toolTipIcon" matTooltip='{{question.toolTip}}'>info</mat-icon>
+
                </ng-template>
                <ng-template class="question-content" matStepContent="">
                   <div *ngFor="let contentItem of question.content; index as coi;">
