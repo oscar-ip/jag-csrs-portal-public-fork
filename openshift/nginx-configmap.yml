@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: childcarerecalc-config
-  namespace: f0b5b6-dev
+  namespace: licenseplate-env
 data:
   nginx.conf: |
     error_log  /var/log/nginx/error.log;
