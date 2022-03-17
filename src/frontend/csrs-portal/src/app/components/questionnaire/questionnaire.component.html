@@ -44,18 +44,18 @@
 
             <mat-step class="notSelected" (click)="setUIconColor(i,question)" *ngFor="let question of data; index as i;" [editable]="isEditable">
               <div class="card border-0">
-                <ng-template matStepLabel="" >
-                    <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
-                      <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
-                    <!--
-                    <span  class="question-label" style="font-size: 20px;">{{question.label}}</span><mat-icon *ngIf="question.toolTip"  class="toolTipIcon" matTooltip='{{question.toolTip}}'>info</mat-icon>
-                    -->
-                    <div class="question-label card-title fontSize20">{{question.label}}</div>
-                    <mat-icon *ngIf="question.toolTip"  class="toolTipIcon" matTooltip='{{question.toolTip}}'>
-                      info
-                    </mat-icon>
-                </ng-template>
-               <div class="card-body">
+                  <ng-template matStepLabel="" >
+                      <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
+                        <div *ngIf="question.clicked == 'No'"><mat-icon [ngClass]="{ 'colorRed' :question.clicked == 'No' }">cancel</mat-icon></div>   -->
+                      <!--
+                      <span  class="question-label" style="font-size: 20px;">{{question.label}}</span><mat-icon *ngIf="question.toolTip"  class="toolTipIcon" matTooltip='{{question.toolTip}}'>info</mat-icon>
+                      -->
+                      <div class="question-label card-title fontSize20" >{{question.label}}</div>
+                      <mat-icon *ngIf="question.toolTip"  class="toolTipIcon" matTooltip='{{question.toolTip}}'>
+                        info
+                      </mat-icon>
+                  </ng-template>
+                <div class="card-body">
                 <ng-template class="question-content" matStepContent="">
                     <div *ngFor="let contentItem of question.content; index as coi;">
                       <!--
@@ -121,47 +121,48 @@
                 <h1 style="margin-top: 15px;"><strong>I think I am eligible and want to enrol</strong></h1>
                 <hr style="opacity: 1" />
                 <p class="text-dark">
-                  <strong
-                    >To apply online, you will need a BCeID account.</strong
+                  <strong>To apply online, you will need a BCeID account.</strong
                   >
                 </p>
                 <div class="container p-0 mb-2">
-                  <div #alertContent class="alert-content row">
-                    <span class="col-sm-2" style="width: 10%;">
-                      <img
-                        style="height: 70px; width: auto"
-                        src="/assets/Questionnaire-End_icon.svg"
-                      />
-                    </span>
-                    <div class="col-sm-10">
-                      <h1 class="m-0"><strong> Before you start your application, make sure you have:</strong></h1>
-                      <ul class="text-dark">
-                        <li>
-                          Contact information for you and the other party (to the best
-                          of your knowledge)
-                        </li>
-                        <li>A copy of your current order or written agreement</li>
-                        <li>Child(ren) information</li>
-                      </ul>
+                  <div #alertContent class="alert-content row card-group">
+                    <div class="card d-none d-lg-block mb-2 border-0">
+                      <span class="col-sm-2" style="width: 10%;">
+                        <img
+                          style="min-height: 70px; width: auto"
+                          src="/assets/Questionnaire-End_icon.svg"
+                        />
+                      </span>
+                    </div>
+                    <div calss="card border-0">
+                      <div class="col-sm-10 card-body">
+                        <h1 class="m-0 card-title"><strong> Before you start your application, make sure you have:</strong></h1>
+                        <div class="card-text">
+                          <ul class="text-dark">
+                            <li>Contact information for you and the other party (to the best of your knowledge)</li>
+                            <li>A copy of your current order or written agreement</li>
+                            <li>Child(ren) information</li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <p style="color: black;">
-                  Sign in with your BCeID to proceed, if you do not have a BCeID, please
-                  create an account first.
-                </p>
-                <div class="flex-6-col">
-                  <mat-grid-list cols="6" rowHeight="60px">
-                    <mat-grid-tile
-                      class="mi-tile-contents-center"
-                      aria-rowindex="0"
-                      colspan="3"
-                      rowspan="1"
-                    >
+                <div class="card border-0">
+                  <div class="card-body">
+                    <p class="card-text" style="color: black;">
+                      Sign in with your BCeID to proceed, if you do not have a BCeID, please
+                      create an account first.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex-6-col card-group">
+                  <div class="card border-0">
+                    <div class="card-body">
                       <a class="useful-links bceIdLink" target="_blank" rel="noopener">
                         <button
                           type="button"
-                          style="min-width: 480px"
+                          style="min-width: 98%"
                           mat-flat-button
                           color="primary"
                           (click)="login()"
@@ -169,27 +170,35 @@
                           BCeID Login
                         </button>
                       </a>
-                    </mat-grid-tile>
-                    <mat-grid-tile
-                      class="mi-tile-contents-center"
-                      aria-rowindex="0"
-                      colspan="3"
-                      rowspan="1"
-                    >
+                    </div>
+                  </div>
+                  <div class="card border-0">
+                    <div class="card-body">
                       <a class="useful-links bceIdLink" [attr.href]="bceIdRegisterLink" target="_blank" rel="noopener">
-                        <button style="min-width: 480px" mat-stroked-button color="primary">
+                        <button style="min-width: 98%" mat-stroked-button color="primary">
                           Register for a Basic BCeID
                         </button>
                       </a>
-                    </mat-grid-tile>
-                  </mat-grid-list>
+                    </div>
+                  </div>
                 </div>
                 <div class="container mt-4 mb-2">
                   <div #alertContent class="alert-text2 row">
-
-                      <span class="text-dark"><strong style="color: #003366;"><img style="width: 2%;" src="/assets/PDF_icon.svg" /> Prefer a PDF to complete your application? </strong>
-                       You can download the PDF version of the application <a style="cursor:pointer; text-decoration: underline;" (click)="downloadApplication();">here</a> and mail the completed <br>   <span style="padding-left: 24px;">package.</span></span>
+                    <div class="card border-0">
+                      <div class="card-body">
+                        <span class="text-dark">
+                          <strong style="color: #003366;">
+                            <img style="min-width: 2%;" src="/assets/PDF_icon.svg" />
+                            Prefer a PDF to complete your application?
+                          </strong>
+                          You can download the PDF version of the application
+                          <a style="cursor:pointer; text-decoration: underline;"
+                              (click)="downloadApplication();">here</a> and mail the completed package.
+                        </span>
+                      </div>
                     </div>
+
+                  </div>
                 </div>
                 <p>
                   <strong>I’m not sure if I am eligible and have questions</strong>

@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
-import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-questionnaire',
@@ -15,14 +14,12 @@ import { MatStepper } from '@angular/material/stepper';
 
 export class QuestionnaireComponent implements OnInit {
 
-  @ViewChild('stepper') stepper: MatStepper;
 
   public isLoggedIn = false;
   public bceIdRegisterLink: string;
   public   isEditable = true;
   public welcomeUser: string;
   public selectedIndex: number = 0;
-
 
   data: any = [
     {
@@ -592,6 +589,7 @@ export class QuestionnaireComponent implements OnInit {
       } else if (node && question.clicked === 'No') {
         node[style].cssText += 'background-color:#D8292F !important';
       }
+
     });
   }
 
@@ -664,6 +662,7 @@ export class QuestionnaireComponent implements OnInit {
     // tslint:disable-next-line: object-literal-key-quotes
     return { 'myGreen' : myGreen, 'myRed' : myRed  };
  }
+
   public async ngOnInit() {
 
     // it is temporary solution. Later Links will retreive from configuration file
