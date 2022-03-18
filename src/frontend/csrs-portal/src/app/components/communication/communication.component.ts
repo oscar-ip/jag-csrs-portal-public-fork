@@ -235,7 +235,23 @@ export class CommunicationComponent implements OnInit {
   clearContactForm(): void {
     this.showValidationMessages = false;
     this.validationMessages = [];
-    this.contactFormGroup.reset();
+    this.contactSubject.reset();
+    this.contactMessage.reset();
+    if (this.files && this.files.length > 1) {
+      this.contactFile.reset();
+      this.selectedContactFile = null;
+    }
+  }
+
+  clearUploadForm(): void {
+    this.showValidationMessages = false;
+    this.validationMessages = [];
+    this.documentType.reset();
+    this.selectedFile = null;
+    if (this.files && this.files.length > 1) {
+      this.uploadFile.reset();
+      this.selectedUploadFile = null;
+    }
   }
 
   getRemoteData() {
@@ -365,7 +381,7 @@ export class CommunicationComponent implements OnInit {
     if (this.uploadFormGroup.valid) {
       if (this.selectedFile !== null) {
         this.submitUploadedAttachment();
-        this.selectedFile = null;
+        this.clearUploadForm();
       } else {
         this.validationMessages = [];
         this.showValidationMessages = true;
