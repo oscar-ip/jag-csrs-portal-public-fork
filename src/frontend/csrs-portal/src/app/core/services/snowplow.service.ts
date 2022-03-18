@@ -42,4 +42,14 @@ export class SnowplowService {
       this._window.snowplow('refreshLinkClickTracking');
     }
   }
+
+
+  public trackSelfDescribingEvent(data: any): void {
+      if (this._window.snowplow) {
+        this._window.snowplow('trackSelfDescribingEvent', {"schema":"iglu:ca.bc.gov.csrs/questionnaire_click/jsonschema/1-0-0",
+        "data": data
+      })
+    }
+  }
+
 }

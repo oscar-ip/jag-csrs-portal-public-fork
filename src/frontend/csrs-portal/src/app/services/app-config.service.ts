@@ -16,6 +16,7 @@ export class AppConfig implements IAppConfig {
   cscLink: string;
   bceIdRegisterLink: string;
   bceIdRegisterLink_P: string;
+  downloadApplication: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -57,6 +58,10 @@ export class AppConfigService {
 
   public get bceIdRegisterLink_P(): string {
     return this.appConfig?.bceIdRegisterLink_P;
+  }
+
+  public get downloadApplication(): string {
+    return this.appConfig?.downloadApplication;
   }
 
 }

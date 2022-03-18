@@ -27,6 +27,7 @@ import { Message } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
 import { List } from 'ts-generic-collections-linq';
 import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-communication',
   templateUrl: './communication.component.html',
@@ -38,6 +39,7 @@ export class CommunicationComponent implements OnInit {
   dataSource = new MatTableDataSource();
   @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['id', 'name', 'username', 'email', 'phone'];
+  public cscLink: string;
 
   constructor(private _formBuilder: FormBuilder,
               @Inject(LoggerService) private logger,
@@ -105,10 +107,13 @@ export class CommunicationComponent implements OnInit {
       this.selectedFileNumber = params.fileNumber;
     });
 
+    this.cscLink = this.appConfigService.appConfig.cscLink;
+    this.logger.info('cscLink :',this.cscLink);
+
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.getAccountInfo();
     this.getMessages();
-    
+
     this.uploadFormGroup = this._formBuilder.group({
       uploadFile: [null, Validators.required],
       documentType: [null, Validators.required],
@@ -133,7 +138,7 @@ export class CommunicationComponent implements OnInit {
       inboxFile: [null, ]
     });
 
-    
+
   }
 
   getAccountInfo() {
@@ -525,7 +530,7 @@ openDialog(): void {
       },
       complete: () => this.logger.info('apiFileUploadattachmentPost is completed')
       });
-    
+
   }
   selectTab(index) {
     this.selectedTab = 0;
@@ -537,7 +542,7 @@ openDialog(): void {
   downloadAttachment(serverRelativeUrl, subject, name) {
     //entityId: string, entityName: string, serverRelativeUrl: string, documentType: string,
 
-    
+
     this.documentService.apiDocumentDownloadattachmentGet(
       this.selectedInboxMessage.messageId,
       "ssg_csrscommunicationmessage",
