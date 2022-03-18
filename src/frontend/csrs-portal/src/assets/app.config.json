@@ -3,5 +3,6 @@
   "environment": "dev",
   "version": "1.0.0",
   "cscLink": "https://www.childsupportcalculator.ca/british-columbia.html",
-  "bceIdRegisterLink": "https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic"
+  "bceIdRegisterLink": "https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic",
+  "bceIdRegisterLink_P": "https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic"
 }
