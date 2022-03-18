@@ -2,7 +2,7 @@
     border-top-width: 3px;
     border-top-color: #facc00;
   }
-  
+
   .alert-content {
   border: 1px solid gray;
   width: 100%;
@@ -13,7 +13,7 @@
   .start-button {
     float: right;
     margin-bottom: 40px;
-    width:50%
+    min-width:50%
   }
   .footer {
     width:100%;
@@ -24,16 +24,21 @@
     margin-bottom: 50px;
   }
   .left-line{
-    float:left; 
-    width: 48%;
+    float:left;
+    min-width: 45%;
     padding-left: 1.5%;
     padding-right: 1%;
   }
   .right-line{
-    float:right; 
-    width: 48%;
+    float:right;
+    min-width: 45%;
+    padding-left: 1%;
   }
   .create-account{
     float: right;
-    width: 48%;
+    min-width: 48%;
+  }
+  .h2_class {
+    font-size: 28px;
+    font-weight: bold;
   }
