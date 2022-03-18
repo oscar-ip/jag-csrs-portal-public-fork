@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
+import { SnowplowService } from '@core/services/snowplow.service';
+//declare var jQuery: any;
 
 @Component({
   selector: 'app-questionnaire',
@@ -16,6 +18,8 @@ export class QuestionnaireComponent implements OnInit {
 
   public isLoggedIn = false;
   public bceIdRegisterLink: string;
+  public downloadApplicationLink: string;
+  public cscLink: string;
   public   isEditable = true;
   public welcomeUser: string;
   public selectedIndex: number = 0;
@@ -544,7 +548,8 @@ export class QuestionnaireComponent implements OnInit {
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
-              @Inject(AppConfigService) private appConfigService) {
+              @Inject(AppConfigService) private appConfigService,
+              @Inject(SnowplowService) private snowplow) {
 
   }
 
@@ -588,7 +593,6 @@ export class QuestionnaireComponent implements OnInit {
       } else if (node && question.clicked === 'No') {
         node[style].cssText += 'background-color:#D8292F !important';
       }
-
     });
   }
 
@@ -675,6 +679,12 @@ export class QuestionnaireComponent implements OnInit {
     this.logger.info('isDevMode :',isDevMode());
     this.logger.info('bceIdRegisterLink :',this.bceIdRegisterLink);
 
+    this.downloadApplicationLink = this.appConfigService.appConfig.downloadApplication;
+    this.logger.info('downloadApplicationLink :',this.downloadApplicationLink);
+
+    this.cscLink = this.appConfigService.appConfig.cscLink;
+    this.logger.info('cscLink :',this.cscLink);
+
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
       this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
       if (isAuthenticated === true)
@@ -696,7 +706,8 @@ export class QuestionnaireComponent implements OnInit {
   {
     const link = document.createElement('a');
     link.download = "Application.pdf";
-    link.href = "assets/Application.pdf";
+    //link.href = "assets/Application.pdf";
+    link.href = this.downloadApplicationLink;
     link.click();
   }
 

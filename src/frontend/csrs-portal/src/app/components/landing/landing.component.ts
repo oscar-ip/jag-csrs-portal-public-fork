@@ -35,7 +35,8 @@ export class LandingComponent implements OnInit
 
   public async ngOnInit() {
 
-      this.cscLink = this.appConfigService.cscLink;
+      this.cscLink = this.appConfigService.appConfig.cscLink;
+      this.logger.info('cscLink :',this.cscLink);
 
       if(isDevMode())
       {
