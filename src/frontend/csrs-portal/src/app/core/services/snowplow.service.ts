@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import {
   ISnowplowWindow,
   WindowRefService,
@@ -13,7 +13,16 @@ export class SnowplowService {
   constructor(window: WindowRefService) {
     this._window = window.nativeWindow;
     if (this._window.snowplow) {
-      const collector = 'spt.apps.gov.bc.ca';
+
+      var collector: string = '';
+      if(isDevMode())
+      {
+        collector = 'spm.apps.gov.bc.ca';
+      }
+      else
+      {
+        collector = 'spt.apps.gov.bc.ca';
+      }
       this._window.snowplow('newTracker', 'rt', collector, {
         appId: 'Snowplow_standalone',
         cookieLifetime: 86400 * 548,
