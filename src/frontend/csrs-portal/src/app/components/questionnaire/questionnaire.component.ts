@@ -1,5 +1,5 @@
 import { style } from '@angular/animations';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
@@ -13,7 +13,6 @@ import { AppConfigService } from 'app/services/app-config.service';
 })
 
 export class QuestionnaireComponent implements OnInit {
-
 
   public isLoggedIn = false;
   public bceIdRegisterLink: string;
@@ -545,7 +544,7 @@ export class QuestionnaireComponent implements OnInit {
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
-              @Inject(AppConfigService) private config) {
+              @Inject(AppConfigService) private appConfigService) {
 
   }
 
@@ -665,8 +664,17 @@ export class QuestionnaireComponent implements OnInit {
 
   public async ngOnInit() {
 
-    // it is temporary solution. Later Links will retreive from configuration file
-    this.bceIdRegisterLink = 'https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
+    if(isDevMode())
+    {
+      this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink;
+    }
+    else
+    {
+      this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink_P;
+    }
+    this.logger.info('isDevMode :',isDevMode());
+    this.logger.info('bceIdRegisterLink :',this.bceIdRegisterLink);
+
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
       this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
       if (isAuthenticated === true)

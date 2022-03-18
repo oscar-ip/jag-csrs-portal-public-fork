@@ -15,6 +15,7 @@ export class AppConfig implements IAppConfig {
   version: string;
   cscLink: string;
   bceIdRegisterLink: string;
+  bceIdRegisterLink_P: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,9 @@ export class AppConfig implements IAppConfig {
 export class AppConfigService {
   public appConfig: AppConfig;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+      this.loadAppConfig();
+  }
 
   public loadAppConfig(): Observable<any> {
     return this.http.get('/assets/app.config.json').pipe(
@@ -48,7 +51,12 @@ export class AppConfigService {
     return this.appConfig?.cscLink;
   }
 
-  get bceIdRegisterLink(): string {
+  public get bceIdRegisterLink(): string {
     return this.appConfig?.bceIdRegisterLink;
   }
+
+  public get bceIdRegisterLink_P(): string {
+    return this.appConfig?.bceIdRegisterLink_P;
+  }
+
 }
