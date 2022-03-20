@@ -1,7 +1,7 @@
 # This is the workflow that creates three new images for CSRS prod
 # Credit goes to Suganth /his CDDS and SCSS templates
 
-name:  Production: Ctreate Prod specific tagged images from previously build tagged Images for all three components and deploy 
+name:  Production Create Prod specific tagged images from previously build tagged Images for all three components and deploy 
 
 # Controls when the workflow will run
 # This one is triggered only manually as an extra pre-caution
