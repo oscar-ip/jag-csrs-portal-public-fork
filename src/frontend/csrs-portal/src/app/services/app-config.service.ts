@@ -29,7 +29,7 @@ export class AppConfigService {
   }
 
   public loadAppConfig(): Observable<any> {
-    return this.http.get('/assets/app.config.json').pipe(
+    return this.http.get('/assets/config/app.config.json').pipe(
       map((config: AppConfig) => {
         this.appConfig = config;
       })
