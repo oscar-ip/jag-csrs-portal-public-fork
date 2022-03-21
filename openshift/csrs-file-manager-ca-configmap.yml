@@ -4,4 +4,4 @@ metadata:
   name: csrs-file-manager-ca
   annotations:
     service.beta.openshift.io/inject-cabundle: "true"
-    app.kubernetes.io/part-of: jag-csrs
+    app.kubernetes.io/part-of: jag-csrs-file-manager

@@ -1,12 +1,13 @@
+# For test and prod
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${APP_NAME}
+  name: ${APP_NAME}-file-manager
   description: Deployment template for the JAG-csrs filemanager
 
 labels:
-  app: ${APP_NAME}
-  app.kubernetes.io/name: ${APP_NAME}
+  app: ${APP_NAME}-file-manager
+  app.kubernetes.io/name: ${APP_NAME}-file-manager
   app.kubernetes.io/part-of: ${APP_NAME}
 
 parameters:
@@ -60,6 +61,34 @@ parameters:
   required: true
   value: blahblah
 
+- name: OPENSHIFT
+  description: Indicator of the build is for OpenShift not local
+  required: false
+  value: nonlocal
+- name: SSL_CERT_DIR
+  description: CA CERT Location
+  required: true
+  value: /opt/app-root/ssl_dir/csrs-file-manager-ca
+- name: ASPNETCORE_ENVIRONMENT
+  description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
+  required: false
+  value: Production
+
+- name: SIGNER
+  description: signer for self signed cert
+  required: true
+  value: openshift-service-serving-signer@blahblah
+
+- name: FILE_MANAGER_SERVICE_CERT
+  description: where filemanager tls cert and keys are mounted
+  required: true
+  value: /var/run/secrets/blahblah
+
+- name: FILEMANAGER_CONFIG_NAME
+  description: name of file manager config
+  required: true
+  value: blahblah
+
 
 objects:
 
@@ -85,24 +114,35 @@ objects:
           name: ${FILEMANAGER_COMPONENT_NAME}
           app.kubernetes.io/instance: ${FILEMANAGER_COMPONENT_NAME}
           app.openshift.io/runtime: dotnet
+          version: vblahblah
       spec:
+        volumes:
+          - name: service-cert
+            secret:
+              secretName: file-manager-service-cert
+              defaultMode: 420
+          - name: csrs-file-manager-ca
+            configMap:
+              name: csrs-file-manager-ca
+              defaultMode: 420
         containers:
           - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${FILEMANAGER_COMPONENT_NAME}:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
             name: ${FILEMANAGER_COMPONENT_NAME}
             imagePullPolicy: Always
             ports:
               - containerPort: 8080
+              - containerPort: 8088
             env:
-            - name: SPLUNK_URL
+            - name: SPLUNK_COLLECTOR_URL
               valueFrom:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_URL
-            - name: FILEMANAGER_ADDRESS
+            - name: FILE_MANAGER_URI
               valueFrom:
                 secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
+                  name: csrs-filemanager-config
                   key: FILEMANAGER_ADDRESS
             - name: FILEMANAGER_SECURE
               valueFrom:
@@ -119,80 +159,124 @@ objects:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_INDEX
-            - name: SHAREPOINT_STS_TOKEN_URI
+            - name: AUTHORIZATION_URI
               valueFrom:
                 secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
-                  key: SHAREPOINT_STS_TOKEN_URI
+                  name: csrs-filemanager-config
+                  key: AUTHORIZATION_URI
             - name: SHAREPOINT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__PASSWORD
+                  name: csrs-filemanager-config
+                  key: SHAREPOINT_PASSWORD
             - name: SHAREPOINT_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__USERNAME
-            - name: SHAREPOINT_RELYING_PARTY_IDENTIFIER
+                  name: csrs-filemanager-config
+                  key: SHAREPOINT_USERNAME
+            - name: RELYING_PARTY_IDENTIFIER
               valueFrom:
                 secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
+                  name: csrs-filemanager-config
                   key: SHAREPOINT_RELYING_PARTY_IDENTIFIER
-            # SharePoint API GW EndPoint
-            - name: SHAREPOINT_ODATA_URI
+            - name: APIGATEWAY_HOST
               valueFrom:
                 secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
-                  key: APIGATEWAY_BASEPATH_SP
-            - name: SHAREPOINT_NATIVE_BASE_URI
+                  name: csrs-filemanager-config
+                  key: APIGATEWAY_HOST
+            - name: APIGATEWAY_POLICY
               valueFrom:
                 secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
-                  key: SHAREPOINT_NATIVE_BASE_URI
+                  name: csrs-filemanager-config
+                  key: APIGATEWAY_POLICY
+            - name: RESOURCE
+              valueFrom:
+                secretKeyRef:
+                  name: csrs-filemanager-config
+                  key: RESOURCE
+            - name: OPENSHIFT
+              value: ${OPENSHIFT}
+            - name: SSL_CERT_DIR
+              value: ${SSL_CERT_DIR}
             resources:
               limits:
-                cpu: 250m
+                cpu: 1000m
                 memory: 1000Mi
               requests:
-                cpu: 250m
+                cpu: 500m
                 memory: 512Mi
+            volumeMounts:
+              - name: service-cert
+                mountPath: ${FILE_MANAGER_SERVICE_CERT}
+              - name: csrs-file-manager-ca
+                mountPath: ${CA_MOUNT_PATH}
+                subPath: service-ca.crt
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense
-    #triggers:
-    #  - type: ConfigChange
-    #  - type: ImageChange
-    #    imageChangeParams:
-    #      automatic: true
-    #      containerNames:
-    #        - ${FILEMANAGER_COMPONENT_NAME}
-    #      from:
-    #        kind: ImageStreamTag
-    #        namespace: ${OC_NAMESPACE}-tools
-    #        name: ${FILEMANAGER_COMPONENT_NAME}:${IMAGE_TAG}
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${FILEMANAGER_COMPONENT_NAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${OC_NAMESPACE}-tools
+            name: ${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
   status: {}
 
 
-- apiVersion: v1
+- apiVersion:  v1
   kind: Service
-  apiVersion: v1
   metadata:
     name: ${FILEMANAGER_COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
+    annotations:
+      description: File Manager cert generation (automatic)
+      service.alpha.openshift.io/serving-cert-secret-name: file-manager-service-cert
+      service.alpha.openshift.io/serving-cert-signed-by: ${SIGNER}
+      service.beta.openshift.io/serving-cert-signed-by: ${SIGNER}
   labels:
-    app: file-manager
+    app: jag-csrs-file-manager
     app.kubernetes.io/component: backend
-    app.kubernetes.io/instance: file-manager
-    app.kubernetes.io/name: file-manager
+    app.kubernetes.io/instance: jag-csrs-file-manager
+    app.kubernetes.io/name: jag-csrs-file-manager
     app.kubernetes.io/part-of: jag-csrs
   spec:
     ports:
-      - name: https
+      - name: 8080-tcp
         protocol: TCP
         port: 8080
         targetPort: 8080
+      - name: 8088-tcp
+        protocol: TCP
+        port: 8088
+        targetPort: 8088
     selector:
-      name: file-manager
+      name: jag-csrs-file-manager
     clusterIP: None
     sessionAffinity: None
+
+- apiVersion:  route.openshift.io/v1
+  kind: Route
+
+  metadata:
+    name: ${FILEMANAGER_COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+    labels:
+      app: jag-csrs-file-manager
+      app.kubernetes.io/name: jag-csrs-file-manager
+      app.kubernetes.io/part-of: jag-csrs
+  spec:
+    host: ${FILEMANAGER_COMPONENT_NAME}-${OC_ENV}
+    to:
+      kind: Service
+      name: jag-csrs-file-manager
+      weight: 100
+    port:
+      targetPort: 8080-tcp
+    tls:
+      termination: passthrough
+    wildcardPolicy: None

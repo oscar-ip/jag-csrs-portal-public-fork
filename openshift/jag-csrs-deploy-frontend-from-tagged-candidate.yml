@@ -1,11 +1,12 @@
+# For test and prod
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${APP_NAME}
+  name: ${COMPONENT_NAME}
   description: Deployment template for the JAG-csrs Frontend
 
 labels:
-  app: ${APP_NAME}
+  app: ${COMPONENT_NAME}
   app.kubernetes.io/name: ${COMPONENT_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 
@@ -63,6 +64,12 @@ parameters:
   required: true
   value: blahblah
 
+- name: NODE_ENV 
+  description: dev, test or prod indicator; use development for DEV and TEST
+  # use production 
+  required: true
+  value: development
+
 objects:
 
 ### JAG-csrs Deployment Config ###
@@ -87,12 +94,29 @@ objects:
           name: ${COMPONENT_NAME}
           app.kubernetes.io/instance: ${COMPONENT_NAME}
           app.openshift.io/runtime: angularjs
+          version: vblahblah
       spec:
+        volumes:
+          - name: volume-oidc-config
+            configMap:
+              name: oidc-config
+              defaultMode: 420
+          - name: nginx-config
+            configMap:
+              name: childcarerecalc-config
+          - name: frontend-app-config
+            configMap:
+              name: frontend-app-config
+              defaultMode: 420
         containers:
           - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${COMPONENT_NAME}:${OC_ENV}
             name: ${COMPONENT_NAME}
             imagePullPolicy: Always
+            restartPolicy: Always
+            terminationGracePeriodSeconds: 30
+
+            terminationMessagePolicy: File
             ports:
               - containerPort: 8080
             env:
@@ -111,29 +135,39 @@ objects:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_INDEX
-            - name: BCEID_URL
-              value: ${BCEID_URL}
+            - name: NODE_ENV
+              value: ${NODE_ENV}
             resources:
               limits:
-                cpu: 250m
-                memory: 1000Mi
+                cpu: 1000m
+                memory: 4000Mi
               requests:
-                cpu: 125m
-                memory: 512Mi
+                cpu: 500m
+                memory: 1000Mi
+            volumeMounts:
+              - name: frontend-app-config
+                mountPath: /usr/share/nginx/html/assets/config/app.config.json
+                subPath: app.config.json
+              - name: volume-oidc-config
+                mountPath: /usr/share/nginx/html/assets/config/oidc.json
+                subPath: oidc.json
+              - name: nginx-config
+                mountPath: /etc/nginx/nginx.conf
+                subPath: nginx.conf
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense
-    # triggers:
-    #  - type: ConfigChange
-    #  - type: ImageChange
-    #    imageChangeParams:
-    #      automatic: true
-    #      containerNames:
-    #        - ${COMPONENT_NAME}
-    #      from:
-    #        kind: ImageStreamTag
-    #        namespace: ${OC_NAMESPACE}-tools
-    #        name: ${COMPONENT_NAME}:${IMAGE_TAG}
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${COMPONENT_NAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${OC_NAMESPACE}-tools
+            name: ${COMPONENT_NAME}:${OC_ENV}
   status: {}
 
 
@@ -155,24 +189,31 @@ objects:
     sessionAffinity: None
     type: ClusterIP
 
-#- apiVersion: route.openshift.io/v1
-#  kind: Route
-#  metadata:
-#    name: ${ROUTE_PREFIX}
-#    namespace: ${OC_NAMESPACE}-${OC_ENV}
-#  annotations:
-#    # if we do not use sticky-session, disable_cookies needs to be true
-#    haproxy.router.openshift.io/disable_cookies: "true"
-#    # balance algorithm
-#    haproxy.router.openshift.io/balance: roundrobin
-#  spec:
-#    host: ${DNS}
-#    to:
-#      kind: Service
-#      name: ${COMPONENT_NAME}
-#    port:
-#      targetPort: http
-#    tls:
-#      termination: edge
-#      insecureEdgeTerminationPolicy: Redirect
-#    wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    name: ${ROUTE_PREFIX}
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+  annotations:
+    # if we do not use sticky-session, disable_cookies needs to be true
+    haproxy.router.openshift.io/disable_cookies: "true"
+    # balance algorithm
+    haproxy.router.openshift.io/balance: roundrobin
+    # Needed only for DEV and TEST to restrict traffic temporarily
+    haproxy.router.openshift.io/ip_whitelist: ${CIDR_NOTATION}
+  spec:
+    host: ${DNS}
+    #${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
+    to:
+      kind: Service
+      name: ${COMPONENT_NAME}
+    port:
+     targetPort: http
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+      # Volume mount of secret on route Not allowed yet https://stackoverflow.com/a/62571080
+      # However we can do variable substitution in template https://stackoverflow.com/a/69002769
+      certificate: ${CERT}
+      key: ${KEY}
+    wildcardPolicy: None

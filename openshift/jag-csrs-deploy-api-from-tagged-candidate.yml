@@ -1,12 +1,13 @@
+# For test and prod
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${APP_NAME}
+  name: ${API_COMPONENT_NAME}
   description: Deployment template for the JAG-csrs TEST
 
 labels:
-  app: ${APP_NAME}
-  app.kubernetes.io/name: ${APP_NAME}
+  app: ${API_COMPONENT_NAME}
+  app.kubernetes.io/name: ${API_COMPONENT_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 
 
@@ -73,10 +74,32 @@ parameters:
   # Below value must be changed as per gold cluster certificate/DNS
   value: apps.silver.devops.gov.bc.ca
 
-- name: BCEID_URL
-  description: BCEID_URL for dev, test or prod
+- name: OPENSHIFT
+  description: Indicator of the build is for OpenShift not local
+  required: false
+  value: nonlocal
+- name: SSL_CERT_DIR
+  description: CA CERT Location
   required: true
-  value: https://www.development.bceid.ca/
+  value: /opt/app-root/ssl_dir/blahblah
+- name: ASPNETCORE_ENVIRONMENT
+  description: Environemnt indicator for DOTNET like DEvelopment, Production etc.
+  required: false
+  value: Production
+
+- name: RESOURCE
+  description: sharepoint location
+  required: true
+  value: sharepoint_blah_blah_location
+- name: CA_MOUNT_PATH
+  description: ca mount path
+  required: true
+  value: CA_MOUNT_PATH_blah_blah
+- name: SERVICE_TRUST_BUNDLE_MOUNT_PATH
+  description: ca mount path
+  required: true
+  value: SERVICE_TRUST_BUNDLE_MOUNT_PATH blah blah
+
 
 objects:
 
@@ -102,109 +125,144 @@ objects:
           name: ${API_COMPONENT_NAME}
           app.kubernetes.io/instance: ${API_COMPONENT_NAME}
           app.openshift.io/runtime: dotnet
+          version: vblahblah
       spec:
+        volumes:
+        - name: service-cert
+          secret:
+            secretName: file-manager-service-cert
+            defaultMode: 420
+        - name: volume-appsettings
+          configMap:
+            name: appsettings.production.json
+            defaultMode: 420
+        - name: csrs-file-manager-ca
+          configMap:
+            name: csrs-file-manager-ca
+            defaultMode: 420
+        - name: service-trustbundle-ca
+          configMap:
+            name: service-trustbundle-ca
+            defaultMode: 420
         containers:
-          - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${IMAGE_TAG}
-            name: ${API_COMPONENT_NAME}
-            imagePullPolicy: Always
-            ports:
-              - containerPort: 8080
-            env:
-            - name: JWT_AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: ${JWT_CONFIG_NAME}
-                  key: JWT__AUDIENCE
-            - name: JWT_AUTHORITY
-              valueFrom:
-                secretKeyRef:
-                  name: ${JWT_CONFIG_NAME}
-                  key: JWT__AUTHORITY
-            - name: SPLUNK_URL
-              valueFrom:
-                secretKeyRef:
-                  name: ${SPLUNK_CONFIG_NAME}
-                  key: SPLUNK_URL
-            - name: FILEMANAGER_ADDRESS
-              valueFrom:
-                secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
-                  key: FILEMANAGER_ADDRESS
-            - name: FILEMANAGER_SECURE
-              valueFrom:
-                secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
-                  key: FILEMANAGER_SECURE
-            - name: SPLUNK_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: ${SPLUNK_CONFIG_NAME}
-                  key: SPLUNK_TOKEN
-            - name: SPLUNK_INDEX
-              valueFrom:
-                secretKeyRef:
-                  name: ${SPLUNK_CONFIG_NAME}
-                  key: SPLUNK_INDEX
-            - name: OAUTH_CLIENTID
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__CLIENTID
-            - name: OAUTH_OAUTHURL
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__OAUTHURL
-            - name: OAUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__PASSWORD
-            - name: OAUTH_RESOURCEURL
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__RESOURCEURL
-            - name: OAUTH_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__SECRET
-            - name: OAUTH_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__USERNAME
-            - name: APIGATEWAY_BASEPATH
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: APIGATEWAY_BASEPATH
-            - name: BCEID_URL
-              value: ${BCEID_URL}
-            resources:
-              limits:
-                cpu: 250m
-                memory: 1000Mi
-              requests:
-                cpu: 250m
-                memory: 512Mi
-            # Took away readiness and liveness probe until those end points are ready
-    # Would trigger deployment from GitHub Actions by using dc patch
-    # Hence taking out the following trigger would make sense
-    #triggers:
-    #  - type: ConfigChange
-    #  - type: ImageChange
-    #    imageChangeParams:
-    #      automatic: true
-    #      containerNames:
-    #        - ${API_COMPONENT_NAME}
-    #      from:
-    #        kind: ImageStreamTag
-    #        namespace: ${OC_NAMESPACE}-tools
-    #        name: ${API_COMPONENT_NAME}:${IMAGE_TAG}
-  status: {}
+        - image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${OC_ENV}
+          name: ${API_COMPONENT_NAME}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+          - name: JWT__AUDIENCE
+            valueFrom:
+              secretKeyRef:
+                name: ${JWT_CONFIG_NAME}
+                key: JWT__AUDIENCE
+          - name: JWT__AUTHORITY
+            valueFrom:
+              secretKeyRef:
+                name: ${JWT_CONFIG_NAME}
+                key: JWT__AUTHORITY
+          - name: SPLUNK_URL
+            valueFrom:
+              secretKeyRef:
+                name: ${SPLUNK_CONFIG_NAME}
+                key: SPLUNK_URL
+          - name: FILEMANAGER_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: FILEMANAGER_ADDRESS
+          - name: FILEMANAGER_SECURE
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: FILEMANAGER_SECURE
+          - name: SPLUNK_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: ${SPLUNK_CONFIG_NAME}
+                key: SPLUNK_TOKEN
+          - name: SPLUNK_INDEX
+            valueFrom:
+              secretKeyRef:
+                name: ${SPLUNK_CONFIG_NAME}
+                key: SPLUNK_INDEX
+          - name: OAUTH_CLIENTID
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__CLIENTID
+          - name: OAUTH_OAUTHURL
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__OAUTHURL
+          - name: OAUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__PASSWORD
+          - name: OAUTH_RESOURCEURL
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__RESOURCEURL
+          - name: OAUTH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__SECRET
+          - name: OAUTH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__USERNAME
+          - name: APIGATEWAY_BASEPATH
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: APIGATEWAY_BASEPATH
+          - name: BCEID_URL
+            value: ${BCEID_URL}
+          - name: OPENSHIFT
+            value: ${OPENSHIFT}
+          - name: SSL_CERT_DIR
+            value: ${SSL_CERT_DIR}
+          - name: ASPNETCORE_ENVIRONMENT
+            value: ${ASPNETCORE_ENVIRONMENT}
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2000Mi
+            requests:
+              cpu: 500m
+              memory: 1000Mi
+          # Took away readiness and liveness probe until those end points are ready
+          volumeMounts:
+            #- name: volume-appsettings
+            #  mountPath: /opt/app-root/app/appsettings.Production.json
+            #  subPath: appsettings.json
+          - name: csrs-file-manager-ca
+            mountPath: ${CA_MOUNT_PATH}
+            subPath: service-ca.crt
+          - name: service-trustbundle-ca
+            mountPath: ${SERVICE_TRUST_BUNDLE_MOUNT_PATH}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${API_COMPONENT_NAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${OC_NAMESPACE}-tools
+            name: ${API_COMPONENT_NAME}:${IMAGE_TAG}
+
 
 # https://stackoverflow.com/a/61452441
 ### JAG-csrs-backend Service ###

@@ -1,0 +1,45 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: oidc-config-template
+  description: oidc-config-template
+
+labels:
+  app: ${APP_NAME}
+  app.kubernetes.io/name: ${COMPONENT_NAME}
+  app.openshift.io/runtime: ${RUNTIME}
+
+parameters:
+
+- name: OC_NAMESPACE
+  description: The OpenShift namespace prefix
+  required: false
+  # Below value must be changed as per gold cluster oc nameplate
+  value: licenseplate
+
+- name: OC_ENV
+  description: The OpenShift environment, ie dev, test or prod
+  required: true
+  
+
+objects:
+
+- kind: ConfigMap
+  apiVersion: v1
+
+  metadata:
+    name: oidc-config
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+
+  data:
+    oidc.json: |
+
+    { "postLoginRoute": "/welcomeuser",
+      "authority": "https://dev.oidc.gov.bc.ca/auth/realms/onestopauth-basic",
+      "redirectUrl": "https://dev.childsupportrecalc.gov.bc.ca",
+      "postLogoutRedirectUri": "https://test.childsupportrecalc.gov.bc.ca",
+      "clientId": "jsb-csrs-991", "kc_idp_hint": "bceid-basic", 
+      "scope": "openid profile",
+      "responseType": "code",
+      "prompt": "consent"
+    } 

@@ -1,18 +1,18 @@
-
-### Angular ###
 ## Angular ##
 # compiled output
 dist/
 tmp/
 app/**/*.js
 app/**/*.js.map
-openshift/.jag-csrs.env
+openshift/.*.env
+openshift/.for-config-map/*
 # dependencies
 node_modules/
 bower_components/
 
 # IDEs and editors
 .idea/
+.vscode/
 
 # misc
 .sass-cache/

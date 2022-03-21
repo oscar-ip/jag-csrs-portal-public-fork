@@ -1,3 +1,4 @@
+# For dev
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
@@ -58,6 +59,14 @@ parameters:
   description: BCEID_URL for dev, test or prod
   required: true
   value: https://www.development.bceid.ca/
+
+- name: NODE_ENV 
+  description: dev, test or prod indicator; use development for DEV and TEST
+  # use production 
+  required: true
+  value: development
+
+ 
   
 objects:
 
@@ -89,6 +98,13 @@ objects:
             configMap:
               name: oidc-config
               defaultMode: 420
+          - name: nginx-config
+            configMap:
+              name: childcarerecalc-config
+          - name: frontend-app-config
+            configMap:
+              name: frontend-app-config
+              defaultMode: 420
         containers:
           # due to permission issue not using tools space; dev is pulling from dev
           - image: >-
@@ -115,6 +131,8 @@ objects:
                   key: SPLUNK_INDEX
             - name: BCEID_URL
               value: ${BCEID_URL}
+            - name: NODE_ENV
+              value: ${NODE_ENV}
             # Yet to deal with proper resource allocation
             resources:
               limits:
@@ -124,8 +142,16 @@ objects:
                 cpu: 250m
                 memory: 512Mi
             volumeMounts:
+              - name: frontend-app-config
+                mountPath: /usr/share/nginx/html/assets/config/app.config.json
+                subPath: app.config.json
               - name: volume-oidc-config
-                mountPath: /usr/share/nginx/html/assets/config/
+                mountPath: /usr/share/nginx/html/assets/config/oidc.json
+                subPath: oidc.json
+              - name: nginx-config
+                mountPath: /etc/nginx/nginx.conf
+                subPath: nginx.conf
+
             # Took away readiness and liveness probe until those end points are ready
     triggers:
       - type: ConfigChange
@@ -154,6 +180,10 @@ objects:
         protocol: TCP
         port: 80
         targetPort: 8080
+    - name: http1
+      protocol: TCP
+      port: 8081
+      targetPort: 8081        
     selector:
       name: ${COMPONENT_NAME}
     sessionAffinity: None
@@ -172,7 +202,7 @@ objects:
     # Needed only for DEV and TEST to restrict traffic
     haproxy.router.openshift.io/ip_whitelist: ${CIDR_NOTATION}
   spec:
-    host: ${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
+    host: ${DNS} #${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
     to:
       kind: Service
       name: ${COMPONENT_NAME}

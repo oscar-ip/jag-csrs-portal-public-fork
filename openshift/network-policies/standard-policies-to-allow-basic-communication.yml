@@ -1,0 +1,50 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: standard network policies template
+metadata:
+  name:  standard-network-policies-template
+
+objects:
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: deny-by-default
+    spec:
+      podSelector: {}
+      policyTypes:
+        - Ingress
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+
+    metadata:
+      name: allow-from-openshift-ingress
+
+    spec:
+      podSelector: {}
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      policyTypes:
+        - Ingress
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+
+      name: allow-same-namespace
+
+    spec:
+      podSelector: {}
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  environment: env
+                  name: licenseplate
+      policyTypes:
+        - Ingress

@@ -1,0 +1,170 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: nginx config template
+  description: nginx config template
+
+
+
+parameters:
+
+- name: OC_NAMESPACE
+  description: The OpenShift namespace prefix
+  required: false
+  # Below value must be changed as per gold cluster oc nameplate
+  value: licenseplate
+
+- name: OC_ENV
+  description: The OpenShift environment, ie dev, test or prod
+  required: true
+  
+
+objects:
+
+- kind: ConfigMap
+  apiVersion: v1
+  metadata:
+    name: childcarerecalc-config
+    namespace: ${OC_NAMESPACE}-${OC_ENV}
+  data:
+    nginx.conf: |
+      #error_log  /var/log/nginx/error.log;
+      events {
+        worker_connections  4096;
+      }
+      http {
+        # commenting out all these so as not to deal with  issue due to log size and truncation need 
+        #log_format  main
+        #  'remote_addr:$remote_addr\t'
+        #  'time_local:$time_local\t'
+        #  'method:$request_method\t'
+        #  'uri:$request_uri\t'
+        #  'host:$host\t'
+        #  'status:$status\t'
+        #  'bytes_sent:$body_bytes_sent\t'
+        #  'referer:$http_referer\t'
+        #  'useragent:$http_user_agent\t'
+        #  'forwardedfor:$http_x_forwarded_for\t'
+        #  'request_time:$request_time';
+        #access_log	/var/log/nginx/access.log main;
+        include /etc/nginx/conf.d/*.conf;
+        server {
+          listen      8080;
+          server_name  _ *.childcarerecalc.gov.bc.ca;
+
+          include /etc/nginx/conf.d/*.conf;
+
+          location / {
+
+            root   /usr/share/nginx/html;
+
+            index  index.html index.htm;
+
+            try_files $uri $uri/ /index.html;
+
+            include /etc/nginx/mime.types;
+
+
+            add_header Strict-Transport-Security "max-age=31536000; includeSubdomains;
+            preload" always;
+
+            add_header X-Content-Type-Options "nosniff" always;
+
+            add_header Referrer-Policy "no-referrer-when-downgrade";
+
+            add_header Access-Control-Allow-Credentials "true";
+
+            #add_header  X-Frame-Options "SAMEORIGIN" always;
+
+            add_header X-Frame-Options "DENY";
+
+            #variation that didnot load page properly
+            #add_header Content-Security-Policy "default-src 'self' https://sfstest7.gov.bc.ca *.gov.bc.ca https://www2.gov.bc.ca *.childsupportrecalc.gov.bc.ca *.devops.gov.bc.ca *.oidc.gov.bc.ca https://spt.apps.gov.bc.ca https://spm.apps.gov.bc.ca; frame-src 'self' *.gov.bc.ca;  script-src 'self' 'unsafe-inline' 'unsafe-eval' *.childsupportrecalc.gov.bc.ca https://www2.gov.bc.ca  *.gov.bc.ca ; style-src 'self' ; font-src 'self' *.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' *.gov.bc.ca; connect-src 'self' *.gov.bc.ca; manifest-src 'self' *.gov.bc.ca; object-src 'self'" always;
+            #variation that loaded page properly but too open
+            #add_header Content-Security-Policy " default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' ;" always;
+            #variation that loaded page properly but less lenient
+            add_header Content-Security-Policy " default-src 'self' *.gov.bc.ca *.childcarerecalc.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; script-src 'self' *.gov.bc.ca *.childcarerecalc.gov.bc.ca 'unsafe-inline' 'unsafe-eval' ;" always;
+
+
+            add_header set_cookie_flag "Secret HttpOnly secure SameSite";
+            add_header set_cookie_flag "* HttpOnly";
+            add_header set_cookie_flag "SessionID SameSite=Lax secure";
+            add_header set_cookie_flag "SiteToken SameSite=Strict";
+            proxy_cookie_path / "/; SameSite=Lax; HTTPOnly; Secure";
+
+
+
+            add_header X-XSS-Protection "1; mode=block";
+
+            add_header Cache-Control "no-cache, no-store, must-revalidate";
+
+            add_header Pragma "no-cache";
+
+            autoindex off;
+
+
+            gzip on;
+
+            gzip_min_length 1000;
+
+            gzip_proxied expired no-cache no-store private auth;
+
+            gzip_types text/plain text/css application/json application/javascript
+            application/x-javascript text/xml application/xml application/xml+rss
+            text/javascript;
+
+          }
+
+
+          error_page   500 502 503 504  /50x.html;
+
+
+          location = /50x.html {
+
+            root   /usr/share/nginx/html;
+    
+
+          }
+
+
+          # For status of ngnix service, OpenShift is configured to call this
+
+          location /nginx_status {
+
+            # Enable Nginx stats
+
+            stub_status on;
+
+            # No need to log this request, its just noise
+
+            access_log off;
+
+
+          }
+
+
+          location /api/ {
+
+            proxy_pass http://jag-csrs-api:8080/api/;
+
+            client_max_body_size 10M;
+
+            client_body_timeout 180s;
+
+
+            add_header X-XSS-Protection "1; mode=block";
+
+            add_header Cache-Control "no-cache, no-store, must-revalidate";
+
+            add_header Pragma "no-cache";
+
+            
+          }
+
+
+          # Disables emitting nginx version in error messages and in the “Server”
+          #response header field.
+
+          server_tokens off;
+        }
+      }
