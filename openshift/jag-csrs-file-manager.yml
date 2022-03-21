@@ -1,3 +1,4 @@
+# For dev
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
@@ -128,16 +129,18 @@ objects:
           name: ${FILEMANAGER_COMPONENT_NAME}
           app.kubernetes.io/instance: ${FILEMANAGER_COMPONENT_NAME}
           app.openshift.io/runtime: dotnet
-          version: v0.1.11
+          version: vblahblah
       spec:
         containers:
-          # due to permission issue not using tools space; dev is pulling from dev
+          # due to permission issue (originally; that got resolved later but retroactive  adjustment did not happen) 
+          # not using tools space; dev is pulling from dev
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_ENV}/${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
             name: ${FILEMANAGER_COMPONENT_NAME} 
             imagePullPolicy: Always
             ports:
               - containerPort: 8080
+              - containerPort: 8088
             env:
             - name: SPLUNK_COLLECTOR_URL
               valueFrom:
@@ -236,55 +239,55 @@ objects:
 
 
 - apiVersion: v1
-  kind: Service
-  apiVersion: v1
+    kind: Service
+
+    metadata:
+      name: ${FILEMANAGER_COMPONENT_NAME}
+      namespace: ${OC_NAMESPACE}-${OC_ENV}
+      annotations:
+        description: File Manager cert generation (automatic)
+        service.alpha.openshift.io/serving-cert-secret-name: file-manager-service-cert
+        service.alpha.openshift.io/serving-cert-signed-by: ${SIGNER}
+        service.beta.openshift.io/serving-cert-signed-by: ${SIGNER}
+    labels:
+      app: jag-csrs-file-manager
+      app.kubernetes.io/component: backend
+      app.kubernetes.io/instance: jag-csrs-file-manager
+      app.kubernetes.io/name: jag-csrs-file-manager
+      app.kubernetes.io/part-of: jag-csrs
+    spec:
+      ports:
+        - name: 8080-tcp
+          protocol: TCP
+          port: 8080
+          targetPort: 8080
+        - name: 8088-tcp
+          protocol: TCP
+          port: 8088
+          targetPort: 8088
+      selector:
+        name: jag-csrs-file-manager
+      clusterIP: None
+      sessionAffinity: None
+
+- apiVersion: route.openshift.io/v1
+  kind: Route
+
   metadata:
     name: ${FILEMANAGER_COMPONENT_NAME}
     namespace: ${OC_NAMESPACE}-${OC_ENV}
-  annotations:
-    description: File Manager cert generation (automatic)
-    service.alpha.openshift.io/serving-cert-secret-name: file-manager-service-cert
-    service.alpha.openshift.io/serving-cert-signed-by: ${SIGNER}
-    service.beta.openshift.io/serving-cert-signed-by: ${SIGNER}
-  labels:
-    app: jag-csrs-file-manager
-    app.kubernetes.io/component: backend
-    app.kubernetes.io/instance: jag-csrs-file-manager
-    app.kubernetes.io/name: jag-csrs-file-manager
-    app.kubernetes.io/part-of: jag-csrs
+    labels:
+      app: jag-csrs-file-manager
+      app.kubernetes.io/name: jag-csrs-file-manager
+      app.kubernetes.io/part-of: jag-csrs
   spec:
-    ports:
-      - name: 8080-tcp
-        protocol: TCP
-        port: 8080
-        targetPort: 8080
-    - name: 8088-tcp
-      protocol: TCP
-      port: 8088
-      targetPort: 8088
-    selector:
+    host: ${FILEMANAGER_COMPONENT_NAME}-${OC_ENV}
+    to:
+      kind: Service
       name: jag-csrs-file-manager
-    clusterIP: None
-    sessionAffinity: None
-
-
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: ${FILE_MANAGER_ROUTE}
-  namespace: ${OC_NAMESPACE}-${OC_ENV}
-  labels:
-    app: jag-csrs-file-manager
-    app.kubernetes.io/name: jag-csrs-file-manager
-    app.kubernetes.io/part-of: jag-csrs
-spec:
-  host: ${FILE_MANAGER_ROUTE}
-  to:
-    kind: Service
-    name: jag-csrs-file-manager
-    weight: 100
-  port:
-    targetPort: 8080-tcp
-  tls:
-    termination: passthrough
-  wildcardPolicy: None
+      weight: 100
+    port:
+      targetPort: 8080-tcp
+    tls:
+      termination: passthrough
+    wildcardPolicy: None

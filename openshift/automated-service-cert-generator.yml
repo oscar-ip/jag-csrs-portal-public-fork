@@ -1,0 +1,32 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: automated-service-cert-generator
+  description: automated service cert generator for some of the components
+
+parameters:
+
+- name: SERVICE_CERT_NAME
+  description: service cert name
+  required: true
+  value:  file-manager-service-cert
+- name: ORIGINATING_SERVICE_NAME 
+  description: originating service name  
+  required: true
+  value:  jag-csrs-file-manager
+- name: NAME_SPACE 
+  description: name-space  
+  required: true
+  value:  licenseplate-env
+
+objects:
+
+### JAG-csrs FILEMANAGER Deployment Config ###
+- apiVersion: v1
+  kind: Secret
+
+  metadata:
+    name: ${SERVICE_CERT_NAME}
+    namespace: ${NAME_SPACE}
+    annotations:
+      service.alpha.openshift.io/originating-service-name: ${ORIGINATING_SERVICE_NAME}

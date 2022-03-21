@@ -1,3 +1,4 @@
+# For test and prod
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
@@ -127,129 +128,129 @@ objects:
           version: vblahblah
       spec:
         volumes:
-          - name: service-cert
-            secret:
-              secretName: file-manager-service-cert
-              defaultMode: 420
-          - name: volume-appsettings
-            configMap:
-              name: appsettings.production.json
-              defaultMode: 420
+        - name: service-cert
+          secret:
+            secretName: file-manager-service-cert
+            defaultMode: 420
+        - name: volume-appsettings
+          configMap:
+            name: appsettings.production.json
+            defaultMode: 420
+        - name: csrs-file-manager-ca
+          configMap:
+            name: csrs-file-manager-ca
+            defaultMode: 420
+        - name: service-trustbundle-ca
+          configMap:
+            name: service-trustbundle-ca
+            defaultMode: 420
+        containers:
+        - image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${OC_ENV}
+          name: ${API_COMPONENT_NAME}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+          - name: JWT__AUDIENCE
+            valueFrom:
+              secretKeyRef:
+                name: ${JWT_CONFIG_NAME}
+                key: JWT__AUDIENCE
+          - name: JWT__AUTHORITY
+            valueFrom:
+              secretKeyRef:
+                name: ${JWT_CONFIG_NAME}
+                key: JWT__AUTHORITY
+          - name: SPLUNK_URL
+            valueFrom:
+              secretKeyRef:
+                name: ${SPLUNK_CONFIG_NAME}
+                key: SPLUNK_URL
+          - name: FILEMANAGER_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: FILEMANAGER_ADDRESS
+          - name: FILEMANAGER_SECURE
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: FILEMANAGER_SECURE
+          - name: SPLUNK_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: ${SPLUNK_CONFIG_NAME}
+                key: SPLUNK_TOKEN
+          - name: SPLUNK_INDEX
+            valueFrom:
+              secretKeyRef:
+                name: ${SPLUNK_CONFIG_NAME}
+                key: SPLUNK_INDEX
+          - name: OAUTH_CLIENTID
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__CLIENTID
+          - name: OAUTH_OAUTHURL
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__OAUTHURL
+          - name: OAUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__PASSWORD
+          - name: OAUTH_RESOURCEURL
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__RESOURCEURL
+          - name: OAUTH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__SECRET
+          - name: OAUTH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: OAUTH__USERNAME
+          - name: APIGATEWAY_BASEPATH
+            valueFrom:
+              secretKeyRef:
+                name: ${OAUTH_CONFIG_NAME}
+                key: APIGATEWAY_BASEPATH
+          - name: BCEID_URL
+            value: ${BCEID_URL}
+          - name: OPENSHIFT
+            value: ${OPENSHIFT}
+          - name: SSL_CERT_DIR
+            value: ${SSL_CERT_DIR}
+          - name: ASPNETCORE_ENVIRONMENT
+            value: ${ASPNETCORE_ENVIRONMENT}
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2000Mi
+            requests:
+              cpu: 500m
+              memory: 1000Mi
+          # Took away readiness and liveness probe until those end points are ready
+          volumeMounts:
+            #- name: volume-appsettings
+            #  mountPath: /opt/app-root/app/appsettings.Production.json
+            #  subPath: appsettings.json
           - name: csrs-file-manager-ca
-            configMap:
-              name: csrs-file-manager-ca
-              defaultMode: 420
+            mountPath: ${CA_MOUNT_PATH}
+            subPath: service-ca.crt
           - name: service-trustbundle-ca
-            configMap:
-              name: service-trustbundle-ca
-              defaultMode: 420
-          containers:
-          - image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${API_COMPONENT_NAME}:${OC_ENV}
-            name: ${API_COMPONENT_NAME}
-            imagePullPolicy: Always
-            ports:
-              - containerPort: 8080
-            env:
-            - name: JWT__AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: ${JWT_CONFIG_NAME}
-                  key: JWT__AUDIENCE
-            - name: JWT__AUTHORITY
-              valueFrom:
-                secretKeyRef:
-                  name: ${JWT_CONFIG_NAME}
-                  key: JWT__AUTHORITY
-            - name: SPLUNK_URL
-              valueFrom:
-                secretKeyRef:
-                  name: ${SPLUNK_CONFIG_NAME}
-                  key: SPLUNK_URL
-            - name: FILEMANAGER_ADDRESS
-              valueFrom:
-                secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
-                  key: FILEMANAGER_ADDRESS
-            - name: FILEMANAGER_SECURE
-              valueFrom:
-                secretKeyRef:
-                  name: ${FILEMANAGER_CONFIG_NAME}
-                  key: FILEMANAGER_SECURE
-            - name: SPLUNK_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: ${SPLUNK_CONFIG_NAME}
-                  key: SPLUNK_TOKEN
-            - name: SPLUNK_INDEX
-              valueFrom:
-                secretKeyRef:
-                  name: ${SPLUNK_CONFIG_NAME}
-                  key: SPLUNK_INDEX
-            - name: OAUTH_CLIENTID
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__CLIENTID
-            - name: OAUTH_OAUTHURL
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__OAUTHURL
-            - name: OAUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__PASSWORD
-            - name: OAUTH_RESOURCEURL
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__RESOURCEURL
-            - name: OAUTH_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__SECRET
-            - name: OAUTH_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: OAUTH__USERNAME
-            - name: APIGATEWAY_BASEPATH
-              valueFrom:
-                secretKeyRef:
-                  name: ${OAUTH_CONFIG_NAME}
-                  key: APIGATEWAY_BASEPATH
-            - name: BCEID_URL
-              value: ${BCEID_URL}
-            - name: OPENSHIFT
-              value: ${OPENSHIFT}
-            - name: SSL_CERT_DIR
-              value: ${SSL_CERT_DIR}
-            - name: ASPNETCORE_ENVIRONMENT
-              value: ${ASPNETCORE_ENVIRONMENT}
-            resources:
-              limits:
-                cpu: 1000m
-                memory: 2000Mi
-              requests:
-                cpu: 500m
-                memory: 1000Mi
-            # Took away readiness and liveness probe until those end points are ready
-            volumeMounts:
-              #- name: volume-appsettings
-              #  mountPath: /opt/app-root/app/appsettings.Production.json
-              #  subPath: appsettings.json
-            - name: csrs-file-manager-ca
-              mountPath: ${CA_MOUNT_PATH}
-              subPath: service-ca.crt
-            - name: service-trustbundle-ca
-              mountPath: ${SERVICE_TRUST_BUNDLE_MOUNT_PATH}
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
-            imagePullPolicy: Always
-        restartPolicy: Always
+            mountPath: ${SERVICE_TRUST_BUNDLE_MOUNT_PATH}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
     triggers:
       - type: ConfigChange
       - type: ImageChange

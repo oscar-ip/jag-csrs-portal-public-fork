@@ -1,8 +1,30 @@
-kind: ImageStream
-apiVersion: image.openshift.io/v1
+apiVersion: template.openshift.io/v1
+kind: Template
 metadata:
-  name: jag-csrs-frontend
-  namespace: f0b5b6-tools
-spec:
-  lookupPolicy:
-    local: false
+  name: frontend-image-stream-template
+  description: image stream template for the JAG-csrs frontend
+  
+parameters:
+
+- name: COMPONENT_NAME
+  description: The API component name
+  required: true
+  value: jag-csrs-frontend
+  
+- name: OC_NAMESPACE
+  description: The OpenShift namespace prefix
+  required: true
+  # Below value must be changed as per gold cluster oc nameplate
+  value: blahblah
+
+
+objects:
+
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: ${COMPONENT_NAME}
+    namespace: ${OC_NAMESPACE}-tools
+  spec:
+    lookupPolicy:
+      local: false

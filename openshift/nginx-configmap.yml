@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: childcarerecalc-config
-  namespace: licenseplate-env
+  namespace: f0b5b6-dev #licenseplate-env
 data:
   nginx.conf: |
     error_log  /var/log/nginx/error.log;
@@ -59,14 +59,14 @@ data:
           #variation that loaded page properly but too open
           #add_header Content-Security-Policy " default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' ;" always;
           #variation that loaded page properly but less lenient
-          add_header Content-Security-Policy " default-src 'self' *.gov.bc.ca *.*.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; script-src 'self' *.gov.bc.ca *.*.gov.bc.ca 'unsafe-inline' 'unsafe-eval' ;" always;
+          add_header Content-Security-Policy " default-src 'self' *.gov.bc.ca *.childcarerecalc.gov.bc.ca https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; script-src 'self' *.gov.bc.ca *.childcarerecalc.gov.bc.ca 'unsafe-inline' 'unsafe-eval' ;" always;
 
 
           add_header set_cookie_flag "Secret HttpOnly secure SameSite";
           add_header set_cookie_flag "* HttpOnly";
           add_header set_cookie_flag "SessionID SameSite=Lax secure";
           add_header set_cookie_flag "SiteToken SameSite=Strict";
-
+          proxy_cookie_path / "/; SameSite=Lax; HTTPOnly; Secure";
 
 
 
@@ -115,10 +115,7 @@ data:
 
           access_log off;
 
-          add_header set_cookie_flag "Secret HttpOnly secure SameSite";
-          add_header set_cookie_flag "* HttpOnly";
-          add_header set_cookie_flag "SessionID SameSite=Lax secure";
-          add_header set_cookie_flag "SiteToken SameSite=Strict";
+
         }
 
 
@@ -137,12 +134,6 @@ data:
 
           add_header Pragma "no-cache";
 
-          add_header set_cookie_flag "Secret HttpOnly secure SameSite";
-          add_header set_cookie_flag "* HttpOnly";
-          add_header set_cookie_flag "SessionID SameSite=Lax secure";
-          add_header set_cookie_flag "SiteToken SameSite=Strict";
-          
-          add_header X-Frame-Options "DENY";
           
         }
 

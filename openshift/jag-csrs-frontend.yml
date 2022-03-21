@@ -1,3 +1,4 @@
+# For dev
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
@@ -183,7 +184,7 @@ objects:
     # Needed only for DEV and TEST to restrict traffic
     haproxy.router.openshift.io/ip_whitelist: ${CIDR_NOTATION}
   spec:
-    host: ${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
+    host: ${DNS} #${ROUTE_PREFIX}-${OC_NAMESPACE}-${OC_ENV}.${DNS}
     to:
       kind: Service
       name: ${COMPONENT_NAME}

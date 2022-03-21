@@ -4,10 +4,14 @@ dist/
 tmp/
 app/**/*.js
 app/**/*.js.map
+openshift/.service-cert-generator.env
+openshift/.jag-csrs-file-manager-prod.env
 openshift/.jag-csrs.env
+openshift/.jag-csrs-frontend-prod.env
 openshift/.dcUpdaterRole.env
 openshift/.dcUpdaterRoleBinding.env
 openshift/.jag-csrs-test.env
+openshift/.*.env
 openshift/.image-pull-enabler-config.env
 openshift/.image-pusher-config.env
 openshift/.for-config-map/*

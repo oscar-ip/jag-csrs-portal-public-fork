@@ -1,13 +1,11 @@
-# This is the workflow that creates a new image for CSRS front end
+# This is the workflow that creates three new images for CSRS prod
 # Credit goes to Suganth /his CDDS and SCSS templates
 
-name:  Build Images for all three components and Push to Openshift Registry for non DEV Deployment
-# Would separate out `on git tagging execution` vs `manual workflow trigger` into
-# Two seperate scripts
-# Controls when the workflow will run
-on:
+name:  Production Create Prod specific tagged images from previously build tagged Images for all three components and deploy 
 
-  
+# Controls when the workflow will run
+# This one is triggered only manually as an extra pre-caution
+on:  
   # Allows you to run this workflow manually from the Actions tab
   # retrsict execution to limited set of people
   workflow_dispatch:
@@ -35,14 +33,14 @@ jobs:
   # This workflow contains a single job called "build"
   build-push-image:
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     #https://stackoverflow.com/a/70868036
     environment: prod
     env:
       app: ${{github.event.inputs.app}}
       env: ${{github.event.inputs.env}}
-      gittag: ${{github.event.inputs.tag}}
+      gittag: ${{github.event.inputs.gittag}}
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -53,7 +51,6 @@ jobs:
       
       # Get Git latest short Sha# from the release branch used. This Sha# will be used in image tagging as well as DC Pod labelling.
       - name: Get git tag
-        id: tag
         run: |
           if [[ -z "$gittag" ]]; then          
             echo "Exiting"
@@ -69,16 +66,13 @@ jobs:
             echo "Exiting"
             exit 1
           fi
-
       - name: print env variables
 
         run: |
-
           echo "Release Application: ${{ env.app }}"
           echo "Release Git tag: ${{env.gittag}}"
           echo "Deployment env: ${{env.env}}"
           
-
       # Login to OpenShift Tools Space to tag images appropriately
       # It assumes that the images are already built for test by running .github/workflows/build-all-on-tagging.yml
       - name: Login to OpenShift Tools Space 
@@ -96,7 +90,6 @@ jobs:
           oc tag -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-file-manager:${{env.gittag}}  "${{env.app}}-file-manager:${{ env.env }}"
           oc tag -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-api:${{env.gittag}}  "${{env.app}}-api:${{ env.env }}"
           oc tag -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools ${{secrets.OPENSHIFT_INTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{env.app}}-frontend:${{env.gittag}}  "${{env.app}}-frontend:${{ env.env }}"
-
       # Login to Openshift using OC SA and Token of respective env.
       - name: Authenticate OC Env Specific SA
         uses: redhat-actions/oc-login@v1
@@ -120,6 +113,6 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
           toolsSpace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
         run: |
-          oc patch dc "${appName}-file-manager" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
-          oc patch dc "${appName}-api" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
-          oc patch dc "${appName}-frontend" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-file-manager" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-api" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-frontend" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'

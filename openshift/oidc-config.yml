@@ -1,0 +1,18 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: oidc-config
+  namespace: licenseplate-env
+
+data:
+  oidc.json: |
+  {
+    "postLoginRoute": "/welcomeuser",
+    "authority": "https://dev.oidc.gov.bc.ca/auth/realms/onestopauth-basic",
+    "redirectUrl": "https://dev.childsupportrecalc.gov.bc.ca",
+    "postLogoutRedirectUri": "https://test.childsupportrecalc.gov.bc.ca",
+    "clientId": "jsb-csrs-991", "kc_idp_hint": "bceid-basic", 
+    "scope": "openid profile",
+    "responseType": "code",
+    "prompt": "consent"
+  }
