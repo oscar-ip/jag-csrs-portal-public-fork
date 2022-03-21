@@ -64,6 +64,12 @@ parameters:
   required: true
   value: blahblah
 
+- name: NODE_ENV 
+  description: dev, test or prod indicator; use development for DEV and TEST
+  # use production 
+  required: true
+  value: development
+
 objects:
 
 ### JAG-csrs Deployment Config ###
@@ -98,6 +104,9 @@ objects:
           - name: nginx-config
             configMap:
               name: childcarerecalc-config
+          - name: frontend-app-config
+            configMap:
+              name: frontend-app-config
               defaultMode: 420
         containers:
           - image: >-
@@ -126,6 +135,8 @@ objects:
                 secretKeyRef:
                   name: ${SPLUNK_CONFIG_NAME}
                   key: SPLUNK_INDEX
+            - name: NODE_ENV
+              value: ${NODE_ENV}
             resources:
               limits:
                 cpu: 1000m
@@ -134,8 +145,12 @@ objects:
                 cpu: 500m
                 memory: 1000Mi
             volumeMounts:
+              - name: frontend-app-config
+                mountPath: /usr/share/nginx/html/assets/config/app.config.json
+                subPath: app.config.json
               - name: volume-oidc-config
-                mountPath: /usr/share/nginx/html/assets/config/
+                mountPath: /usr/share/nginx/html/assets/config/oidc.json
+                subPath: oidc.json
               - name: nginx-config
                 mountPath: /etc/nginx/nginx.conf
                 subPath: nginx.conf
