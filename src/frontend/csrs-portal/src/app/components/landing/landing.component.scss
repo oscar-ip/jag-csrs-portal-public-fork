@@ -154,8 +154,8 @@ div.container {
 }
 
 .round4 {
-  width: 95%;
-  border: 2px solid orange;
+  width: 100%;
+  border: 2px solid #facc00;
   border-radius: 0px;
   background-color: white;
 }
@@ -468,7 +468,7 @@ div.container {
 
 .border-bottom{
   border-bottom-width: 2px;
-  border-bottom-color: orange;
+  border-bottom-color: #facc00;
 }
 
 .text-left-inside-grid {
@@ -499,12 +499,12 @@ div.container {
   margin: 0;
   border-bottom-width: 2px;
   border-bottom-style: solid;
-  border-bottom-color: orange;
+  border-bottom-color: #facc00;
 }
 
 mat-grid-tile.bottom_line {
   margin-bottom: 20px;
-  border-bottom: solid 2px #FCBA19;
+  border-bottom: solid 2px #facc00;
 }
 
 .mat-grid-tile-content{
@@ -527,7 +527,7 @@ mat-grid-tile.bottom_line {
   font-size:18px;
   font-weight: normal;
   background: black;
-  border: solid 2px orange;
+  border: solid 2px #facc00;
 }
 
 .description_text {
@@ -552,7 +552,6 @@ mat-grid-tile.bottom_line {
     background-repeat: no-repeat;
     background-size: 110%;
   }
-
 }
 
 @media (min-width: 442px) and (max-width: 768px) {
@@ -577,7 +576,7 @@ mat-grid-tile.bottom_line {
 
 .border_bottom {
   margin-right: 10px;
-  border-bottom: solid 1px orange;
+  border-bottom: solid 1px #facc00;
 }
 
 .font_size_24_bolder {
@@ -609,7 +608,7 @@ mat-grid-tile.bottom_line {
   font-size: 15px;
   color: black !important;
   background-color: white;
-  border: 4px solid orange;
+  border: 4px solid #facc00;
 }
 mat-expansion-panel{
   padding: 5px;

@@ -1,11 +1,12 @@
 import { style } from '@angular/animations';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
-import { MatStepper } from '@angular/material/stepper';
+import { SnowplowService } from '@core/services/snowplow.service';
+//declare var jQuery: any;
 
 @Component({
   selector: 'app-questionnaire',
@@ -15,14 +16,13 @@ import { MatStepper } from '@angular/material/stepper';
 
 export class QuestionnaireComponent implements OnInit {
 
-  @ViewChild('stepper') stepper: MatStepper;
-
   public isLoggedIn = false;
   public bceIdRegisterLink: string;
+  public downloadApplicationLink: string;
+  public cscLink: string;
   public   isEditable = true;
   public welcomeUser: string;
   public selectedIndex: number = 0;
-
 
   data: any = [
     {
@@ -548,7 +548,8 @@ export class QuestionnaireComponent implements OnInit {
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
-              @Inject(AppConfigService) private config) {
+              @Inject(AppConfigService) private appConfigService,
+              @Inject(SnowplowService) private snowplow) {
 
   }
 
@@ -664,10 +665,26 @@ export class QuestionnaireComponent implements OnInit {
     // tslint:disable-next-line: object-literal-key-quotes
     return { 'myGreen' : myGreen, 'myRed' : myRed  };
  }
+
   public async ngOnInit() {
 
-    // it is temporary solution. Later Links will retreive from configuration file
-    this.bceIdRegisterLink = 'https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
+    if(isDevMode())
+    {
+      this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink;
+    }
+    else
+    {
+      this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink_P;
+    }
+    this.logger.info('isDevMode :',isDevMode());
+    this.logger.info('bceIdRegisterLink :',this.bceIdRegisterLink);
+
+    this.downloadApplicationLink = this.appConfigService.appConfig.downloadApplication;
+    this.logger.info('downloadApplicationLink :',this.downloadApplicationLink);
+
+    this.cscLink = this.appConfigService.appConfig.cscLink;
+    this.logger.info('cscLink :',this.cscLink);
+
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
       this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
       if (isAuthenticated === true)
@@ -689,7 +706,8 @@ export class QuestionnaireComponent implements OnInit {
   {
     const link = document.createElement('a');
     link.download = "Application.pdf";
-    link.href = "assets/Application.pdf";
+    //link.href = "assets/Application.pdf";
+    link.href = this.downloadApplicationLink;
     link.click();
   }
 

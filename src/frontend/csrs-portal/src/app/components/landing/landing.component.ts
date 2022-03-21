@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 
@@ -35,10 +35,19 @@ export class LandingComponent implements OnInit
 
   public async ngOnInit() {
 
-      this.cscLink = this.appConfigService.cscLink;
+      this.cscLink = this.appConfigService.appConfig.cscLink;
+      this.logger.info('cscLink :',this.cscLink);
 
-      //this.bceIdRegisterLink = environment.production ? 'https://www.bceid.ca/os/?7731' : 'https://www.development.bceid.ca/os/?2281';
-      this.bceIdRegisterLink = 'https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic';
+      if(isDevMode())
+      {
+        this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink;
+      }
+      else
+      {
+        this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink_P;
+      }
+      this.logger.info('isDevMode :',isDevMode());
+      this.logger.info('bceIdRegisterLink :',this.bceIdRegisterLink);
 
       this.logInOutService.getLogoutStatus.subscribe((data) => {
         if (data !== null || data !== '')

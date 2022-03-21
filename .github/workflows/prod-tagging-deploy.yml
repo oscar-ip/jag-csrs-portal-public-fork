@@ -113,6 +113,6 @@ jobs:
           openshiftEnvNamespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{ env.env }}
           toolsSpace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
         run: |
-          oc patch dc "${appName}-file-manager" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
-          oc patch dc "${appName}-api" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
-          oc patch dc "${appName}-frontend" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-file-manager" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-api" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'
+          oc patch dc "${appName}-frontend" -n "${openshiftEnvNamespace}" --patch '{"spec":{"template":{"metadata":{"labels":{"version":"v${{ env.gittag }}"}}}}}'

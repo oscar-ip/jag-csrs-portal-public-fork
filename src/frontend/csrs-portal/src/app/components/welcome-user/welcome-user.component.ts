@@ -15,6 +15,7 @@ import { AppRoutes } from 'app/app.routes';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
+import { AppConfigService } from 'app/services/app-config.service';
 
 // -- import data structure
 import {
@@ -36,16 +37,21 @@ export class WelcomeUserComponent implements OnInit {
   data: any = null;
   outData: NewFileRequest = null;
   errorMessage: any = '';
+  public cscLink: string;
 
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
+              @Inject(AppConfigService) private appConfigService,
               public dialog: MatDialog,
               private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+
+    this.cscLink = this.appConfigService.appConfig.cscLink;
+    this.logger.info('cscLink :',this.cscLink);
 
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
@@ -54,7 +60,7 @@ export class WelcomeUserComponent implements OnInit {
 
     this.errorMessage = 'Error: Field is required.';
 
-    this.logger.info("before accountService.apiAccountGet");
+    //this.logger.info("before accountService.apiAccountGet");
 
     this.accountService.apiAccountGet().subscribe({
       next: (data:any) => {
@@ -68,11 +74,11 @@ export class WelcomeUserComponent implements OnInit {
           {
             const listFiles = new List<ModelFile>(files); this.logger.info("listFiles", listFiles);
             const activeStatus:ModelFile = listFiles.firstOrDefault(x=>x.status == FileStatus.Active);
-            this.logger.info("activeStatus", activeStatus);
+            //this.logger.info("activeStatus", activeStatus);
 
             if (activeStatus)
             {
-              this.logger.info("redirect to Communication");
+              //this.logger.info("redirect to Communication");
               this.router.routeReuseStrategy.shouldReuseRoute = () => false;
               this.router.navigate(['/communication']);
             }
