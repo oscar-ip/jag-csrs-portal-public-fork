@@ -5,12 +5,14 @@
   n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","https://www2.gov.bc.ca/StaticWebResources/static/sp/sp-2-14-0.js","snowplow"));
 
   var collector = '';
-  if (process.env.NODE_ENV === 'development') {
+  const nodeEnv = window.NODE_ENV || "development";
+  console.log('nodeEnv: ', nodeEnv);
+  if (nodeEnv === 'development') {
     collector = 'spm.apps.gov.bc.ca';
     }
-    if (process.env.NODE_ENV === 'production') {
+    else {
       collector = 'spt.apps.gov.bc.ca';
-    }
+    };
 
   //var collector = 'spt.apps.gov.bc.ca';
   window.snowplow('newTracker','rt',collector, {
