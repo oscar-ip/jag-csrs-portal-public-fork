@@ -5,7 +5,7 @@ import { AppConfigService } from 'app/services/app-config.service';
 
 import { AppModule } from './app/app.module';
 
-fetch('/assets/app.config.json')
+fetch('/assets/config/app.config.json')
   .then((response) => response.json())
   .then((config) => {
     console.log('Is production?', config.production);
