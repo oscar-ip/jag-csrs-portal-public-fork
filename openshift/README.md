@@ -25,6 +25,8 @@
 
   ``oc process -f network-policies/standard-policies-to-allow-basic-communication.yml | oc apply -f -  ``
 
+  ``oc process -f csrs-file-manager-ca-configmap.yml | oc apply -f - ``
+
   ``oc process -f dcUpdaterRole.yml --param-file=.dcUpdaterRole.env --ignore-unknown-parameters=true| oc apply -f -  ``
 
   ``oc process -f dcUpdaterRoleBinding.yml --param-file=.dcUpdaterRoleBinding.env --ignore-unknown-parameters=true| oc apply -f -  ``

@@ -17,7 +17,9 @@ parameters:
 - name: NAME_SPACE 
   description: name-space  
   required: true
-  value:  licenseplate-env
+- name: OC_ENV
+  description: The OpenShift environment, ie dev, test or prod
+  required: true
 
 objects:
 
@@ -27,6 +29,6 @@ objects:
 
   metadata:
     name: ${SERVICE_CERT_NAME}
-    namespace: ${NAME_SPACE}
+    namespace: ${NAME_SPACE}-${OC_ENV}
     annotations:
       service.alpha.openshift.io/originating-service-name: ${ORIGINATING_SERVICE_NAME}

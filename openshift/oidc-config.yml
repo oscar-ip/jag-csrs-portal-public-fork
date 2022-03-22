@@ -4,18 +4,13 @@ metadata:
   name: oidc-config-template
   description: oidc-config-template
 
-labels:
-  app: ${APP_NAME}
-  app.kubernetes.io/name: ${COMPONENT_NAME}
-  app.openshift.io/runtime: ${RUNTIME}
 
 parameters:
 
 - name: OC_NAMESPACE
   description: The OpenShift namespace prefix
-  required: false
-  # Below value must be changed as per gold cluster oc nameplate
-  value: licenseplate
+  required: true
+
 
 - name: OC_ENV
   description: The OpenShift environment, ie dev, test or prod

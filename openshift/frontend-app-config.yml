@@ -9,9 +9,7 @@ parameters:
 
 - name: OC_NAMESPACE
   description: The OpenShift namespace prefix
-  required: false
-  # Below value must be changed as per gold cluster oc nameplate
-  value: licenseplate
+  required: true
 
 - name: OC_ENV
   description: The OpenShift environment, ie dev, test or prod
