@@ -125,6 +125,11 @@ objects:
             configMap:
               name: csrs-file-manager-ca
               defaultMode: 420
+          - name: appsettings
+            configMap:
+              name: appsettings.json
+              defaultMode: 420
+
         containers:
           - image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${FILEMANAGER_COMPONENT_NAME}:${OC_ENV}
@@ -200,17 +205,20 @@ objects:
               value: ${SSL_CERT_DIR}
             resources:
               limits:
-                cpu: 1000m
-                memory: 1000Mi
+                cpu: '2'
+                memory: 4000Mi
               requests:
-                cpu: 500m
-                memory: 512Mi
+                cpu: '1'
+                memory: 2000Mi
             volumeMounts:
               - name: service-cert
                 mountPath: ${FILE_MANAGER_SERVICE_CERT}
               - name: csrs-file-manager-ca
                 mountPath: ${CA_MOUNT_PATH}
                 subPath: service-ca.crt
+              - name: appsettings
+                mountPath: /opt/app-root/app/appsettings.Production.json
+                subPath: appsettings.json
             # Took away readiness and liveness probe until those end points are ready
     # Would trigger deployment from GitHub Actions by using dc patch
     # Hence taking out the following trigger would make sense

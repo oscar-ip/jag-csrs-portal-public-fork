@@ -1,7 +1,16 @@
+kind: Template
 apiVersion: v1
-kind: ConfigMap
 metadata:
-  name: csrs-file-manager-ca
-  annotations:
-    service.beta.openshift.io/inject-cabundle: "true"
-    app.kubernetes.io/part-of: jag-csrs-file-manager
+  name: csrs-file-manager-ca-template
+  description: csrs-file-manager-ca-template
+
+
+objects:
+
+- kind: ConfigMap
+  apiVersion: v1
+  metadata:
+    name: csrs-file-manager-ca
+    annotations:
+      service.beta.openshift.io/inject-cabundle: "true"
+      app.kubernetes.io/part-of: jag-csrs-file-manager

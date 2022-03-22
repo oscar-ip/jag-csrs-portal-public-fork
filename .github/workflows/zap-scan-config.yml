@@ -1,8 +1,7 @@
 name: ZAP Scan
 on:
   schedule:
-    # Experimental schedule;
-    # HAve to be mindful of load on shared system
+    # Scheduled Scanning of Prod
     - cron:  '25 07 * * 6'
 
 jobs:
@@ -13,5 +12,5 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.6.1
         with:
-          target: 'https://dev.childsupportrecalc.gov.bc.ca/'
+          target: 'https://childsupportrecalc.gov.bc.ca/'
           token: ${{ secrets.GITHUB_TOKEN }}

@@ -132,9 +132,9 @@ objects:
           secret:
             secretName: file-manager-service-cert
             defaultMode: 420
-        - name: volume-appsettings
+        - name: appsettings
           configMap:
-            name: appsettings.production.json
+            name: appsettings.json
             defaultMode: 420
         - name: csrs-file-manager-ca
           configMap:
@@ -232,21 +232,21 @@ objects:
             value: ${ASPNETCORE_ENVIRONMENT}
           resources:
             limits:
-              cpu: 1000m
-              memory: 2000Mi
+              cpu: '2'
+              memory: 4000Mi
             requests:
-              cpu: 500m
-              memory: 1000Mi
+              cpu: '1'
+              memory: 2000Mi
           # Took away readiness and liveness probe until those end points are ready
           volumeMounts:
-            #- name: volume-appsettings
-            #  mountPath: /opt/app-root/app/appsettings.Production.json
-            #  subPath: appsettings.json
-          - name: csrs-file-manager-ca
-            mountPath: ${CA_MOUNT_PATH}
-            subPath: service-ca.crt
-          - name: service-trustbundle-ca
-            mountPath: ${SERVICE_TRUST_BUNDLE_MOUNT_PATH}
+            - name: csrs-file-manager-ca
+              mountPath: ${CA_MOUNT_PATH}
+              subPath: service-ca.crt
+            - name: service-trustbundle-ca
+              mountPath: ${SERVICE_TRUST_BUNDLE_MOUNT_PATH}
+            - name: appsettings
+              mountPath: /opt/app-root/app/appsettings.Production.json
+              subPath: appsettings.json
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always

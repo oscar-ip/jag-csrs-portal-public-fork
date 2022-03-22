@@ -21,7 +21,11 @@
 
  Additional Instructions
 
- cd openshift
+  ``cd openshift ``
+
+  ``oc process -f network-policies/standard-policies-to-allow-basic-communication.yml | oc apply -f -  ``
+
+  ``oc process -f csrs-file-manager-ca-configmap.yml | oc apply -f - ``
 
   ``oc process -f dcUpdaterRole.yml --param-file=.dcUpdaterRole.env --ignore-unknown-parameters=true| oc apply -f -  ``
 
@@ -34,8 +38,5 @@
   ``oc process -f automated-service-cert-generator.yml --param-file=.service-cert-generator.env  --ignore-unknown-parameters=true| oc apply -f -  ``
 
   ``oc process -f jag-csrs-deploy-filemanager-from-tagged-candidate.yml --param-file=.jag-csrs-file-manager-prod.env  --ignore-unknown-parameters=true| oc apply -f -  ``
-
-  ``oc process -f network-policies/allow-from-openshift-ingress.yml | oc apply -f -  ``
-
 
    Credit for the base template files go to jag-CDDS repo contributors/Suganth
