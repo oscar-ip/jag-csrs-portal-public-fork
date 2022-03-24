@@ -54,9 +54,15 @@ export class SnowplowService {
 
 
   public trackSelfDescribingEvent(data: any): void {
+     console.log("inside trackSelfDescribingEvent: ", data);
       if (this._window.snowplow) {
         this._window.snowplow('trackSelfDescribingEvent', {"schema":"iglu:ca.bc.gov.csrs/questionnaire_click/jsonschema/1-0-0",
-        "data": data
+        "data": {
+          "step": data.step,
+          "question": data.question,
+          "label": data.label,
+          "url": data.url
+        }
       })
     }
   }

@@ -54,6 +54,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
+import { snowplowData } from './components/model/snowplowData.model';
 @NgModule({
   declarations: [
     AppComponent,

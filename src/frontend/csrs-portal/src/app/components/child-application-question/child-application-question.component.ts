@@ -285,9 +285,9 @@ export class ChildApplicationQuestionComponent implements OnInit {
 onDateChange(event: MatDatepickerInputEvent<Date>, i: number): void {
   //var childYears = this.diff_years(event.value, new Date());
   var childYears = this.ageFromDateOfBirthday(event.value);
-  this.logger.info(`childYears = ${childYears}`);
+  //this.logger.info(`childYears = ${childYears}`);
   this.isHiddens[i] = childYears >= 19 ? true : false;
-  this.logger.warn(`childYears = ${childYears}, isHiddens[i] = ${this.isHiddens[i]}`);
+  //this.logger.warn(`childYears = ${childYears}, isHiddens[i] = ${this.isHiddens[i]}`);
 }
 
 diff_years(dt2, dt1)
@@ -299,18 +299,18 @@ diff_years(dt2, dt1)
 
  ageFromDateOfBirthday(dateOfBirth: any): number {
   const today = new Date();
-  this.logger.warn(`today = ${today}`);
+  //this.logger.warn(`today = ${today}`);
   const birthDate = new Date(dateOfBirth);
-  this.logger.warn(`birthDate = ${birthDate}`);
+  //this.logger.warn(`birthDate = ${birthDate}`);
   let age = today.getFullYear() - birthDate.getFullYear();
-  this.logger.warn(`age = ${age}`);
+  //this.logger.warn(`age = ${age}`);
   const m = today.getMonth() - birthDate.getMonth();
-  this.logger.warn(`m = ${m}`);
+  //this.logger.warn(`m = ${m}`);
 
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
-  this.logger.warn(`age = ${age}`);
+  //this.logger.warn(`age = ${age}`);
 
   return age;
 }
@@ -345,7 +345,7 @@ editPage(stepper, index){
           //this.logger.info('this.identities',this.identities);
         },
         error: (e) => {
-          this.logger.error('error is getIdentities', e);
+          //this.logger.error('error is getIdentities', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -364,7 +364,7 @@ editPage(stepper, index){
         //this.logger.info('this.provinces',this.provinces);
       },
       error: (e) => {
-        this.logger.error('error in getProvinces', e);
+        //this.logger.error('error in getProvinces', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -383,7 +383,7 @@ editPage(stepper, index){
         //this.logger.info('this.genders',this.genders);
       },
       error: (e) => {
-        this.logger.error('error is getGenders', e);
+        //this.logger.error('error is getGenders', e);
         this.data = {
           title: 'Error',
           content: e.message,
@@ -402,7 +402,7 @@ editPage(stepper, index){
           //this.logger.info('this.courtLocations',this.courtLocations);
         },
         error: (e) => {
-          this.logger.error('error in getCourtLocations', e);
+          //this.logger.error('error in getCourtLocations', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -421,7 +421,7 @@ editPage(stepper, index){
           //this.logger.info('this.courtLevels',this.courtLevels);
         },
         error: (e) => {
-          this.logger.error('error in getCourtLevels', e);
+          //this.logger.error('error in getCourtLevels', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -441,7 +441,7 @@ editPage(stepper, index){
         //this.logger.info('this.referals',this.referrals);
       },
       error: (e) => {
-        this.logger.error('error in getReferrals', e);
+        //this.logger.error('error in getReferrals', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -460,7 +460,7 @@ editPage(stepper, index){
         //this.logger.info('this.preferredContactMethods',this.preferredContactMethods);
       },
       error: (e) => {
-        this.logger.error('error in getPreferredcontactmethods', e);
+        //this.logger.error('error in getPreferredcontactmethods', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -508,7 +508,7 @@ editPage(stepper, index){
 
   deletechild(){
     const arraylen = this.fourthFormGroup1.get('users')['controls'].length;
-    this.logger.info('arraylen = ', arraylen);
+    //this.logger.info('arraylen = ', arraylen);
     if (arraylen >= 2)
     {
       this.fourthFormGroup1.get('users')['controls'].splice(arraylen-1,1);
@@ -524,7 +524,7 @@ editPage(stepper, index){
 
   saveLater() {
     this.isDisabledSubmit = true;
-    this.logger.info(`this.isDisabledSubmit = ${this.isDisabledSubmit}`);
+    //this.logger.info(`this.isDisabledSubmit = ${this.isDisabledSubmit}`);
     const formData = {
       firstStep: this.firstFormGroup.value,
       secondFormGroup: this.secondFormGroup.value,
@@ -536,7 +536,7 @@ editPage(stepper, index){
       eFormGroup: this.eFormGroup.value,
       nineFormGroup: this.nineFormGroup.value,
     };
-    this.logger.info("formData", formData);
+    //this.logger.info("formData", formData);
 
     this.prepareData();
     //localStorage.setItem('formData', JSON.stringify(formData));
@@ -555,7 +555,7 @@ editPage(stepper, index){
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.logger.info(`Dialog result: ${result}`);
+      //this.logger.info(`Dialog result: ${result}`);
     });
   }
 
@@ -612,7 +612,7 @@ editPage(stepper, index){
   getCourtTyleFile(value){
     const courtTypeFileId = value == 'Order' ?  this._courtOrder : this._writtenAgreement;
     const inCourtFileType: LookupValue = {id: courtTypeFileId, value: value};
-    this.logger.warn(`inCourtFileType: ${inCourtFileType}`);
+    //this.logger.warn(`inCourtFileType: ${inCourtFileType}`);
     return inCourtFileType;
   }
 
@@ -774,7 +774,7 @@ editPage(stepper, index){
         newFileRequest.file.payorSafetyConcernDescription = file2Data.childSafetyDescription;
       }
 
-      this.logger.info("newFileRequest:", newFileRequest);
+      //this.logger.info("newFileRequest:", newFileRequest);
 
     this.accountService.apiAccountCreatePost(newFileRequest).subscribe({
       next: (outData:any) => {
@@ -794,7 +794,7 @@ editPage(stepper, index){
       },
       error: (e) => {
 
-        this.logger.error('error in prepareData', e);
+        //this.logger.error('error in prepareData', e);
         this.data = {
           title: 'Error',
           content: 'The information you entered is not valid. Please enter the information given to you by the Child Support Recalculation Service.',

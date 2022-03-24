@@ -102,13 +102,13 @@ export class CommunicationComponent implements OnInit {
 
     this.route.queryParams
     .subscribe(params => {
-      this.logger.info("params", params);
+      //this.logger.info("params", params);
       this.selectedTab = params.index;
       this.selectedFileNumber = params.fileNumber;
     });
 
     this.cscLink = this.appConfigService.appConfig.cscLink;
-    this.logger.info('cscLink :',this.cscLink);
+    //this.logger.info('cscLink :',this.cscLink);
 
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.getAccountInfo();
@@ -160,10 +160,10 @@ export class CommunicationComponent implements OnInit {
       },
       error: (e) => {
         if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
+          //this.logger.error(e.error.message);
         } else {
           //Backend returns unsuccessful response codes such as: 500 etc.
-          this.logger.info('Backend returned ', e);
+          //this.logger.info('Backend returned ', e);
         }
       },
       complete: () => this.logger.info('apiAccountGet<AccountFileSummary> is completed')
@@ -179,10 +179,10 @@ export class CommunicationComponent implements OnInit {
       },
       error: (e) => {
         if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
+          //this.logger.error(e.error.message);
         } else {
           //Backend returns unsuccessful response codes such as: 500 etc.
-          this.logger.info('Backend returned ', e);
+          //this.logger.info('Backend returned ', e);
         }
       },
       complete: () => this.logger.info('apiMessageListGet is completed')
@@ -330,7 +330,7 @@ export class CommunicationComponent implements OnInit {
         },
         error: (e) => {
           if (e.error instanceof Error) {
-            this.logger.error(e.error.message);
+            //this.logger.error(e.error.message);
 
             this.data = {
               type: 'error',
@@ -343,7 +343,7 @@ export class CommunicationComponent implements OnInit {
 
           } else {
             //Backend returns unsuccessful response codes such as 404, 500 etc.
-            this.logger.info('Backend returned ', e);
+            //this.logger.info('Backend returned ', e);
             this.data = {
               type: 'error',
               title: 'Contact Request Failed',
@@ -410,7 +410,7 @@ export class CommunicationComponent implements OnInit {
 
 onFileSelected(event) {
     this.selectedFile = event.target.files[0];
-    this.logger.info('Selected File', this.selectedFile);
+    //this.logger.info('Selected File', this.selectedFile);
 
     // this.isDisabled = true;
     // this.isUploaing = false;
@@ -460,7 +460,7 @@ openDialog(): void {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.logger.info('Modal dialog was closed');
+      //this.logger.info('Modal dialog was closed');
     });
   }
   openConfirmationDialog() {
@@ -484,10 +484,10 @@ openDialog(): void {
       },
       error: (e) => {
         if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
+          //this.logger.error(e.error.message);
         } else {
           //Backend returns unsuccessful response codes such as: 500 etc.
-          this.logger.info('Backend returned ', e);
+          //this.logger.info('Backend returned ', e);
         }
       },
       complete: () => this.logger.info('apiMessageReadGet is completed')
@@ -498,7 +498,7 @@ openDialog(): void {
     const fileData = new FormData();
     this.uploadDisabled = true;
     fileData.append('file', this.selectedFile, this.selectedFile.name);
-        this.logger.info('File Data', fileData);
+        //this.logger.info('File Data', fileData);
      this.documentService.apiDocumentUploadattachmentPost(
         this.selectedUploadFile.fileId,
         "ssg_csrsfile",
@@ -519,7 +519,7 @@ openDialog(): void {
       },
       error: (e) => {
         if (e.error instanceof Error) {
-          this.logger.error(e.error.message);
+          //this.logger.error(e.error.message);
           this.data = {
             type: 'error',
             title: 'Error Encountered',
@@ -532,7 +532,7 @@ openDialog(): void {
 
         } else {
             // Backend returns unsuccessful response codes such as 404, 500 etc.
-          this.logger.info('Backend returned ', e);
+          //this.logger.info('Backend returned ', e);
           this.data = {
             type: 'error',
             title: 'Upload Failed',

@@ -8,6 +8,7 @@ import { AppConfigService } from 'app/services/app-config.service';
 import { SnowplowService } from '@core/services/snowplow.service';
 import { environment } from './../../../environments/environment';
 import { LogInOutService } from 'app/services/log-in-out.service';
+import { snowplowData } from '@components/model/snowplowData.model';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -23,6 +24,7 @@ export class LandingComponent implements OnInit
   public cscLink: string;
   public welcomeUser: string;
   public code: string;
+  public spData: snowplowData;
 
   constructor(public oidcSecurityService : OidcSecurityService,
               private logInOutService : LogInOutService,
@@ -36,18 +38,7 @@ export class LandingComponent implements OnInit
   public async ngOnInit() {
 
       this.cscLink = this.appConfigService.appConfig.cscLink;
-      this.logger.info('cscLink :',this.cscLink);
-
-      if(isDevMode())
-      {
-        this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink;
-      }
-      else
-      {
-        this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink_P;
-      }
-      this.logger.info('isDevMode :',isDevMode());
-      this.logger.info('bceIdRegisterLink :',this.bceIdRegisterLink);
+      this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink;
 
       this.logInOutService.getLogoutStatus.subscribe((data) => {
         if (data !== null || data !== '')
@@ -68,12 +59,12 @@ export class LandingComponent implements OnInit
                                           idToken,
                                           configId,
   errorMessage }) => {
-          this.logger.info('isAuthenticated: ', isAuthenticated);
-          this.logger.info('userData: ', userData);
-          this.logger.info('accessToken: ', accessToken);
-          this.logger.info('idToken: ', idToken);
-          this.logger.info('configId: ', configId);
-          this.logger.info('errorMessage: ', errorMessage);
+          //this.logger.info('isAuthenticated: ', isAuthenticated);
+          //this.logger.info('userData: ', userData);
+          //this.logger.info('accessToken: ', accessToken);
+          //this.logger.info('idToken: ', idToken);
+          //this.logger.info('configId: ', configId);
+          //this.logger.info('errorMessage: ', errorMessage);
 
           if (isAuthenticated === true)
           {
@@ -91,14 +82,56 @@ export class LandingComponent implements OnInit
     }
 
   login() {
-      this.oidcSecurityService.authorize();
+    this.spData = {
+      step: 0,
+      question: "BCeID login",
+      label:    "BCeID login",
+      url: window.location.href
+     };
+    //this.logger.info('snow plow data:', this.spData);
+    this.snowplow.trackSelfDescribingEvent(this.spData);
+
+    this.oidcSecurityService.authorize();
   }
 
   logout() {
-      this.oidcSecurityService.logoffAndRevokeTokens();
+    this.spData = {
+      step: 0,
+      question: "Logout",
+      label:    "Logout",
+      url: window.location.href
+     };
+    //this.logger.info('snow plow data:', this.spData);
+    this.snowplow.trackSelfDescribingEvent(this.spData);
+
+    this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
   public ngAfterViewInit(): void {
     this.snowplow.refreshLinkClickTracking();
+  }
+
+  spQuestionnaire()
+  {
+    this.spData = {
+      step: 0,
+      question: "Questionnaire",
+      label:    "Questionnaire",
+      url: window.location.href
+     };
+    //this.logger.info('snow plow data:', this.spData);
+    this.snowplow.trackSelfDescribingEvent(this.spData);
+  }
+
+  register() {
+    this.spData = {
+      step: 0,
+      question: "Register for a Basic BCeID",
+      label:    "Register for a Basic BCeID",
+      url: window.location.href
+     };
+    //this.logger.info('snow plow data:', this.spData);
+    this.snowplow.trackSelfDescribingEvent(this.spData);
+
   }
 }

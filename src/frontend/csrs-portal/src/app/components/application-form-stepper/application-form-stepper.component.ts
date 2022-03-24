@@ -147,8 +147,6 @@ export class ApplicationFormStepperComponent implements OnInit {
   }
 
   forSubmitBtn(event){
-    //this.logger.info(`event: ${event}`);
-    //this.logger.info(`event.checked: ${event.checked}`);
     this.isDisabledSubmit = !event.checked;
   }
 
@@ -173,7 +171,7 @@ export class ApplicationFormStepperComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.logger.log(`Dialog result: ${result}`);
+      //this.logger.log(`Dialog result: ${result}`);
     });
   }
   editPage(stepper, index){
@@ -187,7 +185,7 @@ export class ApplicationFormStepperComponent implements OnInit {
           this.identities = data;
         },
         error: (e) => {
-          this.logger.error('error is getIdentities', e);
+          //this.logger.error('error is getIdentities', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -205,7 +203,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         this.provinces = data;
       },
       error: (e) => {
-        this.logger.error('error in getProvinces', e);
+        //this.logger.error('error in getProvinces', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -223,7 +221,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         this.genders = data;
       },
       error: (e) => {
-        this.logger.error('error is getGenders', e);
+        //this.logger.error('error is getGenders', e);
         this.data = {
           title: 'Error',
           content: e.message,
@@ -241,7 +239,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         this.preferredContactMethods = data;
       },
       error: (e) => {
-        this.logger.error('error in getPreferredcontactmethods', e);
+        //this.logger.error('error in getPreferredcontactmethods', e);
           this.data = {
             title: 'Error',
             content: e.message,
@@ -259,7 +257,7 @@ export class ApplicationFormStepperComponent implements OnInit {
       sixFormGroup: this.sixFormGroup.value,
     };
 
-    this.logger.info("formData", formData);
+    //this.logger.info("formData", formData);
     this.prepareData();
     //localStorage.setItem('formData', JSON.stringify(formData));
   }
@@ -275,7 +273,7 @@ export class ApplicationFormStepperComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.logger.info(`Dialog result: ${result}`);
+      //this.logger.info(`Dialog result: ${result}`);
     });
   }
 
@@ -376,7 +374,7 @@ export class ApplicationFormStepperComponent implements OnInit {
         csrsAccountFile: inFile,
       }
 
-    this.logger.info("csrsAccountRequest:", csrsAccountRequest);
+    //this.logger.info("csrsAccountRequest:", csrsAccountRequest);
 
     this.accountService.apiAccountUpdatecsrsaccountPost(csrsAccountRequest).subscribe({
       next: (outData:any) => {
@@ -384,12 +382,12 @@ export class ApplicationFormStepperComponent implements OnInit {
         var partyId = outData.partyId;
         var fileId = outData.fileId;
 
-        this.logger.info("partyId", partyId);
-        this.logger.info("fileId", fileId);
+        //this.logger.info("partyId", partyId);
+        //this.logger.info("fileId", fileId);
 
         if (partyId == this.partyId && fileId == this.fileId)
         {
-          this.logger.info("inside partyId == this.partyId &&  fileId == this.fileId");
+          //this.logger.info("inside partyId == this.partyId &&  fileId == this.fileId");
 
           this.data = {
             type: 'check',
@@ -402,14 +400,14 @@ export class ApplicationFormStepperComponent implements OnInit {
           };
           this.openModalDialog();
 
-          this.logger.info("redirect to Communication");
+          //this.logger.info("redirect to Communication");
           this.router.routeReuseStrategy.shouldReuseRoute = () => false;
           this.router.navigate(['/communication']);
         }
       },
       error: (e) => {
 
-        this.logger.error('error in prepareData', e);
+        //this.logger.error('error in prepareData', e);
         this.data = {
           //type: 'error',
           title: 'Error.',
