@@ -72,7 +72,7 @@ export class WelcomeUserComponent implements OnInit {
 
           if (user != null && files != null && files.length > 0)
           {
-            const listFiles = new List<ModelFile>(files); this.logger.info("listFiles", listFiles);
+            const listFiles = new List<ModelFile>(files); //this.logger.info("listFiles", listFiles);
             const activeStatus:ModelFile = listFiles.firstOrDefault(x=>x.status == FileStatus.Active);
             //this.logger.info("activeStatus", activeStatus);
 
@@ -88,7 +88,7 @@ export class WelcomeUserComponent implements OnInit {
       error: (e) => {
         if(e.error instanceof Error)
         {
-          this.logger.info('e.error', e.error);
+          //this.logger.info('e.error', e.error);
         }
 
       },

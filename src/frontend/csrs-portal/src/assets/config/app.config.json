@@ -1,9 +1,9 @@
 {
   "production": false,
-  "environment": "dev",
+  "environment": "development",
   "version": "1.0.0",
   "cscLink": "https://www2.gov.bc.ca/gov/content/life-events/divorce/family-justice/who-can-help/recalculate-child-support-csrs",
   "bceIdRegisterLink": "https://www.test.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic",
-  "bceIdRegisterLink_P": "https://www.bceid.ca/register/basic/account_details.aspx?type=regular&eServiceType=basic",
-  "downloadApplication": "https://www2.gov.bc.ca/assets/gov/birth-adoption-death-marriage-and-divorce/divorce/family/basics/help/child-support-recalculation-service/csrs-application.pdf"
+  "downloadApplication": "https://www2.gov.bc.ca/assets/gov/birth-adoption-death-marriage-and-divorce/divorce/family/basics/help/child-support-recalculation-service/csrs-application.pdf",
+  "collector": "spm.apps.gov.bc.ca"
 }
