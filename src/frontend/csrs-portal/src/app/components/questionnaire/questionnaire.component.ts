@@ -593,16 +593,6 @@ export class QuestionnaireComponent implements OnInit {
       } else if (node && question.clicked === 'No') {
         node[style].cssText += 'background-color:#D8292F !important';
       }
-
-      this.spData = {
-        step: index,
-        question: question.label,
-        label: question.clicked,
-        url: window.location.href
-       };
-      //this.logger.info('snow plow data:', this.spData);
-      this.snowplow.trackSelfDescribingEvent(this.spData);
-
     });
   }
 
@@ -678,18 +668,11 @@ export class QuestionnaireComponent implements OnInit {
 
   public async ngOnInit() {
 
-    this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink_P;
-    //this.logger.info('isDevMode :',isDevMode());
-    //this.logger.info('bceIdRegisterLink :',this.bceIdRegisterLink);
-
+    this.bceIdRegisterLink = this.appConfigService.appConfig.bceIdRegisterLink;
     this.downloadApplicationLink = this.appConfigService.appConfig.downloadApplication;
-    //this.logger.info('downloadApplicationLink :',this.downloadApplicationLink);
-
     this.cscLink = this.appConfigService.appConfig.cscLink;
-    //this.logger.info('cscLink :',this.cscLink);
 
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
-      //this.logger.log('info',`isAuthenticated = ${isAuthenticated}`);
       if (isAuthenticated === true)
       {
         this.router.navigate(['/welcomeuser']);
@@ -698,15 +681,6 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   login() {
-    this.spData = {
-      step: 9,
-      question: "Questionnaire complete",
-      label: "BCeID Login",
-      url: window.location.href
-     };
-    //this.logger.info('snow plow data:', this.spData);
-    this.snowplow.trackSelfDescribingEvent(this.spData);
-
     this.oidcSecurityService.authorize();
   }
 
@@ -714,38 +688,13 @@ export class QuestionnaireComponent implements OnInit {
     this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
-  register() {
-    this.spData = {
-      step: 9,
-      question: "Questionnaire complete",
-      label: "Register for a Basic BCeID",
-      url: window.location.href
-     };
-    //this.logger.info('snow plow data:', this.spData);
-    this.snowplow.trackSelfDescribingEvent(this.spData);
-
-  }
-
 
   downloadApplication()
   {
     const link = document.createElement('a');
     link.download = "Application.pdf";
-    //link.href = "assets/Application.pdf";
     link.href = this.downloadApplicationLink;
     link.click();
-
-
-    this.spData = {
-      step: 9,
-      question: "Questionnaire complete",
-      label: "Download PDF",
-      url: window.location.href
-     };
-    //this.logger.info('snow plow data:', this.spData);
-    this.snowplow.trackSelfDescribingEvent(this.spData);
-
-
   }
 
 }

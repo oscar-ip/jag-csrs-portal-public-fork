@@ -53,19 +53,8 @@ export class LandingComponent implements OnInit
         }
       })
 
-      this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated,
-                                          userData,
-                                          accessToken,
-                                          idToken,
-                                          configId,
-  errorMessage }) => {
-          //this.logger.info('isAuthenticated: ', isAuthenticated);
-          //this.logger.info('userData: ', userData);
-          //this.logger.info('accessToken: ', accessToken);
-          //this.logger.info('idToken: ', idToken);
-          //this.logger.info('configId: ', configId);
-          //this.logger.info('errorMessage: ', errorMessage);
-
+      this.oidcSecurityService.checkAuth().subscribe(
+        ({ isAuthenticated}) => {
           if (isAuthenticated === true)
           {
             this.router.navigate(['/welcomeuser']);
@@ -77,33 +66,13 @@ export class LandingComponent implements OnInit
 
           this.logInOutService.currentUser(isAuthenticated);
       });
-
-
-    }
+  }
 
   login() {
-    this.spData = {
-      step: 0,
-      question: "BCeID login",
-      label:    "BCeID login",
-      url: window.location.href
-     };
-    //this.logger.info('snow plow data:', this.spData);
-    this.snowplow.trackSelfDescribingEvent(this.spData);
-
     this.oidcSecurityService.authorize();
   }
 
   logout() {
-    this.spData = {
-      step: 0,
-      question: "Logout",
-      label:    "Logout",
-      url: window.location.href
-     };
-    //this.logger.info('snow plow data:', this.spData);
-    this.snowplow.trackSelfDescribingEvent(this.spData);
-
     this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
@@ -111,27 +80,4 @@ export class LandingComponent implements OnInit
     this.snowplow.refreshLinkClickTracking();
   }
 
-  spQuestionnaire()
-  {
-    this.spData = {
-      step: 0,
-      question: "Questionnaire",
-      label:    "Questionnaire",
-      url: window.location.href
-     };
-    //this.logger.info('snow plow data:', this.spData);
-    this.snowplow.trackSelfDescribingEvent(this.spData);
-  }
-
-  register() {
-    this.spData = {
-      step: 0,
-      question: "Register for a Basic BCeID",
-      label:    "Register for a Basic BCeID",
-      url: window.location.href
-     };
-    //this.logger.info('snow plow data:', this.spData);
-    this.snowplow.trackSelfDescribingEvent(this.spData);
-
-  }
 }
