@@ -688,9 +688,6 @@ export class QuestionnaireComponent implements OnInit {
     this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
-  register() {
-  }
-
 
   downloadApplication()
   {
