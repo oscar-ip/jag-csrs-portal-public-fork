@@ -80,9 +80,4 @@ export class LandingComponent implements OnInit
     this.snowplow.refreshLinkClickTracking();
   }
 
-  spQuestionnaire() {
-  }
-
-  register() {
-  }
 }
