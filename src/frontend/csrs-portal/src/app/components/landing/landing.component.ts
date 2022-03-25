@@ -66,7 +66,7 @@ export class LandingComponent implements OnInit
 
           this.logInOutService.currentUser(isAuthenticated);
       });
-    }
+  }
 
   login() {
     this.oidcSecurityService.authorize();
