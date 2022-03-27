@@ -1,5 +1,5 @@
 .document-drag-container{
-  height: 150px;
+  height: 175px;
   border-style: dashed;
   border-color: grey;
   border-width: 1px ;
@@ -7,7 +7,7 @@
 }
 .dropzone {
     width: 95%;
-    height: 100px;
+    height: 125px;
     padding: 2rem;
     text-align: center;
     position: relative;
@@ -36,8 +36,7 @@
   .round1 {
     border: 1px solid grey;
     border-radius: 5px;
-    padding: 40px;
-
+    padding: 20px;
   }
   .full-width {
     width: 100%;
@@ -255,4 +254,7 @@ label {
   font-weight: 700;
   color: #003366;
 }
+
+
+
 
