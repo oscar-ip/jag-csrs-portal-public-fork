@@ -139,11 +139,11 @@ objects:
               value: ${NODE_ENV}
             resources:
               limits:
-                cpu: '2'
-                memory: 4000Mi
-              requests:
                 cpu: '1'
                 memory: 2000Mi
+              requests:
+                cpu: 500m
+                memory: 1000Mi
             volumeMounts:
               - name: frontend-app-config
                 mountPath: /usr/share/nginx/html/assets/config/app.config.json

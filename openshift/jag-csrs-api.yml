@@ -93,6 +93,10 @@ parameters:
   description: ca mount path
   required: true
   value: SERVICE_TRUST_BUNDLE_MOUNT_PATH blah blah
+- name: FILEMANAGER_CONFIG_NAME
+  description: name of file manager config
+  required: true
+  value: blahblah
 
 objects:
 
@@ -165,12 +169,27 @@ objects:
           - name: FILE_MANAGER_URI
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: FILEMANAGER_ADDRESS
+          - name: FILEMANAGER_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: FILEMANAGER_ADDRESS
+          - name: APIGATEWAY_HOST
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: APIGATEWAY_HOST
+          - name: APIGATEWAY_POLICY
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: APIGATEWAY_POLICY
           - name: FILEMANAGER_SECURE
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: FILEMANAGER_SECURE
           - name: SPLUNK_TOKEN
             valueFrom:
@@ -231,39 +250,48 @@ objects:
             #Sharepoint
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: AUTHORIZATION_URI
           - name: SHAREPOINT_PASSWORD
             #Sharepoint
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: SHAREPOINT_PASSWORD
           - name: SHAREPOINT_USERNAME
             #Sharepoint
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: SHAREPOINT_USERNAME
           - name: RELYING_PARTY_IDENTIFIER
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: SHAREPOINT_RELYING_PARTY_IDENTIFIER
           - name: APIGATEWAY_HOST
             #Sharepoint
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: APIGATEWAY_HOST
           - name: APIGATEWAY_POLICY
             #Sharepoint
             valueFrom:
               secretKeyRef:
-                name: csrs-filemanager-config
+                name: ${FILEMANAGER_CONFIG_NAME}
                 key: APIGATEWAY_POLICY
+          - name: AUTHORIZATION_URI
+            #Sharepoint
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: AUTHORIZATION_URI
           - name: RESOURCE
             value: ${RESOURCE}
+          - name: ASPNETCORE_URLS
+            value: http://*:8080
+
           ports:
             - containerPort: 8080
               protocol: TCP

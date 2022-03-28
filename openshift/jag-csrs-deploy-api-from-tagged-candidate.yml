@@ -99,7 +99,10 @@ parameters:
   description: ca mount path
   required: true
   value: SERVICE_TRUST_BUNDLE_MOUNT_PATH blah blah
-
+- name: FILEMANAGER_CONFIG_NAME
+  description: name of file manager config
+  required: true
+  value: blahblah
 
 objects:
 
@@ -167,6 +170,11 @@ objects:
               secretKeyRef:
                 name: ${SPLUNK_CONFIG_NAME}
                 key: SPLUNK_URL
+          - name: FILE_MANAGER_URI
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: FILEMANAGER_ADDRESS
           - name: FILEMANAGER_ADDRESS
             valueFrom:
               secretKeyRef:
@@ -177,6 +185,16 @@ objects:
               secretKeyRef:
                 name: ${FILEMANAGER_CONFIG_NAME}
                 key: FILEMANAGER_SECURE
+          - name: APIGATEWAY_HOST
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: APIGATEWAY_HOST
+          - name: APIGATEWAY_POLICY
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: APIGATEWAY_POLICY
           - name: SPLUNK_TOKEN
             valueFrom:
               secretKeyRef:
@@ -217,13 +235,21 @@ objects:
               secretKeyRef:
                 name: ${OAUTH_CONFIG_NAME}
                 key: OAUTH__USERNAME
-          - name: APIGATEWAY_BASEPATH
+          - name: AUTHORIZATION_URI
+            #Sharepoint
+            valueFrom:
+              secretKeyRef:
+                name: ${FILEMANAGER_CONFIG_NAME}
+                key: AUTHORIZATION_URI
+          - name: APIGATEWAY__BASEPATH
             valueFrom:
               secretKeyRef:
                 name: ${OAUTH_CONFIG_NAME}
                 key: APIGATEWAY_BASEPATH
           - name: BCEID_URL
             value: ${BCEID_URL}
+          - name: ASPNETCORE_URLS
+            value: http://*:8080
           - name: OPENSHIFT
             value: ${OPENSHIFT}
           - name: SSL_CERT_DIR

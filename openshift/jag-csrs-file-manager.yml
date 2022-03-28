@@ -152,6 +152,11 @@ objects:
                 secretKeyRef:
                   name: ${FILEMANAGER_CONFIG_NAME}
                   key: FILEMANAGER_ADDRESS
+            - name: FILE_MANAGER_URI
+              valueFrom:
+                secretKeyRef:
+                  name: ${FILEMANAGER_CONFIG_NAME}
+                  key: FILEMANAGER_ADDRESS
             - name: FILEMANAGER_SECURE
               valueFrom:
                 secretKeyRef:
