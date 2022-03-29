@@ -1,5 +1,39 @@
+@media (max-width: 442px) {
+  .tabHeader {
+    font-size: 1.1em;
+    font-weight: 500;
+  }
+
+  .container {
+    label { font-size: small; }
+    a { font-size: small; }
+    img { max-width: 12px; }
+    ::ng-deep .mat-form-field {
+      font-size: small;
+    }
+    ::ng-deep .mat-table
+    {
+      .mat-header-cell {
+        font-size: x-small;
+      }
+      .mat-cell {
+        font-size: x-small;
+        img { max-width: 10px; }
+        a { font-size: x-small; }
+      }
+    }
+
+    div {
+      label { font-size: small; }
+      h2  { font-size: small; }
+      dropzone { font-size: small; }
+      p  { font-size: small; }
+    }
+  }
+}
+
 .document-drag-container{
-  height: 150px;
+  height: 175px;
   border-style: dashed;
   border-color: grey;
   border-width: 1px ;
@@ -7,7 +41,7 @@
 }
 .dropzone {
     width: 95%;
-    height: 100px;
+    height: 125px;
     padding: 2rem;
     text-align: center;
     position: relative;
@@ -36,8 +70,7 @@
   .round1 {
     border: 1px solid grey;
     border-radius: 5px;
-    padding: 40px;
-
+    padding: 20px;
   }
   .full-width {
     width: 100%;
@@ -255,4 +288,7 @@ label {
   font-weight: 700;
   color: #003366;
 }
+
+
+
 
