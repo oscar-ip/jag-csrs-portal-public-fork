@@ -6,7 +6,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
 import { SnowplowService } from '@core/services/snowplow.service';
-import { snowplowData } from '@components/model/snowplowData.model';
+import { questionnaireClickData, questionnaireStepData } from '@components/model/snowplowData.model';
 
 @Component({
   selector: 'app-questionnaire',
@@ -23,7 +23,8 @@ export class QuestionnaireComponent implements OnInit {
   public isEditable = true;
   public welcomeUser: string;
   public selectedIndex: number = 0;
-  public spData: snowplowData;
+  public questionClickData: questionnaireClickData;
+  public questionStepData: questionnaireStepData;
 
   data: any = [
     {
@@ -576,7 +577,7 @@ export class QuestionnaireComponent implements OnInit {
     question.clicked = buttonItem.label;
     question.isYes = buttonItem.label === 'No' ? false : true;
   }
-  setUIconColor(index, question) {
+  setUIconColor(index, question, direction) {
 
     question.submit = true;
     const style = 'style';
@@ -592,6 +593,16 @@ export class QuestionnaireComponent implements OnInit {
         node[style].cssText += 'background-color:#2E8540 !important';
       } else if (node && question.clicked === 'No') {
         node[style].cssText += 'background-color:#D8292F !important';
+      }
+
+      if (direction !== null) {
+        this.questionStepData = {
+          step: index+1,
+          question: question.label,
+          response: question.clicked,
+          direction: direction
+        };
+        this.snowplow.trackSelfDescribingEventStep(this.questionStepData);
       }
     });
   }
@@ -646,7 +657,7 @@ export class QuestionnaireComponent implements OnInit {
      } else {
        myGreen = true;
      }
-     this.setUIconColor(i, question);
+     this.setUIconColor(i, question, null);
    }
     if ((question.clicked === buttonItem.label &&  question.clicked == 'No')){
 
@@ -655,7 +666,7 @@ export class QuestionnaireComponent implements OnInit {
      } else {
        myRed = true;
      }
-     this.setUIconColor(i, question);
+     this.setUIconColor(i, question, null);
 
    }
     if ((question.clicked == buttonItem.label &&  question.clicked === 'I don\’t know')){
@@ -681,6 +692,14 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   login() {
+    this.questionClickData = {
+      step: 9,
+      question: 'BCeID Login',
+      label: 'BCeID Login',
+      url: window.location.href
+    };
+    this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+
     this.oidcSecurityService.authorize();
   }
 
@@ -688,9 +707,27 @@ export class QuestionnaireComponent implements OnInit {
     this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
+  register() {
+    this.questionClickData = {
+      step: 9,
+      question: "Register for a Basic BCeID",
+      label:    "Register for a Basic BCeID",
+      url: window.location.href
+     };
+     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+  }
 
   downloadApplication()
   {
+
+    this.questionClickData = {
+      step: 9,
+      question: 'You can download the PDF version of the application here and mail the completed package.',
+      label: 'You can download the PDF version of the application here and mail the completed package.',
+      url: window.location.href
+    };
+    this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+
     const link = document.createElement('a');
     link.download = "Application.pdf";
     link.href = this.downloadApplicationLink;

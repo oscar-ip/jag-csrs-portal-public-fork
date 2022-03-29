@@ -53,8 +53,8 @@ export class SnowplowService {
   }
 
 
-  public trackSelfDescribingEvent(data: any): void {
-     console.log("inside trackSelfDescribingEvent: ", data);
+  public trackSelfDescribingEventClick(data: any): void {
+     console.log("inside trackSelfDescribingEventClick: ", data);
       if (this._window.snowplow) {
         this._window.snowplow('trackSelfDescribingEvent', {"schema":"iglu:ca.bc.gov.csrs/questionnaire_click/jsonschema/1-0-0",
         "data": {
@@ -66,5 +66,19 @@ export class SnowplowService {
       })
     }
   }
+
+  public trackSelfDescribingEventStep(data: any): void {
+    console.log("inside trackSelfDescribingEventStep: ", data);
+     if (this._window.snowplow) {
+       this._window.snowplow('trackSelfDescribingEvent', {"schema":"iglu:ca.bc.gov.csrs/questionnaire_step/jsonschema/1-0-0",
+       "data": {
+         "step": data.step,
+         "question": data.question,
+         "response": data.response,
+         "direction": data.direction
+       }
+     })
+   }
+ }
 
 }

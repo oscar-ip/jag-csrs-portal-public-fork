@@ -8,7 +8,7 @@ import { AppConfigService } from 'app/services/app-config.service';
 import { SnowplowService } from '@core/services/snowplow.service';
 import { environment } from './../../../environments/environment';
 import { LogInOutService } from 'app/services/log-in-out.service';
-import { snowplowData } from '@components/model/snowplowData.model';
+import { questionnaireClickData } from '@components/model/snowplowData.model';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -24,7 +24,7 @@ export class LandingComponent implements OnInit
   public cscLink: string;
   public welcomeUser: string;
   public code: string;
-  public spData: snowplowData;
+  public questionClickData: questionnaireClickData;
 
   constructor(public oidcSecurityService : OidcSecurityService,
               private logInOutService : LogInOutService,
@@ -69,11 +69,82 @@ export class LandingComponent implements OnInit
   }
 
   login() {
+    this.questionClickData = {
+      step: 0,
+      question: 'BCeID Login',
+      label: 'BCeID Login',
+      url: window.location.href
+    };
+    this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+
+    this.oidcSecurityService.authorize();
+  }
+
+  here() {
+    this.questionClickData = {
+      step: 0,
+      question: 'If you already have a Basic BCeID account log in here.',
+      label: 'If you already have a Basic BCeID account log in here.',
+      url: window.location.href
+    };
+    this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+
     this.oidcSecurityService.authorize();
   }
 
   logout() {
+
+    this.questionClickData = {
+      step: 0,
+      question: 'Logout',
+      label: 'Logout',
+      url: window.location.href
+    };
+    this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+
     this.oidcSecurityService.logoffAndRevokeTokens();
+  }
+
+
+  register() {
+    this.questionClickData = {
+      step: 0,
+      question: "Register for a Basic BCeID",
+      label:    "Register for a Basic BCeID",
+      url: window.location.href
+     };
+     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+  }
+
+  learnMore() {
+    this.questionClickData = {
+      step: 0,
+      question: "Learn More >",
+      label:    "Learn More >",
+      url: window.location.href
+     };
+     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+  }
+
+
+  questionnaire() {
+    this.questionClickData = {
+      step: 0,
+      question: "Questionnaire",
+      label:    "Questionnaire",
+      url: window.location.href
+     };
+     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
+  }
+
+  startQuestionnaire() {
+    this.questionClickData = {
+      step: 0,
+      question: "Start Questionnaire",
+      label:    "Start Questionnaire",
+      url: window.location.href
+     };
+     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
   }
 
   public ngAfterViewInit(): void {
