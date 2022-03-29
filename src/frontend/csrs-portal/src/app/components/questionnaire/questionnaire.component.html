@@ -42,7 +42,7 @@
               <mat-icon >{{setUIconColor1(index, data[index])}}</mat-icon>
             </ng-template>
 
-            <mat-step class="notSelected" (click)="setUIconColor(i,question,null)" *ngFor="let question of data; index as i;" [editable]="isEditable">
+            <mat-step class="notSelected" (click)="setUIconColor(i,question)" *ngFor="let question of data; index as i;" [editable]="isEditable">
               <div class="card border-0">
                   <ng-template matStepLabel="" >
                       <!-- <div *ngIf="question.clicked == 'Yes'"><mat-icon [ngClass]="{ 'colorGreen' :question.clicked == 'Yes' }">done</mat-icon></div>
@@ -103,10 +103,10 @@
                     <hr class="mt-0 mb-4" style="opacity: 1">
                     <div class="button-row">
                       <span *ngFor="let nextBackButton of question.forwardButtons; index as nbi">
-                        <button class="fontSize20" *ngIf="i == 0" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question,'Back')"><a href="/">< Back</a></button>
-                        <button class="fontSize20" *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question,nextBackButton.label)">< {{nextBackButton.label}}</button>
+                        <button class="fontSize20" *ngIf="i == 0" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColorWithDirection(i,question,'Back')"><a href="/">< Back</a></button>
+                        <button class="fontSize20" *ngIf="nextBackButton.name=='back'" mat-stroked-button color="basic" matStepperPrevious (click)="setUIconColor(i,question)">< {{nextBackButton.label}}</button>
                         <button class="fontSize20" class="nextStep" [disabled]="!question.clicked" *ngIf="nextBackButton.name=='next'" mat-stroked-button color="basic" matStepperNext
-                        (click)="setUIconColor(i,question,'Next')">
+                        (click)="setUIconColorWithDirection(i,question,'Next')">
                         Next ></button>
                       </span>
                     </div>

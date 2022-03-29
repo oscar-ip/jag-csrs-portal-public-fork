@@ -71,7 +71,7 @@ export class LandingComponent implements OnInit
   login() {
     this.questionClickData = {
       step: 0,
-      question: 'BCeID Login',
+      question: 'Is the recalculation service right for you?',
       label: 'BCeID Login',
       url: window.location.href
     };
@@ -83,7 +83,7 @@ export class LandingComponent implements OnInit
   here() {
     this.questionClickData = {
       step: 0,
-      question: 'If you already have a Basic BCeID account log in here.',
+      question: 'Is the recalculation service right for you?',
       label: 'If you already have a Basic BCeID account log in here.',
       url: window.location.href
     };
@@ -94,14 +94,6 @@ export class LandingComponent implements OnInit
 
   logout() {
 
-    this.questionClickData = {
-      step: 0,
-      question: 'Logout',
-      label: 'Logout',
-      url: window.location.href
-    };
-    this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
-
     this.oidcSecurityService.logoffAndRevokeTokens();
   }
 
@@ -109,7 +101,7 @@ export class LandingComponent implements OnInit
   register() {
     this.questionClickData = {
       step: 0,
-      question: "Register for a Basic BCeID",
+      question: "Is the recalculation service right for you?",
       label:    "Register for a Basic BCeID",
       url: window.location.href
      };
@@ -119,7 +111,7 @@ export class LandingComponent implements OnInit
   learnMore() {
     this.questionClickData = {
       step: 0,
-      question: "Learn More >",
+      question: "Is the recalculation service right for you?",
       label:    "Learn More >",
       url: window.location.href
      };
@@ -130,7 +122,7 @@ export class LandingComponent implements OnInit
   questionnaire() {
     this.questionClickData = {
       step: 0,
-      question: "Questionnaire",
+      question: "Is the recalculation service right for you?",
       label:    "Questionnaire",
       url: window.location.href
      };
@@ -140,7 +132,7 @@ export class LandingComponent implements OnInit
   startQuestionnaire() {
     this.questionClickData = {
       step: 0,
-      question: "Start Questionnaire",
+      question: "Is the recalculation service right for you?",
       label:    "Start Questionnaire",
       url: window.location.href
      };
