@@ -577,7 +577,28 @@ export class QuestionnaireComponent implements OnInit {
     question.clicked = buttonItem.label;
     question.isYes = buttonItem.label === 'No' ? false : true;
   }
-  setUIconColor(index, question, direction) {
+  setUIconColor(index, question) {
+
+    question.submit = true;
+    const style = 'style';
+    setTimeout(() => {
+      const node: Node = document.querySelector(
+        '#cdk-step-label-0-' + index + ' .mat-step-icon-state-edit'
+      );
+      if (question.clicked === 'Yes' && node && [4,5,8].includes(index+1))  {
+        node[style].cssText += 'background-color:#D8292F !important';
+      } else if (node && (question.clicked === 'Yes' || question.clicked === 'I don\'t know')) {
+        node[style].cssText += 'background-color:#2E8540 !important';
+      } else if (node && question.clicked === 'No' && [3,4,5,6,7,8].includes(index+1)) {
+        node[style].cssText += 'background-color:#2E8540 !important';
+      } else if (node && question.clicked === 'No') {
+        node[style].cssText += 'background-color:#D8292F !important';
+      }
+    });
+  }
+
+
+  setUIconColorWithDirection(index, question, direction) {
 
     question.submit = true;
     const style = 'style';
@@ -606,6 +627,7 @@ export class QuestionnaireComponent implements OnInit {
       }
     });
   }
+
 
   setUIconColor1(index, question) {
       if (question.clicked === 'Yes' && [4,5,8].includes(index+1))  {
@@ -657,7 +679,7 @@ export class QuestionnaireComponent implements OnInit {
      } else {
        myGreen = true;
      }
-     this.setUIconColor(i, question, null);
+     this.setUIconColor(i, question);
    }
     if ((question.clicked === buttonItem.label &&  question.clicked == 'No')){
 
@@ -666,7 +688,7 @@ export class QuestionnaireComponent implements OnInit {
      } else {
        myRed = true;
      }
-     this.setUIconColor(i, question, null);
+     this.setUIconColor(i, question);
 
    }
     if ((question.clicked == buttonItem.label &&  question.clicked === 'I don\’t know')){
@@ -694,7 +716,7 @@ export class QuestionnaireComponent implements OnInit {
   login() {
     this.questionClickData = {
       step: 9,
-      question: 'BCeID Login',
+      question: 'Questionnaire complete',
       label: 'BCeID Login',
       url: window.location.href
     };
@@ -710,7 +732,7 @@ export class QuestionnaireComponent implements OnInit {
   register() {
     this.questionClickData = {
       step: 9,
-      question: "Register for a Basic BCeID",
+      question: "Questionnaire complete",
       label:    "Register for a Basic BCeID",
       url: window.location.href
      };
@@ -722,7 +744,7 @@ export class QuestionnaireComponent implements OnInit {
 
     this.questionClickData = {
       step: 9,
-      question: 'You can download the PDF version of the application here and mail the completed package.',
+      question: 'Questionnaire complete',
       label: 'You can download the PDF version of the application here and mail the completed package.',
       url: window.location.href
     };
