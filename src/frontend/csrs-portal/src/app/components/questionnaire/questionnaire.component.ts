@@ -753,7 +753,9 @@ export class QuestionnaireComponent implements OnInit {
     const link = document.createElement('a');
     link.download = "Application.pdf";
     link.href = this.downloadApplicationLink;
-    link.click();
+    //link.click();
+    window.open(link.href,'resizable,scrollbars');
+    return false;
   }
 
 }
