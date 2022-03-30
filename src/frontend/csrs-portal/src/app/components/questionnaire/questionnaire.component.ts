@@ -724,7 +724,7 @@ export class QuestionnaireComponent implements OnInit {
       step: 9,
       question: 'Questionnaire complete',
       label: 'BCeID Login',
-      url: window.location.href
+      url: this.oidcSecurityService.getConfiguration().authority
     };
     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
 
@@ -740,7 +740,7 @@ export class QuestionnaireComponent implements OnInit {
       step: 9,
       question: "Questionnaire complete",
       label:    "Register for a Basic BCeID",
-      url: window.location.href
+      url: this.bceIdRegisterLink
      };
      this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
   }
@@ -752,7 +752,7 @@ export class QuestionnaireComponent implements OnInit {
       step: 9,
       question: 'Questionnaire complete',
       label: 'You can download the PDF version of the application here and mail the completed package.',
-      url: window.location.href
+      url: this.downloadApplicationLink
     };
     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
 
