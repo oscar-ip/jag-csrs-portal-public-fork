@@ -11,5 +11,3 @@ export interface questionnaireStepData
   response?: string | null;
   direction: string;
 }
-
-
