@@ -31,7 +31,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 442px) and (max-width: 769px) {
 
   .question-label {
     display: -webkit-box;
@@ -47,9 +47,9 @@
 }
 
 
-@media (max-width: 441px) {
+@media (max-width: 442px) {
 
-  .question-label {
+  question-label {
     display: -webkit-box;
     max-width: 420px;
     height: 70px;
@@ -57,6 +57,22 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  ::ng-deep .mat-step-header[aria-selected="true"]  {
+    & div.mat-step-label.mat-step-label-active.mat-step-label-selected {
+      //background-color:  yellow;
+      -webkit-line-clamp: 1;
+      overflow: hiddent;
+    }
+    & div.mat-step-label.mat-step-label-active {
+      //background-color:  red;
+      -webkit-line-clamp: 4;
+      overflow: visible;
+    }
+  }
+
+
+
   .h1_class { font-size: 26px; }
   .h2_class { font-size: 22px; }
   .h3_class { font-size: 16px; }

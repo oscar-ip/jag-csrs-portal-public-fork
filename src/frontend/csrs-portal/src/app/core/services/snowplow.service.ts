@@ -15,14 +15,14 @@ export class SnowplowService {
     if (this._window.snowplow) {
 
       var collector: string = '';
-      if(isDevMode())
-      {
-        collector = 'spm.apps.gov.bc.ca';
-      }
-      else
-      {
+      //if(isDevMode())
+      //{
+      //  collector = 'spm.apps.gov.bc.ca';
+      //}
+      //else
+      //{
         collector = 'spt.apps.gov.bc.ca';
-      }
+      //}
       this._window.snowplow('newTracker', 'rt', collector, {
         appId: 'Snowplow_standalone',
         cookieLifetime: 86400 * 548,

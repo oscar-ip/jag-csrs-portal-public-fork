@@ -546,7 +546,7 @@ mat-grid-tile.bottom_line {
 //  background-size: 110%;
 //}
 
-@media (min-width: 300px) and (max-width: 441px) {
+@media (max-width: 442px) {
   .background_image {
     background-image: url('/assets/CSRS-background-image-MOBILE-414x460.jpg');
     background-repeat: no-repeat;
@@ -554,7 +554,7 @@ mat-grid-tile.bottom_line {
   }
 }
 
-@media (min-width: 442px) and (max-width: 768px) {
+@media (min-width: 443px) and (max-width: 768px) {
   .background_image {
     background-image: url('/assets/CSRS-background-TABLET-768x460.jpg');
     background-repeat: no-repeat;
