@@ -17,11 +17,11 @@ export class SnowplowService {
       var collector: string = '';
       //if(isDevMode())
       //{
-        collector = 'spm.apps.gov.bc.ca';
+      //  collector = 'spm.apps.gov.bc.ca';
       //}
       //else
       //{
-      //  collector = 'spt.apps.gov.bc.ca';
+        collector = 'spt.apps.gov.bc.ca';
       //}
       this._window.snowplow('newTracker', 'rt', collector, {
         appId: 'Snowplow_standalone',
