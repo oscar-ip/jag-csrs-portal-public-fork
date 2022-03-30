@@ -375,7 +375,7 @@ export class QuestionnaireComponent implements OnInit {
       ],
     },
     {
-      label: ' Does your order or written agreement require the payment of special or extraordinary expenses?',
+      label: 'Does your order or written agreement require the payment of special or extraordinary expenses?',
       toolTip:'These are additional amounts to be paid over and above the base child support amount. Some examples of these expenses (often referred to as Section 7 expenses) include childcare, medical or dental premiums, healthcare costs.',
       content: [],
       buttons: [
@@ -490,7 +490,7 @@ export class QuestionnaireComponent implements OnInit {
     },
     {
       label:
-      ' Are there any court applications underway between you and the other parent that could have an impact on the amount of child support in your order or written agreement?',
+      'Are there any court applications underway between you and the other parent that could have an impact on the amount of child support in your order or written agreement?',
       content: [
         {
           label:
