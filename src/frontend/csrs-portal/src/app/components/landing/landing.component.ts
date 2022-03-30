@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewEncapsulation, isDevMode } from '
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 
-import { Router, ActivatedRoute } from '@angular/router';
+import { Routes, Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { AppConfigService } from 'app/services/app-config.service';
 import { SnowplowService } from '@core/services/snowplow.service';
@@ -25,6 +25,7 @@ export class LandingComponent implements OnInit
   public welcomeUser: string;
   public code: string;
   public questionClickData: questionnaireClickData;
+  public routes: Routes;
 
   constructor(public oidcSecurityService : OidcSecurityService,
               private logInOutService : LogInOutService,
@@ -73,7 +74,7 @@ export class LandingComponent implements OnInit
       step: 0,
       question: 'Is the recalculation service right for you?',
       label: 'BCeID Login',
-      url: window.location.href
+      url:  this.oidcSecurityService.getConfiguration().authority
     };
     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
 
@@ -85,7 +86,7 @@ export class LandingComponent implements OnInit
       step: 0,
       question: 'Is the recalculation service right for you?',
       label: 'If you already have a Basic BCeID account log in here.',
-      url: window.location.href
+      url: this.oidcSecurityService.getConfiguration().authority
     };
     this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
 
@@ -103,7 +104,7 @@ export class LandingComponent implements OnInit
       step: 0,
       question: "Is the recalculation service right for you?",
       label:    "Register for a Basic BCeID",
-      url: window.location.href
+      url: this.bceIdRegisterLink
      };
      this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
   }
@@ -113,7 +114,7 @@ export class LandingComponent implements OnInit
       step: 0,
       question: "Is the recalculation service right for you?",
       label:    "Learn More >",
-      url: window.location.href
+      url: this.cscLink
      };
      this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
   }
@@ -124,7 +125,7 @@ export class LandingComponent implements OnInit
       step: 0,
       question: "Is the recalculation service right for you?",
       label:    "Questionnaire",
-      url: window.location.href
+      url: "/questionnaire"
      };
      this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
   }
@@ -134,7 +135,7 @@ export class LandingComponent implements OnInit
       step: 0,
       question: "Is the recalculation service right for you?",
       label:    "Start Questionnaire",
-      url: window.location.href
+      url: "/questionnaire"
      };
      this.snowplow.trackSelfDescribingEventClick(this.questionClickData);
   }
