@@ -630,6 +630,10 @@ export class QuestionnaireComponent implements OnInit {
 
 
   setUIconColor1(index, question) {
+
+    if (question !== undefined )
+    {
+
       if (question.clicked === 'Yes' && [4,5,8].includes(index+1))  {
         return 'clear'
       } else if ((question.clicked === 'Yes' || question.clicked === 'I don\’t know')) {
@@ -639,8 +643,10 @@ export class QuestionnaireComponent implements OnInit {
       } else if (question.clicked === 'No') {
         return 'clear'
       }
-      return 'edit'
+      //return 'edit'
     }
+    return 'edit'
+  }
 
   setColor(question,buttonItem,i){
     let myGreen = false;
