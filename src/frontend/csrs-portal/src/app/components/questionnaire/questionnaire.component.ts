@@ -631,9 +631,10 @@ export class QuestionnaireComponent implements OnInit {
 
   setUIconColor1(index, question) {
 
+    this.logger.info('setUIconColor1 - index, question: ', index, question);
     if (question !== undefined )
     {
-
+      this.logger.info('setUIconColor1 - question.clicked: ', question.clicked);
       if (question.clicked === 'Yes' && [4,5,8].includes(index+1))  {
         return 'clear'
       } else if ((question.clicked === 'Yes' || question.clicked === 'I don\’t know')) {

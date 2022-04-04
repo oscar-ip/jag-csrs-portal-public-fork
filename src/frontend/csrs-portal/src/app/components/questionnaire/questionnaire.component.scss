@@ -2,22 +2,11 @@
 @import "bootstrap/bootstrap-imports";
 
 
-.h1_class {
-  font-size: 28px;
-}
-
-.h2_class {
-  font-size: 24px;
-}
-
-.h3_class {
-  font-size: 18px;
-}
-
-.fontSize20 {
-  font-size: 20px;
-}
-
+.h1_class { font-size: 28px; }
+.h2_class { font-size: 24px; }
+.h3_class { font-size: 18px; }
+.fontSize20 { font-size: 20px; }
+/*
 ::ng-deep .mat-step-header[aria-selected="true"]  {
   & div.mat-step-label.mat-step-label-active.mat-step-label-selected {
     //background-color:  yellow;
@@ -29,8 +18,8 @@
     -webkit-line-clamp: 4;
     overflow: visible;
   }
-}
-
+}*/
+/*
 @media (max-width: 442px) and (max-width: 769px) {
 
   .question-label {
@@ -45,49 +34,141 @@
   .h3_class { font-size: 18px; }
   .fontSize20 { font-size: 16px; }
 }
-
+*/
 
 @media (max-width: 442px) {
 
-  question-label {
+  .h1_class { font-size: 1.2em; }
+  .h2_class { font-size: 1em; }
+  .fontSize20 { font-size: 0.9em; }
+  .h3_class { font-size: 0.75em; }
+
+  .question-label {
+    font-size: small;
+    font-weight: normal;
     display: -webkit-box;
-    max-width: 420px;
-    height: 70px;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: flex;
+    max-width: 100%;
+    max-height: 4em;
+    line-height: 1em;
   }
 
   ::ng-deep .mat-step-header[aria-selected="true"]  {
-    & div.mat-step-label.mat-step-label-active.mat-step-label-selected {
-      //background-color:  yellow;
-      -webkit-line-clamp: 1;
-      overflow: hiddent;
+
+    .card-title {
+      max-height: 170px;
+      font-size: small;
+      font-weight: bolder;
+      line-height: 1em;
+      display: -webkit-box;
+      display: flex;
+      overflow: visible !important;
     }
-    & div.mat-step-label.mat-step-label-active {
-      //background-color:  red;
-      -webkit-line-clamp: 4;
-      overflow: visible;
-    }
+
   }
 
+  .button-row button,
+  .button-row a {
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 135px ;
+    //max-height: 30px;
+    margin-bottom: 5px;
+    line-height: 1em;
+    font-size: large;
+  }
 
-
-  .h1_class { font-size: 26px; }
-  .h2_class { font-size: 22px; }
-  .h3_class { font-size: 16px; }
-  .fontSize20 { font-size: 18px; }
   .mat-stroked-button {
-    min-width: 45%;
-    max-width: 90%;
-    background-color: white;
-    color: #003366;
+      min-width: 100px;
+      background-color: white;
+      color: #003366;
+      line-height: 1em;
+      font-size: large;
   }
-  .mat-flat-button {
-    min-width: 45%;
-    max-width: 90%;
-  }
+
+  button.mat-stroked-button {
+    min-width: 80px;
+    font-size: small;
+    font-weight:bolder;
+    line-height: 1em;
+   }
+
+   button.mat-flat-button {
+    width: 50px;
+    font-size: 0.75em;
+    font-weight:bolder;
+    line-height: 1em;
+   }
+
 }
+
+
+@media (min-width: 443px) and (max-width: 769px) {
+
+  .h1_class { font-size: 1.2em; }
+  .h2_class { font-size: 1em; }
+  .fontSize20 { font-size: 0.9em; }
+  .h3_class { font-size: 0.75em; }
+
+  .question-label {
+    font-size: large;
+    font-weight: normal;
+    display: -webkit-box;
+    display: flex;
+    max-width: 100%;
+    max-height: 4em;
+    line-height: 1em;
+  }
+
+  ::ng-deep .mat-step-header[aria-selected="true"]  {
+
+    .card-title {
+      max-height: 170px;
+      font-size: large;
+      font-weight: bolder;
+      line-height: 1em;
+      display: -webkit-box;
+      display: flex;
+      overflow: visible !important;
+    }
+
+  }
+
+  .button-row button,
+  .button-row a {
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 135px ;
+    //max-height: 30px;
+    margin-bottom: 5px;
+    line-height: 1em;
+    font-size: larger;
+  }
+
+  .mat-stroked-button {
+      min-width: 100px;
+      background-color: white;
+      color: #003366;
+      line-height: 1em;
+      font-size: larger;
+  }
+
+  button.mat-stroked-button {
+    min-width: 80px;
+    font-size: larger;
+    font-weight:bolde;
+    line-height: 1em;
+   }
+
+   button.mat-flat-button {
+    width: 50px;
+    font-size: larger;
+    font-weight:bolder;
+    line-height: 1em;
+   }
+
+}
+
 
 .question-content{
   line-height: 1em;
@@ -115,7 +196,7 @@
   display: none;
 }
 
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
   .divider {
     display: inline-block;
   }
@@ -143,7 +224,7 @@
       font-weight: 400;
     }
   }
-}
+}*/
 
 div.summary-header {
   background-color: #336699;
@@ -159,7 +240,7 @@ div.summary-header {
   padding-bottom: 0px;
 }
 button.nextStep{
-  min-width: 150px;
+  min-width: 130px;
   float: right;
   border: 1px solid white;
   background-color: #003366;
