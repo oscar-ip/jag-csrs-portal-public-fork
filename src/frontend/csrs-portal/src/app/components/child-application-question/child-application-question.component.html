@@ -247,7 +247,8 @@
             <div class="pb-1">
               Fields marked <span class="text-danger">*</span> are required.
            </div>
-            <div class="row row-height">
+            <!--<div class="row row-height">-->
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
@@ -262,7 +263,8 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <!--<div class="row row-height">-->
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
@@ -278,7 +280,8 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <!--<div class="row row-height">-->
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Date of birth</mat-label>
@@ -291,7 +294,8 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <!--<div class="row row-height">-->
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Street address 1</mat-label>
@@ -325,7 +329,8 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <!--<div class="row row-height">-->
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Postal Code</mat-label>
@@ -341,7 +346,8 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <!--<div class="row row-height">-->
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Cell phone number</mat-label>
@@ -355,7 +361,8 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row row-height">
+            <!--<div class="row row-height">-->
+            <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Email</mat-label>
@@ -375,6 +382,7 @@
           </div>
           </form>
         </mat-step>
+
         <mat-step [stepControl]="fourthFormGroup1" [editable]="true">
           <form [formGroup]="fourthFormGroup1">
             <ng-template matStepLabel>Information about the Child(ren)</ng-template>
@@ -393,7 +401,8 @@
               <div class="pb-1 bold">
                 Child{{i+1}}
               </div>
-              <div class="row row-height" >
+              <!--<div class="row row-height">-->
+              <div class="row">
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
                     <mat-label>Legal first name<span class="text-danger">*</span></mat-label>
@@ -409,7 +418,8 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row row-height">
+              <!--<div class="row row-height">-->
+              <div class="row">
                 <div class="col-md-6">
                   <mat-form-field class="w-100">
                     <mat-label>Legal last name<span class="text-danger">*</span></mat-label>
@@ -482,6 +492,7 @@
             </button>
           </div>
         </mat-step>
+
         <mat-step [stepControl]="fifthFormGroup" [editable]="true">
           <form [formGroup]="fifthFormGroup" >
             <ng-template matStepLabel>Details about the Court Order or Written Agreement</ng-template>
@@ -558,6 +569,7 @@
             </div>
           </form>
         </mat-step>
+
         <mat-step [stepControl]="sixFormGroup" [editable]="true">
           <form [formGroup]="sixFormGroup">
             <ng-template matStepLabel>Additional Information</ng-template>
@@ -709,6 +721,7 @@
             </div>
           </form>
         </mat-step>
+
         <mat-step [stepControl]="nineFormGroup">
           <form [formGroup]="nineFormGroup" class="text-dark">
             <ng-template matStepLabel>Review and Submit Your Application
@@ -1144,6 +1157,7 @@
             </div>
           </form>
         </mat-step>
+
       </mat-stepper>
       <!--
       <div>

@@ -88,14 +88,14 @@
 
   button.mat-stroked-button {
     min-width: 80px;
-    font-size: small;
+    font-size: large;
     font-weight:bolder;
     line-height: 1em;
    }
 
    button.mat-flat-button {
     width: 50px;
-    font-size: 0.75em;
+    font-size: large;//0.75em;
     font-weight:bolder;
     line-height: 1em;
    }
