@@ -1,3 +1,143 @@
+
+@media (max-width: 442px) {
+
+  h2 { font-size: large;}
+  p  { font-size: small;}
+
+  .matStepLabel {
+    font-size: small;
+    font-weight: normal;
+    display: -webkit-box;
+    display: flex;
+    max-width: 100%;
+    max-height: 4em;
+    line-height: 1em;
+  }
+
+  ::ng-deep .mat-step-header[aria-selected="true"]  {
+    .mat-step-text-label
+    {
+      max-height: 170px;
+      font-size: large;
+      font-weight: bolder;
+      line-height: 1em;
+      display: -webkit-box;
+      display: flex;
+      overflow: visible !important;
+    }
+  }
+
+
+
+  .button-row button,
+  .button-row a {
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 135px ;
+    //max-height: 30px;
+    margin-bottom: 5px;
+    line-height: 1em;
+    font-size: large;
+  }
+
+  .mat-stroked-button {
+      min-width: 100px;
+      background-color: white;
+      color: #003366;
+      line-height: 1em;
+      font-size: large;
+  }
+
+  button.submitStep{
+    min-width: 130px;
+    float: right;
+    border: 1px solid white;
+    background-color: green;
+    color: #ffffff;
+    font-size: large;
+  }
+  button.nextStep{
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 80px ;
+    margin-bottom: 5px;
+    line-height: 1em;
+    font-size: large;
+  }
+}
+
+@media (min-width: 443px) and (max-width: 769px) {
+
+  h2 { font-size: large;}
+  p  { font-size: small;}
+
+  .matStepLabel {
+    font-size: small;
+    font-weight: normal;
+    display: -webkit-box;
+    display: flex;
+    max-width: 100%;
+    max-height: 4em;
+    line-height: 1em;
+  }
+
+  ::ng-deep .mat-step-header[aria-selected="true"]  {
+    .mat-step-text-label
+    {
+      max-height: 170px;
+      font-size: large;
+      font-weight: bolder;
+      line-height: 1em;
+      display: -webkit-box;
+      display: flex;
+      overflow: visible !important;
+    }
+  }
+
+  ::ng-deep span.mat-radio-label-content {
+    overflow-wrap:  break-word;
+    word-wrap: break-word;
+  }
+
+  .button-row button,
+  .button-row a {
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 135px ;
+    //max-height: 30px;
+    margin-bottom: 5px;
+    line-height: 1em;
+    font-size: large;
+  }
+
+  .mat-stroked-button {
+      min-width: 100px;
+      background-color: white;
+      color: #003366;
+      line-height: 1em;
+      font-size: large;
+  }
+
+  button.submitStep{
+    min-width: 130px;
+    float: right;
+    border: 1px solid white;
+    background-color: green;
+    color: #ffffff;
+    font-size: large;
+  }
+  button.nextStep{
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 80px ;
+    margin-bottom: 5px;
+    line-height: 1em;
+    font-size: large;
+  }
+
+}
+
+
 .mat-stepper-vertical {
     margin-top: 8px;
   }
@@ -95,28 +235,7 @@
   .nextButton{
     margin-top: 20px;
   }
-  .dropzone {
-    width: 450px;
-    height: 200px;
-    padding: 2rem;
-    text-align: center;
-    position: relative;
-    margin: 0 auto;
-    .drop-file {
-    opacity: 0;
-    position: absolute;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    }
-    .browse-file {
-    width: 183px;
-    height: 44px;
-    padding: 8px 16px;
-    }
-    }
+
     .radio-question {
       width: 50%;
     }
@@ -132,9 +251,7 @@
   color: #009CDE;
 
 }
-// .header-section,.stepper-section{
-//   width:90%;
-// }
+
 button.submitStep{
   float: right;
   border: 1px solid white;
