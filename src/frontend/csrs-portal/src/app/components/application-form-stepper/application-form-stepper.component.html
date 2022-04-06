@@ -479,19 +479,25 @@ the information before submission.
               </ng-container>
             </app-alert>
             <mat-divider></mat-divider>
-            <div class="nextButton">
-              <button mat-stroked-button color="basic" matStepperPrevious>
-               < Back
-              </button>
-              <button
-              [ngClass]="{
-                'submitDisabled': isDisabledSubmit === true,
-                'submitStep': isDisabledSubmit === false
-              }"
-              mat-stroked-button color="basic" matStepperNext [disabled]="isDisabledSubmit"
-              (click)="saveLater(); isDisabledSubmit = true">
-              Submit account setup request
-              </button>
+            <div class="nextButton card-group">
+              <div class="card border-0">
+                <div class="card-body">
+                  <button mat-stroked-button color="basic" matStepperPrevious>
+                  < Back
+                  </button>
+                </div>
+              </div>
+              <div class="card border-0">
+                <div class="card-body">
+                  <button
+                  [ngClass]="{
+                    'submitDisabled': isDisabledSubmit === true,
+                    'submitStep': isDisabledSubmit === false
+                  }"
+                  mat-stroked-button color="basic" matStepperNext [disabled]="isDisabledSubmit"
+                  (click)="saveLater(); isDisabledSubmit = true">Submit account setup request</button>
+                </div>
+              </div>
             </div>
           </form>
         </mat-step>
