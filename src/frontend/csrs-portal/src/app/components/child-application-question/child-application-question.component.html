@@ -31,9 +31,9 @@
                           I am the recipient; I currently receive child support
                         </span>
                       </mat-radio-button>
-                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="I am the payor; I current pay child support">
+                      <mat-radio-button class="radio-question" style="margin-left: 0px" value="I am the payor; I currently pay child support">
                         <span class="wrap-mat-radio-label">
-                          I am the payor; I current pay child support
+                          I am the payor; I currently pay child support
                         </span>
                       </mat-radio-button>
                     </mat-radio-group>
@@ -793,7 +793,7 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Province</div>
+                  <div>Province:</div>
                   <div class="bold">{{(secondFormGroup.value.province)?
                     getProvinceById(secondFormGroup.value.province):'-' }}</div>
                 </div>
@@ -814,7 +814,7 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Work Phone number</div>
+                  <div>Work Phone number:</div>
                   <div class="bold">{{(secondFormGroup.value.workNumber)?secondFormGroup.value.workNumber:'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
@@ -883,7 +883,7 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Province</div>
+                  <div>Province:</div>
                   <div class="bold">{{(thirdFormGroup.value.province)?
                     getProvinceById(thirdFormGroup.value.province):'-' }}</div>
                 </div>
@@ -904,7 +904,7 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Work Phone number</div>
+                  <div>Work Phone number:</div>
                   <div class="bold">{{(thirdFormGroup.value.workPhoneNumber)?thirdFormGroup.value.workPhoneNumber:'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
@@ -977,37 +977,34 @@
                   <div class="bold">{{(fifthFormGroup.value.orderDate)?(fifthFormGroup.value.orderDate | date:"yyyy/MM/dd"):'-' }}</div>
                 </div>
               </div>
-              <!-- <div class="stepRow spaceAround">
-                <strong class="submit-text-color">Income</strong>
-              </div> -->
               <div class="row agreement">
                 <div class="col-md-8 stepRow leftRight">
                   <div>
                     Payor's income amount from the order or written agreement
                   </div>
                 </div>
-                <div class="col-md-2 stepRow  ">
-                  <div class="bold">{{(fifthFormGroup.value.payorIncome)?'$'+fifthFormGroup.value.payorIncome:'-' }}</div>
+                <div class="col-md-2 stepRow">
+                  <div class="bold for441">{{(fifthFormGroup.value.payorIncome)?'$'+fifthFormGroup.value.payorIncome:'-' }}</div>
                 </div>
-                </div>
-                <div class="row agreement">
-                  <div class="col-md-8 stepRow  leftRight">
+              </div>
+              <div class="row agreement">
+                  <div class="col-md-8 stepRow leftRight">
                     <div>
                       Recalculation ordered by the court?
                     </div>
                   </div>
-                  <div class="col-md-2 stepRow  ">
-                    <div class="bold">{{(fifthFormGroup.value.recalculationOrdered)?fifthFormGroup.value.recalculationOrdered:'-' }}</div>
+                  <div class="col-md-2 stepRow">
+                    <div class="bold for441">{{(fifthFormGroup.value.recalculationOrdered)?fifthFormGroup.value.recalculationOrdered:'-' }}</div>
                   </div>
                 </div>
                 <div class="row agreement">
-                  <div class="col-md-8 stepRow  leftRight">
+                  <div class="col-md-8 stepRow leftRight">
                     <div>
                       Does the order include special expenses?
                     </div>
                   </div>
-                  <div class="col-md-2 stepRow  ">
-                    <div class="bold">{{(fifthFormGroup.value.isSpecifiedIncome)?fifthFormGroup.value.isSpecifiedIncome:'-' }}</div>
+                  <div class="col-md-2 stepRow">
+                    <div class="bold for441">{{(fifthFormGroup.value.isSpecifiedIncome)?fifthFormGroup.value.isSpecifiedIncome:'-' }}</div>
                   </div>
                 </div>
             </div>
@@ -1039,7 +1036,7 @@
                   </div>
                 </div>
                 <div class="col-md-6 stepRow">
-                  <div class="bold">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.contactMethod:'-' }}</div>
+                  <div class="bold for441">{{(sixFormGroup.value.contactMethod)?sixFormGroup.value.contactMethod:'-' }}</div>
                 </div>
               </div>
               <div class="row agreement">
@@ -1048,8 +1045,8 @@
                     Are you enrolled in the Family Maintenance and Enforcement Program (FMEP)?
                   </div>
                 </div>
-                <div class="col-md-6 stepRow ">
-                  <div class="bold">{{(sixFormGroup.value.enrollFMEP)?sixFormGroup.value.enrollFMEP:'-' }}</div>
+                <div class="col-md-6 stepRow">
+                  <div class="bold for441">{{(sixFormGroup.value.enrollFMEP)?sixFormGroup.value.enrollFMEP:'-' }}</div>
                 </div>
               </div>
               <div class="row agreement">
@@ -1058,8 +1055,8 @@
                     My FMEP file number is:
                   </div>
                 </div>
-                <div class="col-md-6 stepRow ">
-                  <div class="bold">{{(sixFormGroup.value.FMEPinput)?sixFormGroup.value.FMEPinput:'-' }}</div>
+                <div class="col-md-6 stepRow">
+                  <div class="bold for441">{{(sixFormGroup.value.FMEPinput)?sixFormGroup.value.FMEPinput:'-' }}</div>
                 </div>
               </div>
               <div class="row agreement">
@@ -1068,8 +1065,8 @@
                     Are you currently on income assistance?
                   </div>
                 </div>
-                <div class="col-md-6 stepRow ">
-                  <div class="bold">{{(sixFormGroup.value.incomeAssistance)?sixFormGroup.value.incomeAssistance:'-'}}</div>
+                <div class="col-md-6 stepRow">
+                  <div class="bold for441">{{(sixFormGroup.value.incomeAssistance)?sixFormGroup.value.incomeAssistance:'-'}}</div>
                 </div>
               </div>
               <div class="row agreement">
@@ -1079,7 +1076,7 @@
                   </div>
                 </div>
                 <div class="col-md-6 stepRow">
-                  <div class="bold">{{(sixFormGroup.value.referral)?
+                  <div class="bold for441">{{(sixFormGroup.value.referral)?
                     getReferralById(sixFormGroup.value.referral):'-' }}</div>
                 </div>
               </div>
@@ -1142,9 +1139,6 @@
               <button mat-stroked-button color="basic" matStepperPrevious>
                < Back
               </button>
-              <!-- <button mat-flat-button color="primary" matStepperPrevious>
-                Save my application for later
-              </button> -->
               <button #submitBtn
               [ngClass]="{
                 'nextStep': isDisabledSubmit === true,
@@ -1159,11 +1153,6 @@
         </mat-step>
 
       </mat-stepper>
-      <!--
-      <div>
-        <button mat-button (click)="saveLater()">Save fot later</button>
-        <button mat-button (click)="save()">Save</button>
-      </div>-->
     </div>
   </section>
 </div>
