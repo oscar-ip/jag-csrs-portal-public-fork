@@ -286,3 +286,11 @@
   color: #009CDE;
 
 }
+
+::ng-deep .mat-select-panel mat-option.mat-option {
+  margin: 1rem 0;
+  overflow: visible;
+  line-height: initial;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  }
