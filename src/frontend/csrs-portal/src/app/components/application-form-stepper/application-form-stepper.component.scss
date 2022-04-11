@@ -27,8 +27,6 @@
     }
   }
 
-
-
   .button-row button,
   .button-row a {
     margin-right: 5px;
@@ -64,6 +62,44 @@
     line-height: 1em;
     font-size: large;
   }
+
+  div {
+    font-size: small;
+  }
+
+  div.row {
+    font-size: small;
+  }
+
+  div.stepRow {
+    font-size: small;
+  }
+
+  .leftRight{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .displayDetails{
+    padding-left: 10px;
+    padding-right: 15px;
+    div{
+      width: 50%;
+      word-break: break-word;
+      font-size: small;
+    }
+  }
+
+  .displayDetails1{
+    padding-left: 10px;
+    padding-right: 15px;
+    div{
+      width: 100%;
+      word-break: break-all;
+      font-size: small;
+    }
+  }
+
 }
 
 @media (min-width: 443px) and (max-width: 769px) {
@@ -136,11 +172,6 @@
   }
 
 }
-
-
-
-
-
 
 .mat-stepper-vertical {
     margin-top: 8px;

@@ -26,19 +26,7 @@
       overflow: visible !important;
     }
   }
-/*
-  ::ng-deep .mat-select-panel mat-option.mat-option {
-    margin: 1rem 0;
-    overflow: visible;
-    line-height: initial;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    }
 
-    ::ng-deep .mat-option-text.mat-option-text {
-    white-space: normal;
-    }
-*/
   .button-row button,
   .button-row a {
     margin-right: 5px;
@@ -147,8 +135,7 @@
   }
 
   ::ng-deep span.mat-radio-label-content {
-    overflow-wrap:  break-word;
-    word-wrap: break-word;
+    white-space: normal;
   }
 
   .button-row button,
@@ -186,6 +173,11 @@
     line-height: 1em;
     font-size: large;
   }
+
+
+
+
+
 
 }
 
