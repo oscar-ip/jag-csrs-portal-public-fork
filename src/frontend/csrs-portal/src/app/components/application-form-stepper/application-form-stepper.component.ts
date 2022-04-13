@@ -98,6 +98,7 @@ export class ApplicationFormStepperComponent implements OnInit {
     this.errorIncomeMessage = 'Field should have numerical values. ';
     this.errorDateMessage = 'Date cannot be in future.'
     this.errorMaxMessage = 'You can only enter up to 3000 characters.';
+    this.errorMaxOtherIdentityMessage = 'You can only enter up to 100 characters.';
 
     this.getIdentities();
     this.getProvinces();
