@@ -21,6 +21,7 @@ import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 import { Router, ActivatedRoute } from "@angular/router";
+import { MatSelectModule, MatSelectChange } from '@angular/material/select';
 
 // -- import data structure
 import {
@@ -67,6 +68,8 @@ export class ApplicationFormStepperComponent implements OnInit {
   errorIncomeMessage: any = '';
   errorDateMessage: any = '';
   errorMaxMessage: any = '';
+  errorMaxOtherIdentityMessage: any = '';
+  isVisibleOtherIdentity: boolean = false;
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
       @Inject(AccountService) private accountService,
@@ -117,7 +120,8 @@ export class ApplicationFormStepperComponent implements OnInit {
       cellNumber: [''],
       workNumber: [''],
       gender: [''],
-      identity: ['']
+      identity: [''],
+      otherIdentity: ['', Validators.maxLength(100)]
     });
 
     this.sixFormGroup = this._formBuilder.group({
@@ -144,6 +148,23 @@ export class ApplicationFormStepperComponent implements OnInit {
       weight: 'normal',
       color: 'red'
     };
+  }
+
+  onIdentityChange(event: MatSelectChange)
+  {
+
+    let listIdentity = new List<LookupValue>(this.identities);
+    let identity: LookupValue = listIdentity.firstOrDefault(x=>x.id == event.value);
+    //this.logger.info('seleceted identity: ', identity.value);
+    if (identity.value === 'Other')
+    {
+      this.isVisibleOtherIdentity = true;
+    }
+    else
+    {
+      this.isVisibleOtherIdentity = false;
+    }
+    //this.logger.info('isVisibleOtherIdentity: ', this.isVisibleOtherIdentity);
   }
 
   forSubmitBtn(event){
@@ -295,6 +316,12 @@ export class ApplicationFormStepperComponent implements OnInit {
   {
     let listIdentity = new List<LookupValue>(this.identities);
     let identity: LookupValue = listIdentity.firstOrDefault(x=>x.id == id);
+
+    if (identity.value === 'Other')
+    {
+      return 'Other: ' + this.secondFormGroup.value.otherIdentity
+    }
+
     return identity != null  ? identity.value : '-';
   }
 
@@ -354,7 +381,7 @@ export class ApplicationFormStepperComponent implements OnInit {
           referral: null,
           preferredContactMethod: inPreferredContactMethod,
           incomeAssistance: this.findId(file2Data.incomeAssistance),
-          //referenceNumber = null
+          otherIdentity: partyData.otherIdentity
       }
 
       // --- populate file

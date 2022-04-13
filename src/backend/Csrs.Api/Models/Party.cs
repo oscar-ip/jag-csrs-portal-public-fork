@@ -32,5 +32,7 @@ namespace Csrs.Api.Models
         public LookupValue? PreferredContactMethod { get; set; }
         public string? ReferenceNumber { get; set; }
         public int? IncomeAssistance { get; set; }
+        public string? OtherIdentity { get; set; }
+
     }
 }

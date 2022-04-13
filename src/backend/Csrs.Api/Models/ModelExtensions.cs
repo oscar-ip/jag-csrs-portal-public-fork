@@ -72,7 +72,8 @@ namespace Csrs.Api.Models
                 SsgIdentity = party.Identity?.Id,
                 //SsgIdentityotherdetails = ssgIdentityotherdetails, ???
                 SsgStreet1 = party.AddressStreet1,
-                SsgIncomeassistance = party.IncomeAssistance
+                SsgIncomeassistance = party.IncomeAssistance,
+                SsgIdentityotherdetails = party.OtherIdentity
             };
             return dynamicsParty;
         }

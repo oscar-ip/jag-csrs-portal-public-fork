@@ -237,7 +237,7 @@ export class MessageService {
                 reportProgress: reportProgress
             }
         );
-    }*/
+    } */
 
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

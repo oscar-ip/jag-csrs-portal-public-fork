@@ -175,9 +175,33 @@
   }
 
 
+  div {
+    font-size: small;
+  }
 
+  div.row {
+    font-size: small;
+  }
 
+  div.stepRow {
+    font-size: small;
+  }
 
+  .displayDetails{
+    div {
+      width: 50%;
+      word-break: break-word;
+      font-size: small;
+    }
+  }
+
+  .displayDetails1{
+    div {
+      width: 100%;
+      word-break: break-all;
+      font-size: small;
+    }
+  }
 
 }
 
@@ -341,3 +365,6 @@ button.submitStep{
   //::ng-deep .mat-option-text.mat-option-text {
   //white-space: normal;
   //}
+
+.show { display: block; }
+.hide { display: none; }
