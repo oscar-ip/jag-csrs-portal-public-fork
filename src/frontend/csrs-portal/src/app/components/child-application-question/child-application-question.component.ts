@@ -23,7 +23,8 @@ import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.c
 import { DialogOptions } from '@shared/dialogs/dialog-options.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatSelectModule, MatSelectChange } from '@angular/material/select';
 
 // -- import data structure
 import {
@@ -87,11 +88,13 @@ export class ChildApplicationQuestionComponent implements OnInit {
   errorIncomeMessage: any = '';
   errorDateMessage: any = '';
   errorMaxMessage: any = '';
+  errorMaxOtherIdentityMessage: any = '';
   tooltips: any = [];
   isHiddens: any = [];
 
   dateOfOrder: Date;
   birthOfDateOtherParty: Date;
+  isVisibleOtherIdentity: boolean = false;
 
 
   constructor(public oidc : OidcSecurityService,
@@ -117,6 +120,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.errorIncomeMessage = 'Field should have numerical values. ';
     this.errorDateMessage = 'Date cannot be in future.'
     this.errorMaxMessage = 'You can only enter up to 3000 characters.';
+
+    this.errorMaxOtherIdentityMessage = 'You can only enter up to 100 characters.';
 
 
     this.tooltips = [
@@ -160,7 +165,8 @@ export class ChildApplicationQuestionComponent implements OnInit {
       cellNumber: [''],
       workNumber: [''],
       gender: [''],
-      identity: ['']
+      identity: [''],
+      otherIdentity: ['', Validators.maxLength(100)]
     });
 
     this.thirdFormGroup = this._formBuilder.group({
@@ -233,6 +239,23 @@ export class ChildApplicationQuestionComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
     //this.setFormDataFromLocal();
+  }
+
+  onIdentityChange(event: MatSelectChange)
+  {
+
+    let listIdentity = new List<LookupValue>(this.identities);
+    let identity: LookupValue = listIdentity.firstOrDefault(x=>x.id == event.value);
+    //this.logger.info('seleceted identity: ', identity.value);
+    if (identity.value === 'Other')
+    {
+      this.isVisibleOtherIdentity = true;
+    }
+    else
+    {
+      this.isVisibleOtherIdentity = false;
+    }
+    //this.logger.info('isVisibleOtherIdentity: ', this.isVisibleOtherIdentity);
   }
 
   clearDate(event) {
@@ -577,6 +600,12 @@ editPage(stepper, index){
   {
     let listIdentity = new List<LookupValue>(this.identities);
     let identity: LookupValue = listIdentity.firstOrDefault(x=>x.id == id);
+
+    if (identity.value === 'Other')
+    {
+      return 'Other: ' + this.secondFormGroup.value.otherIdentity
+    }
+
     return identity != null  ? identity.value : '-';
   }
 
@@ -692,7 +721,7 @@ editPage(stepper, index){
           referral: inReferral,
           preferredContactMethod: inPreferredContactMethod,
           incomeAssistance: this.findId(file2Data.incomeAssistance),
-          //referenceNumber = null
+          otherIdentity: partyData.otherIdentity
       }
 
       // --- populate other party

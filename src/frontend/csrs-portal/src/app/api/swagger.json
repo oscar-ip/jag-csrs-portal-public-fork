@@ -1648,59 +1648,6 @@
         },
         "additionalProperties": false
       },
-      "Child": {
-        "type": "object",
-        "properties": {
-          "childId": {
-            "type": "string",
-            "description": "The child id.",
-            "nullable": true
-          },
-          "firstName": {
-            "type": "string",
-            "description": "Child's first name.",
-            "nullable": true
-          },
-          "middleName": {
-            "type": "string",
-            "description": "Child's middle name.",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "description": "Child's last name.",
-            "nullable": true
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "description": "Child's date of birth name.",
-            "format": "date",
-            "nullable": true
-          },
-          "childIsDependent": {
-            "type": "string",
-            "description": "Child is a dependent.",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CourtLookupValue": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique id of the value.",
-            "nullable": true
-          },
-          "value": {
-            "type": "string",
-            "description": "The human readable value.",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "CSRSAccount": {
         "required": [
           "fileNumber",
@@ -1788,6 +1735,59 @@
           "fileId": {
             "type": "string",
             "description": "The output File Id of CSRS account.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Child": {
+        "type": "object",
+        "properties": {
+          "childId": {
+            "type": "string",
+            "description": "The child id.",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Child's first name.",
+            "nullable": true
+          },
+          "middleName": {
+            "type": "string",
+            "description": "Child's middle name.",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Child's last name.",
+            "nullable": true
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Child's date of birth name.",
+            "format": "date",
+            "nullable": true
+          },
+          "childIsDependent": {
+            "type": "string",
+            "description": "Child is a dependent.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CourtLookupValue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique id of the value.",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "description": "The human readable value.",
             "nullable": true
           }
         },
@@ -2183,6 +2183,10 @@
           "incomeAssistance": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "otherIdentity": {
+            "type": "string",
             "nullable": true
           }
         },

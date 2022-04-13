@@ -217,13 +217,22 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Identity</mat-label>
-                  <mat-select formControlName="identity">
+                  <mat-select formControlName="identity" (selectionChange)="onIdentityChange($event)">
                     <mat-option *ngFor="let identity of identities; index as pi" [value]="identity.id">
                       {{ identity.value }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
+              <!--Other Identity Dscription -->
+              <div class="col-md-6" [ngClass]="isVisibleOtherIdentity ? 'show' : 'hide'">
+                <mat-form-field class="w-100">
+                  <mat-label>Other Identity Description</mat-label>
+                  <input matInput formControlName="otherIdentity"/>
+                  <mat-error>{{ errorMaxOtherIdentityMessage | json }}</mat-error>
+                </mat-form-field>
+              </div>
+              <!---->
             </div>
             <mat-divider></mat-divider>
             <div class="nextButton">
