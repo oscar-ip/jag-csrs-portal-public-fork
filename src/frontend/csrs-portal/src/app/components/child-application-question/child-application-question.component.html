@@ -478,14 +478,14 @@
               </div>-->
             </ng-container>
             <div class="row button-row pb-3">
-              <div class="col-md-8"></div>
-              <div class="col-md-2">
+              <div class="col-md-6"></div>
+              <div class="col-md-6" style="display: flex; justify-content: flex-end;">
                   <button mat-button style="color:red" [disabled]="!fourthFormGroup1.valid" (click)="deletechild()">
                     Delete
                     <mat-icon style="color:red" color="danger">delete</mat-icon>
                   </button>
-              </div>
-              <div class="col-md-2">
+              <!--</div>
+              <div class="col-md-3"> -->
                 <button  mat-stroked-button [disabled]="!fourthFormGroup1.valid"
                 (click)="callAntherchild()">+ Add another child</button>
               </div>

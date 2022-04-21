@@ -29,6 +29,19 @@
       dropzone { font-size: small; }
       p  { font-size: small; }
     }
+
+    div {
+      .list_th {
+        font-size: small;
+        color: #003366;
+        font-weight: 600;
+      }
+      .col-9 {
+        font-size: small;
+        white-space: normal;
+      }
+    }
+
   }
 }
 
@@ -155,6 +168,26 @@
     font-size: 15px;
     color: #003366;
     font-weight: 600;
+  }
+
+  .list_th {
+    font-size: 15px;
+    color: #003366;
+    font-weight: 600;
+  }
+
+
+  .mat-row:nth-child(odd){
+    background-color: aliceblue;
+  }
+  .mat-row:not(:nth-child(odd)){
+    background-color:whitesmoke;
+  }
+
+
+  ::ng-deep .mat-list-item-content {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   .message-data{

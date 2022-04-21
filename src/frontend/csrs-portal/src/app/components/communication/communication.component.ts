@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, ElementRef, OnDestroy } from '@angular/core';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import {
@@ -26,7 +26,8 @@ import { UserRequest } from '../../api';
 import { Message } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
 import { List } from 'ts-generic-collections-linq';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-communication',
@@ -35,11 +36,22 @@ import { MatPaginator } from '@angular/material/paginator';
   providers: [DatePipe]
 })
 
-export class CommunicationComponent implements OnInit {
+export class CommunicationComponent implements //OnDestroy {
+OnInit {
   dataSource = new MatTableDataSource();
   @ViewChild('paginator') paginator: MatPaginator;
+
   displayedColumns: string[] = ['id', 'name', 'username', 'email', 'phone'];
   public cscLink: string;
+  isMobile: boolean = false;
+
+  pageEvent: PageEvent;
+  dataSource441 = new MatTableDataSource();
+  @ViewChild('paginator441') paginator441: MatPaginator;
+  public array441: any;
+  public pageSize441 = 5;
+  public currentPage441 = 0;
+  public totalSize441 = 0;
 
   constructor(private _formBuilder: FormBuilder,
               @Inject(LoggerService) private logger,
@@ -53,8 +65,9 @@ export class CommunicationComponent implements OnInit {
               public dialog: MatDialog,
               private datePipe: DatePipe,
               private route: ActivatedRoute,
-              @Inject(Router) private router  ) {
-   }
+              @Inject(Router) private router
+              ) {}
+
   showValidationMessages: boolean;
   validationMessages: any[];
   selectedInboxFile: any;
@@ -109,6 +122,14 @@ export class CommunicationComponent implements OnInit {
 
     this.cscLink = this.appConfigService.appConfig.cscLink;
     //this.logger.info('cscLink :',this.cscLink);
+
+    //this.logger.info('window.innerWidth: ', window.innerWidth);
+    if (window.innerWidth < 442) {
+      this.isMobile = true;
+    } else {
+      this.isMobile = false;
+    }
+
 
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.getAccountInfo();
@@ -277,8 +298,27 @@ export class CommunicationComponent implements OnInit {
         }
       }
     }
-    this.dataSource.data = selectedMsgs;
+    this.dataSource = new MatTableDataSource<Message>(selectedMsgs);
     this.dataSource.paginator = this.paginator;
+
+    this.dataSource441 = new MatTableDataSource<Message>(selectedMsgs);
+    this.dataSource441.paginator = this.paginator441;
+    this.array441 = selectedMsgs;
+    this.totalSize441 = this.array441.length;
+    this.iterator();
+  }
+
+  private iterator() {
+    const end = (this.currentPage441 + 1) * this.pageSize441;
+    const start = this.currentPage441 * this.pageSize441;
+    const part = this.array441.slice(start, end);
+    this.dataSource441 = part;
+  }
+
+  public handlePage(e: any) {
+    this.currentPage441 = e.pageIndex;
+    this.pageSize441 = e.pageSize;
+    this.iterator();
   }
 
   sendContact(): void {

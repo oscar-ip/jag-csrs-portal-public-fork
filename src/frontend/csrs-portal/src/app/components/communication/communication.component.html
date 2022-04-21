@@ -42,41 +42,90 @@
                   </div>
                 </div>
               </div>
-              <hr class="mt-0 mb-4" style="opacity: 0.5">
+              <hr class="mt-0 mb-1" style="opacity: 0.5">
 
-              <table mat-table [dataSource]="dataSource" >
+              <div [ngSwitch]="isMobile">
+                <div *ngSwitchCase="false">
+                  <table mat-table [dataSource]="dataSource">
+                    <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
+                      <td mat-cell *matCellDef="let element">{{element.date | date:'yyyy-MM-dd'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef> File&nbsp;#&nbsp;</th>
+                      <td mat-cell *matCellDef="let element"> {{element.fileNumber}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="username">
+                      <th mat-header-cell *matHeaderCellDef> Subject </th>
+                      <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="email">
+                      <th mat-header-cell *matHeaderCellDef> Attachment&nbsp;</th>
+                      <td mat-cell *matCellDef="let element"><div style="display: inline;" *ngIf="element.attachment"><img src="/assets/PDF-black_icon.svg" /><div style="display: inline;" *ngFor="let doc of element.documents">{{doc.documentType}}</div></div></td>
+                    </ng-container>
+                    <ng-container matColumnDef="phone">
+                      <th mat-header-cell *matHeaderCellDef> Actions </th>
+                      <td class="font_normal" mat-cell *matCellDef="let element"> <img src="/assets/View_icon.svg" /><a target="blank" (click)="ontable(element)">View</a> </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'make-bold': !row.isRead }"></tr>
+                  </table>
+                  <mat-paginator #paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+                </div>
 
-                <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
-                  <td mat-cell *matCellDef="let element">{{element.date | date:'yyyy-MM-dd'}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef> File&nbsp;#&nbsp;</th>
-                  <td mat-cell *matCellDef="let element"> {{element.fileNumber}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="username">
-                  <th mat-header-cell *matHeaderCellDef> Subject </th>
-                  <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="email">
-                  <th mat-header-cell *matHeaderCellDef> Attachment&nbsp;</th>
-                  <td mat-cell *matCellDef="let element"><div style="display: inline;" *ngIf="element.attachment"><img src="/assets/PDF-black_icon.svg" /><div style="display: inline;" *ngFor="let doc of element.documents">{{doc.documentType}}</div></div></td>
-                </ng-container>
-
-                <ng-container matColumnDef="phone">
-                  <th mat-header-cell *matHeaderCellDef> Actions </th>
-                  <td class="font_normal" mat-cell *matCellDef="let element"> <img src="/assets/View_icon.svg" /><a target="blank" (click)="ontable(element)">View</a> </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'make-bold': !row.isRead }"></tr>
-
-              </table>
-              <mat-paginator #paginator [pageSizeOptions]="[5]"
-                             showFirstLastButtons></mat-paginator>
+                <div *ngSwitchCase="true">
+                  <mat-list>
+                    <mat-list-item *ngFor="let message of dataSource441; even as isEven" >
+                        <div matLine>
+                          <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
+                            <div class="list_th col-2">Date:</div>
+                            <div class="col-9">{{ message.date | date:'yyyy-MM-dd' }}</div>
+                          </div>
+                        </div>
+                        <div matLine>
+                          <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
+                            <div class="list_th col-2">File&nbsp;#:</div>
+                            <div class="col-9">{{ message.fileNumber }}</div>
+                          </div>
+                        </div>
+                        <div matLine>
+                          <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
+                            <div class="list_th col-2">Subject:</div>
+                            <div class="col-9">{{ message.subject }}</div>
+                          </div>
+                        </div>
+                        <div matLine>
+                          <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
+                            <div class="list_th col-2">Attachment:</div>
+                            <div class="col-9">
+                              <div style="display: inline;" *ngIf="message.attachment">
+                                <img src="/assets/PDF-black_icon.svg" />
+                                <div style="display: inline;" *ngFor="let doc of message.documents">
+                                  {{doc.documentType}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div matLine>
+                          <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
+                            <div class="list_th col-2">Actions:</div>
+                            <div class="font_normal col-9" ><img src="/assets/View_icon.svg" /><a target="blank" (click)="ontable(message)">View</a></div>
+                          </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                  </mat-list>
+                  <mat-paginator #paginator441
+                    [pageSize] = "pageSize441"
+                    [length]   = "totalSize441"
+                    [pageIndex]= "currentPage441"
+                    (page)="handlePage($event)"
+                    [pageSizeOptions]="[5]"
+                    showFirstLastButtons>
+                  </mat-paginator>
+                </div>
+              </div>
             </div>
 
             <div class="step2" *ngIf="toggleRow">
