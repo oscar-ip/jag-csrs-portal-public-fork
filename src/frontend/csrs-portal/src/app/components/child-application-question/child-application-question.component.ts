@@ -504,7 +504,7 @@ editPage(stepper, index){
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       birthdate: ['', Validators.required],
-      givenNames: [],
+      //givenNames: [],
       childDependency: [],
       middleName: [],
     });
@@ -647,10 +647,26 @@ editPage(stepper, index){
 
   prepareData(){
 
-    // --- populate children
-    const users = this.fourthFormGroup1.value.users;
+    //---------
+    /*const users = this.fourthFormGroup1.value.users;
     let childs: Array<Child> = new Array<Child>();
 
+    for(let user in users) {
+      let child: Child = {
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        dateOfBirth: this.transformDate(user.birthdate),
+        childIsDependent: user.childDependency
+      };
+      childs.push(child)
+    }*/
+
+    //--------
+    // --- populate children
+    const users = this.fourthFormGroup1.value.users;
+    this.logger.info('users: ', users);
+    let childs: Array<Child> = new Array<Child>();
     for(var i = 0; i < users.length;i++) {
       let child: Child = {
         firstName: users[i].firstName,

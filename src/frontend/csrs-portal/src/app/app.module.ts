@@ -54,6 +54,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { filter } from 'rxjs/operators';
     MatIconModule,
     MatDialogModule,
     FormsModule,
+    MatListModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -135,7 +137,7 @@ export class AppModule {
       .registerForEvents()
       .pipe(filter((notification) => notification.type === EventTypes.ConfigLoaded))
       .subscribe((config) => {
-        console.log('ConfigLoaded', config);
+        //console.log('ConfigLoaded', config);
       });
   }
 }
