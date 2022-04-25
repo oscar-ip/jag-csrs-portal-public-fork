@@ -15,6 +15,7 @@ import { LogInOutService } from 'app/services/log-in-out.service';
 export class HeaderComponent implements OnInit {
   public btnLabel: string = '';
   public btnIcon: string = '';
+  isMobile: boolean = false;
 
   constructor(protected logger: LoggerService,
               private appConfigService: AppConfigService,
@@ -39,6 +40,13 @@ export class HeaderComponent implements OnInit {
         }
       }
     })
+
+    if (window.innerWidth < 442) {
+      this.isMobile = true;
+    } else {
+      this.isMobile = false;
+    }
+
   }
 
   public onClickBtn()

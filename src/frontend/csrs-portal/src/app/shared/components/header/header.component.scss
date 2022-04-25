@@ -9,7 +9,7 @@
 }
 
 .mat-toolbar {
-  height: 70px;
+  min-height: 70px;
   padding: 0;
 
   img {
@@ -47,5 +47,7 @@
   .logout {
     margin-right: 1.2em;
   }
-
 }
+
+
+
