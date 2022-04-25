@@ -28,6 +28,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { List } from 'ts-generic-collections-linq';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-communication',

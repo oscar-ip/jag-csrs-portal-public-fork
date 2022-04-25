@@ -42,10 +42,11 @@
                   </div>
                 </div>
               </div>
-              <hr class="mt-0 mb-1" style="opacity: 0.5">
+
 
               <div [ngSwitch]="isMobile">
                 <div *ngSwitchCase="false">
+                  <hr class="mt-0 mb-1" style="opacity: 0.5">
                   <table mat-table [dataSource]="dataSource">
                     <ng-container matColumnDef="id">
                       <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
@@ -74,30 +75,31 @@
                 </div>
 
                 <div *ngSwitchCase="true">
+                  <hr class="mt-0 mb-0" style="opacity: 0.5">
                   <mat-list>
                     <mat-list-item *ngFor="let message of dataSource441; even as isEven" >
                         <div matLine>
                           <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
-                            <div class="list_th col-2">Date:</div>
-                            <div class="col-9">{{ message.date | date:'yyyy-MM-dd' }}</div>
+                            <div class="list_th col-3" style="margin-left:15px">Date:</div>
+                            <div class="col-8">{{ message.date | date:'yyyy-MM-dd' }}</div>
                           </div>
                         </div>
                         <div matLine>
                           <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
-                            <div class="list_th col-2">File&nbsp;#:</div>
-                            <div class="col-9">{{ message.fileNumber }}</div>
+                            <div class="list_th col-3" style="margin-left:15px">File&nbsp;#:</div>
+                            <div class="col-8">{{ message.fileNumber }}</div>
                           </div>
                         </div>
                         <div matLine>
                           <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
-                            <div class="list_th col-2">Subject:</div>
-                            <div class="col-9">{{ message.subject }}</div>
+                            <div class="list_th col-3" style="margin-left:15px">Subject:</div>
+                            <div class="col-8">{{ message.subject }}</div>
                           </div>
                         </div>
                         <div matLine>
                           <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
-                            <div class="list_th col-2">Attachment:</div>
-                            <div class="col-9">
+                            <div class="list_th col-3" style="margin-left:15px">Attachment:</div>
+                            <div class="col-8">
                               <div style="display: inline;" *ngIf="message.attachment">
                                 <img src="/assets/PDF-black_icon.svg" />
                                 <div style="display: inline;" *ngFor="let doc of message.documents">
@@ -109,8 +111,8 @@
                         </div>
                         <div matLine>
                           <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }" [ngClass]="{'make-bold': !message.isRead }">
-                            <div class="list_th col-2">Actions:</div>
-                            <div class="font_normal col-9" ><img src="/assets/View_icon.svg" /><a target="blank" (click)="ontable(message)">View</a></div>
+                            <div class="list_th col-3" style="margin-left:15px">Actions:</div>
+                            <div class="font_normal col-8" ><img src="/assets/View_icon.svg" /><a target="blank" (click)="ontable(message)">View</a></div>
                           </div>
                         </div>
                         <mat-divider></mat-divider>

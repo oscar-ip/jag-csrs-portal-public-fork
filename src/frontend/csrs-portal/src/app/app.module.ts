@@ -55,6 +55,7 @@ import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.com
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { MatListModule } from '@angular/material/list';
     MatDialogModule,
     FormsModule,
     MatListModule,
+    MatDividerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
