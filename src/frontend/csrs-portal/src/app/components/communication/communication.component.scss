@@ -1,49 +1,11 @@
-@media (max-width: 442px) {
-  .tabHeader {
-    font-size: 1.1em;
-    font-weight: 500;
-  }
-
-  .container {
-    label { font-size: small; }
-    a { font-size: small; }
-    img { max-width: 12px; }
-    ::ng-deep .mat-form-field {
-      font-size: small;
-    }
-    ::ng-deep .mat-table
-    {
-      .mat-header-cell {
-        font-size: x-small;
-      }
-      .mat-cell {
-        font-size: x-small;
-        img { max-width: 10px; }
-        a { font-size: x-small; }
-      }
-    }
-
-    div {
-      label { font-size: small; }
-      h2  { font-size: small; }
-      dropzone { font-size: small; }
-      p  { font-size: small; }
-    }
-
-    div {
-      .list_th {
-        font-size: small;
-        color: #003366;
-        font-weight: 600;
-      }
-      .col-9 {
-        font-size: small;
-        white-space: normal;
-      }
-    }
-
-  }
+.material-divider {
+  color: grey;
 }
+
+.mat-divider {
+  border-top-color: grey;
+}
+
 
 .document-drag-container{
   height: 175px;
@@ -156,11 +118,11 @@
     color:black
   }
 
-  .border_dialog{
-    border-width: 2px;
-    border-color: orange;
-  }
   table {
+    width: 100%;
+  }
+
+  .mat-list {
     width: 100%;
   }
 
@@ -186,8 +148,11 @@
 
 
   ::ng-deep .mat-list-item-content {
-    padding-top: 0 !important;
+    width: 100%;
+    padding-top:    0 !important;
     padding-bottom: 0 !important;
+    padding-left:   0 !important;
+    padding-right:  0 !important;
   }
 
   .message-data{
@@ -198,14 +163,7 @@
   .message-data h2{
     color: black;
   }
-  .footer {
-    width:100%;
-    padding-top: 24px;
-    margin-left:15px;
-    border: 3px solid #facc00;
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
+
   .back-to-messages{
     cursor: pointer;
     color: #009cde;
@@ -322,6 +280,56 @@ label {
   color: #003366;
 }
 
+@media (max-width: 442px) {
+  .tabHeader {
+    font-size: 1.1em;
+    font-weight: 500;
+  }
+
+  .container {
+    label { font-size: small; }
+    a { font-size: small; }
+    img { max-width: 12px; }
+    ::ng-deep .mat-form-field {
+      font-size: small;
+    }
+    ::ng-deep .mat-table
+    {
+      .mat-header-cell {
+        font-size: x-small;
+      }
+      .mat-cell {
+        font-size: x-small;
+        img { max-width: 10px; }
+        a { font-size: x-small; }
+      }
+    }
+
+    div {
+      label { font-size: small; }
+      h2  { font-size: small; }
+      dropzone { font-size: small; }
+      p  { font-size: small; }
+    }
+
+    div {
+      .list_th {
+        font-size: small;
+        color: #003366;
+        font-weight: 600;
+      }
+      .col-8 {
+        font-size: small;
+        white-space: normal;
+      }
+    }
+
+    .mat-divider {
+      border-top-color: grey;
+    }
+
+  }
+}
 
 
 
