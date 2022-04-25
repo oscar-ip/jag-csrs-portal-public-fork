@@ -1,28 +1,52 @@
 <div class="header d-print-none">
   <div class="container">
-    <mat-toolbar  color="primary">
-      <span>
-        <a href="https://www2.gov.bc.ca/gov/content/home"
-          class="government-of-bc-logo"
-          target="_blank"
-          rel="noopener">
-          <img src="/assets/gov_bc_logo.jpg"
-              alt="Government of BC Logo"/>
-        </a>
-      </span>
 
-      <span class="p-3 flex-fill">Child Support Recalculation Service</span>
-      <!--
-      <mat-icon class="logout-icon">logout</mat-icon><span>BCeID Login</span>
-      -->
-      <button mat-button (click)="onClickBtn()">
-        <mat-icon class="logout-icon" inline=true>{{btnIcon}}</mat-icon>
-        {{btnLabel}}
-      </button>
+    <div [ngSwitch]="isMobile">
+      <div *ngSwitchCase="false">
+        <mat-toolbar  color="primary">
+          <span>
+            <a href="https://www2.gov.bc.ca/gov/content/home"
+              class="government-of-bc-logo"
+              target="_blank"
+              rel="noopener">
+              <img src="/assets/gov_bc_logo.jpg"
+                  alt="Government of BC Logo"/>
+            </a>
+          </span>
+          <span class="p-3 flex-fill">Child Support Recalculation Service</span>
+          <button mat-button (click)="onClickBtn()">
+            <mat-icon class="logout-icon" inline=true>{{btnIcon}}</mat-icon>
+            {{btnLabel}}
+          </button>
+        </mat-toolbar>
+      </div>
+      <div *ngSwitchCase="true">
+        <mat-toolbar  color="primary">
+          <mat-toolbar-row class="pt-2" style="min-height: 40px !important; height: 40px !important;">
+            <span>
+              <a href="https://www2.gov.bc.ca/gov/content/home"
+                class="government-of-bc-logo"
+                target="_blank"
+                rel="noopener">
+                <img src="/assets/gov_bc_logo.jpg"
+                    alt="Government of BC Logo"/>
+              </a>
+            </span>
+          </mat-toolbar-row>
+          <mat-toolbar-row style="min-height: 30px !important; height: 30px !important;">
+            <span class="p-3 flex-fill">Child Support Recalculation Service</span>
+          </mat-toolbar-row>
+          <mat-toolbar-row style="min-height: 30px !important; height: 30px !important;">
+            <button mat-button (click)="onClickBtn()">
+              <mat-icon class="logout-icon" inline=true>{{btnIcon}}</mat-icon>
+              {{btnLabel}}
+            </button>
+          </mat-toolbar-row>
+        </mat-toolbar>
+      </div>
 
-    </mat-toolbar>
   </div>
-
+</div>
 <div class="ngx-progress">
   <ng-progress></ng-progress>
 </div>
