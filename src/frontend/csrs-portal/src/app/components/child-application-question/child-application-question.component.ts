@@ -512,42 +512,19 @@ editPage(stepper, index){
     usersArray.insert(arraylen, newUsergroup);
     this.isHiddens.push(false);
 
-    if (usersArray.length >= 2)
-    {
-      this.isChildDelete = false;
-    }
-    else
-    {
-      this.isChildDelete = true;
-    }
-
+    this.isChildDelete = false;
   }
 
-  /*
-  deletechild(index){
-    this.fourthFormGroup1.get('users')['controls'].splice(index,1);
-    this.isHiddens.splice(index,1);
-  }*/
-
-  deletechild(){
+  deletechild1(){
     const arraylen = this.fourthFormGroup1.get('users')['controls'].length;
-    //this.logger.info('arraylen = ', arraylen);
-    if (arraylen >= 2)
-    {
-      this.fourthFormGroup1.get('users')['controls'].splice(arraylen-1,1);
-      this.isHiddens.splice(arraylen-1,1);
-      this.isChildDelete = false;
-    }
-
-    if (this.fourthFormGroup1.get('users')['controls'].length == 1)
-    {
-      this.isChildDelete = true;
-    }
+    ( <FormArray> this.fourthFormGroup1.controls.users).removeAt(arraylen-1);
+    this.isChildDelete = true;
   }
+
+
 
   saveLater() {
     this.isDisabledSubmit = true;
-    //this.logger.info(`this.isDisabledSubmit = ${this.isDisabledSubmit}`);
     const formData = {
       firstStep: this.firstFormGroup.value,
       secondFormGroup: this.secondFormGroup.value,
@@ -559,16 +536,13 @@ editPage(stepper, index){
       eFormGroup: this.eFormGroup.value,
       nineFormGroup: this.nineFormGroup.value,
     };
-    //this.logger.info("formData", formData);
 
     this.prepareData();
-    //localStorage.setItem('formData', JSON.stringify(formData));
     this.isDisabledSubmit = false;
   }
   save(){
     this.prepareData();
-
-    localStorage.getsetItemItem('formData', '');
+    //localStorage.getsetItemItem('formData', '');
   }
 
   openModalDialog(): void {
