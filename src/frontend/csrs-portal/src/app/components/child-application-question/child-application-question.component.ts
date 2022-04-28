@@ -518,7 +518,14 @@ editPage(stepper, index){
   deletechild1(){
     const arraylen = this.fourthFormGroup1.get('users')['controls'].length;
     ( <FormArray> this.fourthFormGroup1.controls.users).removeAt(arraylen-1);
-    this.isChildDelete = true;
+    if (arraylen === 1)
+    {
+      this.isChildDelete = true;
+    }
+    else
+    {
+      this.isChildDelete = false;
+    }
   }
 
 
