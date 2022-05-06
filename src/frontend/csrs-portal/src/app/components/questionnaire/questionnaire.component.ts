@@ -89,7 +89,7 @@ export class QuestionnaireComponent implements OnInit {
               },
             },
             {
-              data: '<span class="text-dark">If you already have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\' target="_blank"><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. ',
+              data: '<span class="text-dark">If you already have an order or written agreement but do not have a copy, ask <a href=\'https://www2.gov.bc.ca/gov/content/justice/courthouse-services/courthouse-locations\' target="_blank"><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. ',
             },
             {
               data: '<span class="text-dark">The Child Support Recalculation Service does <strong>not</strong> recalculate:',
