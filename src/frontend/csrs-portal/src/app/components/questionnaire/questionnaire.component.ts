@@ -36,13 +36,9 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              id: 'content-1',
-              data: '<span class="text-dark"><strong>Great!</strong></span>',
-            },
-            {
               data: ' <span class="text-dark">To apply for the recalculation service, you must have an order or written agreement for child support from the Provincial Court of British Columbia. You\'ll need a copy of it before you start your application.</span>',
             },
-             {data: ' <span class="text-dark">If you have an order or written agreement but do not have a copy, ask <a href=\'https://www.provincialcourt.bc.ca/locations-contacts\' target="_blank"><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. </span>'},
+             {data: ' <span class="text-dark">If you have an order or written agreement but do not have a copy, ask <a href=\'https://www2.gov.bc.ca/gov/content/justice/courthouse-services/courthouse-locations\' target="_blank"><span style="color:#009cde !important; text-decoration: underline">the court</span></a> for one. </span>'},
             {
               data: ' <span class="text-dark">You\'ll need to have a copy of it before you start your application.</span>',
             },
@@ -123,7 +119,7 @@ export class QuestionnaireComponent implements OnInit {
           label: 'Yes',
           clickedContent: [
             {
-              data: '<span class="text-dark"><strong>Great,</strong> to use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C residents. You\'re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.'
+              data: '<span class="text-dark">To use the Child Support Recalculation Service, both you and the other parent or guardian must be B.C residents. You\'re considered a B.C. resident if you have an address in the province and spend the majority of your time in the province.'
             }
           ],
         },
