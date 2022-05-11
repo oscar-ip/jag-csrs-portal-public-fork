@@ -76,7 +76,7 @@ OnInit {
   unreadCnt: any = 0;
 
   inboxFormGroup: FormGroup;
-  messages: List<Message>;
+  messages: List<Message> = new List<Message>();
 
   uploadFormGroup: FormGroup;
   bceIdLink: string;
@@ -196,6 +196,7 @@ OnInit {
     this.dataSource.data = [];
     this.messageService.apiMessageListGet('response', false).subscribe({
       next: (data) => {
+        this.logger.info('getMessages: ', data.body);
         this.messages = data.body;
         this.getRemoteData();
       },
@@ -596,12 +597,10 @@ openDialog(): void {
     }
   }
 
-  downloadAttachment(serverRelativeUrl, subject, name) {
-    //entityId: string, entityName: string, serverRelativeUrl: string, documentType: string,
-
+  downloadAttachment(messageId, serverRelativeUrl, subject, name) {
 
     this.documentService.apiDocumentDownloadattachmentGet(
-      this.selectedInboxMessage.messageId,
+      messageId,
       "ssg_csrscommunicationmessage",
       serverRelativeUrl,
       subject,
