@@ -118,6 +118,7 @@ public static class WebApplicationBuilderExtensions
             logger.Information("Using secure channel for File Manager service");
             credentials = ChannelCredentials.SecureSsl;
         }
+        //credentials = ChannelCredentials.SecureSsl;
         logger.Information("Using file manager service {Address}", address);
         builder.Services.AddSingleton(services =>
         {
