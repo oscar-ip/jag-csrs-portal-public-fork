@@ -597,22 +597,6 @@ openDialog(): void {
     }
   }
 
-  /*downloadAttachment(serverRelativeUrl, subject, name) {
-    //entityId: string, entityName: string, serverRelativeUrl: string, documentType: string,
-
-
-    this.documentService.apiDocumentDownloadattachmentGet(
-      this.selectedInboxMessage.messageId,
-      "ssg_csrscommunicationmessage",
-      serverRelativeUrl,
-      subject,
-      'body', false,
-      { httpHeaderAccept: 'application/octet-stream' }
-    ).subscribe((response) => {
-      this.downLoadFile(response, subject, name);
-    });
-  }*/
-
   downloadAttachment(messageId, serverRelativeUrl, subject, name) {
 
     this.documentService.apiDocumentDownloadattachmentGet(
