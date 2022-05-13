@@ -36,7 +36,7 @@ namespace Csrs.Interfaces
         private const string DefaultDocumentListTitle = "Account";
         private const string SharePointSpaceCharacter = "_x0020_";
 
-        private const int MaxUrlLength = 260; // default maximum URL length.
+        private const int MaxUrlLength = 256; // default maximum URL length.
         private readonly SharePointFileManagerConfiguration _configuration;
         private readonly ISamlAuthenticator _samlAuthenticator;
         private readonly ILogger<SharePointFileManager> _logger;
@@ -95,9 +95,10 @@ namespace Csrs.Interfaces
             // make the request.
             using var httpClient = await GetHttpClientAsync();
             using var response = await httpClient.SendAsync(request);
+
             HttpStatusCode statusCode = response.StatusCode;
 
-            if ((int)statusCode != 200)
+            if ((int)statusCode != 200 || !response.IsSuccessStatusCode)
             {
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
                 responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -120,6 +121,7 @@ namespace Csrs.Interfaces
             }
             catch (JsonReaderException jre)
             {
+                _logger.LogError("Error in parse the response", responseContent);
                 throw jre;
             }
             // get JSON response objects into a list
@@ -147,7 +149,7 @@ namespace Csrs.Interfaces
         private string RemoveInvalidCharacters(string filename)
         {
             var osInvalidChars = new string(System.IO.Path.GetInvalidFileNameChars());
-            osInvalidChars += "~#%&*()[]{}"; // add additional characters that do not work with SharePoint
+            osInvalidChars += "~#%&*()[]{}:;+@%^<>|.?!/"; // add additional characters that do not work with SharePoint
             string invalidChars = System.Text.RegularExpressions.Regex.Escape(osInvalidChars);
             string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
@@ -213,7 +215,7 @@ namespace Csrs.Interfaces
             HttpStatusCode statusCode = response.StatusCode;
 
             // check to see if the folder creation worked.
-            if (!(statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.Created))
+            if (statusCode != HttpStatusCode.OK || statusCode != HttpStatusCode.Created || !response.IsSuccessStatusCode)
             {
                 string responseContent;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
@@ -256,9 +258,10 @@ namespace Csrs.Interfaces
             // make the request.
             using var httpClient = await GetHttpClientAsync();
             using var listsResponse = await httpClient.SendAsync(listsRequest);
+
             HttpStatusCode statusCode = listsResponse.StatusCode;
 
-            if (statusCode != HttpStatusCode.Created)
+            if (statusCode != HttpStatusCode.Created || !listsResponse.IsSuccessStatusCode)
             {
                 string responseContent = null;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
@@ -276,7 +279,7 @@ namespace Csrs.Interfaces
                 if (listTitle != documentTemplateUrlTitle)
                 {
                     // update list title
-                    using var titleRequest = new HttpRequestMessage(HttpMethod.Post, new Uri (_configuration.Resource, "_api/web/lists(guid'{ob.d.Id}')"));
+                    using var titleRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(_configuration.Resource, "_api/web/lists(guid'{ob.d.Id}')"));
                     var type = new { type = "SP.List" };
                     var request = new
                     {
@@ -315,7 +318,7 @@ namespace Csrs.Interfaces
             using var response = await httpClient.SendAsync(request);
             HttpStatusCode statusCode = response.StatusCode;
 
-            if (statusCode != HttpStatusCode.Created)
+            if (statusCode != HttpStatusCode.Created || !response.IsSuccessStatusCode)
             {
                 string responseContent = null;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
@@ -437,7 +440,7 @@ namespace Csrs.Interfaces
             using var response = await httpClient.SendAsync(endpointRequest);
             string jsonString = await response.Content.ReadAsStringAsync();
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK || response.IsSuccessStatusCode)
             {
                 result = JsonConvert.DeserializeObject(jsonString);
             }
