@@ -97,16 +97,17 @@ namespace Csrs.Interfaces
             //using var response = await httpClient.SendAsync(request);
             HttpResponseMessage response = null;
 
+            // create file details list to add from response
+            List<FileDetailsList> fileDetailsList = new List<FileDetailsList>();
+
             try
             {
                 response = await httpClient.SendAsync(request);
             }
             catch(ArgumentNullException e)
             {
-                var ex = new SharePointRestException("The request is null.");
-                ex.Request = new HttpRequestMessageWrapper(request, null);
-                ex.Response = new HttpResponseMessageWrapper(response, null);
-                throw ex;
+                //folder does not exist
+                return fileDetailsList;
             }
             catch(InvalidOperationException e)
             {
@@ -161,8 +162,6 @@ namespace Csrs.Interfaces
             // get JSON response objects into a list
             List<JToken> responseResults = responseObject["value"].Children().ToList();
 
-            // create file details list to add from response
-            List<FileDetailsList> fileDetailsList = new List<FileDetailsList>();
             // create .NET objects
             foreach (JToken responseResult in responseResults)
             {
