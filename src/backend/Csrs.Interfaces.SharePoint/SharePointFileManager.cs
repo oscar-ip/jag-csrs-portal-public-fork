@@ -106,14 +106,18 @@ namespace Csrs.Interfaces
             }
             catch(ArgumentNullException e)
             {
-                //folder does not exist
-                return fileDetailsList;
+                var ex = new SharePointRestException("The response is null.");
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, null);
+                _logger.LogError("The response is null.");
+                throw ex;
             }
             catch(InvalidOperationException e)
             {
                 var ex = new SharePointRestException("The request message was already sent by the HttpClient instance.");
                 ex.Request = new HttpRequestMessageWrapper(request, null);
                 ex.Response = new HttpResponseMessageWrapper(response, null);
+                _logger.LogError("The request message was already sent by the HttpClient instance.");
                 throw ex;
             }
             catch (HttpRequestException e)
@@ -121,6 +125,7 @@ namespace Csrs.Interfaces
                 var ex = new SharePointRestException("The request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.");
                 ex.Request = new HttpRequestMessageWrapper(request, null);
                 ex.Response = new HttpResponseMessageWrapper(response, null);
+                _logger.LogError("The request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.");
                 throw ex;
             }
             catch (TaskCanceledException e)
@@ -128,12 +133,20 @@ namespace Csrs.Interfaces
                 var ex = new SharePointRestException("The request failed due to timeout.");
                 ex.Request = new HttpRequestMessageWrapper(request, null);
                 ex.Response = new HttpResponseMessageWrapper(response, null);
+                _logger.LogError("The request failed due to timeout.");
                 throw ex;
             }
 
             HttpStatusCode statusCode = response.StatusCode;
 
-            if ((int)statusCode != 200 || !response.IsSuccessStatusCode)
+            if ((int)statusCode == 404)
+            {
+                _logger.LogInformation($"The folder '{serverRelativeUrl}' is not found.");
+                return fileDetailsList;
+            }
+
+
+            if ((int)statusCode != 200)
             {
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
                 responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
