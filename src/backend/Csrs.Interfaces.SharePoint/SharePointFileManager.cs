@@ -94,7 +94,41 @@ namespace Csrs.Interfaces
 
             // make the request.
             using var httpClient = await GetHttpClientAsync();
-            using var response = await httpClient.SendAsync(request);
+            //using var response = await httpClient.SendAsync(request);
+            HttpResponseMessage response = null;
+
+            try
+            {
+                response = await httpClient.SendAsync(request);
+            }
+            catch(ArgumentNullException e)
+            {
+                var ex = new SharePointRestException("The request is null.");
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, null);
+                throw ex;
+            }
+            catch(InvalidOperationException e)
+            {
+                var ex = new SharePointRestException("The request message was already sent by the HttpClient instance.");
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, null);
+                throw ex;
+            }
+            catch (HttpRequestException e)
+            {
+                var ex = new SharePointRestException("The request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.");
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, null);
+                throw ex;
+            }
+            catch (TaskCanceledException e)
+            {
+                var ex = new SharePointRestException("The request failed due to timeout.");
+                ex.Request = new HttpRequestMessageWrapper(request, null);
+                ex.Response = new HttpResponseMessageWrapper(response, null);
+                throw ex;
+            }
 
             HttpStatusCode statusCode = response.StatusCode;
 
