@@ -178,11 +178,13 @@ namespace Csrs.Api.Services
         {
             var fileSystemItemVMList = new List<FileSystemItem>();
 
-            if (string.IsNullOrEmpty(entityId) || string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(documentType)) return fileSystemItemVMList;
+            if (string.IsNullOrEmpty(entityId) || 
+                string.IsNullOrEmpty(entityName) || 
+                string.IsNullOrEmpty(documentType)) return fileSystemItemVMList;
 
             //Three retries? Why only here?
-            for (int i = 0; i < 3; i++)
-            {
+            //for (int i = 0; i < 3; i++)
+            //{
                 try
                 {
                     
@@ -198,7 +200,8 @@ namespace Csrs.Api.Services
 
                     var result = _fileManagerClient.FolderFiles(request);
 
-                    if (result.ResultStatus == ResultStatus.Success)
+                    if (result != null && result.ResultStatus == ResultStatus.Success && 
+                        result.Files != null && result.Files.Count > 0)
                     {
 
                         // convert the results to the view model.
@@ -237,7 +240,7 @@ namespace Csrs.Api.Services
                 {
                     _logger.LogError(e, "Error getting SharePoint File List");
                 }
-            }
+            //}
             return fileSystemItemVMList;
         }
 
