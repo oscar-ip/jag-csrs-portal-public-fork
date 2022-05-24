@@ -233,7 +233,14 @@ namespace Csrs.Api.Services
 
                     }
 
-                    _logger.LogError($"ERROR in getting folder files for entity {entityName}, entityId {entityId}, docuemnt type {documentType} ");
+                    if (result != null && result.ResultStatus == ResultStatus.Success &&
+                        result.Files != null && result.Files.Count == 0)
+                    {
+                        _logger.LogInformation($"Folder does not exist or empty for entity {entityName}, entityId {entityId}, docuemnt type {documentType} ");
+                        return fileSystemItemVMList;
+                    }
+
+                _logger.LogError($"ERROR in getting folder files for entity {entityName}, entityId {entityId}, docuemnt type {documentType} ");
 
                 }
                 catch (Exception e)
