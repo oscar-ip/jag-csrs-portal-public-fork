@@ -514,7 +514,7 @@ onFileSelected(event) {
     }
 
     var notAllowed = "";
-    var specialChars = "~#%&*:;<>?+[]/{|}."; //"~#%&*{}\:<>?/+|;][”;
+    var specialChars = "~#%&*()[]{}:;+@^<>|.?!/."; //"~#%&*{}\:<>?/+|;][”;
     var name = this.selectedFile.name;
     for (var j = 0; j < specialChars.length; j++) {
         if (name.indexOf(specialChars[j]) > -1) {
