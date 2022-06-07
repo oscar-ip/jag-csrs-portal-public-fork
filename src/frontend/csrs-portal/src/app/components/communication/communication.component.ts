@@ -466,7 +466,7 @@ onFileSelected(event) {
       this.selectedFile = null;
       this.data = {
         type: 'error',
-        title: 'Selected file is not a supported file type.',
+        title: ' Selected file is not a supported file type.',
         content: 'Supported file types are .pdf, .gif, .jpg, .jpeg, .png.',
         weight: 'normal',
         color: 'red'
@@ -479,13 +479,62 @@ onFileSelected(event) {
       this.selectedFile = null;
       this.data = {
         type: 'error',
-        title: 'Selected file is over the maximum supported file size.',
+        title: ' Selected file is over the maximum supported file size.',
         content: 'Maximum supported file size is 10MB.',
         weight: 'normal',
         color: 'red'
       };
       this.openDialog();
     }
+
+    if (this.selectedFile.name.length > 128)
+    {
+      this.selectedFile = null;
+      this.data = {
+        type: 'error',
+        title: ' Selected file is over the maximum supported file size.',
+        content: 'Maximum length can not be longer than 128 characters.',
+        weight: 'normal',
+        color: 'red'
+      };
+      this.openDialog();
+    }
+
+    if (this.selectedFile.name.length > 128)
+    {
+      this.selectedFile = null;
+      this.data = {
+        type: 'error',
+        title: ' Selected file is over the maximum supported file size.',
+        content: 'Maximum length can not be longer than 128 characters.',
+        weight: 'normal',
+        color: 'red'
+      };
+      this.openDialog();
+    }
+
+    var notAllowed = "";
+    var specialChars = "~#%&*:;<>?+[]/{|}."; //"~#%&*{}\:<>?/+|;][”;
+    var name = this.selectedFile.name;
+    for (var j = 0; j < specialChars.length; j++) {
+        if (name.indexOf(specialChars[j]) > -1) {
+            notAllowed = notAllowed + specialChars[j];
+        }
+    }
+
+    if (notAllowed != "" )
+    {
+      this.selectedFile = null;
+      this.data = {
+        type: 'error',
+        title: ' Special characters in selected file name.',
+        content: `Special characters ${notAllowed} should be removed from file name.`,
+        weight: 'normal',
+        color: 'red'
+      };
+      this.openDialog();
+    }
+
 
   }
 
