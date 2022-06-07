@@ -192,22 +192,28 @@ namespace Csrs.Interfaces
             return fileDetailsList;
         }
 
+        private string GetInvalidCharacters(string osInvalidChars)
+        {
+            osInvalidChars += "~#%&*()[]{}:;+@^<>|.?!/";
+            string invalidChars = Regex.Escape(osInvalidChars);
+            return string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+        }
         private string RemoveInvalidCharacters(string filename)
         {
-            var osInvalidChars = new string(System.IO.Path.GetInvalidFileNameChars());
-            osInvalidChars += "~#%&*()[]{}:;+@%^<>|.?!/"; // add additional characters that do not work with SharePoint
-            string invalidChars = System.Text.RegularExpressions.Regex.Escape(osInvalidChars);
-            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+            var osInvalidChars = new string(Path.GetInvalidFileNameChars());
 
             // Get the validated file name string
-            string result = Regex.Replace(filename, invalidRegStr, "_");
+            string result = Regex.Replace(filename, GetInvalidCharacters(osInvalidChars), "_");
 
             return result;
         }
 
         private string FixFoldername(string foldername)
         {
-            string result = RemoveInvalidCharacters(foldername);
+            var osInvalidChars = new string(Path.GetInvalidPathChars());
+
+            // Get the validated folder name string
+            string result = Regex.Replace(foldername, GetInvalidCharacters(osInvalidChars), "_");
 
             return result;
         }
