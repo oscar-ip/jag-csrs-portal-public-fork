@@ -507,9 +507,7 @@ onFileSelected(event) {
     var dotIndex = this.selectedFile.name.lastIndexOf('.');
     if (dotIndex === -1) dotIndex = 0;
     if (dotIndex > 4) dotIndex = 4;
-    this.logger.info('dotIndex', dotIndex);
     var name = this.selectedFile.name.substring(0,  this.selectedFile.name.length - dotIndex);
-    this.logger.info('Selected File name', name);
 
     for (var j = 0; j < specialChars.length; j++) {
         if (name.indexOf(specialChars[j]) > -1) {
