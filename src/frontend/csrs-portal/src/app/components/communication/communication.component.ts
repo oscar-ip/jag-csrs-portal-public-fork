@@ -487,25 +487,14 @@ onFileSelected(event) {
       this.openDialog();
     }
 
-    if (this.selectedFile.name.length > 128)
-    {
-      this.selectedFile = null;
-      this.data = {
-        type: 'error',
-        title: ' Selected file is over the maximum supported file size.',
-        content: 'Maximum length can not be longer than 128 characters.',
-        weight: 'normal',
-        color: 'red'
-      };
-      this.openDialog();
-    }
+
 
     if (this.selectedFile.name.length > 128)
     {
       this.selectedFile = null;
       this.data = {
         type: 'error',
-        title: ' Selected file is over the maximum supported file size.',
+        title: ' Selected file name over maximum length.',
         content: 'Maximum length can not be longer than 128 characters.',
         weight: 'normal',
         color: 'red'
@@ -514,8 +503,12 @@ onFileSelected(event) {
     }
 
     var notAllowed = "";
-    var specialChars = "~#%&*()[]{}:;+@^<>|.?!/."; //"~#%&*{}\:<>?/+|;][”;
-    var name = this.selectedFile.name;
+    var specialChars = "~#%&*()[]{}:;+@^<>|.?!/"; //"~#%&*{}\:<>?/+|;][”;
+    var dotIndex = this.selectedFile.name.lastIndexOf('.');
+    if (dotIndex === -1) dotIndex = 0;
+    if (dotIndex > 4) dotIndex = 4;
+    var name = this.selectedFile.name.substring(0,  this.selectedFile.name.length - dotIndex);
+
     for (var j = 0; j < specialChars.length; j++) {
         if (name.indexOf(specialChars[j]) > -1) {
             notAllowed = notAllowed + specialChars[j];
