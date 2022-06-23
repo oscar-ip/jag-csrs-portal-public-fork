@@ -267,7 +267,7 @@ namespace Csrs.Interfaces
             HttpStatusCode statusCode = response.StatusCode;
 
             // check to see if the folder creation worked.
-            if (statusCode != HttpStatusCode.OK || statusCode != HttpStatusCode.Created || !response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 string responseContent;
                 var ex = new SharePointRestException($"Operation returned an invalid status code '{statusCode}'");
