@@ -12,7 +12,8 @@ RUN dotnet build "Csrs.Services.FileManager.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "Csrs.Services.FileManager.csproj" -c Release -o /app/publish
 
-FROM registry.access.redhat.com/ubi8/dotnet-60-runtime AS final
+# For fixing some of the vulnerabilities for CSRS-448
+FROM registry.access.redhat.com/ubi8/dotnet-60-runtime:6.0-17.20220907105939 AS final
 WORKDIR /opt/app-root/app
 EXPOSE 8080
 COPY --from=publish /app/publish .
