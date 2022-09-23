@@ -30,10 +30,10 @@ objects:
     oidc.json: |
 
     { "postLoginRoute": "/welcomeuser",
-      "authority": "https://dev.oidc.gov.bc.ca/auth/realms/onestopauth-basic",
+      "authority": "https://dev.loginproxy.gov.bc.ca/auth/realms/standard",
       "redirectUrl": "https://dev.childsupportrecalc.gov.bc.ca",
-      "postLogoutRedirectUri": "https://test.childsupportrecalc.gov.bc.ca",
-      "clientId": "jsb-csrs-991", "kc_idp_hint": "bceid-basic", 
+      "postLogoutRedirectUri": "https://dev.childsupportrecalc.gov.bc.ca",
+      "clientId": "jsb-csrs-4126", "kc_idp_hint": "bceid-basic", 
       "scope": "openid profile",
       "responseType": "code",
       "prompt": "consent"
