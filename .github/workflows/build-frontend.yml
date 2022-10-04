@@ -42,6 +42,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Git Checkout
         uses: actions/checkout@v2
+        with:
+          ref: patch/vulnerabilityfix
       
       # Get Git latest short Sha# from the release branch used. This Sha# will be used in image tagging as well as DC Pod labelling.
       - name: Get git commit short sha
