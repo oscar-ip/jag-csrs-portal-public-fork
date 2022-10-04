@@ -1,5 +1,5 @@
 # Build image
-FROM node:slim as build-deps
+FROM node:17.6.0 as build-deps
 
 # set working directory
 ENV NODE_ROOT /usr/src/app
@@ -17,6 +17,14 @@ RUN yarn run build-prod
 
 # Runtime image
 FROM nginx:latest
+
+USER 0
+
+RUN yum -y remove vim-filesystem \
+&& yum -y remove vim-minimal \
+&& yum -y remove bind-libs
+
+USER 1001
 
 COPY --from=build-deps /usr/src/app/src/favicon.ico /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/csrs-portal /usr/share/nginx/html
