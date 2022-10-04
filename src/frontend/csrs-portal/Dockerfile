@@ -16,7 +16,7 @@ COPY . .
 RUN yarn run build-prod
 
 # Runtime image
-FROM nginx:1.23.1
+FROM nginx:latest
 
 COPY --from=build-deps /usr/src/app/src/favicon.ico /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/csrs-portal /usr/share/nginx/html
