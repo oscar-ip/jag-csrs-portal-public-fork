@@ -16,7 +16,7 @@ COPY . .
 RUN yarn run build-prod
 
 # Runtime image
-FROM nginx:latest
+FROM registry.access.redhat.com/ubi8/nginx-120
 
 USER 0
 
