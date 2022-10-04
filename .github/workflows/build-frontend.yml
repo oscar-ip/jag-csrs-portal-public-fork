@@ -88,7 +88,7 @@ jobs:
           DOCKER_BUILDKIT: 1
           CONTEXT: ./src/frontend/csrs-portal
           #Right now do not have enough permission to manipulate RBAC, creating imagestream under tools and then using that from dev, test, prod
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.env}}/${{env.app}}:vulnerabilityfix
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.env}}/${{env.app}}:vulnerabilityfix_docker
         run: |
           docker build \
             --tag ${IMAGE} \

@@ -16,13 +16,16 @@ COPY . .
 RUN yarn run build-prod
 
 # Runtime image
-FROM registry.access.redhat.com/ubi8/nginx-120
+#FROM registry.access.redhat.com/ubi8/nginx-120
+FROM nginx:latest
 
 USER 0
 
-RUN yum -y remove vim-filesystem \
-&& yum -y remove vim-minimal \
-&& yum -y remove bind-libs
+#RUN yum -y remove vim-filesystem \
+#&& yum -y remove vim-minimal \
+#&& yum -y remove bind-libs
+
+RUN apt-get update && apt-get upgrade -y && apt-get clean
 
 USER 1001
 
