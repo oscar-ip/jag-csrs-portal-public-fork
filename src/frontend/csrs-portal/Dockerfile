@@ -16,15 +16,7 @@ COPY . .
 RUN yarn run build-prod
 
 # Runtime image
-FROM registry.access.redhat.com/ubi8/nginx-120
-
-USER 0
-
-RUN yum -y remove vim-filesystem \
-&& yum -y remove vim-minimal \
-&& yum -y remove bind-libs
-
-USER 1001
+FROM nginx:stable-alpine
 
 COPY --from=build-deps /usr/src/app/src/favicon.ico /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/csrs-portal /usr/share/nginx/html
