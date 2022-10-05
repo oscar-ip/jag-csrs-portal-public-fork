@@ -31,7 +31,10 @@ mkdir -p /var/cache/nginx/proxy_temp && \
 mkdir -p /var/cache/nginx/scgi_temp && \
 mkdir -p /var/cache/nginx/uwsgi_temp && \
 mkdir -p /var/cache/nginx/fastcgi_temp && \
-chown -R 1001:0 /var/run/nginx.pid
+chown -R 1001:0 /var &&\
+mkdir /etc/systemd/system/nginx.service.d &&\
+printf "[Service]\nExecStartPost=/bin/sleep 0.1\n" > /etc/systemd/system/nginx.service.d/override.conf &&\
+systemctl daemon-reload
 
 USER 1001
 
