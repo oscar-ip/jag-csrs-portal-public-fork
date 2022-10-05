@@ -27,6 +27,10 @@ USER 0
 
 RUN apt-get update && apt-get upgrade -y && apt-get clean && \
 mkdir -p /var/cache/nginx/client_temp && \
+mkdir -p /var/cache/nginx/proxy_temp && \
+mkdir -p /var/cache/nginx/scgi_temp && \
+mkdir -p /var/cache/nginx/uwsgi_temp && \
+mkdir -p /var/cache/nginx/fastcgi_temp && \
 chown -R 1001:0 /var
 
 USER 1001
