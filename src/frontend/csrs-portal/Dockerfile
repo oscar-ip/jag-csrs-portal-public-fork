@@ -31,8 +31,8 @@ mkdir -p /var/cache/nginx/proxy_temp && \
 mkdir -p /var/cache/nginx/scgi_temp && \
 mkdir -p /var/cache/nginx/uwsgi_temp && \
 mkdir -p /var/cache/nginx/fastcgi_temp && \
-touch /var/run/nginx.pid && \
-chown -R nginx:nginx /var/cache/nginx /var/run/nginx.pid
+chmod -R a+rwx /var/run && \
+chown -R 1001:0 /var/run
 
 USER 1001
 
