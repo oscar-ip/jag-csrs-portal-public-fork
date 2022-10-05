@@ -26,7 +26,8 @@ USER 0
 #&& yum -y remove bind-libs
 
 RUN apt-get update && apt-get upgrade -y && apt-get clean && \
-chown -R 1001:0 /var/cache
+mkdir -p /var/cache/nginx/client_temp && \
+chown -R 1001:0 /var
 
 USER 1001
 
