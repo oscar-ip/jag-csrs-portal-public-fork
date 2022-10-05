@@ -31,7 +31,7 @@ USER 1001
 
 COPY --from=build-deps /usr/src/app/src/favicon.ico /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/csrs-portal /usr/share/nginx/html
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 
