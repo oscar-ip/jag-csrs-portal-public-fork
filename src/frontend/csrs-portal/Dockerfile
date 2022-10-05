@@ -25,7 +25,8 @@ USER 0
 #&& yum -y remove vim-minimal \
 #&& yum -y remove bind-libs
 
-RUN apt-get update && apt-get upgrade -y && apt-get clean
+RUN apt-get update && apt-get upgrade -y && apt-get clean && \
+chown -R 1001:0 /var/cache
 
 USER 1001
 
