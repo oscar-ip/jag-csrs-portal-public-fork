@@ -15,8 +15,19 @@ COPY . .
 
 RUN yarn run build-prod
 
-# Runtime image
-FROM registry.access.redhat.com/ubi8/nginx-118
+FROM nginx:1.23.1
+
+USER 0
+
+RUN mkdir -p /var/cache/nginx/client_temp && \
+mkdir -p /var/cache/nginx/proxy_temp && \
+mkdir -p /var/cache/nginx/scgi_temp && \
+mkdir -p /var/cache/nginx/uwsgi_temp && \
+mkdir -p /var/cache/nginx/fastcgi_temp && \
+chmod -R a+rwx /var/run && \
+chown -R 1001:0 /var/run
+
+USER 1001
 
 COPY --from=build-deps /usr/src/app/src/favicon.ico /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/csrs-portal /usr/share/nginx/html
