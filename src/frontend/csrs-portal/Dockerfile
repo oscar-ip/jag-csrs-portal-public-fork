@@ -15,18 +15,11 @@ COPY . .
 
 RUN yarn run build-prod
 
-# Runtime image
-#FROM registry.access.redhat.com/ubi8/nginx-120
-FROM nginx:latest
+FROM nginx:1.23.1
 
 USER 0
 
-#RUN yum -y remove vim-filesystem \
-#&& yum -y remove vim-minimal \
-#&& yum -y remove bind-libs
-
-RUN apt-get update && apt-get upgrade -y && apt-get clean && \
-mkdir -p /var/cache/nginx/client_temp && \
+RUN mkdir -p /var/cache/nginx/client_temp && \
 mkdir -p /var/cache/nginx/proxy_temp && \
 mkdir -p /var/cache/nginx/scgi_temp && \
 mkdir -p /var/cache/nginx/uwsgi_temp && \
