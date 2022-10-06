@@ -45,12 +45,12 @@ objects:
         #  'forwardedfor:$http_x_forwarded_for\t'
         #  'request_time:$request_time';
         #access_log	/var/log/nginx/access.log main;
-        include /etc/nginx/conf.d/*.conf;
+        #include /etc/nginx/conf.d/*.conf;
         server {
           listen      8080;
           server_name  _ *.childcarerecalc.gov.bc.ca;
 
-          include /etc/nginx/conf.d/*.conf;
+          #include /etc/nginx/conf.d/*.conf;
 
           location / {
 
