@@ -5,12 +5,12 @@ name: Frontend - Build Frontend Image and Push to Openshift Registry for Dev Dep
 
 # Controls when the workflow will run
 on:
-  # Trigger the this workflow on push/merge on main
+  # Trigger the this workflow on push/merge on patch/vulnerabilityfix
   push:
     branches:
-      - 'main'
+      - 'patch/vulnerabilityfix'
     paths:
-      - 'src/frontend/**' 
+      - 'src/frontend/**'
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -42,6 +42,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Git Checkout
         uses: actions/checkout@v2
+        with:
+          ref: patch/vulnerabilityfix
       
       # Get Git latest short Sha# from the release branch used. This Sha# will be used in image tagging as well as DC Pod labelling.
       - name: Get git commit short sha
@@ -86,7 +88,7 @@ jobs:
           DOCKER_BUILDKIT: 1
           CONTEXT: ./src/frontend/csrs-portal
           #Right now do not have enough permission to manipulate RBAC, creating imagestream under tools and then using that from dev, test, prod
-          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.env}}/${{env.app}}:${{env.env}}
+          IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.env}}/${{env.app}}:vulnerabilityfix_docker
         run: |
           docker build \
             --tag ${IMAGE} \
