@@ -28,7 +28,7 @@ namespace Csrs.Api.Services
             if (userid is null)
             {
                 _logger.LogInformation("Current user does not have a bceid_userid claim, checking bceid_user_guid");
-                userid = principal.Claims.SingleOrDefault(_ => _.Type == "bceid_user_guiid");
+                userid = principal.Claims.SingleOrDefault(_ => _.Type == "bceid_user_guid");
                 if(userid is null)
                 {
                     _logger.LogInformation("Current user does not have a bceid_userid claim nor a bceid_user_guid claim");
