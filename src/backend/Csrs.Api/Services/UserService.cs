@@ -27,8 +27,13 @@ namespace Csrs.Api.Services
             Claim? userid = principal.Claims.SingleOrDefault(_ => _.Type == "bceid_userid");
             if (userid is null)
             {
-                _logger.LogInformation("Current user does not have a bceid_userid claim");
-                return string.Empty;
+                _logger.LogInformation("Current user does not have a bceid_userid claim, checking bceid_user_guid");
+                userid = principal.Claims.SingleOrDefault(_ => _.Type == "bceid_user_guiid");
+                if(userid is null)
+                {
+                    _logger.LogInformation("Current user does not have a bceid_userid claim nor a bceid_user_guid claim");
+                    return string.Empty;
+                }
             }
 
             if (Guid.TryParse(userid.Value, out Guid id))
@@ -37,7 +42,7 @@ namespace Csrs.Api.Services
             }
 
             using var scope = _logger.AddProperty("bceid_userid", userid.Value);
-            _logger.LogInformation("Current user's bceid_userid cannot be parsed as a valid guid");
+            _logger.LogInformation("Current user's bceid_userid or bceid_user_guid cannot be parsed as a valid guid");
 
             return string.Empty;
         }
