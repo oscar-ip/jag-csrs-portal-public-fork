@@ -25,6 +25,8 @@ mkdir -p /var/cache/nginx/scgi_temp && \
 mkdir -p /var/cache/nginx/uwsgi_temp && \
 mkdir -p /var/cache/nginx/fastcgi_temp && \
 chmod -R a+rwx /var/run && \
+chmod -R a+rw- /var/cache/nginx/client_temp && \
+chown -R 1001:0 /var/cache/nginx/client_temp && \
 chown -R 1001:0 /var/run
 
 USER 1001
