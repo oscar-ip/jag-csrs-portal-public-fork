@@ -111,6 +111,7 @@ OnInit {
   public toggleRow = false;
   selectedTab: number = 0;
   selectedFileNumber: any = '';
+  inboxLoaded = false;
 
   ngOnInit(): void {
 
@@ -193,6 +194,7 @@ OnInit {
   }
 
   getMessages() {
+    this.inboxLoaded = false;
     this.dataSource.data = [];
     this.messageService.apiMessageListGet('response', false).subscribe({
       next: (data) => {
@@ -210,6 +212,7 @@ OnInit {
       },
       complete: () => this.logger.info('apiMessageListGet is completed')
     });
+    this.inboxLoaded = true;
   }
   get contactFile() {
     return this.contactFormGroup.get('contactFile');
