@@ -6,6 +6,7 @@ import {
 import { LoggerService } from '@core/services/logger.service';
 import { AppConfigService } from 'app/services/app-config.service';
 import { LogInOutService } from 'app/services/log-in-out.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,7 +21,7 @@ export class HeaderComponent implements OnInit {
   constructor(protected logger: LoggerService,
               private appConfigService: AppConfigService,
               private logInOutService: LogInOutService,
-              ) {
+              public oidcSecurityService: OidcSecurityService) {
   }
 
   public async ngOnInit() {
@@ -51,17 +52,19 @@ export class HeaderComponent implements OnInit {
 
   public onClickBtn()
   {
-    this.logInOutService.logoutUser(this.btnLabel);
+    //this.logInOutService.logoutUser(this.btnLabel);
     if (this.btnLabel === 'BCeID Login')
     {
       this.btnLabel = 'Logout';
       this.btnIcon = 'logout';
+      this.oidcSecurityService.authorize();
     }
     else
     {
       this.btnLabel = 'BCeID Login';
       this.btnIcon = 'login';
-      //this.router.navigate(['/']);
+      this.oidcSecurityService.logoff();
+      this.oidcSecurityService.revokeAccessToken(this.oidcSecurityService.getAccessToken);
     }
   }
 }
