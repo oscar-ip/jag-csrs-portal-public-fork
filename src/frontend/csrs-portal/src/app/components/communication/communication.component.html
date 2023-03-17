@@ -14,7 +14,6 @@
           </ng-template>
           <form [formGroup]="inboxFormGroup" style="padding-bottom: 20px">
             <div class="round1" *ngIf="!toggleRow">
-              <mat-progress-bar *ngIf="!inboxLoaded" mode="indeterminate"></mat-progress-bar>
               <div>
                 <div class="container">
                   <div class="row">
@@ -47,6 +46,7 @@
 
               <div [ngSwitch]="isMobile">
                 <div *ngSwitchCase="false">
+                  <mat-progress-bar *ngIf="!inboxLoaded" mode="indeterminate"></mat-progress-bar>
                   <hr class="mt-0 mb-1" style="opacity: 0.5">
                   <table mat-table [dataSource]="dataSource">
                     <ng-container matColumnDef="id">
