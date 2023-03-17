@@ -9,12 +9,12 @@
     <div class="flex-6-col">
       <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTab">
         <mat-tab>
-          <mat-progress-bar class="mt-1" *ngIf="!inboxLoaded" mode="indeterminate"></mat-progress-bar>
           <ng-template mat-tab-label>
             <h1 class="mb-1 tabHeader">Inbox ({{unreadCnt}})</h1>
           </ng-template>
           <form [formGroup]="inboxFormGroup" style="padding-bottom: 20px">
             <div class="round1" *ngIf="!toggleRow">
+              <mat-progress-bar class="mt-1" *ngIf="!inboxLoaded" mode="indeterminate"></mat-progress-bar>
               <div>
                 <div class="container">
                   <div class="row">
