@@ -46,7 +46,7 @@
 
               <div [ngSwitch]="isMobile">
                 <div *ngSwitchCase="false">
-                  <mat-progress-bar *ngIf="!inboxLoaded" mode="indeterminate"></mat-progress-bar>
+                  <mat-progress-bar *ngIf="!(inboxLoaded)" mode="indeterminate"></mat-progress-bar>
                   <hr class="mt-0 mb-1" style="opacity: 0.5">
                   <table mat-table [dataSource]="dataSource">
                     <ng-container matColumnDef="id">
