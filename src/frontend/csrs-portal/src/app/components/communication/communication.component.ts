@@ -201,8 +201,10 @@ OnInit {
         this.logger.info('getMessages: ', data.body);
         this.messages = data.body;
         this.getRemoteData();
+        this.inboxLoaded = true
       },
       error: (e) => {
+        this.inboxLoaded = true
         if (e.error instanceof Error) {
           //this.logger.error(e.error.message);
         } else {
@@ -212,7 +214,6 @@ OnInit {
       },
       complete: () => this.logger.info('apiMessageListGet is completed')
     });
-    this.inboxLoaded = true;
   }
   get contactFile() {
     return this.contactFormGroup.get('contactFile');
