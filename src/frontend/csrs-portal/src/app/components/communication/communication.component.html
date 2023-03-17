@@ -14,7 +14,7 @@
           </ng-template>
           <form [formGroup]="inboxFormGroup" style="padding-bottom: 20px">
             <div class="round1" *ngIf="!toggleRow">
-              <mat-progress-bar class="mt-1" *ngIf="!inboxLoaded" mode="indeterminate"></mat-progress-bar>
+              <mat-progress-bar *ngIf="!inboxLoaded" mode="indeterminate"></mat-progress-bar>
               <div>
                 <div class="container">
                   <div class="row">
