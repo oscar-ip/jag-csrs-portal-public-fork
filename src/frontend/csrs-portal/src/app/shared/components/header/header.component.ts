@@ -26,21 +26,16 @@ export class HeaderComponent implements OnInit {
 
   public async ngOnInit() {
 
-    this.logInOutService.getCurrentStatus.subscribe((data) => {
-      if (data !== null || data !== undefined)
-      {
-        if(data === true){
-
-          this.btnLabel = 'Logout';
-          this.btnIcon = 'logout';
-        }
-        else
-        {
-          this.btnLabel = 'BCeID Login';
-          this.btnIcon = 'login';
-        }
-      }
-    })
+    if (this.oidcSecurityService.isAuthenticated()) 
+    {
+        this.btnLabel = 'Logout';
+        this.btnIcon = 'logout';
+    }
+    else
+    {
+      this.btnLabel = 'BCeID Login';
+      this.btnIcon = 'login';
+    }
 
     if (window.innerWidth < 442) {
       this.isMobile = true;
