@@ -26,16 +26,8 @@ export class HeaderComponent implements OnInit {
 
   public async ngOnInit() {
 
-    if (this.oidcSecurityService.isAuthenticated()) 
-    {
-        this.btnLabel = 'Logout';
-        this.btnIcon = 'logout';
-    }
-    else
-    {
-      this.btnLabel = 'BCeID Login';
-      this.btnIcon = 'login';
-    }
+    this.btnLabel = 'BCeID Login / Logout';
+    this.btnIcon = 'login';
 
     if (window.innerWidth < 442) {
       this.isMobile = true;
@@ -48,16 +40,12 @@ export class HeaderComponent implements OnInit {
   public onClickBtn()
   {
     //this.logInOutService.logoutUser(this.btnLabel);
-    if (this.btnLabel === 'BCeID Login')
+    if (!this.oidcSecurityService.isAuthenticated())
     {
-      this.btnLabel = 'Logout';
-      this.btnIcon = 'logout';
       this.oidcSecurityService.authorize();
     }
     else
     {
-      this.btnLabel = 'BCeID Login';
-      this.btnIcon = 'login';
       this.oidcSecurityService.logoff();
       this.oidcSecurityService.revokeAccessToken(this.oidcSecurityService.getAccessToken);
     }
