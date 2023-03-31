@@ -689,17 +689,8 @@ openDialog(): void {
 
       let binaryData = [];
       binaryData.push(response);
-      var fileURL = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/pdf' }));
-
-      const iframe = document.createElement('iframe');
-      iframe.src = fileURL;
-      iframe.width = '100%';
-      iframe.height = '100%';
-      iframe.style.border = 'none';
-
-      const newWindow = window.open('', '_blank');
-      newWindow.document.body.appendChild(iframe);
-      newWindow.document.title = name;
+      const fileURL = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/pdf' }));
+      window.open(fileURL, '_blank');
 
     });
   }
