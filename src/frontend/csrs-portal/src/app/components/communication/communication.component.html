@@ -188,7 +188,10 @@
                   <tr class="text-dark" *ngFor="let doc of selectedInboxMessage.documents">
                     <td><strong>{{doc.name}}</strong></td>
                     <td>{{doc.size}}</td>
-                    <td><img src="/assets/Download_icon.svg" /><a href="javascript:void(0)" (click)="downloadAttachment(selectedInboxMessage.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">Download</a></td>
+                    <td>
+                      <img style="padding-right: 0px;padding-left: 0px;" src="/assets/Download_icon.svg" /><a href="javascript:void(0)" (click)="downloadAttachment(selectedInboxMessage.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">Download</a>
+                      <img style="padding-right: 0px;" src="/assets/View_icon.svg" /><a href="javascript:void(0)" (click)="ViewAttachment(selectedInboxMessage.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">View</a>
+                    </td>
                   </tr>
 
                 </table>

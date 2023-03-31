@@ -676,6 +676,36 @@ openDialog(): void {
     }*/
   }
 
+  ViewAttachment(messageId, serverRelativeUrl, subject, name) {
+
+    this.documentService.apiDocumentDownloadattachmentGet(
+      messageId,
+      "ssg_csrscommunicationmessage",
+      serverRelativeUrl,
+      subject,
+      'body', false,
+      { httpHeaderAccept: 'application/octet-stream' }
+    ).subscribe((response) => {
+
+      let binaryData = [];
+      binaryData.push(response);
+      var fileURL = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/pdf' }));
+
+      const iframe = document.createElement('iframe');
+      iframe.src = fileURL;
+      iframe.width = '100%';
+      iframe.height = '100%';
+      iframe.style.border = 'none';
+
+      const newWindow = window.open('', '_blank');
+      newWindow.document.body.appendChild(iframe);
+      newWindow.document.title = name;
+
+    });
+  }
+
+
+
 }
 
 
