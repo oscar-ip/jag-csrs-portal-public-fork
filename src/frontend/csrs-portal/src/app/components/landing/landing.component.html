@@ -30,22 +30,23 @@
       <section>
         <div class="card mb-2 border-0 summary-content">
           <div>
+            <div id="messageBanner" style="width: 100%; color: red; font-size: 21px;">
+              This site will be down for maintenance between Friday, December 8 @ 4:00pm and Monday, December 11 @11:00am. PLEASE DO NOT USE FORM during this time, as any information submitted will not be received.
+            </div>
             <div class="card-title h1_class">Child Support Recalculation Service</div>
-            <div class="card-body description_text" >
+            <div class="card-body description_text">
               The Child Support Recalculation Service helps families with child support orders and written agreements
-                maintain a fair standard of support for their children by reviewing the amount of child support each year.
-                The recalculation service adjusts the amount of child support if income has gone up or down so that
-                parents do not have to return to court to have their child support amounts reviewed.
-              <a
-              [attr.href]="cscLink"
-              target="_blank"
-              class="primary-navigation"
-              rel="noopener"
-              (click)="learnMore()"
-            >
-            Learn more >
-            </a>
-          </div>
+              maintain a fair standard of support for their children by reviewing the amount of child support each year.
+              The recalculation service adjusts the amount of child support if income has gone up or down so that
+              parents do not have to return to court to have their child support amounts reviewed.
+              <a [attr.href]="cscLink"
+                 target="_blank"
+                 class="primary-navigation"
+                 rel="noopener"
+                 (click)="learnMore()">
+                Learn more >
+              </a>
+            </div>
           </div>
         </div>
       </section>
