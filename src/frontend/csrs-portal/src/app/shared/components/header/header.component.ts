@@ -38,9 +38,9 @@ export class HeaderComponent implements OnInit {
 
     this.logInOutService.getCurrentPortalUser.subscribe((data: any) => {
       this.logger.info("data:", data);
-      if (data != null)
+      if (data && data != null)
       { 
-      this.portalUser = data.firstName + ' ' + data.lastName;
+        this.portalUser = data.firstName + ' ' + data.lastName;
       }
     });
 
