@@ -8,9 +8,11 @@ export class LogInOutService {
 
   private logoutStatus:BehaviorSubject<string> = new BehaviorSubject<string>('');
   private currentStatus:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private currentPortalUser: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   getLogoutStatus = this.logoutStatus.asObservable();
   getCurrentStatus = this.currentStatus.asObservable();
+  getCurrentPortalUser = this.currentPortalUser.asObservable();
 
   constructor() { }
 
@@ -21,4 +23,11 @@ export class LogInOutService {
   currentUser(status){
     this.currentStatus.next(status);
   }
+
+  emitCurrentPortalUser(user) {
+    debugger
+    this.currentPortalUser.next(user);
+  }
+
+
 }

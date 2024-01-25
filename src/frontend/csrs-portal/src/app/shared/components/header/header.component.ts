@@ -16,6 +16,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 export class HeaderComponent implements OnInit {
   public btnLabel: string = '';
   public btnIcon: string = '';
+  public portalUser: string = '';
   isMobile: boolean = false;
 
   constructor(protected logger: LoggerService,
@@ -34,6 +35,14 @@ export class HeaderComponent implements OnInit {
     } else {
       this.isMobile = false;
     }
+
+    this.logInOutService.getCurrentPortalUser.subscribe((data: any) => {
+      this.logger.info("data:", data);
+      if (data != null)
+      { 
+      this.portalUser = data.firstName + ' ' + data.lastName;
+      }
+    });
 
   }
 
