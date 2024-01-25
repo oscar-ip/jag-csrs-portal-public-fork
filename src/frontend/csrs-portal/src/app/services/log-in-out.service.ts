@@ -25,7 +25,6 @@ export class LogInOutService {
   }
 
   emitCurrentPortalUser(user) {
-    debugger
     this.currentPortalUser.next(user);
   }
 
