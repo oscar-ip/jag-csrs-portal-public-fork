@@ -66,16 +66,8 @@
                       <td mat-cell *matCellDef="let element">
                         <div style="display: inline;" *ngIf="element.attachment">
                           <img src="/assets/PDF-black_icon.svg" />
-                          <div style="display: inline;" *ngFor="let doc of element.documents" [ngSwitch]="doc.documentType">
-                            <span *ngSwitchCase="'.PDF'">
-                              <a style="cursor:pointer; text-decoration: underline;"
-                                 href="javascript:void(0)" (click)="downloadAttachment(element.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">
-                                {{doc.documentType}}
-                              </a>
-                            </span>
-                            <span *ngSwitchDefault>
-                              {{doc.documentType}}
-                            </span>
+                          <div style="display: inline;" *ngFor="let doc of element.documents">
+                            {{doc.documentType}}
                           </div>
                         </div>
                       </td>
