@@ -24,6 +24,7 @@
             Add("OAUTH_RESOURCEURL", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.ResourceUrl)}");
             Add("OAUTH_CLIENTID", $"{nameof(CsrsConfiguration.OAuth)}:{nameof(OAuthConfiguration.ClientId)}");
             Add("APIGATEWAY_BASEPATH", $"{nameof(CsrsConfiguration.ApiGateway)}:{nameof(ApiGatewayOptions.BasePath)}");
+            Add("ISLOGINDISABLED", $"{nameof(CsrsConfiguration.AppConfig)}:{nameof(AppConfiguration.IsMaintenanceScheduled)}");
         }
 
         /// <summary>

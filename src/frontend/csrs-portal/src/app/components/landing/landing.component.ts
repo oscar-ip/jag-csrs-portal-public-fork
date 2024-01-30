@@ -9,6 +9,8 @@ import { SnowplowService } from '@core/services/snowplow.service';
 import { environment } from './../../../environments/environment';
 import { LogInOutService } from 'app/services/log-in-out.service';
 import { questionnaireClickData } from '@components/model/snowplowData.model';
+import { ConfigService } from 'app/api/api/config.service';
+
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -26,9 +28,11 @@ export class LandingComponent implements OnInit
   public code: string;
   public questionClickData: questionnaireClickData;
   public routes: Routes;
+  public disabledLogin = false;
 
   constructor(public oidcSecurityService : OidcSecurityService,
-              private logInOutService : LogInOutService,
+    private logInOutService: LogInOutService,
+    private appSettingService: ConfigService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
@@ -66,7 +70,14 @@ export class LandingComponent implements OnInit
           }
 
           this.logInOutService.currentUser(isAuthenticated);
-      });
+        });
+
+    this.appSettingService.apiConfigAppconfigGet().subscribe((data) => {
+      
+      if (data !== null) {
+        this.disabledLogin = data[0] === 'true' ? true : false;
+      }
+    })
   }
 
   login() {
