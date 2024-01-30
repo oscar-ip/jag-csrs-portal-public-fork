@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/account.service.ts
 api/api.ts
+api/config.service.ts
 api/document.service.ts
 api/feedback.service.ts
 api/file.service.ts
