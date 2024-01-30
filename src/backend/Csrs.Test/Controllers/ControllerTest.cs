@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -13,6 +14,7 @@ namespace Csrs.Test.Controllers
     {
         protected Mock<ILogger<TController>> GetMockLogger(bool strict = false) => new(strict ? MockBehavior.Strict : MockBehavior.Default);
         protected Mock<IMediator> GetMockMediator(bool strict = false) => new(strict ? MockBehavior.Strict : MockBehavior.Default);
+        protected Mock<IConfiguration> GetMockConfig(bool strict = false) => new(strict ? MockBehavior.Strict : MockBehavior.Default);
 
         /// <summary>
         /// Creates a <see cref="ClaimsPrincipal"/> with the correct claim type of the bceid user id.

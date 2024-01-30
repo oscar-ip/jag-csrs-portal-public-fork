@@ -26,5 +26,10 @@
         /// Contains the configuration for FileManager service.
         /// </summary>
         public FileManagerConfiguration FileManager { get; set; }
+
+        /// <summary>
+        /// Contains settings for scheduled meintenance
+        /// </summary>
+        public AppConfiguration AppConfig { get; set; }
     }
 }

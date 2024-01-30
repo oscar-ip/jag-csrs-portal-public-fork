@@ -13,6 +13,11 @@
   font-weight: bold;
 }
 
+a.disabled {
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+  color: lightgrey !important;
+}
 
 .summary-header-links {
   list-style: none;
