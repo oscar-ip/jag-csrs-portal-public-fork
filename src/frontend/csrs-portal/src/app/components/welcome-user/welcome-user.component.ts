@@ -57,7 +57,7 @@ export class WelcomeUserComponent implements OnInit {
 
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
-      password: ['', Validators.required]
+      referenceNumber: ['', Validators.required]
     });
 
     this.errorMessage = 'Error: Field is required.';
@@ -125,7 +125,7 @@ export class WelcomeUserComponent implements OnInit {
     };
 
     const accountData = this.accountFormGroup.value;
-    const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
+    const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.referenceNumber };
 
     this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {
