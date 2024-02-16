@@ -29,10 +29,10 @@
 </div>
 <div class="container">
   <div #alertContent class="alert-content p-5 m-3">
-    <h1><strong>The recalculation service sent me a file number and password. I want to create a web account.
+    <h1><strong>The recalculation service sent me a file number and reference number. I want to create a web account.
       </strong><br /></h1>
     <span>If an order requires you to be enrolled in the Child Support Recalculation Service, or the other party has
-      enrolled your order or written agreement, you have been provided a file number and a password so that you can
+      enrolled your order or written agreement, you have been provided a file number and a reference number so that you can
       create a web account. Please enter them below to proceed: </span>
     <br>
     <form [formGroup]="accountFormGroup">
@@ -46,8 +46,8 @@
         </div>
         <div class="col-md-6">
           <mat-form-field class="w-100">
-            <mat-label>Password</mat-label>
-            <input matInput placeholder="XXXXXXXXXXX" formControlName="password"/>
+            <mat-label>Reference Number</mat-label>
+            <input matInput placeholder="XXXXXXXXXXX" formControlName="referenceNumber"/>
             <mat-error>{{ errorMessage | json }}</mat-error>
           </mat-form-field>
         </div>
