@@ -7,6 +7,7 @@ import { Inject } from '@angular/core';
 import { AppConfigService } from 'app/services/app-config.service';
 import { SnowplowService } from '@core/services/snowplow.service';
 import { questionnaireClickData, questionnaireStepData } from '@components/model/snowplowData.model';
+import { ConfigService } from 'app/api/api/config.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -25,6 +26,7 @@ export class QuestionnaireComponent implements OnInit {
   public selectedIndex: number = 0;
   public questionClickData: questionnaireClickData;
   public questionStepData: questionnaireStepData;
+  public disabledLogin = false;
 
   data: any = [
     {
@@ -542,7 +544,8 @@ export class QuestionnaireComponent implements OnInit {
     },
   ];
 
-  constructor(@Inject(LoggerService) private logger,
+  constructor(private appSettingService: ConfigService,
+              @Inject(LoggerService) private logger,
               @Inject(Router) private router,
               @Inject(ActivatedRoute) private route,
               @Inject(OidcSecurityService) private oidcSecurityService,
@@ -714,6 +717,13 @@ export class QuestionnaireComponent implements OnInit {
         this.router.navigate(['/welcomeuser']);
       }
     });
+
+    this.appSettingService.apiConfigAppconfigGet().subscribe((data) => {
+
+      if (data !== null) {
+        this.disabledLogin = data[0] === 'true' ? true : false;
+      }
+    })
   }
 
   login() {
