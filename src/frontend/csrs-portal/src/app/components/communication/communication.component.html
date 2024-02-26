@@ -110,16 +110,8 @@
                           <div class="col-8">
                             <div style="display: inline;" *ngIf="message.attachment">
                               <img src="/assets/PDF-black_icon.svg" />
-                              <div style="display: inline;" *ngFor="let doc of message.documents" [ngSwitch]="doc.documentType">
-                                <span *ngSwitchCase="'.PDF'">
-                                  <a style="cursor:pointer; text-decoration: underline;"
-                                     href="javascript:void(0)" (click)="downloadAttachment(message.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">
-                                    {{doc.documentType}}
-                                  </a>
-                                </span>
-                                <span *ngSwitchDefault>
-                                  {{doc.documentType}}
-                                </span>
+                              <div style="display: inline;" *ngFor="let doc of message.documents">
+                                {{doc.documentType}}
                               </div>
                             </div>
                           </div>
