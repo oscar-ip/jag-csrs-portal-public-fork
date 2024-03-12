@@ -16,6 +16,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { List, Dictionary } from 'ts-generic-collections-linq';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { AppConfigService } from 'app/services/app-config.service';
+import { LogInOutService } from 'app/services/log-in-out.service';
 
 // -- import data structure
 import {
@@ -41,6 +42,7 @@ export class WelcomeUserComponent implements OnInit {
 
 
   constructor(private _formBuilder: FormBuilder, private http: HttpClient,
+            private logInOutService: LogInOutService,
               @Inject(AccountService) private accountService,
               @Inject(LoggerService) private logger,
               @Inject(Router) private router,
@@ -55,21 +57,26 @@ export class WelcomeUserComponent implements OnInit {
 
     this.accountFormGroup = this._formBuilder.group({
       fileNumber: ['', Validators.required],
-      password: ['', Validators.required]
+      referenceNumber: ['', Validators.required]
     });
 
     this.errorMessage = 'Error: Field is required.';
 
     //this.logger.info("before accountService.apiAccountGet");
 
-    this.accountService.apiAccountGet().subscribe({
-      next: (data:any) => {
+    this.accountService.apiAccountGet('response', false).subscribe({
+      next: (data: any) => {
         this.logger.info("data:", data);
-        if (data)
+        if (data && data.body != null)
         {
-          var user   = data.user;
-          var files  = data.files;
+          var user   = data.body.user;
+          var files  = data.body.files;
 
+          if (user != null)
+          {
+            this.logger.info("user:", user);
+            this.logInOutService.emitCurrentPortalUser(user);
+          }
           if (user != null && files != null && files.length > 0)
           {
             const listFiles = new List<ModelFile>(files); //this.logger.info("listFiles", listFiles);
@@ -118,7 +125,7 @@ export class WelcomeUserComponent implements OnInit {
     };
 
     const accountData = this.accountFormGroup.value;
-    const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.password };
+    const csrsAccount: CSRSAccount = {fileNumber: accountData.fileNumber, referenceNumber: accountData.referenceNumber };
 
     this.accountService.apiAccountCheckcsrsaccountPost(csrsAccount).subscribe({
       next: (outData:any) => {

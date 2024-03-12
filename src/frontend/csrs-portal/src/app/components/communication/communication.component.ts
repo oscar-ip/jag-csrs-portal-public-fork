@@ -111,6 +111,7 @@ OnInit {
   public toggleRow = false;
   selectedTab: number = 0;
   selectedFileNumber: any = '';
+  inboxLoaded = false;
 
   ngOnInit(): void {
 
@@ -193,14 +194,17 @@ OnInit {
   }
 
   getMessages() {
+    this.inboxLoaded = false;
     this.dataSource.data = [];
     this.messageService.apiMessageListGet('response', false).subscribe({
       next: (data) => {
         this.logger.info('getMessages: ', data.body);
         this.messages = data.body;
         this.getRemoteData();
+        this.inboxLoaded = true
       },
       error: (e) => {
+        this.inboxLoaded = true
         if (e.error instanceof Error) {
           //this.logger.error(e.error.message);
         } else {
@@ -671,6 +675,27 @@ openDialog(): void {
       alert('Please disable your Pop-up blocker and try again.');
     }*/
   }
+
+  ViewAttachment(messageId, serverRelativeUrl, subject, name) {
+
+    this.documentService.apiDocumentDownloadattachmentGet(
+      messageId,
+      "ssg_csrscommunicationmessage",
+      serverRelativeUrl,
+      subject,
+      'body', false,
+      { httpHeaderAccept: 'application/octet-stream' }
+    ).subscribe((response) => {
+
+      let binaryData = [];
+      binaryData.push(response);
+      const fileURL = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/pdf' }));
+      window.open(fileURL, '_blank');
+
+    });
+  }
+
+
 
 }
 

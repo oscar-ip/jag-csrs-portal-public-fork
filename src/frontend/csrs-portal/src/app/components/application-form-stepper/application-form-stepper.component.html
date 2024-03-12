@@ -107,14 +107,14 @@
                 <mat-form-field class="w-100">
                   <mat-label>Postal Code<span class="text-danger">*</span></mat-label>
                   <input matInput placeholder="XXX-XXX" mask="S0S 0S0" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="postalCode" [showMaskTyped]="false" />
+                    formControlName="postalCode" [showMaskTyped]="false" [dropSpecialCharacters]="false" [specialCharacters]="[' ']" />
                   <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Home phone number</mat-label>
-                  <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
+                  <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
             </div>
@@ -122,13 +122,13 @@
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Cell phone number</mat-label>
-                  <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
+                  <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Work phone number</mat-label>
-                  <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [showMaskTyped]="false" />
+                  <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
             </div>
@@ -255,8 +255,7 @@
                   which may impact the recalculation of my child support.
                 </li>
                 <li>
-                  I understand the recalculation service may access Court Services Online to obtain copies of the
-                  child support order or written agreement.
+                  I authorize the Child Support Recalculation Service to access my family court file to obtain information about and copies of any orders, written agreements, court applications and appearances where the Child Support Recalculation Service considers it necessary to provide their service to me. This authorization is made to comply with the requirements of Provincial Court Family Rule 174(1)(e).
                 </li>
                 <li>
                   Unless a court orders otherwise, I may withdraw from the recalculation service providing that the
@@ -451,8 +450,7 @@ the information before submission.
                       the recalculation of my child support.
                     </li>
                     <li>
-                      I understand the recalculation service may access Court Services Online to obtain copies of the child support order
-                      or written agreement.
+                      I authorize the Child Support Recalculation Service to access my family court file to obtain information about and copies of any orders, written agreements, court applications and appearances where the Child Support Recalculation Service considers it necessary to provide their service to me. This authorization is made to comply with the requirements of Provincial Court Family Rule 174(1)(e).
                     </li>
                     <li>
                       Unless a court orders otherwise, I may withdraw from the recalculation service providing that the other party also

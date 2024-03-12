@@ -113,7 +113,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
     this.identities = [{id: '123', value: 'Native'}];
     this.genders =  [{id: '123', value: 'Male'}];
     this.courtLocations =  [{id: '123', value: 'Victoria Court'}];
-    this.referrals = [{id: '123', value: 'FMEP'}];
+    this.referrals = [{id: '123', value: 'BCFMA'}];
 
     this.errorMessage = 'Error: Field is required. ';
     this.errorMailMessage = 'Email address without @ or domain name. ';

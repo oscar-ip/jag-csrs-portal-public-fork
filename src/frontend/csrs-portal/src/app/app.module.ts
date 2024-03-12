@@ -22,6 +22,7 @@ import {
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LandingComponent } from './components/landing/landing.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { AppConfigService, AppConfig } from './services/app-config.service';
 
@@ -79,6 +80,7 @@ import { MatDividerModule } from '@angular/material/divider';
     ConfigModule,
     HttpClientModule,
     MatStepperModule,
+    MatProgressBarModule,
     CdkAccordionModule,
     MatGridListModule,
     AuthConfigModule,
@@ -100,7 +102,7 @@ import { MatDividerModule } from '@angular/material/divider';
       extend: true,
     }),
   ],
-  exports: [NgBusyModule, NgxMaterialModule, TranslateModule],
+  exports: [NgBusyModule, NgxMaterialModule, MatProgressBarModule, TranslateModule],
   providers: [
     CurrencyPipe,
     DatePipe,

@@ -25,27 +25,33 @@
       </ul>
     </div>
   </div>
+
   <div class="background_image">
     <div class="container">
+      <section [ngStyle]="{ 'display': disabledLogin == true ? 'block' : 'none' }">
+        <div style="color: red; border: 4px solid red; padding: 5px; text-align: center;">
+          Website maintenance in progress. We apologize for any inconvenience.
+          <br />
+          To contact CSRS, please call 1-866-660-2684
+        </div>
+      </section>
       <section>
         <div class="card mb-2 border-0 summary-content">
           <div>
             <div class="card-title h1_class">Child Support Recalculation Service</div>
-            <div class="card-body description_text" >
+            <div class="card-body description_text">
               The Child Support Recalculation Service helps families with child support orders and written agreements
-                maintain a fair standard of support for their children by reviewing the amount of child support each year.
-                The recalculation service adjusts the amount of child support if income has gone up or down so that
-                parents do not have to return to court to have their child support amounts reviewed.
-              <a
-              [attr.href]="cscLink"
-              target="_blank"
-              class="primary-navigation"
-              rel="noopener"
-              (click)="learnMore()"
-            >
-            Learn more >
-            </a>
-          </div>
+              maintain a fair standard of support for their children by reviewing the amount of child support each year.
+              The recalculation service adjusts the amount of child support if income has gone up or down so that
+              parents do not have to return to court to have their child support amounts reviewed.
+              <a [attr.href]="cscLink"
+                 target="_blank"
+                 class="primary-navigation"
+                 rel="noopener"
+                 (click)="learnMore()">
+                Learn more >
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -81,6 +87,11 @@
                   </div>
                 </div>
               </div>
+              <div>
+                <p class="card-text" style="color:black; font-weight:bold;" class="text-inside-grid">
+                  Please note, the recalculation process takes approximately 4 to 5 months to complete.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -105,7 +116,7 @@
                   </p>
                 </div>
                 <div class="py-3">
-                  <p class="color_black">If you already have a Basic BCeID account log in
+                  <p [ngStyle]="{ 'display': disabledLogin == false ? 'block' : 'none' }" class="color_black">If you already have a Basic BCeID account log in
                     <a
                       class ='account-link'
                       style="cursor:pointer; text-decoration: underline;"
@@ -172,7 +183,7 @@
                     rel="noopener"
                     class="useful-links bceIdLink"
                   >
-                    <button mat-flat-button
+                    <button disabled="{{disabledLogin}}" mat-flat-button
                             type="button"
                             class="large"
                             color="primary"
