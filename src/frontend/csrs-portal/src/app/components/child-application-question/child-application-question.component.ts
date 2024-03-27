@@ -38,6 +38,7 @@ import {
   } from 'app/api/model/models';
 
 import { DatePipe } from '@angular/common';
+import { ModalDialogHtmlComponent } from '../modal-dialog-htmlcontent/modal-dialog-htmlcontent.component';
 
 @Component({
   selector: 'app-child-application-question',
@@ -550,6 +551,30 @@ editPage(stepper, index){
   save(){
     this.prepareData();
     //localStorage.getsetItemItem('formData', '');
+  }
+
+  //To edit the content of SERVICE PORTAL TERMS OF USE, Change the word document and convert to html and paste the content here
+  showInfoCollectionDisclosure(): void {
+    const dialogRef = this.dialog.open(ModalDialogHtmlComponent, {
+      width: '850px',
+      data: '',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      //this.logger.info(`Dialog result: ${result}`);
+    });
+  }
+
+  //To edit the content of “INFORMATION COLLECTION, USE AND DISCLOSURE”, Change the word document and convert to html and paste the content here
+  showTermsOfUse(): void {
+    const dialogRef = this.dialog.open(ModalDialogHtmlComponent, {
+      width: '750px',
+      data: '',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      //this.logger.info(`Dialog result: ${result}`);
+    });
   }
 
   openModalDialog(): void {

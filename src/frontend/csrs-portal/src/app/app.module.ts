@@ -53,6 +53,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
+import { ModalDialogHtmlComponent } from './components/modal-dialog-htmlcontent/modal-dialog-htmlcontent.component';
+
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import { MatListModule } from '@angular/material/list';
@@ -69,6 +71,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MailboxComponent,
     CommunicationComponent,
     ModalDialogComponent,
+    ModalDialogHtmlComponent
   ],
   imports: [
     CommonModule,
