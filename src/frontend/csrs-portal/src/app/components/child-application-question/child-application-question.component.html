@@ -169,25 +169,25 @@
                   <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
-
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Home phone number</mat-label>
-                  <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
+                  <mat-label>Preferred phone number<span class="text-danger">*</span></mat-label>
+                  <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
+                  <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Cell phone number</mat-label>
-                  <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
+                  <mat-label>Home phone number</mat-label>
+                  <input matInput formControlName="phoneNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Work phone number</mat-label>
-                  <input matInput formControlName="workNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
+                  <mat-label>Cell phone number</mat-label>
+                  <input matInput formControlName="cellNumber" placeholder="(XXX) XXX-XXXX" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
             </div>
@@ -281,7 +281,6 @@
                   <mat-error>{{ errorMessage | json }}</mat-error>
                 </mat-form-field>
               </div>
-
               <div class="col-md-6">
                 <mat-form-field class="w-100">
                   <mat-label>Preferred name</mat-label>
@@ -796,18 +795,18 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Home Phone number:</div>
-                  <div class="bold">{{(secondFormGroup.value.phoneNumber)?secondFormGroup.value.phoneNumber:'-' }}</div>
+                  <div>Preferred phone number:</div>
+                  <div class="bold">{{(secondFormGroup.value.workNumber)?secondFormGroup.value.workNumber:'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Cell Phone number:</div>
-                  <div class="bold">{{(secondFormGroup.value.cellNumber)?secondFormGroup.value.cellNumber:'-' }}</div>
+                  <div>Home Phone number:</div>
+                  <div class="bold">{{(secondFormGroup.value.phoneNumber)?secondFormGroup.value.phoneNumber:'-' }}</div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Work Phone number:</div>
-                  <div class="bold">{{(secondFormGroup.value.workNumber)?secondFormGroup.value.workNumber:'-' }}</div>
+                  <div>Cell Phone number:</div>
+                  <div class="bold">{{(secondFormGroup.value.cellNumber)?secondFormGroup.value.cellNumber:'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Email:</div>

@@ -164,7 +164,7 @@ export class ChildApplicationQuestionComponent implements OnInit {
       PreferredName: [''],
       saddress: [''],
       cellNumber: [''],
-      workNumber: [''],
+      workNumber: ['', Validators.required],
       gender: [''],
       identity: [''],
       otherIdentity: ['', Validators.maxLength(100)]
