@@ -1,8 +1,8 @@
 # Build image
-FROM node:17.6.0 as build-deps
+FROM node:17.6.0 AS build
 
 # set working directory
-ENV NODE_ROOT /usr/src/app
+ENV NODE_ROOT=/usr/src/app
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -14,6 +14,8 @@ RUN yarn install
 COPY . .
 
 RUN yarn run build-prod
+
+
 
 FROM nginx:1.23.1
 
@@ -31,9 +33,9 @@ chown -R 1001:0 /var/run
 
 USER 1001
 
-COPY --from=build-deps /usr/src/app/src/favicon.ico /usr/share/nginx/html
-COPY --from=build-deps /usr/src/app/dist/csrs-portal /usr/share/nginx/html
-COPY --from=build-deps /usr/src/app/nginx.conf /opt/app-root/etc/nginx.default.d/default.conf
+COPY --from=build /usr/src/app/src/favicon.ico /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/csrs-portal /usr/share/nginx/html
+COPY --from=build /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 

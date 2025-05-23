@@ -14,7 +14,7 @@ services:
     ## following is used for testing nginx.conf locally. No need to build the csrs-portal every
     ## time we change the nginx.conf
     #volumes:
-    #  - ./src/frontend/csrs-portal/nginx.conf:/opt/app-root/etc/nginx.default.d/default.conf
+    #  - ./src/frontend/csrs-portal/nginx.conf:/etc/nginx.default.d/default.conf
     depends_on: [jag-csrs-api]
 
   # #############################################################################################
@@ -48,7 +48,7 @@ services:
       dockerfile: Csrs.Services.FileManager/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://0.0.0.0:8080
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
     ports:
       - "8084:8080"
     volumes:
