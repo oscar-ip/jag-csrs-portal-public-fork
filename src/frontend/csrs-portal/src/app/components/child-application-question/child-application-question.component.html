@@ -346,11 +346,10 @@
                     formControlName="postalCode" [showMaskTyped]="false" [dropSpecialCharacters]="false" [specialCharacters]="[' ']" />
                 </mat-form-field>
               </div>
-
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Home phone number</mat-label>
-                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="homePhoneNumber" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
+                  <mat-label>Preferred phone number</mat-label>
+                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="workPhoneNumber" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
             </div>
@@ -358,14 +357,14 @@
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Cell phone number</mat-label>
-                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="cellPhoneNumber" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
+                  <mat-label>Home phone number</mat-label>
+                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="homePhoneNumber" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="w-100">
-                  <mat-label>Work phone number</mat-label>
-                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="workPhoneNumber" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
+                  <mat-label>Cell phone number</mat-label>
+                  <input matInput placeholder="(XXX) XXX-XXXX" formControlName="cellPhoneNumber" mask="(000) 000-0000" [dropSpecialCharacters]="false" [specialCharacters]="['(', ')', '-', ' ']" [showMaskTyped]="false" />
                 </mat-form-field>
               </div>
             </div>
@@ -885,18 +884,18 @@
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Home Phone number:</div>
-                  <div class="bold">{{(thirdFormGroup.value.homePhoneNumber)?thirdFormGroup.value.homePhoneNumber:'-' }}</div>
+                  <div>Preferred Phone number:</div>
+                  <div class="bold">{{(thirdFormGroup.value.workPhoneNumber)?thirdFormGroup.value.workPhoneNumber:'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Cell Phone number:</div>
-                  <div class="bold">{{(thirdFormGroup.value.cellPhoneNumber)?thirdFormGroup.value.cellPhoneNumber:'-' }}</div>
+                  <div>Home Phone number:</div>
+                  <div class="bold">{{(thirdFormGroup.value.homePhoneNumber)?thirdFormGroup.value.homePhoneNumber:'-' }}</div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6 stepRow spaceAround displayDetails">
-                  <div>Work Phone number:</div>
-                  <div class="bold">{{(thirdFormGroup.value.workPhoneNumber)?thirdFormGroup.value.workPhoneNumber:'-' }}</div>
+                  <div>Cell Phone number:</div>
+                  <div class="bold">{{(thirdFormGroup.value.cellPhoneNumber)?thirdFormGroup.value.cellPhoneNumber:'-' }}</div>
                 </div>
                 <div class="col-md-6 stepRow spaceAround displayDetails">
                   <div>Email:</div>
