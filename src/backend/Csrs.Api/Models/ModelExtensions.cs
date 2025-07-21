@@ -223,6 +223,7 @@ namespace Csrs.Api.Models
             message.Status = inMessage.Statuscode;
             message.Documents = documents;
             message.RecievingParty = inMessage._ssgTopartyValue;
+            message.SendingParty = inMessage._ssgFrompartyValue;
             message.Content = inMessage.SsgCsrsmessage;
             message.Subject = inMessage.SsgCsrsmessagesubject;
             message.Date = inMessage.SsgSentreceiveddate;

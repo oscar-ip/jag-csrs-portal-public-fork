@@ -24,17 +24,17 @@ namespace Csrs.Api.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
         }
-        public async Task<IList<Message>> GetPartyMessages(string partyId, CancellationToken cancellationToken)
+        public async Task<IList<Message>> GetPartyMessages(string partyId, bool isSent, CancellationToken cancellationToken)
         {
 
             _logger.LogDebug("Get party messages request recieved");
 
-            MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.GetFilesByParty(partyId, cancellationToken);
+            MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.GetFilesByParty(partyId, isSent, cancellationToken);
 
             List<Message> messages = new List<Message>();
             foreach (var file in files.Value)
             {
-                MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await _dynamicsClient.GetCommunicationMessagesByFile(file.SsgCsrsfileid, partyId, cancellationToken);
+                MicrosoftDynamicsCRMssgCsrscommunicationmessageCollection dynamicsMessages = await _dynamicsClient.GetCommunicationMessagesByFile(file.SsgCsrsfileid, partyId, isSent, cancellationToken);
 
                 foreach (var message in dynamicsMessages.Value)
                 {

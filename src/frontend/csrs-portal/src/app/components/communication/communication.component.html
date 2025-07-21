@@ -36,7 +36,7 @@
                     <div class="col-md-6 d-none d-lg-block"></div>
                     <div class="col-md-3" style="float: right;">
                       <h2 class="font_normal">
-                        <img src="/assets/Message_icon.svg" /> <a target="blank" (click)="selectTab(2)">New Message</a>
+                        <img src="/assets/Message_icon.svg" /> <a target="blank" (click)="selectTab(3)">New Message</a>
                       </h2>
                     </div>
                   </div>
@@ -175,6 +175,158 @@
                     <td>
                       <img style="padding-right: 0px;padding-left: 0px;" src="/assets/Download_icon.svg" /><a href="javascript:void(0)" (click)="downloadAttachment(selectedInboxMessage.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">Download</a>
                       <img style="padding-right: 0px;" src="/assets/View_icon.svg" /><a href="javascript:void(0)" (click)="ViewAttachment(selectedInboxMessage.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">View</a>
+                    </td>
+                  </tr>
+
+                </table>
+              </div>
+
+            </div>
+          </form>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <h1 class="mb-1 tabHeader">Outbox</h1>
+          </ng-template>
+          <form [formGroup]="outboxFormGroup" style="padding-bottom: 20px">
+            <div class="round1" *ngIf="!toggleRowOutbox">
+              <div>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm-2 col-md-1">
+                      <label>File #:</label>
+                    </div>
+                    <div class="col-sm-1">
+                      <mat-form-field>
+                        <mat-label>Select File</mat-label>
+                        <mat-select formControlName="outboxFile" (selectionChange)="onOutboxFileNumberChange ($event)">
+                          <mat-option value="all">
+                            All
+                          </mat-option>
+                          <mat-option *ngFor="let file of files" [value]="file.fileId">
+                            {{file.fileNumber}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6 d-none d-lg-block"></div>
+                    <div class="col-md-3" style="float: right;">
+                      <h2 class="font_normal">
+                        <img src="/assets/Message_icon.svg" /> <a target="blank" (click)="selectTab(3)">New Message</a>
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div [ngSwitch]="isMobile">
+                <div *ngSwitchCase="false">
+                  <mat-progress-bar *ngIf="!(outboxLoaded)" mode="indeterminate"></mat-progress-bar>
+                  <hr class="mt-0 mb-1" style="opacity: 0.5">
+                  <table mat-table [dataSource]="dataSourceOutbox">
+                    <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Date </th>
+                      <td mat-cell *matCellDef="let element">{{element.date | date:'yyyy-MM-dd'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef> File&nbsp;#&nbsp;</th>
+                      <td mat-cell *matCellDef="let element"> {{element.fileNumber}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="username">
+                      <th mat-header-cell *matHeaderCellDef> Subject </th>
+                      <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="phone">
+                      <th mat-header-cell *matHeaderCellDef> Actions </th>
+                      <td class="font_normal" mat-cell *matCellDef="let element"> <img src="/assets/View_icon.svg" /><a href="javascript:void(0)" (click)="ontableOutbox(element)">View</a> </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsOutbox;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsOutbox;"></tr>
+                  </table>
+                  <mat-paginator #paginatorOutbox [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+                </div>
+
+                <div *ngSwitchCase="true">
+                  <hr class="mt-0 mb-0" style="opacity: 0.5">
+                  <mat-list>
+                    <mat-list-item *ngFor="let message of dataSource541; even as isEven">
+                      <div matLine>
+                        <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }">
+                          <div class="list_th col-3" style="margin-left:15px">Date:</div>
+                          <div class="col-8">{{ message.date | date:'yyyy-MM-dd' }}</div>
+                        </div>
+                      </div>
+                      <div matLine>
+                        <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }">
+                          <div class="list_th col-3" style="margin-left:15px">File&nbsp;#:</div>
+                          <div class="col-8">{{ message.fileNumber }}</div>
+                        </div>
+                      </div>
+                      <div matLine>
+                        <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }">
+                          <div class="list_th col-3" style="margin-left:15px">Subject:</div>
+                          <div class="col-8">{{ message.subject }}</div>
+                        </div>
+                      </div>
+                      <div matLine>
+                        <div class="row" [ngStyle]="{ background: isEven ? 'aliceblue' : 'whitesmoke' }">
+                          <div class="list_th col-3" style="margin-left:15px">Actions:</div>
+                          <div class="font_normal col-8"><img src="/assets/View_icon.svg" /><a target="blank" (click)="ontableOutbox(message)">View</a></div>
+                        </div>
+                      </div>
+                      <mat-divider></mat-divider>
+                    </mat-list-item>
+                  </mat-list>
+                  <mat-paginator #paginator541
+                                 [pageSize]="pageSize541"
+                                 [length]="totalSize541"
+                                 [pageIndex]="currentPage541"
+                                 (page)="handlePageOutbox($event)"
+                                 [pageSizeOptions]="[5]"
+                                 showFirstLastButtons>
+                  </mat-paginator>
+                </div>
+              </div>
+            </div>
+
+            <div class="step2" *ngIf="toggleRowOutbox">
+              <div class="mb-3 mt-5">
+                <div class="container">
+                  <p class="back-to-messages" (click)="ontableOutbox('')"><mat-icon style="vertical-align:middle;">arrow_back</mat-icon>  Back to all messages</p>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <h2 style="font-weight: bold;">File #: <span style="font-size: 14px;color: black;">{{selectedOutboxMessage.fileNumber}}</span>  </h2>
+                    </div>
+                    <div class="col-md-5">
+                      <h2 style="font-weight: bold;">Date : <span style="font-size: 14px;color: black;">{{selectedOutboxMessage.date | date:'yyyy-MM-dd'}}</span> </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr class="mt-0 mb-4" style="opacity: 1">
+
+              <div class="section">
+                <h2>Message</h2>
+                <div class="message-data">
+                  <h2><strong>{{selectedOutboxMessage?.subject}}</strong></h2>
+                  <div style="white-space: pre-line;">
+                    {{selectedOutboxMessage?.content}}
+                  </div>
+                </div>
+                <table class="table" *ngIf="selectedOutboxMessage.attachment">
+                  <tr>
+                    <th>Attachment(s)</th>
+                    <th>File size</th>
+                    <th>Actions</th>
+                  </tr>
+
+                  <tr class="text-dark" *ngFor="let doc of selectedOutboxMessage.documents">
+                    <td><strong>{{doc.name}}</strong></td>
+                    <td>{{doc.size}}</td>
+                    <td>
+                      <img style="padding-right: 0px;padding-left: 0px;" src="/assets/Download_icon.svg" /><a href="javascript:void(0)" (click)="downloadAttachment(selectedOutboxMessage.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">Download</a>
+                      <img style="padding-right: 0px;" src="/assets/View_icon.svg" /><a href="javascript:void(0)" (click)="ViewAttachment(selectedOutboxMessage.messageId, doc.serverRelativeUrl, doc.documentType, doc.name)">View</a>
                     </td>
                   </tr>
 

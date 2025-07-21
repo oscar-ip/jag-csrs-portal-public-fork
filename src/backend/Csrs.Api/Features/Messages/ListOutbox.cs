@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Csrs.Api.Features.Messages
 {
-    public static class List
+    public static class ListOutbox
     {
         public class Request : IRequest<Response>
         {
@@ -72,7 +72,7 @@ namespace Csrs.Api.Features.Messages
                     return Response.Empty;
                 }
 
-                IList<Message> messages = await _messageService.GetPartyMessages(accountParty.PartyId, false, cancellationToken);
+                IList<Message> messages = await _messageService.GetPartyMessages(accountParty.PartyId, true, cancellationToken);
 
                 return new Response(messages);
             }

@@ -42,7 +42,12 @@ OnInit {
   dataSource = new MatTableDataSource();
   @ViewChild('paginator') paginator: MatPaginator;
 
+  dataSourceOutbox = new MatTableDataSource();
+  @ViewChild('paginatorOutbox') paginatorOutbox: MatPaginator;
+
+
   displayedColumns: string[] = ['id', 'name', 'username', 'email', 'phone'];
+  displayedColumnsOutbox: string[] = ['id', 'name', 'username', 'phone'];
   public cscLink: string;
   isMobile: boolean = false;
 
@@ -53,6 +58,14 @@ OnInit {
   public pageSize441 = 5;
   public currentPage441 = 0;
   public totalSize441 = 0;
+
+  pageEventOutbox: PageEvent;
+  dataSource541 = new MatTableDataSource();
+  @ViewChild('paginator541') paginator541: MatPaginator;
+  public array541: any;
+  public pageSize541 = 5;
+  public currentPage541 = 0;
+  public totalSize541 = 0;
 
   constructor(private _formBuilder: FormBuilder,
               @Inject(LoggerService) private logger,
@@ -77,6 +90,11 @@ OnInit {
 
   inboxFormGroup: FormGroup;
   messages: List<Message> = new List<Message>();
+
+  selectedOutboxFile: any;
+  selectedOutboxMessage: any;
+  outboxFormGroup: FormGroup;
+  outboxMessages: List<Message> = new List<Message>();
 
   uploadFormGroup: FormGroup;
   bceIdLink: string;
@@ -109,9 +127,11 @@ OnInit {
 
   accountSummary: HttpResponse<AccountFileSummary>;
   public toggleRow = false;
+  public toggleRowOutbox = false;
   selectedTab: number = 0;
   selectedFileNumber: any = '';
   inboxLoaded = false;
+  outboxLoaded = false;
 
   ngOnInit(): void {
 
@@ -136,6 +156,7 @@ OnInit {
     this.curDateStr = this.datePipe.transform(this.curDate, 'yyyy-MM-dd');
     this.getAccountInfo();
     this.getMessages();
+    this.getOutboxMessages();
 
     this.uploadFormGroup = this._formBuilder.group({
       uploadFile: [null, Validators.required],
@@ -160,7 +181,9 @@ OnInit {
     this.inboxFormGroup = this._formBuilder.group({
       inboxFile: [null, ]
     });
-
+    this.outboxFormGroup = this._formBuilder.group({
+      outboxFile: [null, ]
+    });
 
   }
 
@@ -174,6 +197,7 @@ OnInit {
           this.files = this.accountSummary.body.files;
           if (this.files.length == 1) {
             this.inboxFile.patchValue('all');
+            this.outboxFile.patchValue('all');
             this.uploadFile.patchValue(this.files[0].fileId);
             this.selectedUploadFile = this.files[0];
             this.contactFile.patchValue(this.files[0].fileId);
@@ -196,15 +220,17 @@ OnInit {
   getMessages() {
     this.inboxLoaded = false;
     this.dataSource.data = [];
+    this.dataSourceOutbox.data = [];
+
     this.messageService.apiMessageListGet('response', false).subscribe({
       next: (data) => {
         this.logger.info('getMessages: ', data.body);
         this.messages = data.body;
         this.getRemoteData();
-        this.inboxLoaded = true
+        this.inboxLoaded = true;
       },
       error: (e) => {
-        this.inboxLoaded = true
+        this.inboxLoaded = true;
         if (e.error instanceof Error) {
           //this.logger.error(e.error.message);
         } else {
@@ -215,6 +241,31 @@ OnInit {
       complete: () => this.logger.info('apiMessageListGet is completed')
     });
   }
+
+  getOutboxMessages() {
+    this.outboxLoaded = false;
+    this.dataSource.data = [];
+    this.messageService.apiMessageListOutboxGet('response', false).subscribe({
+      next: (data) => {
+        this.logger.info('getMessagesOutbox: ', data);
+        this.outboxMessages = data.body;
+        this.getRemoteData();
+        this.outboxLoaded = true;
+
+      },
+      error: (e) => {
+        this.outboxLoaded = true;
+        if (e.error instanceof Error) {
+          //this.logger.error(e.error.message);
+        } else {
+          //Backend returns unsuccessful response codes such as: 500 etc.
+          //this.logger.info('Backend returned ', e);
+        }
+      },
+      complete: () => this.logger.info('apiMessageListOutboxGet is completed')
+    });
+  }
+
   get contactFile() {
     return this.contactFormGroup.get('contactFile');
   }
@@ -235,6 +286,9 @@ OnInit {
   }
   get inboxFile() {
     return this.inboxFormGroup.get('inboxFile');
+  }
+  get outboxFile() {
+    return this.outboxFormGroup.get('outboxFile');
   }
   onContactFileNumberChange(ob): void {
     let fileValue = ob.value;
@@ -264,6 +318,18 @@ OnInit {
     }
     this.getRemoteData();
   }
+  onOutboxFileNumberChange(ob): void {
+    let fileValue = ob.value;
+    this.selectedOutboxFile = null;
+    if (fileValue && fileValue != 'all') {
+      for (var i = 0; i < this.files.length; i++) {
+        if (fileValue == this.files[i].fileId) {
+          this.selectedOutboxFile = this.files[i];
+        }
+      }
+    }
+    this.getRemoteData();
+  }
   clearContactForm(): void {
     this.showValidationMessages = false;
     this.validationMessages = [];
@@ -288,7 +354,10 @@ OnInit {
 
   getRemoteData() {
     const selectedMsgs = [];
+    const selectedOutboxMsgs = [];
+
     this.unreadCnt = 0;
+
     for (var i = 0; i < this.messages.length; i++) {
       if (this.selectedInboxFile != null) {
         if (this.selectedInboxFile.fileId == this.messages[i].fileId) {
@@ -304,14 +373,32 @@ OnInit {
         }
       }
     }
+
+    for (var i = 0; i < this.outboxMessages.length; i++) {
+      if (this.selectedOutboxFile != null) {
+        if (this.selectedOutboxFile.fileId == this.outboxMessages[i].fileId) {
+          selectedOutboxMsgs.push(this.outboxMessages[i]);
+        }
+      } else {
+        selectedOutboxMsgs.push(this.outboxMessages[i]);
+      }
+    }
     this.dataSource = new MatTableDataSource<Message>(selectedMsgs);
     this.dataSource.paginator = this.paginator;
+    this.dataSourceOutbox = new MatTableDataSource<Message>(selectedOutboxMsgs);
+    this.dataSourceOutbox.paginator = this.paginatorOutbox;
 
     this.dataSource441 = new MatTableDataSource<Message>(selectedMsgs);
     this.dataSource441.paginator = this.paginator441;
     this.array441 = selectedMsgs;
     this.totalSize441 = this.array441.length;
     this.iterator();
+
+    this.dataSource541 = new MatTableDataSource<Message>(selectedOutboxMsgs);
+    this.dataSource541.paginator = this.paginator541;
+    this.array541 = selectedOutboxMsgs;
+    this.totalSize541 = this.array541.length;
+    this.iteratorOutbox();
   }
 
   private iterator() {
@@ -325,6 +412,20 @@ OnInit {
     this.currentPage441 = e.pageIndex;
     this.pageSize441 = e.pageSize;
     this.iterator();
+  }
+
+  
+  private iteratorOutbox() {
+    const end = (this.currentPage541 + 1) * this.pageSize541;
+    const start = this.currentPage541 * this.pageSize541;
+    const part = this.array541.slice(start, end);
+    this.dataSource541 = part;
+  }
+
+  public handlePageOutbox(e: any) {
+    this.currentPage541 = e.pageIndex;
+    this.pageSize541 = e.pageSize;
+    this.iteratorOutbox();
   }
 
   sendContact(): void {
@@ -403,7 +504,9 @@ OnInit {
         complete: () => this.logger.info('apiUserrequestCreatePost is completed')
       })
       this.clearContactForm();
-
+      setTimeout(() => {
+        this.getOutboxMessages();
+      }, 10000);
     }
   }
 
@@ -424,8 +527,22 @@ OnInit {
       this.getMessages();
     }
     this.toggleRow = element;
+  }
+
+    ontableOutbox(element) {
+    if (element) {
+      for (var i = 0; i < this.outboxMessages.length; i++) {
+        if (this.outboxMessages[i].messageId == element.messageId) {
+          this.selectedOutboxMessage = this.outboxMessages[i];
+        }
+      }
+    } else {
+      this.getOutboxMessages();
+    }
+    this.toggleRowOutbox = element;
 
   }
+
   onUpload(): void {
     this.validationMessages = [];
     this.showValidationMessages = false;
@@ -604,6 +721,9 @@ openDialog(): void {
           };
           this.openDialog();
           this.uploadDisabled = false;
+          setTimeout(() => {
+            this.getOutboxMessages();
+          }, 10000);
       },
       error: (e) => {
         if (e.error instanceof Error) {

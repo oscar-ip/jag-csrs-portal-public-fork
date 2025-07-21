@@ -15,6 +15,8 @@ namespace Csrs.Api.Models
         public string? Content { get; set; }
 
         public string? RecievingParty { get; set; }
+        public string? SendingParty { get; set; }
+
         public DateTimeOffset? Date { get; set; }
         public bool? Attachment { get; set; }
         public IList<FileSystemItem>? Documents { get; set; }
