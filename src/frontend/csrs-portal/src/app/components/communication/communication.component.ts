@@ -1,22 +1,19 @@
-import { Component, OnInit, ViewChild, ViewChildren, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
-  FormArray,
 } from '@angular/forms';
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpStatusCode, HttpResponse, HttpHeaders  } from '@angular/common/http';
+import { HttpClient, HttpStatusCode, HttpResponse } from '@angular/common/http';
 import { AppConfigService } from 'app/services/app-config.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ModalDialogComponent } from 'app/components/modal-dialog/modal-dialog.component';
 import { FileService } from 'app/api/api/file.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '@shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { DatePipe } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
 import { AccountService } from 'app/api/api/account.service';
 import { AccountFileSummary } from 'app/api/model/accountFileSummary.model';
 import { UserRequestService } from 'app/api/api/userRequest.service';
@@ -27,8 +24,7 @@ import { Message } from '../../api';
 import { Router, ActivatedRoute } from "@angular/router";
 import { List } from 'ts-generic-collections-linq';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatListModule } from '@angular/material/list';
-import { MatDividerModule } from '@angular/material/divider';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-communication',
@@ -37,8 +33,7 @@ import { MatDividerModule } from '@angular/material/divider';
   providers: [DatePipe]
 })
 
-export class CommunicationComponent implements //OnDestroy {
-OnInit {
+export class CommunicationComponent implements OnInit {
   dataSource = new MatTableDataSource();
   @ViewChild('paginator') paginator: MatPaginator;
 
@@ -128,7 +123,8 @@ OnInit {
   accountSummary: HttpResponse<AccountFileSummary>;
   public toggleRow = false;
   public toggleRowOutbox = false;
-  selectedTab: number = 0;
+  selectedTab = 0;
+  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
   selectedFileNumber: any = '';
   inboxLoaded = false;
   outboxLoaded = false;
@@ -756,10 +752,10 @@ openDialog(): void {
       });
 
   }
-  selectTab(index) {
-    this.selectedTab = 0;
-    if (index) {
-      this.selectedTab = index;
+
+  selectTab(index?: number | null): void {
+    if (this.tabGroup) {
+      this.tabGroup.selectedIndex = index ?? 0;
     }
   }
 
@@ -814,10 +810,4 @@ openDialog(): void {
 
     });
   }
-
-
-
 }
-
-
-
