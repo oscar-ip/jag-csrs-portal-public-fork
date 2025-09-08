@@ -331,5 +331,16 @@ label {
   }
 }
 
+.linkLike {
+  background: none;
+  border: none;
+  color: #2395e0;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
 
-
+.linkLike:hover {
+  color: #005ea2;
+}
