@@ -4,6 +4,9 @@
 		<UserSecretsId>bc342dfb-3e71-4df4-9786-5bd73599563b</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DebugType>portable</DebugType>
+		<!-- Commit hash injection -->
+		<SourceRevisionId Condition="'$(SourceRevisionId)' == ''">unknown</SourceRevisionId>
+		<DefineConstants>$(DefineConstants);GIT_COMMIT="$(SourceRevisionId)"</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="openshift\**" />

@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Exceptions;
 using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Csrs.Services.FileManager
 {
@@ -16,6 +18,20 @@ namespace Csrs.Services.FileManager
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
+
+            var namespaceMain = typeof(Program).Namespace ?? "UnknownNamespace";
+            var assemblyVersion = typeof(Program).Assembly.GetName().Version?.ToString() ?? "UnknownVersion";
+            Log.Information("Starting up: {Namespace}.Main() ---> .NET Runtime Version: {Version}\n\tAssembly Version: {AssemblyVersion}\n\tGit Commit: {GitCommit}\n\tOS: {OSDescription}\n\tProcessArchitecture: {Arch}",
+                namespaceMain,
+                RuntimeInformation.FrameworkDescription,
+                assemblyVersion,
+                BuildInfo.GitCommitId,
+                RuntimeInformation.OSDescription,
+                RuntimeInformation.ProcessArchitecture);
+
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
@@ -40,6 +56,8 @@ namespace Csrs.Services.FileManager
 
                 Serilog.Debugging.SelfLog.Enable(Console.Error);
             });
+
+            
 
             builder.Services.AddSharePointIntegration();
 
@@ -83,5 +101,14 @@ namespace Csrs.Services.FileManager
             app.Run();
 
         }
+    }
+    
+    internal static class BuildInfo
+    {
+    #if GIT_COMMIT
+        public const string GitCommitId = GIT_COMMIT;
+    #else
+        public const string GitCommitId = "unknown";
+    #endif
     }
 }
