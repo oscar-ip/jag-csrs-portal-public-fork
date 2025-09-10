@@ -2,15 +2,22 @@
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+
+ARG SOURCE_REVISION_ID=unknown
+ENV SOURCE_REVISION_ID=$SOURCE_REVISION_ID
+
 COPY ["Csrs.Services.FileManager/Csrs.Services.FileManager.csproj", "Csrs.Services.FileManager/"]
 COPY ["Csrs.Interfaces.SharePoint/SharePoint.csproj", "Csrs.Interfaces.SharePoint/"]
 RUN dotnet restore "Csrs.Services.FileManager/Csrs.Services.FileManager.csproj"
 COPY . .
 WORKDIR "/src/Csrs.Services.FileManager"
-RUN dotnet build "Csrs.Services.FileManager.csproj" -c Release -o /app/build
+# Pass commit SHA into build
+RUN dotnet build "Csrs.Services.FileManager.csproj" -c Release -o /app/build \
+    /p:SourceRevisionId=$SOURCE_REVISION_ID
 
 FROM build AS publish
-RUN dotnet publish "Csrs.Services.FileManager.csproj" -c Release -o /app/publish
+RUN dotnet publish "Csrs.Services.FileManager.csproj" -c Release -o /app/publish \
+    /p:SourceRevisionId=$SOURCE_REVISION_ID
 
 # For fixing some of the vulnerabilities for CSRS-448
 FROM registry.access.redhat.com/ubi8/dotnet-60-runtime:6.0-17.20220907105939 AS final
@@ -21,4 +28,8 @@ USER 1001
 WORKDIR /opt/app-root/app
 EXPOSE 8080
 COPY --from=publish /app/publish .
+
+# The SHA is available to your app as an env variable
+ENV SOURCE_REVISION_ID=$SOURCE_REVISION_ID
+
 ENTRYPOINT ["dotnet", "Csrs.Services.FileManager.dll"]

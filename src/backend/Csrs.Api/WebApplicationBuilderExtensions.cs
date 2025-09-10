@@ -24,7 +24,7 @@ public static class WebApplicationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        Serilog.ILogger logger = GetLogger();
+        var logger = Log.ForContext(typeof(WebApplicationBuilderExtensions));
 
         var configuration = builder.Configuration.Get<CsrsConfiguration>();
         OAuthConfiguration? oAuthOptions = configuration?.OAuth;
@@ -77,7 +77,7 @@ public static class WebApplicationBuilderExtensions
         .AddHttpMessageHandler<ApiGatewayHandler>();
 
         logger.Debug("Configuing FileManager Service");
-        ConfigureFileManagerService(builder, configuration?.FileManager, logger);
+        ConfigureFileManagerService(builder, configuration?.FileManager);
 
         services.AddHttpContextAccessor();
 
@@ -93,8 +93,10 @@ public static class WebApplicationBuilderExtensions
 
     }
 
-    private static void ConfigureFileManagerService(WebApplicationBuilder builder, FileManagerConfiguration? configuration, Serilog.ILogger logger)
+    private static void ConfigureFileManagerService(WebApplicationBuilder builder, FileManagerConfiguration? configuration)
     {
+        var logger = Log.ForContext(typeof(WebApplicationBuilderExtensions));
+        
         if (string.IsNullOrWhiteSpace(configuration?.Address))
         {
             const string message = $"FileManager configuration is not set, {nameof(CsrsConfiguration.FileManager)}:{nameof(FileManagerConfiguration.Address)} is required.";
@@ -107,17 +109,17 @@ public static class WebApplicationBuilderExtensions
         // determine if we are using http or https
         ChannelCredentials credentials;
 
-        bool? secure = configuration.Secure;
-        if (secure.HasValue && !secure.Value)
+        if (configuration.Secure.HasValue && !configuration.Secure.Value)
         {
-            logger.Information("Using insecure channel for File Manager service");
+            logger.Information("Configuration explicitly set Secure=false. Using insecure channel for File Manager service.");
             credentials = ChannelCredentials.Insecure;
         }
         else
         {
-            logger.Information("Using secure channel for File Manager service");
+            logger.Information("Configuration Secure=true or not set. Using secure channel for File Manager service.");
             credentials = ChannelCredentials.SecureSsl;
         }
+
         //credentials = ChannelCredentials.SecureSsl;
         logger.Information("Using file manager service {Address}", address);
         builder.Services.AddSingleton(services =>

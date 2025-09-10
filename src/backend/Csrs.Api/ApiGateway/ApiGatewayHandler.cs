@@ -24,7 +24,16 @@ namespace Csrs.Api.ApiGateway
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(_apiGatewayOptions.BasePath)) return await base.SendAsync(request, cancellationToken);
+            _logger.LogDebug("➡️ Request Sending {Method} request to {Url}", request.Method, request.RequestUri);
+
+            if (string.IsNullOrEmpty(_apiGatewayOptions.BasePath)) {
+                 var resp = await base.SendAsync(request, cancellationToken);
+
+                // Log response status
+                _logger.LogDebug("⬅️ Response Code {StatusCode} from {Url}", resp.StatusCode, request.RequestUri);
+
+                return resp;
+            } 
 
             if (Uri.TryCreate(CombineUrls(_apiGatewayOptions.BasePath, request.RequestUri.PathAndQuery), UriKind.Absolute, out var path))
             {
@@ -42,7 +51,12 @@ namespace Csrs.Api.ApiGateway
                 request.RequestUri = path;
             }
 
-            return await base.SendAsync(request, cancellationToken);
+            var response = await base.SendAsync(request, cancellationToken);
+
+            // Log response status
+            _logger.LogDebug("⬅️ Response Code {StatusCode} from {Url}", response.StatusCode, request.RequestUri);
+
+            return response;
         }
 
 

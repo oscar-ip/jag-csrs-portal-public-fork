@@ -37,7 +37,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Git Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       
       # Get Git latest short Sha# from the release branch used. This Sha# will be used in image tagging as well as DC Pod labelling.
       - name: Get git commit short sha
@@ -90,6 +90,7 @@ jobs:
           IMAGE: ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.env}}/${{env.api}}:${{env.env}}
         run: |
           docker build -f ./src/backend/Csrs.Services.FileManager/Dockerfile.rhel8 \
+            --build-arg SOURCE_REVISION_ID=${{ env.gitsha  }} \
             --tag ${IMAGE} \
             ${CONTEXT}
           docker push ${IMAGE}

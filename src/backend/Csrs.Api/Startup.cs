@@ -16,7 +16,6 @@ public static class Startup
         builder.Configuration.AddCsrsEnvironmentVariables();
 
         builder.AddJwtBearerAuthentication();
-        builder.UseSerilog();
         builder.AddHealthChecks();
         builder.AddInstrumentation();
         builder.AddServices();  // todo: can these services be configured in ConfigureServices?
