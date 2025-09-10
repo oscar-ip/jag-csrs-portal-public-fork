@@ -38,7 +38,7 @@ namespace Csrs.Api.Services
                     return new List<Message>();
                 }
 
-                _logger.LogInformation("IsSent={IsSent}, Retrieved {FileCount} files for PartyId={PartyId}", isSent, files?.Value?.Count ?? 0, partyId);
+                _logger.LogDebug("IsSent={IsSent}, Retrieved {FileCount} files for PartyId={PartyId}", isSent, files?.Value?.Count ?? 0, partyId);
 
                 List<Message> messages = new List<Message>();
                 foreach (var file in files.Value)
@@ -59,7 +59,7 @@ namespace Csrs.Api.Services
                         continue;
                     }
 
-                    _logger.LogInformation("IsSent={IsSent}, Retrieved {MessageCount} messages for FileId={FileId}", isSent, dynamicsMessages?.Value?.Count ?? 0, file.SsgCsrsfileid);
+                    _logger.LogDebug("IsSent={IsSent}, Retrieved {MessageCount} messages for FileId={FileId}", isSent, dynamicsMessages?.Value?.Count ?? 0, file.SsgCsrsfileid);
 
                     foreach (var message in dynamicsMessages.Value)
                     {
@@ -81,16 +81,72 @@ namespace Csrs.Api.Services
                         //Get documents from fileManager
                         try
                         {
+                            _logger.LogDebug(
+                                "IsSent={IsSent}, Fetching attachments for MessageId={MessageId}, Entity=ssg_csrscommunicationmessage, Subject={Subject}",
+                                isSent,
+                                message.SsgCsrscommunicationmessageid,
+                                message.SsgCsrsmessagesubject
+                            );
+
                             attachments = await _documentService.GetAttachmentList(message.SsgCsrscommunicationmessageid, "ssg_csrscommunicationmessage", message.SsgCsrsmessagesubject, cancellationToken);
+
+                            if (attachments == null || attachments.Count == 0)
+                            {
+                                _logger.LogDebug(
+                                    "IsSent={IsSent}, No attachments found for MessageId={MessageId}, Subject={Subject}",
+                                    isSent,
+                                    message.SsgCsrscommunicationmessageid,
+                                    message.SsgCsrsmessagesubject
+                                );
+                                attachments = Array.Empty<FileSystemItem>();
+                            }
+                            else
+                            {
+                                _logger.LogDebug(
+                                    "IsSent={IsSent}, Retrieved {AttachmentCount} attachments for MessageId={MessageId}, Subject={Subject}",
+                                    isSent,
+                                    attachments.Count,
+                                    message.SsgCsrscommunicationmessageid,
+                                    message.SsgCsrsmessagesubject
+                                );
+
+                                if (_logger.IsEnabled(LogLevel.Debug))
+                                {
+                                    foreach (var attachment in attachments)
+                                    {
+                                        _logger.LogDebug(
+                                            "IsSent={IsSent}, Attachment: Id={AttachmentId}, Name={AttachmentName}, Size={AttachmentSize}",
+                                            isSent,
+                                            attachment.Id,
+                                            attachment.Name,
+                                            attachment.Size
+                                        );
+                                    }
+                                }
+                            }
                         }
                         catch (HttpOperationException ex)
                         {
-                            _logger.LogInformation($"No Attachment Retrieved for Message {message.SsgCsrscommunicationmessageid} " + ex.Message);
+                            _logger.LogDebug(
+                                ex,
+                                "IsSent={IsSent}, No Attachment Retrieved for MessageId={MessageId}, Subject={Subject}: {Message}",
+                                isSent,
+                                message.SsgCsrscommunicationmessageid,
+                                message.SsgCsrsmessagesubject,
+                                ex.Message
+                            );
                             attachments = Array.Empty<FileSystemItem>();
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogInformation($"ERROR OCCURED getting attachment list for message {message.SsgCsrscommunicationmessageid} " + ex.Message);
+                            _logger.LogError(
+                                ex,
+                                "IsSent={IsSent}, ERROR OCCURRED getting attachment list for MessageId={MessageId}, Subject={Subject}: {Message}", 
+                                isSent,
+                                message.SsgCsrscommunicationmessageid,
+                                message.SsgCsrsmessagesubject,
+                                ex.Message
+                            );
                             attachments = Array.Empty<FileSystemItem>();
                         }
 
@@ -99,7 +155,7 @@ namespace Csrs.Api.Services
                     }
                 }
 
-                _logger.LogInformation("IsSent={IsSent}, Returning {MessageCount} messages for PartyId={PartyId}", isSent, messages.Count, partyId);
+                _logger.LogDebug("IsSent={IsSent}, Returning {MessageCount} messages for PartyId={PartyId}", isSent, messages.Count, partyId);
 
                 return messages;
             }

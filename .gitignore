@@ -47,3 +47,4 @@ src/utility/CrmSvcUtilExtensions/.vs/CrmSvcUtilExtensions/v17/.suo
 src/utility/CrmSvcUtilExtensions/.vs/CrmSvcUtilExtensions/v17/
 
 .env
+podman*

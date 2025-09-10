@@ -19,7 +19,9 @@ namespace Csrs.Services.FileManager
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
+            .WriteTo.Console(
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+            )
             .CreateBootstrapLogger();
 
             var namespaceMain = typeof(Program).Namespace ?? "UnknownNamespace";
