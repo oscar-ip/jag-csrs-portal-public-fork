@@ -115,8 +115,9 @@ namespace Csrs.Api.Services
                                     foreach (var attachment in attachments)
                                     {
                                         _logger.LogDebug(
-                                            "IsSent={IsSent}, Attachment: Id={AttachmentId}, Name={AttachmentName}, Size={AttachmentSize}",
+                                            "IsSent={IsSent}, Attachment for MessageId={MessageId}:\nId={AttachmentId},\nName={AttachmentName},\nSize={AttachmentSize}",
                                             isSent,
+                                            message.SsgCsrscommunicationmessageid,
                                             attachment.Id,
                                             attachment.Name,
                                             attachment.Size
