@@ -28,6 +28,14 @@ namespace Csrs.Api.Services
         {
             _logger.LogDebug("IsSent={IsSent}, Get party messages request received for PartyId={PartyId}", isSent, partyId);
 
+            // CSRS-561 
+            // DO NOT show outbox messages, there is a new requirement, messages need to be filtered, user should not be seeing agent messages
+            // This if statement is to not show anything temporarily as we implement the filter feature
+            if (isSent)
+            {
+                return new List<Message>();
+            }
+
             try
             {
                 MicrosoftDynamicsCRMssgCsrsfileCollection files = await _dynamicsClient.GetFilesByParty(partyId, isSent, cancellationToken);
